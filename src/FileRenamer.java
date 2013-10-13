@@ -2,12 +2,12 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FileRenamer {
+class FileRenamer {
     private File[] _listOfFiles;
     private File _sourceFolder;
     private File _destinationFolder;
-    public final static String DROPBOX_FORMAT = "([0-9]){4}-([0-9]){2}-([0-9]){2} ([0-9]|.){8}.(jpeg|JPG|JPEG|jpg)";
-    public final static String SAMSUNG_FORMAT = "([0-9]){8}_([0-9]){6}.(jpeg|JPG|JPEG|jpg)";
+    private final static String DROPBOX_FORMAT = "([0-9]){4}-([0-9]){2}-([0-9]){2} ([0-9]|.){8}.(jpeg|JPG|JPEG|jpg)";
+    private final static String SAMSUNG_FORMAT = "([0-9]){8}_([0-9]){6}.(jpeg|JPG|JPEG|jpg)";
 
     public FileRenamer(){
         /*System.out.println("Working Directory = " + System.getProperty("user.dir"));
@@ -16,9 +16,6 @@ public class FileRenamer {
 
     public void setSourceFolder(String folderName){
         _sourceFolder = new File(folderName);
-        if(_sourceFolder == null){
-
-        }
     }
     public void setDestinationFolder(String folderName){
         _destinationFolder = new File(folderName);

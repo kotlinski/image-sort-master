@@ -13,7 +13,7 @@ import java.io.File;
  * To change this template use File | Settings | File Templates.
  */
 public class BackupSystemTest {
-    BackupSystem backupSystem;
+    private BackupSystem backupSystem;
 
     @Before
     public void setUp() throws Exception {

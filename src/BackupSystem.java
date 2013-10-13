@@ -12,14 +12,16 @@ import java.io.IOException;
  * Time: 10:35
  * To change this template use File | Settings | File Templates.
  */
-public class BackupSystem {
+class BackupSystem {
     public static String USER_FOLDER = "user.folder";
-    Gson gson;
-    Settings settings;
+    private Gson gson;
+    private Settings settings;
+    private FileRenamer fileRenamer;
 
     public BackupSystem(){
         this.gson = new Gson();
         settings = new Settings();
+        fileRenamer = new FileRenamer();
     }
 
     public void updateSettingsFile(Settings settings)
@@ -81,7 +83,6 @@ public class BackupSystem {
 
     public Settings getSettings() {
         String settingsString = readSettingsFromFile();
-        Settings settings = gson.fromJson(settingsString, Settings.class);
-        return settings;
+        return gson.fromJson(settingsString, Settings.class);
     }
 }

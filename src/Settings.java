@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Simon Kotlinski
@@ -25,5 +27,10 @@ public class Settings {
 
     public String getDropboxAlbum() {
         return dropboxAlbum;
+    }
+
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
