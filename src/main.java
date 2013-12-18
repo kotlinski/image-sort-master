@@ -1,37 +1,71 @@
+import org.apache.commons.cli.*;
+
+import java.io.File;
 import java.io.IOException;
 
 public class main {
-    BackupSystem backupSystem;
+//    private String[] menuOptions={"","dropbox","input","output","settings","quit"};
+    private static BackupSystem backupSystem;
 
-    private enum Menu {
-        RUN,
-        DROPBOX,
-        INPUT,
-        OUTPUT,
-        SETTINGS,
-        QUIT
-    }
-    private String[] menuOptions={"run","dropbox","input","output","settings","quit"};
+    public static void main(String[] argv) throws IOException {
 
-    public main(String[] argv) throws IOException {
         backupSystem = new BackupSystem();
-        if (argv.length == 0) {
-            printRunTips();
+
+        Options options = new Options();
+        options.addOption("run", false, "run backup, import images from dropbox and phone.");
+        options.addOption("dropbox", true, "add a dropbox path.");
+        options.addOption("help", false, "print this message");
+
+        CommandLineParser parser = new GnuParser();
+        CommandLine cmd = null;
+        try {
+            cmd = parser.parse( options, argv);
+        } catch (ParseException e) {
+            System.err.println( "Parsing failed.  Reason: " + e.getMessage() );
         }
-        else
+
+        if( cmd == null )
         {
-            if (argv[0].equals(menuOptions[Menu.SETTINGS.ordinal()]))
+            printHelp(options);
+        }
+        else if( cmd.hasOption( "run" ) ) {
+
+        }
+        else if( cmd.hasOption( "help" ) ) {
+            printHelp(options);
+        }
+        else if( cmd.hasOption( "dropbox"))
+        {
+            String dropboxPath = cmd.getOptionValue( "dropbox" );
+            boolean isValid = validatePath(dropboxPath);
+            if( isValid )
             {
-                executeSettings();
+                backupSystem.getSettings().setDropboxAlbum(dropboxPath);
             }
-            else if (argv[0].equals(menuOptions[Menu.DROPBOX.ordinal()])) {
-                Settings settings = backupSystem.getSettings();
-
-            }
-            else if (argv[0].equals("run")) {
-
+            else {
+                System.out.println(dropboxPath + " is not a valid path");
             }
         }
+
+
+//
+//        if (argv.length == 0) {
+//            printRunTips();
+//        }
+//        else
+//        {
+//            if (argv[0].equals(menuOptions[Menu.SETTINGS.ordinal()]))
+//            {
+//                executeSettings();
+//            }
+//            else if (argv[0].equals(menuOptions[Menu.DROPBOX.ordinal()])) {
+//                Settings settings = backupSystem.getSettings();
+//
+//            }
+//            else if (argv[0].equals("run")) {
+//
+//            }
+//        }
 
 
 //
@@ -45,6 +79,16 @@ public class main {
 //        fileRenamer.setDestinationFolder(destinationFolder);
 //
 //        fileRenamer.renameFiles();
+    }
+
+    private static boolean validatePath(String path) {
+        File file = new File(path);
+        return file.isDirectory() && file.exists();
+    }
+
+    private static void printHelp(Options options) {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("ant", options);
     }
 
     private void printRunTips() {
