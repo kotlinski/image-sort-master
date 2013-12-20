@@ -1,4 +1,4 @@
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class SettingsTest {
     public void testToString() throws Exception {
         settings.setDropboxAlbum("aaa");
         settings.setCameraAlbum("bbb");
-        Assert.assertEquals(settings.toString(),"{\"cameraAlbum\":\"bbb\",\"dropboxAlbum\":\"aaa\"}");
+        Assert.assertEquals(settings.toString(), "{\"cameraAlbum\":\"bbb\",\"dropboxAlbum\":\"aaa\"}");
 
     }
 }
