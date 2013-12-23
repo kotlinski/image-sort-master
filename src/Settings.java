@@ -8,25 +8,26 @@ import com.google.gson.Gson;
  * To change this template use File | Settings | File Templates.
  */
 public class Settings {
-    private String cameraAlbum = "";
-    private String dropboxAlbum = "";
+    private String samsungPath = "";
+    private String dropboxPath = "";
+	private String outputPath = "";
 
     public Settings()
     {
     }
 
-    public void setCameraAlbum(String cameraAlbum) {
-        this.cameraAlbum = cameraAlbum;
+    public void setSamsungPath(String samsungPath) {
+        this.samsungPath = samsungPath;
     }
-    public void setDropboxAlbum(String dropboxAlbum) {
-        this.dropboxAlbum = dropboxAlbum;
+    public void setDropboxPath(String dropboxPath) {
+        this.dropboxPath = dropboxPath;
     }
-    public String getCameraAlbum() {
-        return cameraAlbum;
+    public String getSamsungPath() {
+        return samsungPath;
     }
 
-    public String getDropboxAlbum() {
-        return dropboxAlbum;
+    public String getDropboxPath() {
+        return dropboxPath;
     }
 
     public String toString() {

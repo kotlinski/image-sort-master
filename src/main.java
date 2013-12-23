@@ -1,20 +1,14 @@
+import java.io.IOException;
 import org.apache.commons.cli.*;
 
-import java.io.File;
-import java.io.IOException;
-
 public class main {
-//    private String[] menuOptions={"","dropbox","input","output","settings","quit"};
     private static BackupSystem backupSystem;
 
     public static void main(String[] argv) throws IOException {
 
         backupSystem = new BackupSystem();
 
-        Options options = new Options();
-        options.addOption("run", false, "run backup, import images from dropbox and phone.");
-        options.addOption("dropbox", true, "add a dropbox path.");
-        options.addOption("help", false, "print this message");
+        Options options = createOptions();
 
         CommandLineParser parser = new GnuParser();
         CommandLine cmd = null;
@@ -24,85 +18,54 @@ public class main {
             System.err.println( "Parsing failed.  Reason: " + e.getMessage() );
         }
 
+        runCmd(options, cmd);
+    }
+
+    private static void runCmd(Options options, CommandLine cmd) {
         if( cmd == null )
         {
             printHelp(options);
         }
-        else if( cmd.hasOption( "run" ) ) {
+        else if( cmd.hasOption( "generate" ) ) {
+			String dropboxPath = System.getProperty("user.dir")+"\\Dropbox";
+			boolean pathUpdated = FileSystemProvider.createFolder(dropboxPath);
+			if(pathUpdated) {
+				backupSystem.getSettings().setDropboxPath(dropboxPath);
+				backupSystem.updateSettingsFile(backupSystem.getSettings());
+			}
 
+			String samsungPath = System.getProperty("user.dir")+"\\Samsung";
+			pathUpdated = FileSystemProvider.createFolder(samsungPath);
+			if(pathUpdated) {
+				backupSystem.getSettings().setSamsungPath(samsungPath);
+				backupSystem.updateSettingsFile(backupSystem.getSettings());
+			}
+			String resultPath = System.getProperty("user.dir")+"\\Result";
+			FileSystemProvider.createFolder(resultPath);
         }
-        else if( cmd.hasOption( "help" ) ) {
+        else if( cmd.hasOption( "run" ) ) {
+			FileRenamer fileRenamer = new FileRenamer();
+			MoveSettings moveSettings = new MoveSettings(Enums.FORMAT.SAMSUNG, Enums.FORMAT.SAMSUNG);
+			fileRenamer.renameFiles(moveSettings);
+			moveSettings = new MoveSettings(Enums.FORMAT.DROPBOX, Enums.FORMAT.SAMSUNG);
+			fileRenamer.renameFiles(moveSettings);
+        }
+        else { //if( cmd.hasOption( "help" ) ) {
             printHelp(options);
         }
-        else if( cmd.hasOption( "dropbox"))
-        {
-            String dropboxPath = cmd.getOptionValue( "dropbox" );
-            boolean isValid = validatePath(dropboxPath);
-            if( isValid )
-            {
-                backupSystem.getSettings().setDropboxAlbum(dropboxPath);
-            }
-            else {
-                System.out.println(dropboxPath + " is not a valid path");
-            }
-        }
-
-
-//
-//        if (argv.length == 0) {
-//            printRunTips();
-//        }
-//        else
-//        {
-//            if (argv[0].equals(menuOptions[Menu.SETTINGS.ordinal()]))
-//            {
-//                executeSettings();
-//            }
-//            else if (argv[0].equals(menuOptions[Menu.DROPBOX.ordinal()])) {
-//                Settings settings = backupSystem.getSettings();
-//
-//            }
-//            else if (argv[0].equals("run")) {
-//
-//            }
-//        }
-
-
-//
-//        System.out.println("argv.length: " + argv.length);
-//        if (argv.length == 2) {
-//            sourecefolder = argv[1];
-//            destinationFolder = sourecefolder;
-//        } else if (argv.length == 1) {
-//        }
-//        fileRenamer.setSourceFolder(sourecefolder);
-//        fileRenamer.setDestinationFolder(destinationFolder);
-//
-//        fileRenamer.renameFiles();
     }
 
-    private static boolean validatePath(String path) {
-        File file = new File(path);
-        return file.isDirectory() && file.exists();
+    private static Options createOptions() {
+        Options options = new Options();
+        options.addOption("run", false, "run backup, import images from dropbox and phone.");
+        // options.addOption("dropbox", true, "add a dropbox path.");
+        options.addOption("generate", false, "generate default folders");
+        options.addOption("help", false, "Populate Dropbox folder, Samsung folder with images and run.");
+        return options;
     }
 
     private static void printHelp(Options options) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("ant", options);
-    }
-
-    private void printRunTips() {
-        System.out.println("Please choose a command!");
-        System.out.println("run\truns a backup");
-        System.out.println("dropbox\tpath to dropbox image folder");
-        System.out.println("input\tsecondary input folder");
-        System.out.println("output\toutput path");
-        System.out.println("settings\tshow settings");
-        System.out.println("quit");
-    }
-
-    private void executeSettings() {
-        Settings settings = backupSystem.getSettings();
-        System.out.println(settings.toString());
+        formatter.printHelp("ImageRenamer", options);
     }
 }

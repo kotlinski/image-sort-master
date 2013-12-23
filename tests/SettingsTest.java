@@ -17,9 +17,9 @@ public class SettingsTest {
     }
     @Test
     public void testToString() throws Exception {
-        settings.setDropboxAlbum("aaa");
-        settings.setCameraAlbum("bbb");
-        Assert.assertEquals(settings.toString(), "{\"cameraAlbum\":\"bbb\",\"dropboxAlbum\":\"aaa\"}");
+        settings.setDropboxPath("aaa");
+        settings.setSamsungPath("bbb");
+        Assert.assertEquals("{\"samsungPath\":\"bbb\",\"dropboxPath\":\"aaa\",\"outputPath\":\"\"}", settings.toString());
 
     }
 }

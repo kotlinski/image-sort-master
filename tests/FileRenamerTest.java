@@ -1,3 +1,4 @@
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,10 +20,9 @@ import java.io.IOException;
  */
 public class FileRenamerTest {
     private FileRenamer _fileRenamer;
-    private static final String SOURCEFOLDER = "sourceFolderTest";
     private File sourceFolder;
 
-    @Before
+	@Before
     public void setUp() throws Exception {
         System.out.println("--- Setup ---");
         _fileRenamer = new FileRenamer();
@@ -32,10 +32,7 @@ public class FileRenamerTest {
 
         _fileRenamer.setSourceFolder(sourceFolder.getPath());
         _fileRenamer.setDestinationFolder(sourceFolder.getPath());
-
     }
-
-
     private File createFolder(String fileName){
         File theDir = new File(fileName);
         if (!theDir.exists()) {
@@ -62,7 +59,8 @@ public class FileRenamerTest {
 
     @After
     public void tearDown() throws Exception {
-
+		System.out.print("tear down");
+		FileUtils.deleteDirectory(new File(System.getProperty("user.dir") + "\\sourceFolderTest"));
     }
 
     @Test
@@ -130,7 +128,9 @@ public class FileRenamerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        _fileRenamer.renameFiles();
+
+		MoveSettings moveSettings = new MoveSettings(Enums.FORMAT.DROPBOX, Enums.FORMAT.SAMSUNG);
+        _fileRenamer.renameFiles(moveSettings);
         Assert.assertNotNull(sourceFolder.listFiles());
         File[] listFiles = sourceFolder.listFiles();
         if(listFiles != null)

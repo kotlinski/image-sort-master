@@ -39,11 +39,11 @@ public class BackupSystemTest {
     @Test
     public void updateSettingsFileTest() throws Exception {
         Settings settings = new Settings();
-        settings.setCameraAlbum("aaa");
-        settings.setDropboxAlbum("bbb");
+        settings.setSamsungPath("aaa");
+        settings.setDropboxPath("bbb");
         backupSystem.updateSettingsFile(settings);
         Settings settingsResult = backupSystem.getSettings();
-        Assert.assertEquals(settingsResult.getCameraAlbum(), "aaa");
-        Assert.assertEquals(settingsResult.getDropboxAlbum(), "bbb");
+        Assert.assertEquals(settingsResult.getSamsungPath(), "aaa");
+        Assert.assertEquals(settingsResult.getDropboxPath(), "bbb");
     }
 }

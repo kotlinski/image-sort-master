@@ -21,7 +21,7 @@ class FileRenamer {
         _destinationFolder = new File(folderName);
     }
 
-    public void renameFiles(){
+    public void renameFiles(MoveSettings moveSettings){
         File[] listOfFiles = _sourceFolder.listFiles();
 
         assert listOfFiles != null;

@@ -29,11 +29,24 @@ class BackupSystem {
         File settingsFile = getSettingsFile();
         try {
             FileUtils.writeStringToFile(settingsFile, gson.toJson(settings));
+			this.settings = settings;
+			System.out.println(gson.toJson(settings));
+            System.out.print("Settingsfile updated");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+	public Settings getSettingsFromFile() {
+		String settingsString = readSettingsFromFile();
+		return gson.fromJson(settingsString, Settings.class);
+	}
 
+	public Settings getSettings() {
+		if( settings == null ) {
+			settings = getSettingsFromFile();
+		}
+		return settings;
+	}
     public String readSettingsFromFile()
     {
         File settingsFile = getSettingsFile();
@@ -79,10 +92,5 @@ class BackupSystem {
         if(result) {
             System.out.println("File created");
         }
-    }
-
-    public Settings getSettings() {
-        String settingsString = readSettingsFromFile();
-        return gson.fromJson(settingsString, Settings.class);
     }
 }
