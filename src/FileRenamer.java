@@ -15,38 +15,64 @@ class FileRenamer {
     }
 
     public void setSourceFolder(String folderName){
+		System.out.print(folderName);
         _sourceFolder = new File(folderName);
     }
     public void setDestinationFolder(String folderName){
         _destinationFolder = new File(folderName);
     }
 
-    public void renameFiles(MoveSettings moveSettings){
+    public void renameFiles(Enums.FORMAT fromType, Enums.FORMAT toType){
         File[] listOfFiles = _sourceFolder.listFiles();
 
         assert listOfFiles != null;
         for (File file: listOfFiles) {
             if (file.isFile()) {
-                String fileName = file.getName();
-                if(isSamsungFormat( fileName )) {
-                    try{
-                        File f = new File(_sourceFolder.getPath() + "\\" + file.getName());
-                        fileName = samsungToDropboxFormat(fileName);
-                        boolean renamed = f.renameTo(new File(_destinationFolder.getPath() + "\\" + fileName));
-                        System.out.println("File renamed? " + renamed);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
+				refactorFile(file, fromType, toType);
             }
         }
     }
 
-    public boolean isDropboxFormat(String filename){
+	private void refactorFile(File file, Enums.FORMAT fromType, Enums.FORMAT toType) {
+		// Do nothing with toType at the moment, always choose to dropbox-Format
+
+		String fileName = file.getName();
+		File f = new File(_sourceFolder.getPath() + "\\" + file.getName());
+
+		if(fromType == Enums.FORMAT.SAMSUNG) {
+			if(isSamsungFormat( fileName )) {
+				fileName = samsungToDropboxFormat(fileName);
+				renameFile(f, fileName);
+			} else {
+				System.out.println("Not Samsung File Format: " +file.getName());
+				System.out.println();
+			}
+		}
+		else if(fromType == Enums.FORMAT.DROPBOX) {
+			if(isDropboxFormat( fileName )){
+				//Just move the file. From Dropbox to Dropbox.
+				renameFile(f, fileName);
+			} else {
+				System.out.println("Not DropBox File Format: " +file.getName());
+				System.out.println();
+			}
+		}
+	}
+
+	private void renameFile(File f, String fileName) {
+		try{
+			f.renameTo(new File(_destinationFolder.getPath() + "\\" + fileName));
+		}catch (Exception e){
+			e.printStackTrace();
+			System.out.println("Couldn't rename file: " + fileName);
+		}
+	}
+
+	public boolean isDropboxFormat(String filename){
         Pattern pattern = Pattern.compile(DROPBOX_FORMAT);
         Matcher matcher = pattern.matcher(filename);
         return matcher.matches();
-    }
+	}
     public boolean isSamsungFormat(String filename){
         Pattern pattern = Pattern.compile(SAMSUNG_FORMAT);
         Matcher matcher = pattern.matcher(filename);
@@ -76,11 +102,7 @@ class FileRenamer {
     public String getExtension(String filename){
         return filename.substring(filename.lastIndexOf('.'), filename.length());
     }
-/*
-    public String getFileName(String filename) {
 
-        return null;
-    }*/
 
 
 }

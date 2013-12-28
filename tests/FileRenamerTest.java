@@ -24,11 +24,8 @@ public class FileRenamerTest {
 
 	@Before
     public void setUp() throws Exception {
-        System.out.println("--- Setup ---");
         _fileRenamer = new FileRenamer();
         sourceFolder = createFolder(System.getProperty("user.dir") + "\\sourceFolderTest");
-
-        System.out.println(sourceFolder.getPath());
 
         _fileRenamer.setSourceFolder(sourceFolder.getPath());
         _fileRenamer.setDestinationFolder(sourceFolder.getPath());
@@ -38,7 +35,6 @@ public class FileRenamerTest {
         if (!theDir.exists()) {
             boolean result = theDir.mkdir();
             if(result) {
-                System.out.println("DIR created");
             }
         } else {
             File[] list = theDir.listFiles();
@@ -50,7 +46,6 @@ public class FileRenamerTest {
             }
             if(deleted)
             {
-                System.out.println("File deleted");
             }
 
         }
@@ -59,7 +54,6 @@ public class FileRenamerTest {
 
     @After
     public void tearDown() throws Exception {
-		System.out.print("tear down");
 		FileUtils.deleteDirectory(new File(System.getProperty("user.dir") + "\\sourceFolderTest"));
     }
 
@@ -129,15 +123,13 @@ public class FileRenamerTest {
             e.printStackTrace();
         }
 
-		MoveSettings moveSettings = new MoveSettings(Enums.FORMAT.DROPBOX, Enums.FORMAT.SAMSUNG);
-        _fileRenamer.renameFiles(moveSettings);
+        _fileRenamer.renameFiles(Enums.FORMAT.DROPBOX, Enums.FORMAT.SAMSUNG);
         Assert.assertNotNull(sourceFolder.listFiles());
         File[] listFiles = sourceFolder.listFiles();
         if(listFiles != null)
         {
             Assert.assertEquals(listFiles.length, 3);
             for(File file : listFiles){
-                System.out.println("Filename: " + file.getName());
                 Assert.assertTrue(_fileRenamer.isSamsungFormat(file.getName()) || _fileRenamer.isDropboxFormat(file.getName()));
             }
         }

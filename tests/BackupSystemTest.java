@@ -17,7 +17,6 @@ public class BackupSystemTest {
 
     @Before
     public void setUp() throws Exception {
-        System.out.println("--- Setup ---");
         backupSystem = new BackupSystem();
     }
 
@@ -38,10 +37,10 @@ public class BackupSystemTest {
     }
     @Test
     public void updateSettingsFileTest() throws Exception {
-        Settings settings = new Settings();
-        settings.setSamsungPath("aaa");
-        settings.setDropboxPath("bbb");
-        backupSystem.updateSettingsFile(settings);
+		backupSystem.getSettings().setOutputPath("ccc");
+		backupSystem.getSettings().setSamsungPath("aaa");
+		backupSystem.getSettings().setDropboxPath("bbb");
+        backupSystem.updateSettingsFile();
         Settings settingsResult = backupSystem.getSettings();
         Assert.assertEquals(settingsResult.getSamsungPath(), "aaa");
         Assert.assertEquals(settingsResult.getDropboxPath(), "bbb");

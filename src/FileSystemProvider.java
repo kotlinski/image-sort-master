@@ -18,7 +18,6 @@ class FileSystemProvider {
 		boolean result = false;
 		// if the directory does not exist, create it
 		if (!file.exists()) {
-			System.out.println("creating directory: " + path);
 			result = file.mkdir();
 		}
 		return result;

@@ -22,15 +22,22 @@ public class Settings {
     public void setDropboxPath(String dropboxPath) {
         this.dropboxPath = dropboxPath;
     }
+	public void setOutputPath(String outputPath) {
+		this.outputPath = outputPath;
+	}
+
     public String getSamsungPath() {
         return samsungPath;
     }
-
     public String getDropboxPath() {
         return dropboxPath;
     }
+	public String getOutputPath() {
+		return outputPath;
+	}
 
-    public String toString() {
+
+	public String toString() {
         Gson gson = new Gson();
         return gson.toJson(this);
     }

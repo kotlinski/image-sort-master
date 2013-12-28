@@ -31,24 +31,32 @@ public class main {
 			boolean pathUpdated = FileSystemProvider.createFolder(dropboxPath);
 			if(pathUpdated) {
 				backupSystem.getSettings().setDropboxPath(dropboxPath);
-				backupSystem.updateSettingsFile(backupSystem.getSettings());
+				backupSystem.updateSettingsFile();
 			}
 
 			String samsungPath = System.getProperty("user.dir")+"\\Samsung";
 			pathUpdated = FileSystemProvider.createFolder(samsungPath);
 			if(pathUpdated) {
 				backupSystem.getSettings().setSamsungPath(samsungPath);
-				backupSystem.updateSettingsFile(backupSystem.getSettings());
+				backupSystem.updateSettingsFile();
 			}
-			String resultPath = System.getProperty("user.dir")+"\\Result";
-			FileSystemProvider.createFolder(resultPath);
+
+			String outputPath = System.getProperty("user.dir")+"\\Output";
+			pathUpdated = FileSystemProvider.createFolder(outputPath);
+			if(pathUpdated) {
+				backupSystem.getSettings().setOutputPath(outputPath);
+				backupSystem.updateSettingsFile();
+			}
         }
         else if( cmd.hasOption( "run" ) ) {
 			FileRenamer fileRenamer = new FileRenamer();
-			MoveSettings moveSettings = new MoveSettings(Enums.FORMAT.SAMSUNG, Enums.FORMAT.SAMSUNG);
-			fileRenamer.renameFiles(moveSettings);
-			moveSettings = new MoveSettings(Enums.FORMAT.DROPBOX, Enums.FORMAT.SAMSUNG);
-			fileRenamer.renameFiles(moveSettings);
+			fileRenamer.setSourceFolder(backupSystem.getSettings().getSamsungPath());
+			fileRenamer.setDestinationFolder(backupSystem.getSettings().getOutputPath());
+			fileRenamer.renameFiles(Enums.FORMAT.SAMSUNG, Enums.FORMAT.SAMSUNG);
+
+			fileRenamer.setSourceFolder(backupSystem.getSettings().getDropboxPath());
+			fileRenamer.setDestinationFolder(backupSystem.getSettings().getOutputPath());
+			fileRenamer.renameFiles(Enums.FORMAT.DROPBOX, Enums.FORMAT.SAMSUNG);
         }
         else { //if( cmd.hasOption( "help" ) ) {
             printHelp(options);

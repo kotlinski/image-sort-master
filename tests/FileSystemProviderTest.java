@@ -17,7 +17,6 @@ public class FileSystemProviderTest {
 
     @Before
     public void setUp() throws Exception {
-        System.out.println("--- Setup ---");
     }
 
     @After

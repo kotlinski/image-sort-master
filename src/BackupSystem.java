@@ -20,18 +20,16 @@ class BackupSystem {
 
     public BackupSystem(){
         this.gson = new Gson();
-        settings = new Settings();
+        //settings;// = new Settings();
         fileRenamer = new FileRenamer();
     }
 
-    public void updateSettingsFile(Settings settings)
+    public void updateSettingsFile()
     {
+		settings = getSettings();
         File settingsFile = getSettingsFile();
         try {
             FileUtils.writeStringToFile(settingsFile, gson.toJson(settings));
-			this.settings = settings;
-			System.out.println(gson.toJson(settings));
-            System.out.print("Settingsfile updated");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,7 +49,6 @@ class BackupSystem {
     {
         File settingsFile = getSettingsFile();
         String settingsString = getFileContent(settingsFile);
-        System.out.println(settingsString);
         return settingsString;
     }
 
