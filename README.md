@@ -7,9 +7,10 @@ Backing up my images every month, Dropbox and Samsung uses different image-namin
 How to use it
 --------
 
-Put a folder 'Dropbox' and a folder 'Samsung' next to your .jar
-If you don't want to create this folders by your self, make the program generate them. 
+Generate all the files by using generate command
+java -jar ImageRename -generate
 
-Run the program and you end up with a merged result in result folder.
+Then populate the folders with Samsung and Dropbox images. 
+java -jar ImageRename -run
 
-
+Run the program and you end up with a merged result in the Output-folder. 
