@@ -28,25 +28,31 @@ public class main {
         }
         else if( cmd.hasOption( "generate" ) ) {
 			String dropboxPath = System.getProperty("user.dir")+"\\Dropbox";
-			boolean pathUpdated = FileSystemProvider.createFolder(dropboxPath);
-			if(pathUpdated) {
+			if(FileSystemProvider.createFolder(dropboxPath)) {
 				backupSystem.getSettings().setDropboxPath(dropboxPath);
-				backupSystem.updateSettingsFile();
 			}
 
 			String samsungPath = System.getProperty("user.dir")+"\\Samsung";
-			pathUpdated = FileSystemProvider.createFolder(samsungPath);
-			if(pathUpdated) {
+			if(FileSystemProvider.createFolder(samsungPath)) {
 				backupSystem.getSettings().setSamsungPath(samsungPath);
-				backupSystem.updateSettingsFile();
 			}
 
 			String outputPath = System.getProperty("user.dir")+"\\Output";
-			pathUpdated = FileSystemProvider.createFolder(outputPath);
-			if(pathUpdated) {
+			if(FileSystemProvider.createFolder(outputPath)) {
 				backupSystem.getSettings().setOutputPath(outputPath);
-				backupSystem.updateSettingsFile();
 			}
+
+			String outputSamsung = System.getProperty("user.dir")+"\\Output\\Samsung";
+			if(FileSystemProvider.createFolder(outputSamsung)) {
+				backupSystem.getSettings().setOutputPath(outputSamsung);
+			}
+
+			String outputDropbox = System.getProperty("user.dir")+"\\Output\\Dropbox";
+			if(FileSystemProvider.createFolder(outputDropbox)) {
+				backupSystem.getSettings().setOutputPath(outputDropbox);
+			}
+
+			backupSystem.updateSettingsFile();
         }
         else if( cmd.hasOption( "run" ) ) {
 			FileRenamer fileRenamer = new FileRenamer();

@@ -10,4 +10,10 @@ public class Enums {
 		DROPBOX,
 		SAMSUNG
 	}
+	public enum OUTPUT{
+		DUPLICATE,
+		UNIQUE,
+		INVALID,
+		NONE
+	}
 }
