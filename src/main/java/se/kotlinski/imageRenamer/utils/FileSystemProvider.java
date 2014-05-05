@@ -7,7 +7,7 @@ import java.io.File;
  * User: Simon Kotlinski
  * Date: 2013-10-12
  * Time: 10:35
- * To change this template use File | se.kotlinski.imageRenamer.Settings | File Templates.
+ * To change this template use File | MainRenamer.imageRenamer.Settings | File Templates.
  */
 public class FileSystemProvider {
 	public boolean createFolder(String path) {
