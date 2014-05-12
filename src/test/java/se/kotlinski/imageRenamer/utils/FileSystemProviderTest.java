@@ -1,3 +1,5 @@
+package se.kotlinski.imageRenamer.utils;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -10,24 +12,25 @@ import java.io.File;
  * User: Simon Kotlinski
  * Date: 2013-10-12
  * Time: 11:05
- * To change this template use File | se.kotlinski.imageRenamer.Settings | File Templates.
+ * To change this template use File | MainRenamer.imageRenamer.Settings | File Templates.
  */
 public class FileSystemProviderTest {
 
-    @Before
-    public void setUp() throws Exception {
-    }
+	@Before
+	public void setUp() throws Exception {
+	}
 
-    @After
-    public void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 
-    }
-    @Test
-    public void readSettingsFromFileTest() throws Exception {
-		String testPath = System.getProperty("user.dir")+"\\CreateFolderText";
+	}
+
+	@Test
+	public void readSettingsFromFileTest() throws Exception {
+		String testPath = System.getProperty("user.dir") + "\\CreateFolderText";
 		FileUtils.deleteDirectory(new File(testPath));
 		//boolean pathCreated = FileSystemProvider.createFolder(testPath);
-        //Assert.assertTrue(pathCreated);
+		//Assert.assertTrue(pathCreated);
 		//pathCreated = FileSystemProvider.createFolder(testPath);
 		//Assert.assertFalse(pathCreated);
 		FileUtils.deleteDirectory(new File(testPath));
