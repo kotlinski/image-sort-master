@@ -26,9 +26,20 @@ public class ImageMapper {
 		if (imageMap.containsKey(md5)) {
 			imageArray = imageMap.get(md5);
 		} else {
-			imageArray = imageMap.put(md5, new ArrayList<ImageDescriber>());
+			imageArray = new ArrayList<ImageDescriber>();
+			imageMap.put(md5, imageArray);
 			imageArray.add(imageDescriber);
 		}
 		return imageArray;
+	}
+
+	public void populateWithImages(final ArrayList<ImageDescriber> images) {
+		for (ImageDescriber image : images) {
+			addImage(image);
+		}
+	}
+
+	public int getSizeOfUniqueImages() {
+		return imageMap.size();
 	}
 }
