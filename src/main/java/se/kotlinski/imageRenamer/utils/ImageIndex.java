@@ -21,10 +21,8 @@ public class ImageIndex {
 	}
 
 	public ImageMapper runIndexing(String inputPath) {
-		File rootSource = new File(inputPath);
-		ArrayList<ImageDescriber> images = recursiveIterate(rootSource);
 
-		imageMapper.populateWithImages(images);
+		imageMapper.populateWithImages(inputPath);
 
 		return imageMapper;
 /*		for (File file : files) {
@@ -56,19 +54,6 @@ public class ImageIndex {
 		}*/
 	}
 
-	public ArrayList<ImageDescriber> recursiveIterate(final File folder) {
-		ArrayList<ImageDescriber> imageDescriber = new ArrayList<ImageDescriber>();
-
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				imageDescriber.addAll(recursiveIterate(file));
-			}	else {
-				imageDescriber.add(new ImageDescriber(file));
-				System.out.println(file.getName());
-			}
-		}
-		return imageDescriber;
-	}
 
 
 	private void printImageTags(int approachCount, Metadata metadata) {
