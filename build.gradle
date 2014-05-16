@@ -1,5 +1,5 @@
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 apply plugin: 'java'
@@ -8,35 +8,35 @@ apply plugin: 'application'
 mainClassName = "se.kotlinski.imageRenamer.MainRenamer"
 
 jar {
-    manifest.attributes provider: 'gradle'
+  manifest.attributes provider: 'gradle'
 }
 
 sourceSets {
-    main {
-        java {
-            srcDir 'src/java'
-        }
-        resources {
-            srcDir 'src/resources'
-        }
-    }
-    test {
-        java {
-            srcDir 'test/java'
-        }
-        resources {
-            srcDir 'src/resources'
-        }
-    }
+  main {
+	java {
+	  srcDir 'src/java'
+	}
+	resources {
+	  srcDir 'src/resources'
+	}
+  }
+  test {
+	java {
+	  srcDir 'test/java'
+	}
+	resources {
+	  srcDir 'src/resources'
+	}
+  }
 }
 
 dependencies {
-    compile 'com.adobe.xmp:xmpcore:5.1.1'
-    compile 'commons-cli:commons-cli:20040117.000000'
-    compile 'commons-io:commons-io:20030203.000550'
-    compile 'com.drewnoakes:metadata-extractor:2.6.2'
-    testCompile 'junit:junit:4.11'
-    testCompile 'org.powermock:powermock-module-junit4:1.5.4'
+  compile 'com.adobe.xmp:xmpcore:5.1.1'
+  compile 'commons-cli:commons-cli:20040117.000000'
+  compile 'commons-io:commons-io:20030203.000550'
+  compile 'com.drewnoakes:metadata-extractor:2.6.2'
+  testCompile 'junit:junit:4.11'
+  testCompile 'org.powermock:powermock-module-junit4:1.5.4'
 }
 
 

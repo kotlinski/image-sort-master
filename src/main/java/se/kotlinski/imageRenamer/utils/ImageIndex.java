@@ -20,9 +20,9 @@ public class ImageIndex {
 		imageMapper = new ImageMapper();
 	}
 
-	public ImageMapper runIndexing(String inputPath) {
+	public ImageMapper runIndexing(File rootFolder) {
 
-		imageMapper.populateWithImages(inputPath);
+		imageMapper.populateWithImages(rootFolder);
 
 		return imageMapper;
 /*		for (File file : files) {

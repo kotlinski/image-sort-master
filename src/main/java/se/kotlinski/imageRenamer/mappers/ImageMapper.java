@@ -34,9 +34,9 @@ public class ImageMapper {
 		return imageArray;
 	}
 
-	public void populateWithImages(String inputPath) {
-		File rootSource = new File(inputPath);
-		ArrayList<ImageDescriber> images = recursiveIterate(rootSource);
+	public void populateWithImages(File rootFolder) {
+		//File rootSource = new File(inputPath);
+		ArrayList<ImageDescriber> images = recursiveIterate(rootFolder);
 		for (ImageDescriber image : images) {
 			addImage(image);
 		}
@@ -49,7 +49,6 @@ public class ImageMapper {
 				imageDescriber.addAll(recursiveIterate(file));
 			}	else {
 				imageDescriber.add(new ImageDescriber(file));
-				System.out.println(file.getName());
 			}
 		}
 		return imageDescriber;
