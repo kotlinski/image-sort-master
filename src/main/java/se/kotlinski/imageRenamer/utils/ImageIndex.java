@@ -3,6 +3,7 @@ package se.kotlinski.imageRenamer.utils;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import se.kotlinski.imageRenamer.mappers.ImageMapper;
 import se.kotlinski.imageRenamer.models.ImageDescriber;
 
 import java.io.File;
@@ -13,14 +14,17 @@ import java.util.ArrayList;
  * 21:40 To change this template use File | Settings | File Templates.
  */
 public class ImageIndex {
+	private ImageMapper imageMapper;
 
 	public ImageIndex() {
+		imageMapper = new ImageMapper();
 	}
 
-	public ArrayList<ImageDescriber> runIndexing(String inputPath) {
-		File rootSource = new File(inputPath);
-		ArrayList<ImageDescriber> images = recursiveIterate(rootSource);
-		return images;
+	public ImageMapper runIndexing(File rootFolder) {
+
+		imageMapper.populateWithImages(rootFolder);
+
+		return imageMapper;
 /*		for (File file : files) {
 
 
@@ -50,19 +54,6 @@ public class ImageIndex {
 		}*/
 	}
 
-	private ArrayList<ImageDescriber> recursiveIterate(final File folder) {
-		ArrayList<ImageDescriber> imageDescriber = new ArrayList<ImageDescriber>();
-
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				imageDescriber.addAll(recursiveIterate(file));
-			}	else {
-				imageDescriber.add(new ImageDescriber(file));
-				System.out.println(file.getName());
-			}
-		}
-		return imageDescriber;
-	}
 
 
 	private void printImageTags(int approachCount, Metadata metadata) {

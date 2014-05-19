@@ -25,12 +25,7 @@ public class FileRenamerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//      _fileRenamer = new FileRenamer();
 		sourceFolder = createFolder(System.getProperty("user.dir") + "\\sourceFolderTest");
-		System.out.println(System.getProperty("user.dir"));
-
-/*        _fileRenamer.setSourceFolder(sourceFolder.getPath());
-		_fileRenamer.setDestinationFolder(sourceFolder.getPath());*/
 	}
 
 	private File createFolder(String fileName) {

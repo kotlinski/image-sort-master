@@ -2,6 +2,7 @@ package se.kotlinski.imageRenamer.mappers;
 
 import se.kotlinski.imageRenamer.models.ImageDescriber;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,9 +27,34 @@ public class ImageMapper {
 		if (imageMap.containsKey(md5)) {
 			imageArray = imageMap.get(md5);
 		} else {
-			imageArray = imageMap.put(md5, new ArrayList<ImageDescriber>());
+			imageArray = new ArrayList<ImageDescriber>();
+			imageMap.put(md5, imageArray);
 			imageArray.add(imageDescriber);
 		}
 		return imageArray;
+	}
+
+	public void populateWithImages(File rootFolder) {
+		//File rootSource = new File(inputPath);
+		ArrayList<ImageDescriber> images = recursiveIterate(rootFolder);
+		for (ImageDescriber image : images) {
+			addImage(image);
+		}
+	}
+
+	public ArrayList<ImageDescriber> recursiveIterate(final File folder) {
+		ArrayList<ImageDescriber> imageDescriber = new ArrayList<ImageDescriber>();
+		for (File file : folder.listFiles()) {
+			if (file.isDirectory()) {
+				imageDescriber.addAll(recursiveIterate(file));
+			}	else {
+				imageDescriber.add(new ImageDescriber(file));
+			}
+		}
+		return imageDescriber;
+	}
+
+	public int getSizeOfUniqueImages() {
+		return imageMap.size();
 	}
 }

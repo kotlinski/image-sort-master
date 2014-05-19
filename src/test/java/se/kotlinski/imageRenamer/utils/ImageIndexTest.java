@@ -3,8 +3,10 @@ package se.kotlinski.imageRenamer.utils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imageRenamer.mappers.ImageMapper;
 import se.kotlinski.imageRenamer.models.ImageDescriber;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -49,8 +51,8 @@ public class ImageIndexTest {
 
 	@Test
 	public void testRunIndex() throws Exception {
-		ArrayList<ImageDescriber> imageDescriberArrayList = imageIndex.runIndexing(Constants.PATH_INPUT_TEST);
-		Assert.assertEquals("Number of images in testfolder", 6, imageDescriberArrayList.size());
+		ImageMapper imageMapper = imageIndex.runIndexing(new File(Constants.PATH_INPUT_TEST));
 
+		Assert.assertEquals("Number of Unique images", 6, imageMapper.getSizeOfUniqueImages());
 	}
 }
