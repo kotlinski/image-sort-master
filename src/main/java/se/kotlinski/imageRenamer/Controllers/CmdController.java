@@ -21,20 +21,11 @@ public class CmdController {
 	private CommandLine cmd;
 	private CommandLineParser parser;
 	private Options options;
+	private FolderIO folderIO;
 
 	public CmdController() {
 		setOptions(createOptions());
 		setParser(new GnuParser());
-	}
-
-	public void startCmd(String[] argv) {
-		try {
-			setCmd(getParser().parse(getOptions(), argv));
-		}
-		catch (ParseException e) {
-			System.err.println("Parsing failed.  Reason: " + e.getMessage());
-		}
-		FolderIO folderIO = runCmd(getOptions(), getCmd());
 	}
 
 	private static Options createOptions() {
@@ -68,15 +59,38 @@ public class CmdController {
 		if (cmd == null) {
 			printHelp(options);
 		}
-		else if (cmd.hasOption("source") && cmd.hasOption("output")) {
-			String sourcePath = cmd.getOptionValue("source");
-			String outputPath = cmd.getOptionValue("output");
+		else if (cmd.hasOption("s") && cmd.hasOption("o")) {
+			String sourcePath = cmd.getOptionValue("s");
+			String outputPath = cmd.getOptionValue("o");
 			folderIO.inputFolder = new File(sourcePath);
 			folderIO.outputFolder = new File(outputPath);
 		}
 		else {
+			System.out.println("No source no output fodler chosen");
 			printHelp(options);
 		}
+		return folderIO;
+	}
+
+	public FolderIO getFolderIO() {
+		return folderIO;
+	}
+
+	public void startCmd(String[] argv) {
+		folderIO = intepreterArgs(argv);
+
+		System.out.println(folderIO);
+	}
+
+	private FolderIO intepreterArgs(final String[] argv) {
+		FolderIO folderIO;
+		try {
+			setCmd(getParser().parse(getOptions(), argv));
+		}
+		catch (ParseException e) {
+			System.err.println("Parsing failed.  Reason: " + e.getMessage());
+		}
+		folderIO = runCmd(getOptions(), getCmd());
 		return folderIO;
 	}
 

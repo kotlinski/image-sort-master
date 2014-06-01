@@ -29,7 +29,7 @@ public class ImageDescriber {
 
 	public ImageDescriber(File file) {
 		md5 = generateMd5(file);
-		System.out.println(file.getName() + " md5: " + md5);
+		//System.out.println(file.getName() + " md5: " + md5);
 	}
 
 
