@@ -29,7 +29,6 @@ public class ImageMapper {
 		} else {
 			imageArray = new ArrayList<ImageDescriber>();
 			imageMap.put(md5, imageArray);
-			imageArray.add(imageDescriber);
 		}
 		return imageArray;
 	}
@@ -37,12 +36,13 @@ public class ImageMapper {
 	public void populateWithImages(File rootFolder) {
 		//File rootSource = new File(inputPath);
 		ArrayList<ImageDescriber> images = recursiveIterate(rootFolder);
+		System.out.println("Images in " + rootFolder.getName() + ": " + images.size());
 		for (ImageDescriber image : images) {
 			addImage(image);
 		}
 	}
 
-	public ArrayList<ImageDescriber> recursiveIterate(final File folder) {
+	public static ArrayList<ImageDescriber> recursiveIterate(final File folder) {
 		ArrayList<ImageDescriber> imageDescriber = new ArrayList<ImageDescriber>();
 		for (File file : folder.listFiles()) {
 			if (file.isDirectory()) {
@@ -56,5 +56,17 @@ public class ImageMapper {
 
 	public int getSizeOfUniqueImages() {
 		return imageMap.size();
+	}
+
+	@Override
+	public String toString() {
+		String retString = "Files in input folder: \n";
+		for (String s : imageMap.keySet()) {
+			retString+=s+ ", including files: " + "\n";
+			for (ImageDescriber imageDescriber : imageMap.get(s)) {
+				retString += "\t" + imageDescriber.toString() + "\n";
+			}
+		}
+		return retString;
 	}
 }

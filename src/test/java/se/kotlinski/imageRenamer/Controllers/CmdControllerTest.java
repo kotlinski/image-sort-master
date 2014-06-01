@@ -22,5 +22,6 @@ public class CmdControllerTest {
 		assertNotNull(cmdController.getFolderIO());
 		assertNotNull(cmdController.getFolderIO().inputFolder);
 		assertNotNull(cmdController.getFolderIO().outputFolder);
+		cmdController.getImageMapper();
 	}
 }

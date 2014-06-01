@@ -14,6 +14,7 @@ import java.util.Formatter;
  * Created by Simon on 2014-01-01.
  */
 public class ImageDescriber {
+	private final File file;
 	private String md5;
 	private String filePaths;
 
@@ -29,6 +30,7 @@ public class ImageDescriber {
 
 	public ImageDescriber(File file) {
 		md5 = generateMd5(file);
+		this.file = file;
 		//System.out.println(file.getName() + " md5: " + md5);
 	}
 
@@ -72,8 +74,16 @@ public class ImageDescriber {
 		return formatter.toString();
 	}
 
+	public File getFile() {
+		return file;
+	}
 
 	public String getMd5() {
 		return md5;
+	}
+
+	@Override
+	public String toString() {
+		return file.getName();
 	}
 }

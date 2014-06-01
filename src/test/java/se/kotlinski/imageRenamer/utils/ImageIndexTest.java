@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imageRenamer.mappers.ImageMapper;
+import se.kotlinski.imageRenamer.models.FolderIO;
 import se.kotlinski.imageRenamer.models.ImageDescriber;
 
 import java.io.File;
@@ -51,7 +52,9 @@ public class ImageIndexTest {
 
 	@Test
 	public void testRunIndex() throws Exception {
-		ImageMapper imageMapper = imageIndex.runIndexing(new File(Constants.PATH_INPUT_TEST));
+		FolderIO folderIO = new FolderIO();
+		folderIO.inputFolder = new File(Constants.PATH_INPUT_TEST);
+		ImageMapper imageMapper = imageIndex.runIndexing(folderIO);
 
 		Assert.assertEquals("Number of Unique images", 6, imageMapper.getSizeOfUniqueImages());
 	}

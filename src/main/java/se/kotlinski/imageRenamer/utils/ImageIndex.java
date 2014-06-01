@@ -4,6 +4,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import se.kotlinski.imageRenamer.mappers.ImageMapper;
+import se.kotlinski.imageRenamer.models.FolderIO;
 import se.kotlinski.imageRenamer.models.ImageDescriber;
 
 import java.io.File;
@@ -20,12 +21,12 @@ public class ImageIndex {
 		imageMapper = new ImageMapper();
 	}
 
-	public ImageMapper runIndexing(File rootFolder) {
+	public ImageMapper runIndexing(FolderIO folderIO) {
 
-		imageMapper.populateWithImages(rootFolder);
+		imageMapper.populateWithImages(folderIO.inputFolder);
 
 		return imageMapper;
-/*		for (File file : files) {
+		/*for (File file : files) {
 
 
 			ImageDescriber imageFile = new ImageDescriber(file);

@@ -34,6 +34,7 @@ public class ImageMapperTest {
 	public void testPopulateWithImages() throws Exception {
 		imageMapper.populateWithImages(new File(Constants.PATH_INPUT_TEST));
 		Assert.assertEquals("Number of unique images in testfolder", 6, imageMapper.getSizeOfUniqueImages());
+		System.out.println("Expecting 6 files: \n" + imageMapper.toString());
 
 	}
 

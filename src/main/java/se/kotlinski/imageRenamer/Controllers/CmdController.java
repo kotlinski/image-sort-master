@@ -2,8 +2,10 @@ package se.kotlinski.imageRenamer.Controllers;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import se.kotlinski.imageRenamer.mappers.ImageMapper;
 import se.kotlinski.imageRenamer.models.FolderIO;
 import se.kotlinski.imageRenamer.utils.CommandLineUtil;
+import se.kotlinski.imageRenamer.utils.ImageIndex;
 
 import java.io.File;
 
@@ -15,10 +17,15 @@ import java.io.File;
  */
 public class CmdController {
 	private FolderIO folderIO;
+	private ImageIndex imageIndex;
+	private Object imageMapper;
 
 	public CmdController() {
+		imageIndex = new ImageIndex();
 	}
-
+	public Object getImageMapper() {
+		return imageMapper;
+	}
 
 	public FolderIO getFolderIO() {
 		return folderIO;
@@ -29,7 +36,7 @@ public class CmdController {
 		folderIO = CommandLineUtil.runCmd(CommandLineUtil.getOptions(), cmd);
 
 		System.out.println(folderIO);
+		imageMapper = imageIndex.runIndexing(folderIO);
+		System.out.println(imageMapper);
 	}
-
-
 }
