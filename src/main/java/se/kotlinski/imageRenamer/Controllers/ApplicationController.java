@@ -1,15 +1,14 @@
-package se.kotlinski.imageRenamer.Controllers;
+package se.kotlinski.imageRenamer.controllers;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import se.kotlinski.imageRenamer.Views.FolderSelector;
+import se.kotlinski.imageRenamer.views.FolderSelector;
 import se.kotlinski.imageRenamer.utils.JavaFXUtils;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Run the Image Renamer via Application.

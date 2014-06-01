@@ -1,13 +1,9 @@
-package se.kotlinski.imageRenamer.Controllers;
+package se.kotlinski.imageRenamer.controllers;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import se.kotlinski.imageRenamer.mappers.ImageMapper;
 import se.kotlinski.imageRenamer.models.FolderIO;
 import se.kotlinski.imageRenamer.utils.CommandLineUtil;
 import se.kotlinski.imageRenamer.utils.ImageIndex;
-
-import java.io.File;
 
 /**
  * Run the Image Renamer via command-line.

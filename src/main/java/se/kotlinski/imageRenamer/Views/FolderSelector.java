@@ -1,4 +1,4 @@
-package se.kotlinski.imageRenamer.Views;
+package se.kotlinski.imageRenamer.views;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

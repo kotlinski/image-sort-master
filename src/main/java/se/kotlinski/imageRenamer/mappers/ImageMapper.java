@@ -16,6 +16,19 @@ public class ImageMapper {
 		imageMap = new HashMap<String, ArrayList<ImageDescriber>>();
 	}
 
+	public static ArrayList<ImageDescriber> recursiveIterate(final File folder) {
+		ArrayList<ImageDescriber> imageDescriber = new ArrayList<ImageDescriber>();
+		for (File file : folder.listFiles()) {
+			if (file.isDirectory()) {
+				imageDescriber.addAll(recursiveIterate(file));
+			}
+			else {
+				imageDescriber.add(new ImageDescriber(file));
+			}
+		}
+		return imageDescriber;
+	}
+
 	public void addImage(ImageDescriber imageDescriber) {
 		String md5 = imageDescriber.getMd5();
 		ArrayList<ImageDescriber> imageArray = getImageArrayForMd5(imageDescriber, md5);
@@ -26,7 +39,8 @@ public class ImageMapper {
 		ArrayList<ImageDescriber> imageArray;
 		if (imageMap.containsKey(md5)) {
 			imageArray = imageMap.get(md5);
-		} else {
+		}
+		else {
 			imageArray = new ArrayList<ImageDescriber>();
 			imageMap.put(md5, imageArray);
 		}
@@ -42,16 +56,12 @@ public class ImageMapper {
 		}
 	}
 
-	public static ArrayList<ImageDescriber> recursiveIterate(final File folder) {
-		ArrayList<ImageDescriber> imageDescriber = new ArrayList<ImageDescriber>();
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				imageDescriber.addAll(recursiveIterate(file));
-			}	else {
-				imageDescriber.add(new ImageDescriber(file));
+	public ArrayList<String> generateFileList(){
+		for (String s : imageMap.keySet()) {
+			for (ImageDescriber imageDescriber : imageMap.get(s)) {
+				imageDescriber.getRenamedFilePath();
 			}
 		}
-		return imageDescriber;
 	}
 
 	public int getSizeOfUniqueImages() {
@@ -62,11 +72,13 @@ public class ImageMapper {
 	public String toString() {
 		String retString = "Files in input folder: \n";
 		for (String s : imageMap.keySet()) {
-			retString+=s+ ", including files: " + "\n";
+			retString += s + ", including files: " + "\n";
 			for (ImageDescriber imageDescriber : imageMap.get(s)) {
 				retString += "\t" + imageDescriber.toString() + "\n";
 			}
 		}
 		return retString;
 	}
+
+
 }

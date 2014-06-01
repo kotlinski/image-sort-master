@@ -1,4 +1,4 @@
-package se.kotlinski.imageRenamer.Controllers;
+package se.kotlinski.imageRenamer.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
