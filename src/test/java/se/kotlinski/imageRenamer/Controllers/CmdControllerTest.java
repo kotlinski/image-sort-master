@@ -17,7 +17,7 @@ public class CmdControllerTest {
 
 	@Test
 	public void testStartCmd() throws Exception {
-		String[] argv = new String[]{"programname", "somecommand", "-o", Constants.PATH_INPUT_TEST, "-s", Constants.PATH_OUTPUT_TEST};
+		String[] argv = new String[]{"programname", "somecommand", "-s", Constants.PATH_INPUT_TEST, "-o", Constants.PATH_OUTPUT_TEST};
 		cmdController.startCmd(argv);
 		assertNotNull(cmdController.getFolderIO());
 		assertNotNull(cmdController.getFolderIO().inputFolder);

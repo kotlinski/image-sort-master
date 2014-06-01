@@ -2,6 +2,10 @@ package se.kotlinski.imageRenamer.utils;
 
 import java.io.File;
 
+/**
+ * Seems not to be in use.
+ */
+
 public class FileRenamer {
 	private File[] _listOfFiles;
 	private File _sourceFolder;
