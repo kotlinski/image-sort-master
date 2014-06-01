@@ -1,4 +1,4 @@
-package se.kotlinski.imageRenamer.utils;
+package se.kotlinski.imageRenamer.Controllers;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -6,6 +6,7 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import se.kotlinski.imageRenamer.models.FolderIO;
 
 import java.io.File;
 
@@ -16,26 +17,24 @@ import java.io.File;
  * @version $Revision: 1.1 $
  */
 public class CmdController {
-	private static File inputRoot;
-	private static File outputFolder;
 
-	CommandLine cmd;
-	CommandLineParser parser;
-	Options options;
+	private CommandLine cmd;
+	private CommandLineParser parser;
+	private Options options;
 
 	public CmdController() {
-		options = createOptions();
-		parser = new GnuParser();
+		setOptions(createOptions());
+		setParser(new GnuParser());
 	}
 
-	public File startCmd(String[] argv) {
+	public void startCmd(String[] argv) {
 		try {
-			cmd = parser.parse(options, argv);
+			setCmd(getParser().parse(getOptions(), argv));
 		}
 		catch (ParseException e) {
 			System.err.println("Parsing failed.  Reason: " + e.getMessage());
 		}
-		return runCmd(options, cmd);
+		FolderIO folderIO = runCmd(getOptions(), getCmd());
 	}
 
 	private static Options createOptions() {
@@ -63,20 +62,45 @@ public class CmdController {
 		formatter.printHelp("MainRenamer", options);
 	}
 
-	private File runCmd(Options options, CommandLine cmd) {
-		if (inputRoot != null && outputFolder != null) {
-			return inputRoot;
-		}
-		else if (cmd == null) {
+	private static FolderIO runCmd(Options options, CommandLine cmd) {
+		FolderIO folderIO = new FolderIO();
+
+		if (cmd == null) {
 			printHelp(options);
 		}
 		else if (cmd.hasOption("source") && cmd.hasOption("output")) {
 			String sourcePath = cmd.getOptionValue("source");
-			return new File(sourcePath);
+			String outputPath = cmd.getOptionValue("output");
+			folderIO.inputFolder = new File(sourcePath);
+			folderIO.outputFolder = new File(outputPath);
 		}
 		else {
 			printHelp(options);
 		}
-		return null;
+		return folderIO;
+	}
+
+	public CommandLine getCmd() {
+		return cmd;
+	}
+
+	public void setCmd(final CommandLine cmd) {
+		this.cmd = cmd;
+	}
+
+	public CommandLineParser getParser() {
+		return parser;
+	}
+
+	public void setParser(final CommandLineParser parser) {
+		this.parser = parser;
+	}
+
+	public Options getOptions() {
+		return options;
+	}
+
+	public void setOptions(final Options options) {
+		this.options = options;
 	}
 }
