@@ -1,5 +1,8 @@
 package se.kotlinski.imageRenamer.models;
 
+import org.apache.commons.io.FileUtils;
+import se.kotlinski.imageRenamer.utils.ImageTagReader;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,12 +11,13 @@ import java.io.IOException;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Formatter;
 
 /**
  * Created by Simon on 2014-01-01.
  */
-public class ImageDescriber {
+public class ImageDescriber implements Comparable<ImageDescriber> {
 	private final File file;
 	private String md5;
 	private String filePaths;
@@ -85,5 +89,27 @@ public class ImageDescriber {
 	@Override
 	public String toString() {
 		return file.getName();
+	}
+
+	public String getRenamedFilePath() {
+		//TODO build a new string of month, year and formattad name.
+		Date date = ImageTagReader.getImageDate(file);
+		String formattedDate = ImageTagReader.formatPathDate(date);
+		return formattedDate;
+	}
+	public String getRenamedFile() {
+		//TODO build a new string of month, year and formattad name.
+		Date date = ImageTagReader.getImageDate(file);
+		String formattedDate = ImageTagReader.formatFileDate(date);
+		formattedDate += "." + FileUtils.extension(file.getName());
+		return formattedDate;
+	}
+
+	@Override
+	public int compareTo(final ImageDescriber imageDescriber) {
+		if (imageDescriber != null) {
+			return getRenamedFilePath().compareTo(imageDescriber.getRenamedFilePath());
+		}
+		return 0;
 	}
 }

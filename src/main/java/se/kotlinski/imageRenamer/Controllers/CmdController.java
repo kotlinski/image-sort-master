@@ -13,11 +13,9 @@ import se.kotlinski.imageRenamer.utils.ImageIndex;
  */
 public class CmdController {
 	private FolderIO folderIO;
-	private ImageIndex imageIndex;
 	private Object imageMapper;
 
 	public CmdController() {
-		imageIndex = new ImageIndex();
 	}
 	public Object getImageMapper() {
 		return imageMapper;
@@ -31,8 +29,10 @@ public class CmdController {
 		CommandLine cmd = CommandLineUtil.intepreterArgs(argv);
 		folderIO = CommandLineUtil.runCmd(CommandLineUtil.getOptions(), cmd);
 
+		ImageIndex imageIndex = new ImageIndex(folderIO);
+
 		System.out.println(folderIO);
-		imageMapper = imageIndex.runIndexing(folderIO);
-		System.out.println(imageMapper);
+		imageMapper = imageIndex.runIndexing();
+		//System.out.println(imageMapper);
 	}
 }

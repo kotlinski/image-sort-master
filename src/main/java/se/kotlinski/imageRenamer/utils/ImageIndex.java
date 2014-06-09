@@ -1,13 +1,12 @@
 package se.kotlinski.imageRenamer.utils;
 
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
+import org.apache.commons.io.FileUtils;
 import se.kotlinski.imageRenamer.mappers.ImageMapper;
 import se.kotlinski.imageRenamer.models.FolderIO;
 import se.kotlinski.imageRenamer.models.ImageDescriber;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -16,59 +15,58 @@ import java.util.ArrayList;
  */
 public class ImageIndex {
 	private ImageMapper imageMapper;
+	private FolderIO folderIO;
 
-	public ImageIndex() {
+	public ImageIndex(FolderIO folderIO) {
 		imageMapper = new ImageMapper();
+		this.folderIO = folderIO;
 	}
 
-	public ImageMapper runIndexing(FolderIO folderIO) {
+	private void printRedundantFiles(final ArrayList<ImageDescriber> duplicates) {
+		System.out.println("Redundant Files: ");
+		for (ImageDescriber imageDescriber : duplicates) {
+			System.out.println(imageDescriber.getFile().getAbsoluteFile());
+		}
+	}
+
+	private void printNewFileList(final ArrayList<ImageDescriber> uniqueImageDescribers) {
+		System.out.println("New files: ");
+		for (ImageDescriber imageDescriber : uniqueImageDescribers) {
+			System.out.println(imageDescriber.getRenamedFilePath() + "-" + imageDescriber.getMd5());
+		}
+	}
+
+	public ImageMapper runIndexing() {
 
 		imageMapper.populateWithImages(folderIO.inputFolder);
 
 		return imageMapper;
-		/*for (File file : files) {
+	}
 
+	public void printIndexedFiles() {
+		ArrayList<ImageDescriber> uniqueImageDescribers = imageMapper.getUniqueImageDescribers();
+		printNewFileList(uniqueImageDescribers);
+		ArrayList<ImageDescriber> duplicates = imageMapper.getRedundantFiles();
+		printRedundantFiles(duplicates);
+	}
 
-			ImageDescriber imageFile = new ImageDescriber(file);
+	public void copyFiles() {
+		ArrayList<ImageDescriber> uniqueImageDescribers = imageMapper.getUniqueImageDescribers();
+		for (ImageDescriber uniqueImageDescriber : uniqueImageDescribers) {
+			String newImageFolder = folderIO.outputFolder.getAbsolutePath() + "\\" + uniqueImageDescriber.getRenamedFilePath();
+			FileUtils.mkdir(newImageFolder);
+			File file;
 			try {
+				file = new File(newImageFolder+"\\"+uniqueImageDescriber.getRenamedFile());
+				file.createNewFile();
+				FileUtils.copyFile(uniqueImageDescriber.getFile(), file);
 
-				Metadata metadata = ImageMetadataReader.readMetadata(file);
-				*//*printImageTags(1, metadata);*//*
-				// obtain the Exif directory
-				ExifSubIFDDirectory directory = metadata.getDirectory(ExifSubIFDDirectory.class);
-
-				Date date = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
-				System.out.println(date.toString());
-				Calendar calendar = new GregorianCalendar();
-				calendar.setTime(date);
-				SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss");
-				String formatted = format1.format(calendar.getTime());
-				System.out.println(formatted);
-
-			}
-			catch (ImageProcessingException e) {
-				e.printStackTrace();
 			}
 			catch (IOException e) {
 				e.printStackTrace();
 			}
-		}*/
-	}
-
-
-
-	private void printImageTags(int approachCount, Metadata metadata) {
-		System.out.println();
-		System.out.println("*** APPROACH " + approachCount + " ***");
-		System.out.println();
-		// iterate over the exif data and print to System.out
-		for (Directory directory : metadata.getDirectories()) {
-			for (Tag tag : directory.getTags()) {
-				System.out.println(tag);
-			}
-			for (String error : directory.getErrors()) {
-				System.err.println("ERROR: " + error);
-			}
 		}
 	}
+
+
 }

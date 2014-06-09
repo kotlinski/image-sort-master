@@ -4,6 +4,7 @@ import se.kotlinski.imageRenamer.models.ImageDescriber;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -50,18 +51,19 @@ public class ImageMapper {
 	public void populateWithImages(File rootFolder) {
 		//File rootSource = new File(inputPath);
 		ArrayList<ImageDescriber> images = recursiveIterate(rootFolder);
-		System.out.println("Images in " + rootFolder.getName() + ": " + images.size());
 		for (ImageDescriber image : images) {
 			addImage(image);
 		}
 	}
 
-	public ArrayList<String> generateFileList(){
+
+	public ArrayList<ImageDescriber> getUniqueImageDescribers() {
+		ArrayList<ImageDescriber> imageDescribers = new ArrayList<ImageDescriber>();
 		for (String s : imageMap.keySet()) {
-			for (ImageDescriber imageDescriber : imageMap.get(s)) {
-				imageDescriber.getRenamedFilePath();
-			}
+			imageDescribers.add(imageMap.get(s).get(0));
 		}
+		imageDescribers.sort(Comparator.<ImageDescriber>naturalOrder());
+		return imageDescribers;
 	}
 
 	public int getSizeOfUniqueImages() {
@@ -81,4 +83,14 @@ public class ImageMapper {
 	}
 
 
+	public ArrayList<ImageDescriber> getRedundantFiles() {
+		ArrayList<ImageDescriber> imageDescribers = new ArrayList<ImageDescriber>();
+		for (String s : imageMap.keySet()) {
+				for (int i = 1; i < imageMap.get(s).size(); i++) {
+				imageDescribers.add(imageMap.get(s).get(i));
+			}
+		}
+		imageDescribers.sort(Comparator.<ImageDescriber>naturalOrder());
+		return imageDescribers;
+	}
 }
