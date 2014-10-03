@@ -1,7 +1,7 @@
 package se.kotlinski.imageRenamer;
 
-import se.kotlinski.imageRenamer.controllers.ApplicationController;
-import se.kotlinski.imageRenamer.controllers.CmdController;
+import se.kotlinski.imageRenamer.controller.ApplicationController;
+import se.kotlinski.imageRenamer.controller.CmdController;
 
 public class MainRenamer {
 
