@@ -1,23 +1,42 @@
 imageRenamer
 ============
 
-Backing up my images every month, Dropbox, Nexus 5 and Samsung uses different 
+Backing up my images from time to time, Dropbox, Nexus 5 and Samsung uses different 
 image-naming-standards. This java programs solves the problem.
 
 
 What it does
 --------
-You have a folder with a bunch of all your images since you were 4.½ year old.
+This is my problem: 
+I have a great back-up folder for images on different harddrives. With sub-folder
+names like '2011-12 to 2012-05', '2012-01','dropbox 2012' etc. 
+And then in the middle of everything, your out of phone memory and need to dump 
+all images from your phone. 
 <br>
 <br>
-<b>Images</b>
+You have a folder with a bunch of all your images since you were 4.½ year old 
+and this tool helps you cleaning everything up and putting it in nice folders.
+<br>
+<br>
+And this is how it may look when want to add new images to it: 
+<br>
+<br>
+<b>Images from phone</b>
 
--  <b>2013.05.12-2014.02.13</b>
+-  <b>Camera</b>
+    -  <b>Wedding</b>
+        -  imageK.png
     -  imageA.png
     -  2013.12.23-12.23.png
--  <b>school images</b>
+-  <b>Instagram</b>
     -  imageA.png
 	  -  imageB.png
+-  <b>Screenshots</b>
+    -  imageD.png
+	  -  imageG.png
+-  <b>Snapchat</b>
+    -  imageE.png
+	  -  imageF.png
 -  2013.12.23-12.23.png
 -  2013.12.23-12.23(2).png
 
@@ -28,7 +47,10 @@ The output of this will be:
 
 -  <b>2012</b>
     -  <b>02</b>
-        -  <b>school images</b>
+        -  <b>Camera</b>
+        -  <b>Instagram</b>
+        -  <b>Snapchat</b>
+        -  <b>Screenshots</b>
             -  2012.02.12-12.03.png   <renamed from imageA.png>
             -  2012.02.12-12.05.png   <renamed from imageB.png>
         -  <b>2013.05.12-2014.02.13</b>
