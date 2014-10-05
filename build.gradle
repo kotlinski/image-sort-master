@@ -4,6 +4,8 @@ repositories {
 
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
 
 mainClassName = "se.kotlinski.imageRenamer.MainRenamer"
 
@@ -31,6 +33,7 @@ sourceSets {
 }
 
 dependencies {
+  classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
   compile 'com.adobe.xmp:xmpcore:5.1.1'
   compile 'commons-cli:commons-cli:20040117.000000'
   compile 'commons-io:commons-io:20030203.000550'
@@ -39,4 +42,10 @@ dependencies {
   testCompile 'org.powermock:powermock-module-junit4:1.5.4'
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
 
