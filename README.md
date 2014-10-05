@@ -20,11 +20,11 @@ The month setting is optional, your different options is month, quarter or none.
 The flavor may be Instagram, Screenshots, Elins wedding or what folder you 
 put your images in.<br>
 A flavor is all subfolders from the root folder, except year/quarter/month.
-<p>Example:<br>
- `Root/2013/Wedding/TheKiss/imgA.png` 
+<br>Example:<br>
+`Root/2013/Wedding/TheKiss/imgA.png`
  <br>will be sorted as:<br> 
 `2013/04/Wedding/TheKiss/2013-04-22 13:17:00.png`
-</P>
+<br>
 
 
 Donate
