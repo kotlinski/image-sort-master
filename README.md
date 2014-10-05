@@ -1,5 +1,9 @@
 imageRenamer
 ============
+[![Build Status](https://travis-ci.org/kotlinski/imageRenamer.svg?branch=feature%2Ftravis)](https://travis-ci.org/Springworks/android-utils)
+
+[![Coverage Status](https://img.shields.io/coveralls/kotlinski/imageRenamer.svg)](https://coveralls.io/r/kotlinski/imageRenamer)
+
 
 How and when do you sort and back up your images from your camera-devices? 
 
@@ -25,11 +29,6 @@ A flavor is all subfolders from the root folder, except year/quarter/month.
  <br>will be sorted as:<br> 
 `2013/04/Wedding/TheKiss/2013-04-22 13:17:00.png`
 <br>
-
-[![Build Status](https://travis-ci.org/kotlinski/imageRenamer.svg?branch=feature%2Ftravis)](https://travis-ci.org/Springworks/android-utils)
-<br>
-[![Coverage Status](https://img.shields.io/coveralls/kotlinski/imageRenamer.svg)](https://coveralls.io/r/kotlinski/imageRenamer)
-
 
 
 Donate
