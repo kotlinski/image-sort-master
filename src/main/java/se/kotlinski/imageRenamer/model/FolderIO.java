@@ -1,4 +1,4 @@
-package se.kotlinski.imageRenamer.models;
+package se.kotlinski.imageRenamer.model;
 
 import java.io.File;
 

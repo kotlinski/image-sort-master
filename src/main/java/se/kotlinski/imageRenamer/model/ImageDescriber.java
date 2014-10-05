@@ -1,4 +1,4 @@
-package se.kotlinski.imageRenamer.models;
+package se.kotlinski.imageRenamer.model;
 
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imageRenamer.utils.ImageTagReader;

@@ -1,11 +1,11 @@
-package se.kotlinski.imageRenamer.mappers;
+package se.kotlinski.imageRenamer.mapper;
 
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imageRenamer.models.ImageDescriber;
+import se.kotlinski.imageRenamer.model.ImageDescriber;
 import se.kotlinski.imageRenamer.utils.Constants;
 
 import java.io.File;

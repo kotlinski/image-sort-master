@@ -1,4 +1,4 @@
-package se.kotlinski.imageRenamer.models;
+package se.kotlinski.imageRenamer.model;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -6,8 +6,6 @@ import org.junit.Test;
 import se.kotlinski.imageRenamer.utils.Constants;
 
 import java.io.File;
-
-import static org.junit.Assert.*;
 
 public class ImageDescriberTest {
 

@@ -1,6 +1,6 @@
-package se.kotlinski.imageRenamer.mappers;
+package se.kotlinski.imageRenamer.mapper;
 
-import se.kotlinski.imageRenamer.models.ImageDescriber;
+import se.kotlinski.imageRenamer.model.ImageDescriber;
 
 import java.io.File;
 import java.util.ArrayList;

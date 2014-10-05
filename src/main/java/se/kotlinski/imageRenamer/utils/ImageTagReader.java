@@ -6,8 +6,6 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
-import se.kotlinski.imageRenamer.mappers.ImageMapper;
-import se.kotlinski.imageRenamer.models.FolderIO;
 
 import java.io.File;
 import java.io.IOException;

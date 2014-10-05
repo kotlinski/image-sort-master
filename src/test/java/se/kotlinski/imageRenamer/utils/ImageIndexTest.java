@@ -3,12 +3,10 @@ package se.kotlinski.imageRenamer.utils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imageRenamer.mappers.ImageMapper;
-import se.kotlinski.imageRenamer.models.FolderIO;
-import se.kotlinski.imageRenamer.models.ImageDescriber;
+import se.kotlinski.imageRenamer.mapper.ImageMapper;
+import se.kotlinski.imageRenamer.model.FolderIO;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Created by Simon Kotlinski on 2014-02-19.

@@ -1,7 +1,7 @@
 package se.kotlinski.imageRenamer.controller;
 
 import org.apache.commons.cli.CommandLine;
-import se.kotlinski.imageRenamer.models.FolderIO;
+import se.kotlinski.imageRenamer.model.FolderIO;
 import se.kotlinski.imageRenamer.utils.CommandLineUtil;
 import se.kotlinski.imageRenamer.utils.ImageIndex;
 

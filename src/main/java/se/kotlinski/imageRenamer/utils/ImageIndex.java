@@ -1,9 +1,9 @@
 package se.kotlinski.imageRenamer.utils;
 
 import org.apache.commons.io.FileUtils;
-import se.kotlinski.imageRenamer.mappers.ImageMapper;
-import se.kotlinski.imageRenamer.models.FolderIO;
-import se.kotlinski.imageRenamer.models.ImageDescriber;
+import se.kotlinski.imageRenamer.mapper.ImageMapper;
+import se.kotlinski.imageRenamer.model.FolderIO;
+import se.kotlinski.imageRenamer.model.ImageDescriber;
 
 import java.io.File;
 import java.io.IOException;
