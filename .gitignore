@@ -24,3 +24,5 @@ Thumbs.db
 # Android Studio
 .gradle
 build/
+
+src/test/resources/output/*

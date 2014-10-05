@@ -3,6 +3,8 @@ apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 
+mainClassName = "se.kotlinski.imageRenamer.MainRenamer"
+
 buildscript {
   repositories {
 	mavenCentral()
@@ -29,10 +31,11 @@ repositories {
   mavenCentral()
 }
 
-mainClassName = "se.kotlinski.imageRenamer.MainRenamer"
 
 jar {
-  manifest.attributes provider: 'gradle'
+  manifest{
+	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imageRenamer.MainRenamer'
+  }
 }
 
 
@@ -41,9 +44,6 @@ buildscript {
 	mavenCentral()
   }
 
-  dependencies {
-	classpath 'net.saliman:gradle-cobertura-plugin:2.0.0'
-  }
 }
 
 sourceSets {

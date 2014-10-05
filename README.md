@@ -133,8 +133,14 @@ How to use it
 The gui is under development, but will be here soon. You may select what "special folders" 
 that will be inherited to the new structure. 
 
-Then populate the folders with Samsung and Dropbox images. 
-  > java -jar ImageRename -run
+Make a jar with gradle: <br> 
+`  > gradlew build` <br>
+`  > java -jar imageRenamer.jar` <br>
+.. or generate a bat with:  <br>
+`  > gradlew installApp`
+
+A nice way to set up the run configurations in Intellij is:
+Run > Edit Configurations > Add a new Application Configuration.
 
 Run the program and you end up with a merged result in the Master-folder.
  
