@@ -1,6 +1,6 @@
-imageRenamer
+Image Sort Master
 ============
-[![Build Status](https://travis-ci.org/kotlinski/imageRenamer.svg?branch=feature%2Ftravis)](https://travis-ci.org/Springworks/android-utils) [![Coverage Status](https://img.shields.io/coveralls/kotlinski/imageRenamer.svg)](https://coveralls.io/r/kotlinski/imageRenamer)
+[![Build Status](https://travis-ci.org/kotlinski/image-sort-master.svg?branch=feature%2Ftravis)](https://travis-ci.org/Springworks/android-utils) [![Coverage Status](https://img.shields.io/coveralls/kotlinski/image-sort-master.svg)](https://coveralls.io/r/kotlinski/image-sort-master)
 
 
 How and when do you sort and back up your images from your camera-devices? 
