@@ -2,6 +2,7 @@ package se.kotlinski.imageRenamer.controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imageRenamer.controller.CmdController;
 import se.kotlinski.imageRenamer.utils.Constants;
 
 import static org.junit.Assert.*;
