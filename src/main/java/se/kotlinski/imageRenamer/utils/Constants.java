@@ -11,4 +11,5 @@ public class Constants {
 	public static final String USER_FOLDER = "user.folder";
 	public static final String PATH_INPUT_TEST = System.getProperty("user.dir") + "//src//test//resources//inputImages";
 
+	public static final String PATH_OUTPUT_TEST = System.getProperty("user.dir") + "//src//test//resources//output";
 }

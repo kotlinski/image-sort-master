@@ -33,18 +33,27 @@ public class ImageMapperTest {
 	@Test
 	public void testPopulateWithImages() throws Exception {
 		imageMapper.populateWithImages(new File(Constants.PATH_INPUT_TEST));
-		Assert.assertEquals("Number of unique images in testfolder", 6, imageMapper.getSizeOfUniqueImages());
-
+		Assert.assertEquals("Number of unique images in testfolder", 7, imageMapper.getSizeOfUniqueImages());
+		//System.out.println("Expecting 6 files: \n" + imageMapper.toString());
 	}
 
 	@Test
 	public void testRecursiveIterate() throws Exception {
-		ArrayList<ImageDescriber> imageList = imageMapper.recursiveIterate(new File(Constants.PATH_INPUT_TEST));
-		Assert.assertEquals("Image found in root folder", 7, imageList.size());
+		ArrayList<ImageDescriber> imageList = ImageMapper.recursiveIterate(new File(Constants.PATH_INPUT_TEST));
+		Assert.assertEquals("Image found in root folder", 8, imageList.size());
 	}
 
 	@Test
 	public void testGetSizeOfUniqueImages() throws Exception {
 
+	}
+
+	@Test
+	public void testNewFilesNames() throws Exception {
+		imageMapper.populateWithImages(new File(Constants.PATH_INPUT_TEST));
+
+		ArrayList<ImageDescriber> imageDescribers = imageMapper.getUniqueImageDescribers();
+
+		Assert.assertEquals("Unique image describer sizes", imageDescribers.size(), 7);
 	}
 }

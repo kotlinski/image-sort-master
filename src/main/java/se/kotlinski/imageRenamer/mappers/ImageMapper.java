@@ -4,6 +4,7 @@ import se.kotlinski.imageRenamer.models.ImageDescriber;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -16,6 +17,19 @@ public class ImageMapper {
 		imageMap = new HashMap<String, ArrayList<ImageDescriber>>();
 	}
 
+	public static ArrayList<ImageDescriber> recursiveIterate(final File folder) {
+		ArrayList<ImageDescriber> imageDescriber = new ArrayList<ImageDescriber>();
+		for (File file : folder.listFiles()) {
+			if (file.isDirectory()) {
+				imageDescriber.addAll(recursiveIterate(file));
+			}
+			else {
+				imageDescriber.add(new ImageDescriber(file));
+			}
+		}
+		return imageDescriber;
+	}
+
 	public void addImage(ImageDescriber imageDescriber) {
 		String md5 = imageDescriber.getMd5();
 		ArrayList<ImageDescriber> imageArray = getImageArrayForMd5(imageDescriber, md5);
@@ -26,10 +40,10 @@ public class ImageMapper {
 		ArrayList<ImageDescriber> imageArray;
 		if (imageMap.containsKey(md5)) {
 			imageArray = imageMap.get(md5);
-		} else {
+		}
+		else {
 			imageArray = new ArrayList<ImageDescriber>();
 			imageMap.put(md5, imageArray);
-			imageArray.add(imageDescriber);
 		}
 		return imageArray;
 	}
@@ -42,19 +56,41 @@ public class ImageMapper {
 		}
 	}
 
-	public ArrayList<ImageDescriber> recursiveIterate(final File folder) {
-		ArrayList<ImageDescriber> imageDescriber = new ArrayList<ImageDescriber>();
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				imageDescriber.addAll(recursiveIterate(file));
-			}	else {
-				imageDescriber.add(new ImageDescriber(file));
-			}
+
+	public ArrayList<ImageDescriber> getUniqueImageDescribers() {
+		ArrayList<ImageDescriber> imageDescribers = new ArrayList<ImageDescriber>();
+		for (String s : imageMap.keySet()) {
+			imageDescribers.add(imageMap.get(s).get(0));
 		}
-		return imageDescriber;
+		imageDescribers.sort(Comparator.<ImageDescriber>naturalOrder());
+		return imageDescribers;
 	}
 
 	public int getSizeOfUniqueImages() {
 		return imageMap.size();
+	}
+
+	@Override
+	public String toString() {
+		String retString = "Files in input folder: \n";
+		for (String s : imageMap.keySet()) {
+			retString += s + ", including files: " + "\n";
+			for (ImageDescriber imageDescriber : imageMap.get(s)) {
+				retString += "\t" + imageDescriber.toString() + "\n";
+			}
+		}
+		return retString;
+	}
+
+
+	public ArrayList<ImageDescriber> getRedundantFiles() {
+		ArrayList<ImageDescriber> imageDescribers = new ArrayList<ImageDescriber>();
+		for (String s : imageMap.keySet()) {
+				for (int i = 1; i < imageMap.get(s).size(); i++) {
+				imageDescribers.add(imageMap.get(s).get(i));
+			}
+		}
+		imageDescribers.sort(Comparator.<ImageDescriber>naturalOrder());
+		return imageDescribers;
 	}
 }
