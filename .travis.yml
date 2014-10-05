@@ -1,5 +1,8 @@
 language: java
 
+before_install:
+ - chmod +x gradlew
+
 install:
   - TERM=dumb gradle -q assemble
 
@@ -9,3 +12,8 @@ script:
 jdk:
   - oraclejdk8
 
+env:
+- TERM=dumb
+
+after_success:
+- ./gradlew jacocoTestReport coveralls
