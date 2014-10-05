@@ -27,6 +27,8 @@ A flavor is all subfolders from the root folder, except year/quarter/month.
 <br>
 
 [![Build Status](https://travis-ci.org/kotlinski/imageRenamer.svg?branch=feature%2Ftravis)](https://travis-ci.org/Springworks/android-utils)
+<br>
+[![Coverage Status](https://img.shields.io/coveralls/kotlinski/imageRenamer.svg)](https://coveralls.io/r/kotlinski/imageRenamer)
 
 
 
