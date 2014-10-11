@@ -1,1 +1,1 @@
-include ':image-sorter'
+include ':image-sorter', ':image-clients'

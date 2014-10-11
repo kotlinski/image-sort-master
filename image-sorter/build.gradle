@@ -1,15 +1,11 @@
 apply plugin: 'java'
-apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
-
-mainClassName = "se.kotlinski.imagesort.MainRenamer"
 
 buildscript {
   repositories {
 	mavenCentral()
   }
-
   dependencies {
 	classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
   }
@@ -41,7 +37,6 @@ buildscript {
   repositories {
 	mavenCentral()
   }
-
 }
 
 sourceSets {
