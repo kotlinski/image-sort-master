@@ -38,6 +38,13 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
 		//System.out.println(file.getName() + " md5: " + md5);
 	}
 
+	private static String byteArray2Hex(byte[] hash) {
+		Formatter formatter = new Formatter();
+		for (byte b : hash) {
+			formatter.format("%02x", b);
+		}
+		return formatter.toString();
+	}
 
 	private String generateMd5(final File file) {
 		FileInputStream fis = null;
@@ -70,14 +77,6 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
 		return byteArray2Hex(hash);
 	}
 
-	private static String byteArray2Hex(byte[] hash) {
-		Formatter formatter = new Formatter();
-		for (byte b : hash) {
-			formatter.format("%02x", b);
-		}
-		return formatter.toString();
-	}
-
 	public File getFile() {
 		return file;
 	}
@@ -97,6 +96,7 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
 		String formattedDate = ImageTagReader.formatPathDate(date);
 		return formattedDate;
 	}
+
 	public String getRenamedFile() {
 		//TODO build a new string of month, year and formattad name.
 		Date date = ImageTagReader.getImageDate(file);
@@ -107,8 +107,9 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
 
 	@Override
 	public int compareTo(final ImageDescriber imageDescriber) {
-		if (imageDescriber != null) {
-			return getRenamedFilePath().compareTo(imageDescriber.getRenamedFilePath());
+		String renamedFilePath = getRenamedFilePath();
+		if (imageDescriber != null && renamedFilePath != null) {
+			return renamedFilePath.compareTo(imageDescriber.getRenamedFilePath());
 		}
 		return 0;
 	}

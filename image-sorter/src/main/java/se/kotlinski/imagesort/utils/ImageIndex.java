@@ -47,7 +47,7 @@ public class ImageIndex {
 	}
 
 	private boolean validInputFolder(final ArrayList<File> inputFolders) {
-		return false;
+		return true;
 	}
 
 	public void printIndexedFiles() {

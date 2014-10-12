@@ -7,7 +7,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import se.kotlinski.imagesort.Exception.NoFolderException;
+import se.kotlinski.imagesort.Exception.NoInputFolderException;
+import se.kotlinski.imagesort.Exception.NoMasterFolderException;
 import se.kotlinski.imagesort.model.FolderIO;
 
 import java.io.File;
@@ -70,7 +71,7 @@ public class CommandLineUtil {
 		return new GnuParser();
 	}
 
-	public static FolderIO runCmd(final Options options, final CommandLine cmd) throws NoFolderException {
+	public static FolderIO runCmd(final Options options, final CommandLine cmd) throws NoMasterFolderException, NoInputFolderException {
 		FolderIO folderIO = new FolderIO();
 		if (cmd == null || cmd.hasOption("h")) {
 			printHelp(options);
@@ -84,7 +85,7 @@ public class CommandLineUtil {
 					inputFolders.add(folder);
 				}
 				else {
-					throw new NoFolderException("SourcePath not valid: " + sourcePath);
+					throw new NoInputFolderException("SourcePath not valid: " + sourcePath);
 				}
 			}
 			String outputPath = cmd.getOptionValue("o");
@@ -94,7 +95,7 @@ public class CommandLineUtil {
 				inputFolders.add(masterFolder);
 			}
 			else {
-				throw new NoFolderException("SourcePath not valid: " + masterFolder);
+				throw new NoMasterFolderException("SourcePath not valid: " + masterFolder, masterFolder);
 			}
 
 			folderIO.inputFolders = inputFolders;

@@ -3,6 +3,9 @@ package se.kotlinski.imagesort;
 import se.kotlinski.imagesort.controller.ApplicationController;
 import se.kotlinski.imagesort.controller.CmdController;
 
+/**
+ * Entry point of the program, if any kind of arguments, run cmd-version, else application version
+ */
 public class MainRenamer {
 
 	private MainRenamer() {

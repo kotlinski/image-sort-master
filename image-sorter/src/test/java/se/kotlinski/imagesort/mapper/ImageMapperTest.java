@@ -36,7 +36,7 @@ public class ImageMapperTest {
 		ArrayList<File> inputFolders = new ArrayList<File>();
 		inputFolders.add(file);
 		imageMapper.populateWithImages(inputFolders);
-		Assert.assertEquals("Number of unique images in testfolder", 7, imageMapper.getSizeOfUniqueImages());
+		Assert.assertEquals("Number of unique images in testfolder", 6, imageMapper.getSizeOfUniqueImages());
 		//System.out.println("Expecting 6 files: \n" + imageMapper.toString());
 	}
 
@@ -60,6 +60,6 @@ public class ImageMapperTest {
 
 		ArrayList<ImageDescriber> imageDescribers = imageMapper.getUniqueImageDescribers();
 
-		Assert.assertEquals("Unique image describer sizes", imageDescribers.size(), 7);
+		Assert.assertEquals("Unique image describer sizes", 6, imageDescribers.size());
 	}
 }

@@ -36,7 +36,7 @@ public class ImageIndexTest {
 	public void testRunIndex() throws Exception {
 		ImageMapper imageMapper = imageIndex.runIndexing();
 
-		Assert.assertEquals("Number of Unique images", 7, imageMapper.getSizeOfUniqueImages());
+		Assert.assertEquals("Number of Unique images", 6, imageMapper.getSizeOfUniqueImages());
 
 		imageIndex.copyFiles();
 	}

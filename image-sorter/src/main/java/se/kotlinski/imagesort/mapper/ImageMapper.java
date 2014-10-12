@@ -1,6 +1,7 @@
 package se.kotlinski.imagesort.mapper;
 
 import se.kotlinski.imagesort.model.ImageDescriber;
+import se.kotlinski.imagesort.utils.ImageTagReader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,7 +55,12 @@ public class ImageMapper {
 			images.addAll(recursiveIterate(rootFolder));
 		}
 		for (ImageDescriber image : images) {
-			addImage(image);
+			if(ImageTagReader.isValidImageFile(image.getFile())) {
+				addImage(image);
+			}
+			else {
+				System.out.println(image.getFile().getAbsoluteFile() + " is not valid");
+			}
 		}
 	}
 
