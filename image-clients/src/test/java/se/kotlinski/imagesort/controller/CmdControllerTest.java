@@ -12,7 +12,6 @@ public class CmdControllerTest {
 	@Before
 	public void setUp() throws Exception {
 		cmdController = new CmdController();
-
 	}
 
 	@Test
