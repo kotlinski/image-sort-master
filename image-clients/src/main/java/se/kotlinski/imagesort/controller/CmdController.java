@@ -58,10 +58,8 @@ public class CmdController {
 		catch (NoMasterFolderException e) {
 			createMasterFolder(e.getMasterFolder());
 		}
-
 		//Make static calls to an interface instead.
 		System.out.println(folderIO);
-
 
 		// We have created a folderIO
 		// and now the image-sorter will do its magic.

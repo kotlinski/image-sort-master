@@ -36,14 +36,14 @@ public class ImageMapperTest {
 		ArrayList<File> inputFolders = new ArrayList<File>();
 		inputFolders.add(file);
 		imageMapper.populateWithImages(inputFolders);
-		Assert.assertEquals("Number of unique images in testfolder", 6, imageMapper.getSizeOfUniqueImages());
+		Assert.assertEquals("Number of unique images in testfolder", 7, imageMapper.getSizeOfUniqueImages());
 		//System.out.println("Expecting 6 files: \n" + imageMapper.toString());
 	}
 
 	@Test
 	public void testRecursiveIterate() throws Exception {
 		ArrayList<ImageDescriber> imageList = ImageMapper.recursiveIterate(new File(Constants.PATH_INPUT_TEST));
-		Assert.assertEquals("Image found in root folder", 8, imageList.size());
+		Assert.assertEquals("Image found in root folder", 10, imageList.size());
 	}
 
 	@Test
@@ -60,6 +60,12 @@ public class ImageMapperTest {
 
 		ArrayList<ImageDescriber> imageDescribers = imageMapper.getUniqueImageDescribers();
 
-		Assert.assertEquals("Unique image describer sizes", 6, imageDescribers.size());
+		Assert.assertEquals("Unique image describer sizes", 7, imageDescribers.size());
+	}
+
+	@Test
+	public void testGetRedundantFiles() throws Exception {
+		Assert.assertEquals("To string function","Files in input folder: \n", imageMapper.toString());
+		Assert.assertEquals("Size of reduntant file list", 0, imageMapper.getRedundantFiles().size());
 	}
 }

@@ -149,8 +149,8 @@ Road map
 
 - [x] use image meta-data interpreters. 
 - [ ] use some kind of mp4-meta data parser
-- [ ] take an input folder and generate new folders from meta data
+- [x] take an input folder and generate new folders from meta data
 - [ ] create a simple gui selecting two folders(input/output)
 - [ ] present the results of duplicates etc. 
-- [ ] take care of output folder on update
+- [x] take care of output folder on update
 - [ ] handle flavoured folders. 

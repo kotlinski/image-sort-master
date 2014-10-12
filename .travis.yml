@@ -7,7 +7,7 @@ install:
   - TERM=dumb gradle -q assemble
 
 script:
-  - TERM=dumb gradle check
+  - TERM=dumb gradle check --info
 
 jdk:
   - oraclejdk8

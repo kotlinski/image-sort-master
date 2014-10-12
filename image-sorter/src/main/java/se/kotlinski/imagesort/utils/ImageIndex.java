@@ -37,7 +37,7 @@ public class ImageIndex {
 	}
 
 	public ImageMapper runIndexing() {
-		if(validInputFolder(folderIO.inputFolders)){
+		if(folderIO != null && validInputFolder(folderIO.inputFolders)){
 			imageMapper.populateWithImages(folderIO.inputFolders);
 			return imageMapper;
 		}
