@@ -15,7 +15,7 @@ public class ImageDescriberTest {
 	@Before
 	public void setup() {
 		File file = new File(Constants.PATH_INPUT_TEST + "//structure//2013-10-03 13.43.20-kaffe.jpg");
-		File file2 = new File(Constants.PATH_INPUT_TEST + "//structure//2013-10-26 20.20.46-köttbullar.jpg");
+		File file2 = new File(Constants.PATH_INPUT_TEST + "//structure//2013-10-26 20.20.46-kottbullar.jpg");
 		imageDescriber = new ImageDescriber(file);
 		imageDescriber2 = new ImageDescriber(file2);
 	}

@@ -8,17 +8,17 @@ import java.io.File;
  */
 public class Constants {
 	public static final String USER_FOLDER = "user.folder";
-	public static final String PATH_INPUT_TEST = (System.getProperty("user.dir") +
-																							 File.separator
-																							 + "src" + File.separator +
-																							 "test" + File.separator +
-																							 "resources" + File.separator +
-																							 "inputImages").replace("\\", "\\\\");
+	public static final String PATH_INPUT_TEST = (System.getProperty("user.dir") + File.separator +
+																								/*"image-sorter" + File.separator +*/
+																								"src" + File.separator +
+																								"test" + File.separator +
+																								"resources" + File.separator +
+																								"inputImages")/*.replace("\\", "\\\\")*/;
 
-	public static final String PATH_OUTPUT_TEST = (System.getProperty("user.dir") +
-																								 File.separator
-																								 + "src" + File.separator +
+	public static final String PATH_OUTPUT_TEST = (System.getProperty("user.dir") + File.separator +
+																								 /*"image-sorter" + File.separator +*/
+																								 "src" + File.separator +
 																								 "test" + File.separator +
 																								 "resources" + File.separator +
-																								 "output").replace("\\", "\\\\");
+																								 "output")/*.replace("\\", "\\\\")*/;
 }
