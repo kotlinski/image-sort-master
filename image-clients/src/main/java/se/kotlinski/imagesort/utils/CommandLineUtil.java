@@ -81,7 +81,7 @@ public class CommandLineUtil {
 			ArrayList<File> inputFolders = new ArrayList<File>();
 			for (String sourcePath : sourcePaths) {
 				File folder = new File(sourcePath);
-				if (isValidFolder(folder)) {
+				if (FileUtil.isValidFolder(folder)) {
 					inputFolders.add(folder);
 				}
 				else {
@@ -91,7 +91,7 @@ public class CommandLineUtil {
 			String outputPath = cmd.getOptionValue("o");
 			File masterFolder = new File(outputPath);
 
-			if (isValidFolder(masterFolder)) {
+			if (FileUtil.isValidFolder(masterFolder)) {
 				inputFolders.add(masterFolder);
 			}
 			else {
@@ -106,9 +106,5 @@ public class CommandLineUtil {
 			printHelp(options);
 		}
 		return folderIO;
-	}
-
-	private static boolean isValidFolder(final File folder) {
-		return folder != null && folder.exists() && folder.isDirectory();
 	}
 }

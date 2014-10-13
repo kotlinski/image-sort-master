@@ -65,7 +65,7 @@ dependencies {
   compile 'com.drewnoakes:metadata-extractor:2.+'
   compile 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
   testCompile 'junit:junit:4.11'
-  testCompile 'org.powermock:powermock-module-junit4:1.5.4'
+  testCompile 'org.mockito:mockito-all:1.10.8'
 }
 task wrapper(type: Wrapper) {
   gradleVersion = '2.0'
