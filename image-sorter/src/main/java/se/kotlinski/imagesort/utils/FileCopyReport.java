@@ -37,12 +37,12 @@ public class FileCopyReport {
 
   @Override
   public String toString() {
-    String out = "Files Copied: " + numberOfFilesCopied;
+    String out = "Files Copied: " + numberOfFilesCopied + "\n";
     if (!filesNotCopied.isEmpty()) {
-      out += "Files failed: ";
+      out += "Files failed: \n";
     }
     for (ImageDescriber imageDescriber : filesNotCopied) {
-      out += imageDescriber.getFile().getName();
+      out += imageDescriber.getOriginalFileName() + "\n";
     }
     return out;
   }

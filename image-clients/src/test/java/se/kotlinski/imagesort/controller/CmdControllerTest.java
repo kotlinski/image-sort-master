@@ -2,25 +2,27 @@ package se.kotlinski.imagesort.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.utils.Constants;
+import se.kotlinski.imagesort.utils.ImageFileUtil;
 
 import static org.junit.Assert.*;
 
 public class CmdControllerTest {
 	CmdController cmdController;
+  private ImageFileUtil imageFileUtil;
 
-	@Before
+  @Before
 	public void setUp() throws Exception {
-		cmdController = new CmdController();
-	}
+    imageFileUtil = new ImageFileUtil();
+    cmdController = new CmdController();
+  }
 
 	@Test
 	public void testStartCmd() throws Exception {
 		String[] argv = new String[]{"programname",
 				"somecommand", "-s",
-				Constants.PATH_INPUT_TEST,
+        imageFileUtil.getTestInputPath(),
 				"-o",
-				Constants.PATH_OUTPUT_TEST};
+        imageFileUtil.getTestOutputPath()};
 		cmdController.startCmd(argv);
 		assertNotNull(cmdController.getFolderIO());
 		assertNotNull(cmdController.getFolderIO().inputFolders);
