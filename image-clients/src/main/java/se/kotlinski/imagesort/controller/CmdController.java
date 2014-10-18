@@ -5,6 +5,7 @@ import se.kotlinski.imagesort.Exception.NoInputFolderException;
 import se.kotlinski.imagesort.Exception.NoMasterFolderException;
 import se.kotlinski.imagesort.model.FolderIO;
 import se.kotlinski.imagesort.utils.CommandLineUtil;
+import se.kotlinski.imagesort.utils.FileCopyReport;
 import se.kotlinski.imagesort.utils.ImageIndex;
 
 import java.io.File;
@@ -65,7 +66,8 @@ public class CmdController {
 		// and now the image-sorter will do its magic.
 		ImageIndex imageIndex = new ImageIndex(folderIO);
 		imageMapper = imageIndex.runIndexing();
-		imageIndex.copyFiles();
-		System.out.println(imageMapper);
+		FileCopyReport fileCopyReport = imageIndex.copyFiles();
+    //System.out.println(fileCopyReport);
+    //System.out.println(imageMapper);
 	}
 }
