@@ -20,15 +20,18 @@ import static org.mockito.Mockito.spy;
  */
 public class ImageIndexTest {
   ImageIndex imageIndex;
+  private ImageFileUtil imageFileUtil;
 
   @Before
   public void setUp() {
+    imageFileUtil = new ImageFileUtil();
+
     FolderIO folderIO = new FolderIO();
-    File file = new File(Constants.PATH_INPUT_TEST);
+    File file = new File(imageFileUtil.getTestInputPath());
     ArrayList<File> inputFolders = new ArrayList<File>();
     inputFolders.add(file);
     folderIO.inputFolders = inputFolders;
-    folderIO.masterFolder = new File(Constants.PATH_OUTPUT_TEST);
+    folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
     imageIndex = new ImageIndex(folderIO);
   }
 
@@ -37,7 +40,6 @@ public class ImageIndexTest {
   public void testRunIndex() throws Exception {
     ImageMapper imageMapper = imageIndex.runIndexing();
     Assert.assertEquals("Number of Unique images", 7, imageMapper.getSizeOfUniqueImages());
-    imageIndex.copyFiles();
   }
 
   @Test
@@ -55,7 +57,7 @@ public class ImageIndexTest {
     imageIndex = new ImageIndex(folderIO);
     Assert.assertNull("Invalid folders in folderIO", imageIndex.runIndexing());
 
-    folderIO.masterFolder = new File(Constants.PATH_OUTPUT_TEST);
+    folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
     inputFolders = new ArrayList<File>();
     inputFolders.add(folderIO.masterFolder);
     folderIO.inputFolders = inputFolders;

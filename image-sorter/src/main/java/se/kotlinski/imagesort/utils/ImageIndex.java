@@ -24,7 +24,7 @@ public class ImageIndex {
 
   private static boolean validInputFolders(final ArrayList<File> inputFolders) {
     for (File inputFolder : inputFolders) {
-      if (!FileUtil.isValidFolder(inputFolder)) {
+      if (!ImageFileUtil.isValidFolder(inputFolder)) {
         return false;
       }
     }

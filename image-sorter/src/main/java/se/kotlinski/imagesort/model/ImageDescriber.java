@@ -104,6 +104,9 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
     formattedDate += "." + FileUtils.extension(file.getName());
     return formattedDate;
   }
+  public String getOriginalFileName() {
+    return file.getName();
+  }
 
   @Override
   public int compareTo(final ImageDescriber imageDescriber) {
