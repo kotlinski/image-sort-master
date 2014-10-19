@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.exception.CouldNotParseImageDateException;
+import se.kotlinski.imagesort.model.ImageDescriber;
 
 import java.io.File;
 import java.util.Calendar;
@@ -55,6 +56,5 @@ public class ImageTagReaderTest {
     File fileMock = spy(new File("fail file"));
     boolean validImageFile = ImageTagReader.isValidImageFile(fileMock);
     assertFalse(validImageFile);
-
   }
 }

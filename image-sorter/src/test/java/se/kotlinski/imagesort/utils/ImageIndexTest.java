@@ -22,6 +22,21 @@ public class ImageIndexTest {
   ImageIndex imageIndex;
   private ImageFileUtil imageFileUtil;
 
+  private void deleteFolderContent(File folder) {
+    File[] files = folder.listFiles();
+    if (files != null) { //some JVMs return null for empty dirs
+      for (File file : files) {
+        if (file.isDirectory()) {
+          deleteFolderContent(file);
+        }
+        else {
+          if(!file.getName().equals(".gitignore"))
+          file.delete();
+        }
+      }
+    }
+  }
+
   @Before
   public void setUp() {
     imageFileUtil = new ImageFileUtil();
@@ -34,7 +49,6 @@ public class ImageIndexTest {
     folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
     imageIndex = new ImageIndex(folderIO);
   }
-
 
   @Test
   public void testRunIndex() throws Exception {
@@ -65,7 +79,6 @@ public class ImageIndexTest {
     Assert.assertNotNull("Valid folderIO", imageIndex.runIndexing());
   }
 
-
   @Test
   public void testCopyFiles() throws Exception {
     ImageIndex imageIndexSpy = spy(imageIndex);
@@ -75,7 +88,11 @@ public class ImageIndexTest {
     FileCopyReport fileCopyReport = imageIndexSpy.copyFiles();
     Assert.assertEquals(0, fileCopyReport.getNumberOfFilesCopied());
     Assert.assertEquals(7, fileCopyReport.getFilesNotCopied().size());
+
+    File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
+    deleteFolderContent(outputFolder);
+    imageIndex.copyFiles();
+    String[] list = outputFolder.list();
+    Assert.assertEquals(4, list.length);
   }
-
-
 }
