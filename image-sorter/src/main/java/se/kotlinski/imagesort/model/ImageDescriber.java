@@ -1,6 +1,7 @@
 package se.kotlinski.imagesort.model;
 
 import org.apache.commons.io.FileUtils;
+import se.kotlinski.imagesort.exception.CouldNotParseImageDateException;
 import se.kotlinski.imagesort.utils.ImageTagReader;
 
 import java.io.BufferedInputStream;
@@ -11,8 +12,10 @@ import java.io.IOException;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Simon on 2014-01-01.
@@ -90,17 +93,17 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
     return file.getName();
   }
 
-  public String getRenamedFilePath() {
+  public String getRenamedFilePath() throws CouldNotParseImageDateException {
     //TODO build a new string of month, year and formattad name.
     Date date = ImageTagReader.getImageDate(file);
-    String formattedDate = ImageTagReader.formatPathDate(date);
-    return formattedDate;
+    return ImageTagReader.formatPathDate(date);
   }
 
-  public String getRenamedFile() {
+  public String getRenamedFile() throws CouldNotParseImageDateException {
     //TODO build a new string of month, year and formattad name.
     Date date = ImageTagReader.getImageDate(file);
-    String formattedDate = ImageTagReader.formatFileDate(date);
+    Calendar calendar = new GregorianCalendar();
+    String formattedDate = ImageTagReader.formatFileDate(date, calendar);
     formattedDate += "." + FileUtils.extension(file.getName());
     return formattedDate;
   }
@@ -110,9 +113,13 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
 
   @Override
   public int compareTo(final ImageDescriber imageDescriber) {
-    String renamedFilePath = getRenamedFilePath();
-    if (imageDescriber != null && renamedFilePath != null) {
+    String renamedFilePath = null;
+    try {
+      renamedFilePath = getRenamedFilePath();
       return renamedFilePath.compareTo(imageDescriber.getRenamedFilePath());
+    }
+    catch (CouldNotParseImageDateException e) {
+      e.printStackTrace();
     }
     return 0;
   }

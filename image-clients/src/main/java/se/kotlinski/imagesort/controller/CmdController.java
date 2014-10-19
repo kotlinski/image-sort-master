@@ -1,15 +1,14 @@
 package se.kotlinski.imagesort.controller;
 
 import org.apache.commons.cli.CommandLine;
-import se.kotlinski.imagesort.Exception.NoInputFolderException;
-import se.kotlinski.imagesort.Exception.NoMasterFolderException;
+import se.kotlinski.imagesort.exceptions.NoInputFolderException;
+import se.kotlinski.imagesort.exceptions.NoMasterFolderException;
 import se.kotlinski.imagesort.model.FolderIO;
 import se.kotlinski.imagesort.utils.CommandLineUtil;
 import se.kotlinski.imagesort.utils.FileCopyReport;
 import se.kotlinski.imagesort.utils.ImageIndex;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
 
 /**
