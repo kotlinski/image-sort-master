@@ -1,6 +1,7 @@
 package se.kotlinski.imagesort.utils;
 
 import org.apache.commons.io.FileUtils;
+import se.kotlinski.imagesort.exception.CouldNotParseImageDateException;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FolderIO;
 import se.kotlinski.imagesort.model.ImageDescriber;
@@ -48,14 +49,15 @@ public class ImageIndex {
     ArrayList<ImageDescriber> uniqueImageDescribers = imageMapper.getUniqueImageDescribers();
     FileCopyReport fileCopyReport = new FileCopyReport();
     for (ImageDescriber uniqueImageDescriber : uniqueImageDescribers) {
+      try {
       String newImageFolder = folderIO.masterFolder.getAbsolutePath() + "\\" +
                               uniqueImageDescriber.getRenamedFilePath();
       FileUtils.mkdir(newImageFolder);
-      try {
+
         createImageFile(uniqueImageDescriber, newImageFolder);
         fileCopyReport.fileCopySuccess();
       }
-      catch (IOException e) {
+      catch (IOException | CouldNotParseImageDateException e) {
         e.printStackTrace();
         fileCopyReport.fileCopyFailed(uniqueImageDescriber);
       }
@@ -65,7 +67,9 @@ public class ImageIndex {
 
 
   protected void createImageFile(final ImageDescriber uniqueImageDescriber,
-                                 final String newImageFolder) throws IOException {
+                                 final String newImageFolder) throws
+                                                              IOException,
+                                                              CouldNotParseImageDateException {
     File file;
     file = new File(newImageFolder + "\\" + uniqueImageDescriber.getRenamedFile());
     boolean fileCreated = file.createNewFile();
