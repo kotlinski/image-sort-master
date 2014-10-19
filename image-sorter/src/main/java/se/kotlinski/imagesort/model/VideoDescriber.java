@@ -3,7 +3,7 @@ package se.kotlinski.imagesort.model;
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.exception.CouldNotGenerateIDException;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
-import se.kotlinski.imagesort.utils.ImageTagReader;
+import se.kotlinski.imagesort.utils.VideoTagReader;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -20,12 +20,12 @@ import java.util.GregorianCalendar;
 /**
  * Created by Simon on 2014-01-01.
  */
-public class ImageDescriber implements Describer, Comparable<Describer> {
+public class VideoDescriber implements Describer, Comparable<Describer> {
   private final File file;
   private String md5;
 
 
-  public ImageDescriber(File file) throws CouldNotGenerateIDException {
+  public VideoDescriber(File file) throws CouldNotGenerateIDException {
     md5 = generateMd5(file);
     this.file = file;
     //System.out.println(file.getName() + " md5: " + md5);
@@ -49,16 +49,17 @@ public class ImageDescriber implements Describer, Comparable<Describer> {
 
   public String getRenamedFilePath() throws CouldNotParseDateException {
     //TODO build a new string of month, year and formattad name.
-    Date date = ImageTagReader.getImageDate(file);
-    return ImageTagReader.formatPathDate(date);
+    Date date = VideoTagReader.getVideoDate(file);
+    return VideoTagReader.formatPathDate(date);
   }
 
   public String getRenamedFile() throws CouldNotParseDateException {
     //TODO build a new string of month, year and formattad name.
-    Date date = ImageTagReader.getImageDate(file);
+    Date date = VideoTagReader.getVideoDate(file);
     Calendar calendar = new GregorianCalendar();
-    String formattedDate = ImageTagReader.formatFileDate(date, calendar);
+    String formattedDate = VideoTagReader.formatFileDate(date, calendar);
     formattedDate += "." + FileUtils.extension(file.getName());
+    System.out.println("New file name: " + formattedDate);
     return formattedDate;
   }
 
@@ -66,18 +67,6 @@ public class ImageDescriber implements Describer, Comparable<Describer> {
     return file.getName();
   }
 
-  @Override
-  public int compareTo(final Describer describer2) {
-    String renamedFilePath = null;
-    try {
-      renamedFilePath = getRenamedFilePath();
-      return renamedFilePath.compareTo(describer2.getRenamedFilePath());
-    }
-    catch (CouldNotParseDateException e) {
-      e.printStackTrace();
-    }
-    return -1;
-  }
 
   public String generateMd5(final File file) throws CouldNotGenerateIDException {
     FileInputStream fis = null;
@@ -108,4 +97,16 @@ public class ImageDescriber implements Describer, Comparable<Describer> {
     return file.getName();
   }
 
+  @Override
+  public int compareTo(final Describer describer) {
+    String renamedFilePath = null;
+    try {
+      renamedFilePath = getRenamedFilePath();
+      return renamedFilePath.compareTo(describer.getRenamedFilePath());
+    }
+    catch (CouldNotParseDateException e) {
+      e.printStackTrace();
+    }
+    return -1;
+  }
 }

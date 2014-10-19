@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.model.Describer;
 import se.kotlinski.imagesort.model.ImageDescriber;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
 
@@ -39,14 +40,14 @@ public class ImageMapperTest {
     inputFolders.add(file);
     imageMapper.populateWithImages(inputFolders);
     Assert.assertEquals("Number of unique images in testfolder",
-                        7,
+                        8,
                         imageMapper.getSizeOfUniqueImages());
     //System.out.println("Expecting 6 files: \n" + imageMapper.toString());
   }
 
   @Test
   public void testRecursiveIterate() throws Exception {
-    ArrayList<ImageDescriber> imageList;
+    ArrayList<File> imageList;
     imageList = ImageMapper.recursiveIterate(new File(imageFileUtil.getTestInputPath()));
     Assert.assertEquals("Image found in root folder", 10, imageList.size());
   }
@@ -63,9 +64,9 @@ public class ImageMapperTest {
     inputFolderList.add(file);
     imageMapper.populateWithImages(inputFolderList);
 
-    ArrayList<ImageDescriber> imageDescribers = imageMapper.getUniqueImageDescribers();
+    ArrayList<Describer> imageDescribers = imageMapper.getUniqueImageDescribers();
 
-    Assert.assertEquals("Unique image describer sizes", 7, imageDescribers.size());
+    Assert.assertEquals("Unique image describer sizes", 8, imageDescribers.size());
   }
 
   @Test

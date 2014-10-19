@@ -7,8 +7,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import se.kotlinski.imagesort.exceptions.NoInputFolderException;
-import se.kotlinski.imagesort.exceptions.NoMasterFolderException;
+import se.kotlinski.imagesort.exception.NoInputFolderException;
+import se.kotlinski.imagesort.exception.NoMasterFolderException;
 import se.kotlinski.imagesort.model.FolderIO;
 
 import java.io.File;

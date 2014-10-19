@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.exceptions;
+package se.kotlinski.imagesort.exception;
 
 import java.io.File;
 

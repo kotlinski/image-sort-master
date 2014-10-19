@@ -8,7 +8,7 @@ import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import jdk.nashorn.internal.ir.annotations.Ignore;
-import se.kotlinski.imagesort.exception.CouldNotParseImageDateException;
+import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.GregorianCalendar;
  */
 public class ImageTagReader {
 
-  public static Date getImageDate(File file) throws CouldNotParseImageDateException {
+  public static Date getImageDate(File file) throws CouldNotParseDateException {
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
       ExifSubIFDDirectory exifSubIFDDirectory = metadata.getDirectory(ExifSubIFDDirectory.class);
@@ -37,12 +37,12 @@ public class ImageTagReader {
       if (exifIFD0Directory != null && exifIFD0Directory.getDate(tagDatetime) != null) {
         return exifIFD0Directory.getDate(tagDatetime);
       }
-      throw new CouldNotParseImageDateException();
+      throw new CouldNotParseDateException();
     }
     catch (ImageProcessingException | IOException e) {
       System.out.println("File: " + file.getName());
       e.printStackTrace();
-      throw new CouldNotParseImageDateException();
+      throw new CouldNotParseDateException("File: " + file.getName());
     }
   }
 
@@ -74,7 +74,7 @@ public class ImageTagReader {
     catch (IOException e) {
       return false;
     }
-    catch (CouldNotParseImageDateException e) {
+    catch (CouldNotParseDateException e) {
       e.printStackTrace();
       return false;
     }

@@ -1,12 +1,13 @@
 package se.kotlinski.imagesort.controller;
 
 import org.apache.commons.cli.CommandLine;
-import se.kotlinski.imagesort.exceptions.NoInputFolderException;
-import se.kotlinski.imagesort.exceptions.NoMasterFolderException;
+import se.kotlinski.imagesort.exception.InvalidInputFolders;
+import se.kotlinski.imagesort.exception.NoInputFolderException;
+import se.kotlinski.imagesort.exception.NoMasterFolderException;
+import se.kotlinski.imagesort.mapper.ImageMapper;
+import se.kotlinski.imagesort.model.FileCopyReport;
 import se.kotlinski.imagesort.model.FolderIO;
 import se.kotlinski.imagesort.utils.CommandLineUtil;
-import se.kotlinski.imagesort.utils.FileCopyReport;
-import se.kotlinski.imagesort.utils.ImageIndex;
 
 import java.io.File;
 import java.util.Scanner;
@@ -18,7 +19,7 @@ import java.util.Scanner;
  */
 public class CmdController {
 	private FolderIO folderIO;
-	private Object imageMapper;
+	private ImageMapper imageMapper;
 
 	private static void createMasterFolder(final File masterFolder) {
 		System.out.println("Do you want to create " + masterFolder + "[y/n]");
@@ -61,12 +62,19 @@ public class CmdController {
 		//Make static calls to an interface instead.
 		System.out.println(folderIO);
 
-		// We have created a folderIO
-		// and now the image-sorter will do its magic.
-		ImageIndex imageIndex = new ImageIndex(folderIO);
-		imageMapper = imageIndex.runIndexing();
-		FileCopyReport fileCopyReport = imageIndex.copyFiles();
-    //System.out.println(fileCopyReport);
+    // We have created a folderIO
+    // and now the image-sorter will do its magic.
+    FileIndexer fileIndexer = new FileIndexer(folderIO);
+    try {
+      imageMapper = fileIndexer.runIndexing();
+      FileExecutor copyFiles = new FileExecutor();
+      FileCopyReport fileCopyReport = copyFiles.copyFiles(imageMapper, folderIO);
+
+      System.out.println(fileCopyReport);
+    }
+    catch (InvalidInputFolders invalidInputFolders) {
+      invalidInputFolders.printStackTrace();
+    }
     //System.out.println(imageMapper);
 	}
 }

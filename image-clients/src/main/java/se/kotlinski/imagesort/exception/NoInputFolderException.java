@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.exceptions;
+package se.kotlinski.imagesort.exception;
 
 /**
  * Describe class/interface here.

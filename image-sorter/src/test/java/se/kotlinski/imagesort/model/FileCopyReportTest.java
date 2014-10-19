@@ -1,7 +1,8 @@
-package se.kotlinski.imagesort.utils;
+package se.kotlinski.imagesort.model;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.model.FileCopyReport;
 import se.kotlinski.imagesort.model.ImageDescriber;
 
 import static org.junit.Assert.*;
