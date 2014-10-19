@@ -1,13 +1,13 @@
 package se.kotlinski.imagesort.model;
 
 import org.apache.commons.io.FileUtils;
+import se.kotlinski.imagesort.exception.CouldNotGenerateIDException;
 import se.kotlinski.imagesort.exception.CouldNotParseImageDateException;
 import se.kotlinski.imagesort.utils.ImageTagReader;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -35,7 +35,7 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
   private int minute;
   private int second;
 
-  public ImageDescriber(File file) {
+  public ImageDescriber(File file) throws CouldNotGenerateIDException {
     md5 = generateMd5(file);
     this.file = file;
     //System.out.println(file.getName() + " md5: " + md5);
@@ -49,7 +49,7 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
     return formatter.toString();
   }
 
-  private String generateMd5(final File file) {
+  private String generateMd5(final File file) throws CouldNotGenerateIDException {
     FileInputStream fis = null;
     byte[] hash = null;
     try {
@@ -66,17 +66,10 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
       // get the hash value as byte array
       hash = messageDigest.digest();
     }
-    catch (FileNotFoundException e) {
+    catch (NoSuchAlgorithmException | IOException e) {
       e.printStackTrace();
+      throw new CouldNotGenerateIDException();
     }
-    catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
-
-
     return byteArray2Hex(hash);
   }
 
@@ -121,6 +114,6 @@ public class ImageDescriber implements Comparable<ImageDescriber> {
     catch (CouldNotParseImageDateException e) {
       e.printStackTrace();
     }
-    return 0;
+    return -1;
   }
 }

@@ -7,6 +7,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import se.kotlinski.imagesort.exception.CouldNotParseImageDateException;
 
 import java.io.File;
@@ -79,7 +80,8 @@ public class ImageTagReader {
     }
   }
 
-  private static void printAllInfo(final Metadata metadata) {
+  @Ignore
+  public static void printAllInfo(final Metadata metadata) {
     // Read the date
     for (Directory directory : metadata.getDirectories()) {
       for (Tag tag : directory.getTags()) {

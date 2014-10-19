@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.mapper;
 
+import se.kotlinski.imagesort.exception.CouldNotGenerateIDException;
 import se.kotlinski.imagesort.model.ImageDescriber;
 import se.kotlinski.imagesort.utils.ImageTagReader;
 
@@ -27,7 +28,12 @@ public class ImageMapper {
         imageDescriber.addAll(recursiveIterate(file));
       }
       else {
-        imageDescriber.add(new ImageDescriber(file));
+        try {
+          imageDescriber.add(new ImageDescriber(file));
+        }
+        catch (CouldNotGenerateIDException e) {
+          e.printStackTrace();
+        }
       }
     }
     return imageDescriber;
