@@ -1,10 +1,8 @@
 package se.kotlinski.imagesort.utils;
 
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.exception.CouldNotParseImageDateException;
-import se.kotlinski.imagesort.model.ImageDescriber;
+import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
 import java.util.Calendar;
@@ -29,7 +27,7 @@ public class ImageTagReaderTest {
     try{
       ImageTagReader.getImageDate(dateMock);
       assert false;
-    } catch (CouldNotParseImageDateException e){
+    } catch (CouldNotParseDateException e){
       assert true;
     }
   }
