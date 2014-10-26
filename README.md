@@ -1,6 +1,10 @@
 Image Sort Master
 ============
 [![Build Status](https://travis-ci.org/kotlinski/image-sort-master.svg?branch=feature%2Ftravis)](https://travis-ci.org/Springworks/android-utils) [![Coverage Status](https://img.shields.io/coveralls/kotlinski/image-sort-master.svg)](https://coveralls.io/r/kotlinski/image-sort-master)
+<a href="https://scan.coverity.com/projects/3334">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/3334/badge.svg"/>
+</a>
 
 
 How and when do you sort and back up your images from your camera-devices? 
