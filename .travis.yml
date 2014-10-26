@@ -13,11 +13,9 @@ jdk:
   - oraclejdk8
 
 env:
-- TERM=dumb
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "VrzGcplgFG5BZUdCdmijMjM5HLcRBUSNVgXuN4+5t86vL1HMnGsyofx+KsJx5/55/zh4x2pUqw0n5yp7cYVzpWM5roy2Rz3CT7jghaxLMEnOvMQ405uhe/TgRz5pPnQtB2BtlbhiCkgV9jcQ9qAehs/CMUdEjddpTc6vyB78o+8="
+    - secure: "VrzGcplgFG5BZUdCdmijMjM5HLcRBUSNVgXuN4+5t86vL1HMnGsyofx+KsJx5/55/zh4x2pUqw0n5yp7cYVzpWM5roy2Rz3CT7jghaxLMEnOvMQ405uhe/TgRz5pPnQtB2BtlbhiCkgV9jcQ9qAehs/CMUdEjddpTc6vyB78o+8="
+    - TERM=dumb
 
 addons:
   coverity_scan:
