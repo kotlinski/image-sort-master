@@ -22,12 +22,9 @@ addons:
     project:
       name: "kotlinski/image-sort-master"
     notification_email: simon.kotlinski@gmail.com
-    build_command_prepend: "./gradlew clean"
-    build_command:   "./gradlew build"
+    build_command_prepend: "gradle clean"
+    build_command:   "gradle check"
     branch_pattern: coverity_scan
-
-script:
-  - ./gradlew build
 
 after_success:
 - ./gradlew jacocoTestReport coveralls
