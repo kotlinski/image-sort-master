@@ -2,8 +2,6 @@ package se.kotlinski.imagesort.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.model.FileCopyReport;
-import se.kotlinski.imagesort.model.ImageDescriber;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -20,9 +18,9 @@ public class FileCopyReportTest {
   public void testToString() throws Exception {
     FileCopyReport fileCopyReport = new FileCopyReport();
     fileCopyReport.fileCopySuccess();
-    ImageDescriber imageDescriberMock = mock(ImageDescriber.class);
-    when(imageDescriberMock.getOriginalFileName()).thenReturn("mock-name");
-    fileCopyReport.fileCopyFailed(imageDescriberMock);
+    FileDescriber fileDescriberMock = mock(FileDescriber.class);
+    when(fileDescriberMock.getOriginalFileName()).thenReturn("mock-name");
+    fileCopyReport.fileCopyFailed(fileDescriberMock);
     String expected = "Files Copied: 1\n" +
                       "Files failed: \n" +
                       "mock-name\n";
