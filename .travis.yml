@@ -22,7 +22,7 @@ addons:
     project:
       name: "kotlinski/image-sort-master"
     notification_email: simon.kotlinski@gmail.com
-    build_command:   "TERM=dumb gradle check --info"
+    build_command: TERM=dumb gradle build
     branch_pattern: coverity_scan
 
 after_success:
