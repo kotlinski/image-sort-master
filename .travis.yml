@@ -13,17 +13,8 @@ jdk:
   - oraclejdk8
 
 env:
-  global:
-    - secure: "VrzGcplgFG5BZUdCdmijMjM5HLcRBUSNVgXuN4+5t86vL1HMnGsyofx+KsJx5/55/zh4x2pUqw0n5yp7cYVzpWM5roy2Rz3CT7jghaxLMEnOvMQ405uhe/TgRz5pPnQtB2BtlbhiCkgV9jcQ9qAehs/CMUdEjddpTc6vyB78o+8="
-    - TERM=dumb
+  - TERM=dumb
 
-addons:
-  coverity_scan:
-    project:
-      name: "kotlinski/image-sort-master"
-    notification_email: simon.kotlinski@gmail.com
-    build_command: TERM=dumb gradle build
-    branch_pattern: coverity_scan
 
 after_success:
 - ./gradlew jacocoTestReport coveralls
