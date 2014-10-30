@@ -31,10 +31,10 @@ public class FolderIOTest {
 		folderIO.inputFolders.add(new File(imageFileUtil.getTestInputPath()));
 		folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
 
-		String filePart = "image-sort-master" + File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "inputImages";
+		String filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "inputImages";
 		boolean contains = folderIO.toString().contains(filePart);
 		assertTrue("Check toString", contains);
-		filePart = "image-sort-master" + File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "output";
+		filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "output";
 		contains = folderIO.toString().contains(filePart);
 		assertTrue("Check toString", contains);
 	}
