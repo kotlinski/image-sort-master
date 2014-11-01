@@ -51,7 +51,7 @@ public class ImageMapperTest {
   public void testRecursiveIterate() throws Exception {
     File folder = new File(imageFileUtil.getTestInputPath());
     List<File> imageList = ImageMapper.recursiveIterate(folder);
-    Assert.assertEquals("Image found in root folder", 10, imageList.size());
+    Assert.assertEquals("Image found in root folder", 11, imageList.size());
   }
 
   @Test
@@ -91,6 +91,6 @@ public class ImageMapperTest {
     inputfolders.add(folder);
     imageMapper.populateWithImages(inputfolders);
     List<FileDescriber> redundantFiles = imageMapper.getRedundantFiles();
-    Assert.assertEquals(2, redundantFiles.size());
+    Assert.assertEquals(3, redundantFiles.size());
   }
 }
