@@ -25,7 +25,8 @@ public class FileDateInterpreterTest {
 
     imageFileUtil = new ImageFileUtil();
     imageWithDate = new File(imageFileUtil.getTestInputPath() +
-                             File.separator + "structure" +
+                             File.separator + "2013" +
+                             File.separator + "snapchat" +
                              File.separator + "2013-10-03 13.43.20-kaffe.jpg");
 
     imageWitouthDate = new File(imageFileUtil.getTestInputPath() +
