@@ -11,19 +11,22 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Simon Kotlinski on 2014-05-07.
  */
 public class ImageMapper {
-  HashMap<String, ArrayList<FileDescriber>> imageMap;
+  Map<String, ArrayList<FileDescriber>> imageMap;
 
   public ImageMapper() {
+
     imageMap = new HashMap<String, ArrayList<FileDescriber>>();
   }
 
-  public static ArrayList<File> recursiveIterate(final File folder) {
-    ArrayList<File> imageDescriber = new ArrayList<File>();
+  public static List<File> recursiveIterate(final File folder) {
+    List<File> imageDescriber = new ArrayList<File>();
     for (File file : folder.listFiles()) {
       if (file.isDirectory()) {
         imageDescriber.addAll(recursiveIterate(file));
@@ -102,11 +105,11 @@ public class ImageMapper {
   }
 
 
-  public ArrayList<FileDescriber> getRedundantFiles() {
-    ArrayList<FileDescriber> imageDescribers = new ArrayList<FileDescriber>();
+  public List<FileDescriber> getRedundantFiles() {
+    List<FileDescriber> imageDescribers = new ArrayList<FileDescriber>();
     for (String s : imageMap.keySet()) {
-      for (int i = 1; i < imageMap.get(s).size(); i++) {
-        imageDescribers.add(imageMap.get(s).get(i));
+      if (imageMap.get(s).size() > 1) {
+        imageDescribers.addAll(imageMap.get(s));
       }
     }
     Collections.sort(imageDescribers, new FileDescriberPathComperator());

@@ -12,6 +12,7 @@ import se.kotlinski.imagesort.utils.ImageFileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ImageMapperTest {
 
@@ -48,8 +49,8 @@ public class ImageMapperTest {
 
   @Test
   public void testRecursiveIterate() throws Exception {
-    ArrayList<File> imageList;
-    imageList = ImageMapper.recursiveIterate(new File(imageFileUtil.getTestInputPath()));
+    File folder = new File(imageFileUtil.getTestInputPath());
+    List<File> imageList = ImageMapper.recursiveIterate(folder);
     Assert.assertEquals("Image found in root folder", 10, imageList.size());
   }
 
@@ -83,5 +84,13 @@ public class ImageMapperTest {
   public void testGetRedundantFiles() throws Exception {
     Assert.assertEquals("To string function", "Files in input folder: \n", imageMapper.toString());
     Assert.assertEquals("Size of reduntant file list", 0, imageMapper.getRedundantFiles().size());
+
+
+    File folder = new File(imageFileUtil.getTestInputPath());
+    ArrayList<File> inputfolders = new ArrayList<File>();
+    inputfolders.add(folder);
+    imageMapper.populateWithImages(inputfolders);
+    List<FileDescriber> redundantFiles = imageMapper.getRedundantFiles();
+    Assert.assertEquals(2, redundantFiles.size());
   }
 }
