@@ -22,17 +22,23 @@ public class FileExecutor {
     ArrayList<FileDescriber> uniqueFileDescribers = imageMapper.getUniqueImageDescribers();
     FileCopyReport fileCopyReport = new FileCopyReport();
     for (FileDescriber uniqueFileDescriber : uniqueFileDescribers) {
-      try {
-        String newFolder = folderIO.masterFolder.getAbsolutePath() + File.separator +
-                           uniqueFileDescriber.getRenamedFilePath();
-        FileUtils.mkdir(newFolder);
 
+      String newFolder = folderIO.masterFolder.getAbsolutePath() + File.separator;
+      try {
+        newFolder += uniqueFileDescriber.getRenamedFilePath();
+      }
+      catch (CouldNotParseDateException e) {
+        newFolder += "other";
+        e.printStackTrace();
+      }
+      FileUtils.mkdir(newFolder);
+      try {
         createNewFile(uniqueFileDescriber, newFolder);
         fileCopyReport.fileCopySuccess();
       }
       catch (IOException | CouldNotParseDateException e) {
-        e.printStackTrace();
         fileCopyReport.fileCopyFailed(uniqueFileDescriber);
+        e.printStackTrace();
       }
     }
     return fileCopyReport;
@@ -42,7 +48,8 @@ public class FileExecutor {
                             final String newFileFolder) throws
                                                         IOException,
                                                         CouldNotParseDateException {
-    File file = new File(newFileFolder + File.separator + uniqueFileDescriber.getRenamedFile());
+    String pathname = newFileFolder + File.separator + uniqueFileDescriber.getRenamedFile();
+    File file = new File(pathname);
     boolean fileCreated = file.createNewFile();
     if (fileCreated) {
       FileUtils.copyFile(uniqueFileDescriber.getFile(), file);

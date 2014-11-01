@@ -26,4 +26,12 @@ public class FileDescriberTest {
     imageDescriber = new FileDescriber(file, new Date(0), "a");
     imageDescriber2 = new FileDescriber(file2, new Date(0), "b");
   }
+
+  @Test
+  public void testGetOriginalFileName() {
+    String originalFileName = imageDescriber.getOriginalFileName();
+    Assert.assertEquals(originalFileName, "2013-10-03 13.43.20-kaffe.jpg");
+    originalFileName = imageDescriber2.getOriginalFileName();
+    Assert.assertEquals(originalFileName, "2013-10-26 20.20.46-kottbullar.jpg");
+  }
 }

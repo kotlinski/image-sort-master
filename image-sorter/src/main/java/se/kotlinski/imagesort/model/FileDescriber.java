@@ -12,8 +12,9 @@ import java.util.GregorianCalendar;
 /**
  * Created by Simon on 2014-01-01.
  */
-public class FileDescriber implements Comparable<FileDescriber> {
+public class FileDescriber {
   private final File file;
+  private final ImageTagReader imageTagReader;
   private String md5;
   private Date date;
 
@@ -22,6 +23,8 @@ public class FileDescriber implements Comparable<FileDescriber> {
     this.md5 = md5;
     this.file = file;
     this.date = date;
+
+    imageTagReader = new ImageTagReader();
   }
 
   public File getFile() {
@@ -34,17 +37,15 @@ public class FileDescriber implements Comparable<FileDescriber> {
 
   public String getRenamedFilePath() throws CouldNotParseDateException {
     if (date != null) {
-      return ImageTagReader.formatPathDate(date);
+      return imageTagReader.formatPathDate(date);
     }
-    else {
-      return "other";
-    }
+    throw new CouldNotParseDateException();
   }
 
   public String getRenamedFile() throws CouldNotParseDateException {
     if (date != null) {
       Calendar calendar = new GregorianCalendar();
-      String formattedDate = ImageTagReader.formatFileDate(date, calendar);
+      String formattedDate = imageTagReader.formatFileDate(date, calendar);
       formattedDate += "." + FileUtils.extension(file.getName());
       return formattedDate;
     }
@@ -56,20 +57,6 @@ public class FileDescriber implements Comparable<FileDescriber> {
   public String getOriginalFileName() {
     return file.getName();
   }
-
-  @Override
-  public int compareTo(final FileDescriber describer2) {
-    String renamedFilePath = null;
-    try {
-      renamedFilePath = getRenamedFilePath();
-      return renamedFilePath.compareTo(describer2.getRenamedFilePath());
-    }
-    catch (CouldNotParseDateException e) {
-      e.printStackTrace();
-    }
-    return -1;
-  }
-
 
   @Override
   public String toString() {

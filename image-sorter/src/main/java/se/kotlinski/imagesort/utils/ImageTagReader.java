@@ -23,7 +23,7 @@ import java.util.GregorianCalendar;
  */
 public class ImageTagReader {
 
-  public static String formatPathDate(Date date) {
+  public String formatPathDate(Date date) {
     Calendar calendar = new GregorianCalendar();
     calendar.setTime(date);
     SimpleDateFormat format1 = new SimpleDateFormat("yyyy" + File.separator + "MM");
@@ -31,7 +31,7 @@ public class ImageTagReader {
     return formatted;
   }
 
-  public static String formatFileDate(Date date, Calendar calendar) {
+  public String formatFileDate(Date date, Calendar calendar) {
     calendar.setTime(date);
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
     format.setTimeZone(calendar.getTimeZone());

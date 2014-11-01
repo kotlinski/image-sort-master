@@ -81,7 +81,7 @@ public class ImageMapper {
     for (String s : imageMap.keySet()) {
       imageDescribers.add(imageMap.get(s).get(0));
     }
-    Collections.sort(imageDescribers, new FileDescriberComperator());
+    Collections.sort(imageDescribers, new FileDescriberPathComperator());
     return imageDescribers;
   }
 
@@ -109,15 +109,7 @@ public class ImageMapper {
         imageDescribers.add(imageMap.get(s).get(i));
       }
     }
-    Collections.sort(imageDescribers, new FileDescriberComperator());
+    Collections.sort(imageDescribers, new FileDescriberPathComperator());
     return imageDescribers;
-  }
-
-
-  private class FileDescriberComperator implements Comparator<FileDescriber> {
-    @Override
-    public int compare(final FileDescriber describer1, final FileDescriber describer2) {
-      return describer1.compareTo(describer2);
-    }
   }
 }
