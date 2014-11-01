@@ -1,15 +1,11 @@
 package se.kotlinski.imagesort.controller;
 
-import org.apache.commons.io.FileUtils;
-import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FolderIO;
-import se.kotlinski.imagesort.model.ImageDescriber;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**

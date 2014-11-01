@@ -1,7 +1,5 @@
 package se.kotlinski.imagesort.model;
 
-import se.kotlinski.imagesort.model.ImageDescriber;
-
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -11,15 +9,15 @@ import java.util.HashSet;
  * @author Simon Kotlinski
  */
 public class FileCopyReport {
-  private Collection<Describer> filesNotCopied;
+  private Collection<FileDescriber> filesNotCopied;
   private int numberOfFilesCopied;
 
   public FileCopyReport() {
-    filesNotCopied = new HashSet<Describer>();
+    filesNotCopied = new HashSet<FileDescriber>();
     numberOfFilesCopied = 0;
   }
 
-  public void fileCopyFailed(Describer imageDescriber) {
+  public void fileCopyFailed(FileDescriber imageDescriber) {
     getFilesNotCopied().add(imageDescriber);
   }
 
@@ -31,7 +29,7 @@ public class FileCopyReport {
     return numberOfFilesCopied;
   }
 
-  public Collection<Describer> getFilesNotCopied() {
+  public Collection<FileDescriber> getFilesNotCopied() {
     return filesNotCopied;
   }
 
@@ -41,7 +39,7 @@ public class FileCopyReport {
     if (!filesNotCopied.isEmpty()) {
       out += "Files failed: \n";
     }
-    for (Describer imageDescriber : filesNotCopied) {
+    for (FileDescriber imageDescriber : filesNotCopied) {
       out += imageDescriber.getOriginalFileName() + "\n";
     }
     return out;

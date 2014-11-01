@@ -5,12 +5,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.model.Describer;
-import se.kotlinski.imagesort.model.ImageDescriber;
+import se.kotlinski.imagesort.model.FileDescriber;
+import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ImageMapperTest {
 
@@ -40,7 +41,7 @@ public class ImageMapperTest {
     inputFolders.add(file);
     imageMapper.populateWithImages(inputFolders);
     Assert.assertEquals("Number of unique images in testfolder",
-                        8,
+                        9,
                         imageMapper.getSizeOfUniqueImages());
     //System.out.println("Expecting 6 files: \n" + imageMapper.toString());
   }
@@ -53,7 +54,16 @@ public class ImageMapperTest {
   }
 
   @Test
-  public void testGetSizeOfUniqueImages() throws Exception {
+  public void testToString() throws Exception {
+    File inputFile = new File(imageFileUtil.getTestInputPath() + File.separator + "1.jpg");
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+
+    Date date = fileDateInterpreter.getDate(inputFile);
+    FileDescriber fileDescriber = new FileDescriber(inputFile, date, "abc");
+    imageMapper.addValidDescriberFile(fileDescriber);
+    Assert.assertEquals("Files in input folder: \n" +
+                        "abc, including files: \n" +
+                        "\t1.jpg\n", imageMapper.toString());
 
   }
 
@@ -64,9 +74,9 @@ public class ImageMapperTest {
     inputFolderList.add(file);
     imageMapper.populateWithImages(inputFolderList);
 
-    ArrayList<Describer> imageDescribers = imageMapper.getUniqueImageDescribers();
+    ArrayList<FileDescriber> imageDescribers = imageMapper.getUniqueImageDescribers();
 
-    Assert.assertEquals("Unique image describer sizes", 8, imageDescribers.size());
+    Assert.assertEquals("Unique image describer sizes", 9, imageDescribers.size());
   }
 
   @Test

@@ -38,7 +38,7 @@ public class FileIndexerTest {
   @Test
   public void testRunIndex() throws Exception {
     ImageMapper imageMapper = fileIndexer.runIndexing();
-    Assert.assertEquals("Number of Unique images", 8, imageMapper.getSizeOfUniqueImages());
+    Assert.assertEquals("Number of Unique images", 9, imageMapper.getSizeOfUniqueImages());
   }
 
   @Test

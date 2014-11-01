@@ -1,14 +1,13 @@
 package se.kotlinski.imagesort.controller;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.controller.FileExecutor;
-import se.kotlinski.imagesort.controller.FileIndexer;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ImageMapper;
-import se.kotlinski.imagesort.model.Describer;
 import se.kotlinski.imagesort.model.FileCopyReport;
+import se.kotlinski.imagesort.model.FileDescriber;
 import se.kotlinski.imagesort.model.FolderIO;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
 
@@ -38,24 +37,35 @@ public class FileExecuterTest {
     folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
     fileIndexer = new FileIndexer(folderIO);
 
+    File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
+    deleteFolderContent(outputFolder);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
+    deleteFolderContent(outputFolder);
   }
 
   @Test
   public void testCopyFiles() throws Exception {
     FileExecutor fileExecutor = spy(new FileExecutor());
-    doThrow(new IOException())
-        .when(fileExecutor).createNewFile(any(Describer.class), any(String.class));
+    doThrow(new IOException()).when(fileExecutor).createNewFile(any(FileDescriber.class),
+                                                                any(String.class));
     ImageMapper imageMapper = fileIndexer.runIndexing();
     FileCopyReport fileCopyReport = fileExecutor.copyFiles(imageMapper, folderIO);
     Assert.assertEquals(0, fileCopyReport.getNumberOfFilesCopied());
-    Assert.assertEquals(8, fileCopyReport.getFilesNotCopied().size());
+    Assert.assertEquals(9, fileCopyReport.getFilesNotCopied().size());
 
     File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
     imageMapper = fileIndexer.runIndexing();
     fileExecutor.copyFiles(imageMapper, folderIO);
     String[] list = outputFolder.list();
-    Assert.assertEquals(4, list.length);
+    for (String file : list) {
+      System.out.println(file);
+    }
+    Assert.assertEquals(5, list.length);
   }
 
   @Test
@@ -67,7 +77,10 @@ public class FileExecuterTest {
     ImageMapper imageMapper = fileIndexer.runIndexing();
     fileExecutor.copyFiles(imageMapper, folderIO);
     String[] list = outputFolder.list();
-    Assert.assertEquals(4, list.length);
+    for (String file : list) {
+      System.out.println(file);
+    }
+    Assert.assertEquals(5, list.length);
   }
 
   @Test
@@ -83,8 +96,16 @@ public class FileExecuterTest {
           deleteFolderContent(file);
         }
         else {
-          if(!file.getName().equals(".gitignore"))
-          file.delete();
+          if (!".gitignore".equals(file.getName())) {
+            boolean delete = file.delete();
+            if (delete) {
+              System.out.println("Delete: " + file.getName());
+            }
+            else {
+              System.out.println("Could not delete: " + file.getName());
+            }
+
+          }
         }
       }
     }
