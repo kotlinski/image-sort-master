@@ -50,7 +50,7 @@ public class FileExecuterTest {
   @Test
   public void testCopyFiles() throws Exception {
     FileExecutor fileExecutor = spy(new FileExecutor());
-    doThrow(new IOException()).when(fileExecutor).createNewFile(any(FileDescriber.class),
+    doThrow(new IOException()).when(fileExecutor).createNewFile(any(File.class),
                                                                 any(String.class));
     ImageMapper imageMapper = fileIndexer.runIndexing();
     FileCopyReport fileCopyReport = fileExecutor.copyFiles(imageMapper, folderIO);
