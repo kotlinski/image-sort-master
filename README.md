@@ -152,4 +152,6 @@ Road map
 - [ ] create a simple gui selecting two folders(input/output)
 - [ ] present the results of duplicates etc. 
 - [x] take care of output folder on update
-- [ ] handle flavoured folders. 
+- [ ] print out new file structure as default, add parameter to execute
+- [ ] add parameter list of flavours not should be accepted. 
+
