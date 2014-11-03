@@ -31,6 +31,7 @@ public class FileExecutor {
         newFolder += "other";
         e.printStackTrace();
       }
+      newFolder += uniqueFileDescriber.getFlavour();
       FileUtils.mkdir(newFolder);
       try {
         createNewFile(uniqueFileDescriber, newFolder);

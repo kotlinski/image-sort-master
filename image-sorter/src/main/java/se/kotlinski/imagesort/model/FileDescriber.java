@@ -8,6 +8,8 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Simon on 2014-01-01.
@@ -15,14 +17,16 @@ import java.util.GregorianCalendar;
 public class FileDescriber {
   private final File file;
   private final ImageTagReader imageTagReader;
+  private final String rootPath;
   private String md5;
   private Date date;
 
 
-  public FileDescriber(File file, Date date, String md5) {
+  public FileDescriber(File file, Date date, String md5, String rootPath) {
     this.md5 = md5;
     this.file = file;
     this.date = date;
+    this.rootPath = rootPath;
 
     imageTagReader = new ImageTagReader();
   }
@@ -40,6 +44,31 @@ public class FileDescriber {
       return imageTagReader.formatPathDate(date);
     }
     throw new CouldNotParseDateException();
+  }
+
+  public String getFlavour() {
+    String absolutePath = file.getAbsolutePath();
+    System.out.println(absolutePath);
+
+    String flavour = absolutePath.replace(rootPath, "");
+    flavour = flavour.replace(file.getName(), "");
+
+    flavour = flavour.replace("other" + File.separator, "");
+
+    int monthSequence = 2;
+    flavour = removeDigitFolders(flavour, monthSequence);
+    int yearSequence = 4;
+    flavour = removeDigitFolders(flavour, yearSequence);
+    System.out.println("return flavour: " + flavour);
+    return flavour;
+  }
+
+
+  public String removeDigitFolders(String flavour, int sequence) {
+    String pattern = Pattern.quote(File.separator) + "\\d{"+sequence+"}" + Pattern.quote(File.separator);
+    System.err.println("pattern: " +  pattern);
+    flavour = flavour.replaceAll(pattern, Matcher.quoteReplacement(File.separator));
+    return flavour;
   }
 
   public String getRenamedFile() throws CouldNotParseDateException {

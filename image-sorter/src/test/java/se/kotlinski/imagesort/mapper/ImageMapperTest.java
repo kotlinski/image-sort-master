@@ -60,7 +60,8 @@ public class ImageMapperTest {
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
 
     Date date = fileDateInterpreter.getDate(inputFile);
-    FileDescriber fileDescriber = new FileDescriber(inputFile, date, "abc");
+    FileDescriber fileDescriber;
+    fileDescriber= new FileDescriber(inputFile, date, "abc", imageFileUtil.getTestInputPath());
     imageMapper.addValidDescriberFile(fileDescriber);
     Assert.assertEquals("Files in input folder: \n" +
                         "abc, including files: \n" +

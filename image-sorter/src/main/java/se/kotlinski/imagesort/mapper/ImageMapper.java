@@ -8,7 +8,6 @@ import se.kotlinski.imagesort.utils.FileDateMD5Generator;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,24 +56,29 @@ public class ImageMapper {
   }
 
   public void populateWithImages(ArrayList<File> inputFolders) {
-    ArrayList<File> files = new ArrayList<File>();
+    Map<String, List<File>> filesFromFolder = new HashMap<String, List<File>>();
     for (File rootFolder : inputFolders) {
-      files.addAll(recursiveIterate(rootFolder));
+      filesFromFolder.put(rootFolder.getAbsolutePath(), recursiveIterate(rootFolder));
     }
 
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
     FileDateMD5Generator fileDateMD5Generator = new FileDateMD5Generator();
-    for (File file : files) {
-      Date date = null;
-      try {
-        date = fileDateInterpreter.getDate(file);
+
+    for (String rootFolder : filesFromFolder.keySet()) {
+
+      for (File file : filesFromFolder.get(rootFolder)) {
+        Date date = null;
+        try {
+          date = fileDateInterpreter.getDate(file);
+        }
+        catch (CouldNotParseDateException e) {
+          e.printStackTrace();
+        }
+        String imageIdentifier = fileDateMD5Generator.generateMd5(file);
+        FileDescriber fileDescriber = new FileDescriber(file, date, imageIdentifier, rootFolder);
+        addValidDescriberFile(fileDescriber);
       }
-      catch (CouldNotParseDateException e) {
-        e.printStackTrace();
-      }
-      String imageIdentifier = fileDateMD5Generator.generateMd5(file);
-      FileDescriber fileDescriber = new FileDescriber(file, date, imageIdentifier);
-      addValidDescriberFile(fileDescriber);
+
     }
   }
 
