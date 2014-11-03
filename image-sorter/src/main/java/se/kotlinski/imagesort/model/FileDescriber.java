@@ -2,7 +2,7 @@ package se.kotlinski.imagesort.model;
 
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
-import se.kotlinski.imagesort.utils.ImageTagReader;
+import se.kotlinski.imagesort.utils.DateToFileRenamer;
 
 import java.io.File;
 import java.util.Calendar;
@@ -11,15 +11,14 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Simon on 2014-01-01.
- */
 public class FileDescriber {
   private final File file;
-  private final ImageTagReader imageTagReader;
+  private final DateToFileRenamer dateToFileRenamer;
   private final String rootPath;
   private String md5;
   private Date date;
+
+  private static Calendar calendar = new GregorianCalendar();
 
 
   public FileDescriber(File file, Date date, String md5, String rootPath) {
@@ -28,7 +27,7 @@ public class FileDescriber {
     this.date = date;
     this.rootPath = rootPath;
 
-    imageTagReader = new ImageTagReader();
+    dateToFileRenamer = new DateToFileRenamer();
   }
 
   public File getFile() {
@@ -41,7 +40,7 @@ public class FileDescriber {
 
   public String getRenamedFilePath() throws CouldNotParseDateException {
     if (date != null) {
-      return imageTagReader.formatPathDate(date);
+      return dateToFileRenamer.formatPathDate(date);
     }
     throw new CouldNotParseDateException();
   }
@@ -52,7 +51,6 @@ public class FileDescriber {
 
     String flavour = absolutePath.replace(rootPath, "");
     flavour = flavour.replace(file.getName(), "");
-
     flavour = flavour.replace("other" + File.separator, "");
 
     int monthSequence = 2;
@@ -71,10 +69,12 @@ public class FileDescriber {
     return flavour;
   }
 
-  public String getRenamedFile() throws CouldNotParseDateException {
+  public String getDateFilename(boolean appendMD5) throws CouldNotParseDateException {
     if (date != null) {
-      Calendar calendar = new GregorianCalendar();
-      String formattedDate = imageTagReader.formatFileDate(date, calendar);
+      String formattedDate = dateToFileRenamer.formatFileDate(date, calendar);
+      if (appendMD5) {
+        formattedDate += "-" + md5;
+      }
       formattedDate += "." + FileUtils.extension(file.getName());
       return formattedDate;
     }

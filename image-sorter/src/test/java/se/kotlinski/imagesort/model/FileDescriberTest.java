@@ -1,9 +1,11 @@
 package se.kotlinski.imagesort.model;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.exception.CouldNotGenerateIDException;
+import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
 
 import java.io.File;
@@ -40,5 +42,13 @@ public class FileDescriberTest {
     String input = File.separator + "22" + File.separator;
     String s = imageDescriber.removeDigitFolders(input, 2);
     Assert.assertEquals(File.separator, s);
+  }
+
+  @Test
+  public void testGetDateFilename() throws CouldNotParseDateException {
+    String dateFilename = imageDescriber.getDateFilename(false);
+    Assert.assertTrue(dateFilename.contains(".00.00.jpg"));
+    dateFilename = imageDescriber.getDateFilename(true);
+    Assert.assertTrue(dateFilename.contains(".00.00-a.jpg"));
   }
 }
