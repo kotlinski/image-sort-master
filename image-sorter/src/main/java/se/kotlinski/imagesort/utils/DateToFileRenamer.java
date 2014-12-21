@@ -1,17 +1,8 @@
 package se.kotlinski.imagesort.utils;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.drew.metadata.exif.ExifIFD0Directory;
-import com.drew.metadata.exif.ExifSubIFDDirectory;
-import jdk.nashorn.internal.ir.annotations.Ignore;
-import se.kotlinski.imagesort.exception.CouldNotParseDateException;
+import com.google.inject.Inject;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,7 +13,12 @@ import java.util.GregorianCalendar;
  * template use File | Settings | File Templates.
  */
 public class DateToFileRenamer {
-  private static Calendar calendar = new GregorianCalendar();
+  private final Calendar calendar;
+
+  @Inject
+  public DateToFileRenamer(final Calendar calendar) {
+    this.calendar = calendar;
+  }
 
   public String formatPathDate(Date date) {
     calendar.setTime(date);

@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.controller;
 
+import com.google.inject.Inject;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,20 +11,21 @@ import se.kotlinski.imagesort.utils.JavaFXUtils;
 
 import java.io.File;
 
-/**
- * Run the Image Renamer via Application.
- *
- * @author Simon Kotlinski
- * @version $Revision: 1.1 $
- */
 public class ApplicationController extends Application {
 	private File inputFolder;
 	private File outputFolder;
-	private static DirectoryChooser directoryChooser;
+	private final DirectoryChooser directoryChooser;
+  private final JavaFXUtils javaFxUtil;
+
+  @Inject
+  public ApplicationController(final DirectoryChooser directoryChooser, final JavaFXUtils
+      javaFxUtil) {
+    this.directoryChooser = directoryChooser;
+    this.javaFxUtil = javaFxUtil;
+  }
 
 
-	public static void startApplication(final String[] args) {
-		directoryChooser = new DirectoryChooser();
+  public void startApplication(final String[] args) {
 		//go to start()
 		Application.launch(args);
 	}
@@ -36,32 +38,23 @@ public class ApplicationController extends Application {
 		folderSelector.setupGridLayout();
 	}
 
-	private static void inputFolderSetup(final FolderSelector folderSelector, final Stage primaryStage) {
-		EventHandler<ActionEvent> selectInputEvent = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(final ActionEvent e) {
-				File folder =	directoryChooser.showDialog(primaryStage);
-				if (folder != null) {
-					//FolderSelector.openFile(folder);
-					JavaFXUtils.alert(folder.getName());
-
-				}
-			}
-		};
+	private void inputFolderSetup(final FolderSelector folderSelector, final Stage primaryStage) {
+		EventHandler<ActionEvent> selectInputEvent = e -> {
+      File folder =	directoryChooser.showDialog(primaryStage);
+      if (folder != null) {
+        javaFxUtil.alert(folder.getName());
+      }
+    };
 		folderSelector.setupInputButton(selectInputEvent);
 	}
 
-	private static void outputFolderSetup(final FolderSelector folderSelector, final Stage primaryStage) {
-		EventHandler<ActionEvent> selectOutputEvent = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(final ActionEvent e) {
-				File folder = directoryChooser.showDialog(primaryStage);
-				if (folder != null) {
-					//FolderSelector.openFile(folder);
-					JavaFXUtils.alert(folder.getName());
-				}
-			}
-		};
+	private void outputFolderSetup(final FolderSelector folderSelector, final Stage primaryStage) {
+		EventHandler<ActionEvent> selectOutputEvent = e -> {
+      File folder = directoryChooser.showDialog(primaryStage);
+      if (folder != null) {
+        javaFxUtil.alert(folder.getName());
+      }
+    };
 		folderSelector.setupOutputButton(selectOutputEvent);
 	}
 }

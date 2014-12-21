@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -13,10 +14,12 @@ import static org.junit.Assert.*;
 public class DateToFileRenamerTest {
 
   private DateToFileRenamer dateToFileRenamer;
+  private Calendar calendar;
 
   @Before
   public void setUp() throws Exception {
-    dateToFileRenamer = new DateToFileRenamer();
+    calendar = new GregorianCalendar();
+    dateToFileRenamer = new DateToFileRenamer(calendar);
   }
 
   @Test

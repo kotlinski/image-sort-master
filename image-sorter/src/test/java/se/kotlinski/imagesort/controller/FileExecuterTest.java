@@ -5,15 +5,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
+import se.kotlinski.imagesort.mapper.FileDescriberPathComperator;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FileCopyReport;
-import se.kotlinski.imagesort.model.FileDescriber;
 import se.kotlinski.imagesort.model.FolderIO;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -24,6 +26,8 @@ public class FileExecuterTest {
   private ImageFileUtil imageFileUtil;
   private FileIndexer fileIndexer;
   private FolderIO folderIO;
+  private Calendar calendar;
+  private FileDescriberPathComperator fileDescriberPathComperator;
 
   @Before
   public void setUp() throws Exception {
@@ -35,7 +39,9 @@ public class FileExecuterTest {
     inputFolders.add(file);
     folderIO.inputFolders = inputFolders;
     folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
-    fileIndexer = new FileIndexer(folderIO);
+    calendar = new GregorianCalendar();
+    fileDescriberPathComperator = new FileDescriberPathComperator();
+    fileIndexer = new FileIndexer(imageFileUtil, calendar, fileDescriberPathComperator);
 
     File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
@@ -52,14 +58,14 @@ public class FileExecuterTest {
     FileExecutor fileExecutor = spy(new FileExecutor());
     doThrow(new IOException()).when(fileExecutor).createNewFile(any(File.class),
                                                                 any(String.class));
-    ImageMapper imageMapper = fileIndexer.runIndexing();
+    ImageMapper imageMapper = fileIndexer.runIndexing(folderIO);
     FileCopyReport fileCopyReport = fileExecutor.copyFiles(imageMapper, folderIO);
     Assert.assertEquals(0, fileCopyReport.getNumberOfFilesCopied());
     Assert.assertEquals(9, fileCopyReport.getFilesNotCopied().size());
 
     File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
-    imageMapper = fileIndexer.runIndexing();
+    imageMapper = fileIndexer.runIndexing(folderIO);
     fileExecutor.copyFiles(imageMapper, folderIO);
     String[] list = outputFolder.list();
     for (String file : list) {
@@ -74,7 +80,7 @@ public class FileExecuterTest {
 
     File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
-    ImageMapper imageMapper = fileIndexer.runIndexing();
+    ImageMapper imageMapper = fileIndexer.runIndexing(folderIO);
     fileExecutor.copyFiles(imageMapper, folderIO);
     String[] list = outputFolder.list();
     for (String file : list) {

@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.mapper;
 
+import com.google.inject.Inject;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.model.FileDescriber;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
@@ -7,6 +8,7 @@ import se.kotlinski.imagesort.utils.FileDateMD5Generator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,12 +21,19 @@ import java.util.Map;
 public class ImageMapper {
   Map<String, ArrayList<FileDescriber>> imageMap;
 
-  public ImageMapper() {
+  @Inject
+  private final Calendar calendar;
+  @Inject
+  private final FileDescriberPathComperator fileDescriberPathComperator;
 
-    imageMap = new HashMap<String, ArrayList<FileDescriber>>();
+  public ImageMapper(final Calendar calendar,
+                     final FileDescriberPathComperator fileDescriberPathComperator) {
+    this.calendar = calendar;
+    this.fileDescriberPathComperator = fileDescriberPathComperator;
+    imageMap = new HashMap<>();
   }
 
-  public static List<File> recursiveIterate(final File folder) {
+  public List<File> recursiveIterate(final File folder) {
     List<File> imageDescriber = new ArrayList<File>();
     for (File file : folder.listFiles()) {
       if (file.isDirectory()) {
@@ -75,7 +84,8 @@ public class ImageMapper {
           e.printStackTrace();
         }
         String imageIdentifier = fileDateMD5Generator.generateMd5(file);
-        FileDescriber fileDescriber = new FileDescriber(file, date, imageIdentifier, rootFolder);
+        FileDescriber fileDescriber = new FileDescriber(file, date, imageIdentifier, rootFolder,
+                                                        calendar);
         addValidDescriberFile(fileDescriber);
       }
 
@@ -84,11 +94,11 @@ public class ImageMapper {
 
 
   public ArrayList<FileDescriber> getUniqueImageDescribers() {
-    ArrayList<FileDescriber> imageDescribers = new ArrayList<FileDescriber>();
+    ArrayList<FileDescriber> imageDescribers = new ArrayList<>();
     for (String s : imageMap.keySet()) {
       imageDescribers.add(imageMap.get(s).get(0));
     }
-    Collections.sort(imageDescribers, new FileDescriberPathComperator());
+    Collections.sort(imageDescribers, fileDescriberPathComperator);
     return imageDescribers;
   }
 
@@ -116,7 +126,7 @@ public class ImageMapper {
         imageDescribers.addAll(imageMap.get(s));
       }
     }
-    Collections.sort(imageDescribers, new FileDescriberPathComperator());
+    Collections.sort(imageDescribers, fileDescriberPathComperator);
     return imageDescribers;
   }
 }

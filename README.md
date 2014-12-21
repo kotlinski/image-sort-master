@@ -149,8 +149,10 @@ Road map
 - [x] use image meta-data interpreters. 
 - [x] use some kind of mp4-meta data parser
 - [x] take an input folder and generate new folders from meta data
+- [x] use dependecy injection, (guice etc)
+- [x] add automatic builds
 - [ ] create a simple gui selecting two folders(input/output)
-- [ ] present the results of duplicates etc. 
+- [ ] present the results of duplicates etc.
 - [x] take care of output folder on update
 - [ ] print out new file structure as default, add parameter to execute
 - [ ] add parameter list of flavours not should be accepted. 

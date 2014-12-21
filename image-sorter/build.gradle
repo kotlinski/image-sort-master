@@ -66,6 +66,7 @@ dependencies {
   compile 'com.drewnoakes:metadata-extractor:2.+'
   compile 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
   compile 'com.googlecode.mp4parser:isoparser:1.0-RC-27'
+  compile 'com.google.inject:guice:3.0'
 
   testCompile 'junit:junit:4.11'
   testCompile 'org.mockito:mockito-all:1.10.8'

@@ -11,13 +11,16 @@ import static org.mockito.Mockito.when;
 
 public class FileUtilTest {
 
+  private ImageFileUtil imageFileUtil;
+
   @Before
   public void setUp() throws Exception {
+    imageFileUtil = new ImageFileUtil();
   }
 
   @Test
   public void testIsValidFolder() throws Exception {
-    Assert.assertFalse(ImageFileUtil.isValidFolder(new File("invalid path")));
+    Assert.assertFalse(imageFileUtil.isValidFolder(new File("invalid path")));
   }
 
   @Test

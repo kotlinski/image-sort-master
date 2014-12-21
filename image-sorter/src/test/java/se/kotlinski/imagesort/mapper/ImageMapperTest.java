@@ -1,6 +1,5 @@
 package se.kotlinski.imagesort.mapper;
 
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,7 +10,9 @@ import se.kotlinski.imagesort.utils.ImageFileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class ImageMapperTest {
@@ -19,10 +20,16 @@ public class ImageMapperTest {
   ImageMapper imageMapper;
   private ImageFileUtil imageFileUtil;
 
+  private Calendar calendar;
+  private FileDescriberPathComperator fileDescriberPathComperator;
+
   @Before
   public void setUp() throws Exception {
     imageFileUtil = new ImageFileUtil();
-    imageMapper = new ImageMapper();
+    fileDescriberPathComperator = new FileDescriberPathComperator();
+    calendar = new GregorianCalendar();
+    imageMapper = new ImageMapper(calendar, fileDescriberPathComperator);
+    calendar = new GregorianCalendar();
   }
 
   @After
@@ -50,7 +57,7 @@ public class ImageMapperTest {
   @Test
   public void testRecursiveIterate() throws Exception {
     File folder = new File(imageFileUtil.getTestInputPath());
-    List<File> imageList = ImageMapper.recursiveIterate(folder);
+    List<File> imageList = imageMapper.recursiveIterate(folder);
     Assert.assertEquals("Image found in root folder", 11, imageList.size());
   }
 
@@ -61,7 +68,8 @@ public class ImageMapperTest {
 
     Date date = fileDateInterpreter.getDate(inputFile);
     FileDescriber fileDescriber;
-    fileDescriber= new FileDescriber(inputFile, date, "abc", imageFileUtil.getTestInputPath());
+    fileDescriber= new FileDescriber(inputFile, date, "abc", imageFileUtil.getTestInputPath(),
+                                     calendar);
     imageMapper.addValidDescriberFile(fileDescriber);
     Assert.assertEquals("Files in input folder: \n" +
                         "abc, including files: \n" +
