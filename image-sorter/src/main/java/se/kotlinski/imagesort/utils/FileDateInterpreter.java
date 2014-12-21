@@ -26,7 +26,7 @@ import java.util.TimeZone;
 public class FileDateInterpreter {
   private String testInputPath;
 
-  public static Date getImageDate(File file) throws CouldNotParseDateException {
+  public Date getImageDate(File file) throws CouldNotParseDateException {
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
       ExifSubIFDDirectory exifSubIFDDirectory = metadata.getDirectory(ExifSubIFDDirectory.class);

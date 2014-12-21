@@ -32,19 +32,6 @@ public class FolderSelector {
 		primaryStage.setTitle("Set input/output folders");
 	}
 
-	public static void openFile(File file) {
-		Desktop desktop = Desktop.getDesktop();
-
-		try {
-			desktop.open(file);
-		}
-		catch (IOException ex) {
-			Logger.getLogger(
-					FolderSelector.class.getName()).log(
-					Level.SEVERE, null, ex
-			);
-		}
-	}
 	public void setupInputButton(final EventHandler<ActionEvent> selectInputEvent){
 		inputButton = new Button("Select source folder");
 		inputButton.setOnAction(selectInputEvent);

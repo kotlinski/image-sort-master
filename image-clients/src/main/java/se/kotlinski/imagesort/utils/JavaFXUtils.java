@@ -6,15 +6,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/**
- * Describe class/interface here.
- *
- * @author kristofer sommestad
- * @version $Revision: 1.1 $
- */
 public class JavaFXUtils {
-
-  public static void alert(String text) {
+  public void alert(String text) {
     Stage dialog = new Stage();
     dialog.initStyle(StageStyle.UTILITY);
 

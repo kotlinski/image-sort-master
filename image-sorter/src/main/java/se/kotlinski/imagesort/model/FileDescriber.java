@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.model;
 
+import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
@@ -7,7 +8,6 @@ import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,17 +17,17 @@ public class FileDescriber {
   private final String rootPath;
   private String md5;
   private Date date;
+  private final Calendar calendar;
 
-  private static Calendar calendar = new GregorianCalendar();
-
-
-  public FileDescriber(File file, Date date, String md5, String rootPath) {
+  @Inject
+  public FileDescriber(File file, Date date, String md5, String rootPath, final Calendar calendar) {
     this.md5 = md5;
     this.file = file;
     this.date = date;
     this.rootPath = rootPath;
+    this.calendar = calendar;
 
-    dateToFileRenamer = new DateToFileRenamer();
+    dateToFileRenamer = new DateToFileRenamer(calendar);
   }
 
   public File getFile() {

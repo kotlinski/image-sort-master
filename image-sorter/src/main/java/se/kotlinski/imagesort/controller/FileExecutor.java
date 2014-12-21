@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.controller;
 
+import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.mapper.ImageMapper;
@@ -19,6 +20,10 @@ import java.util.Map;
  * @author Simon Kotlinski
  */
 public class FileExecutor implements IFileExecutor{
+
+  @Inject
+  public FileExecutor() {
+  }
 
   public FileCopyReport copyFiles(ImageMapper imageMapper, FolderIO folderIO) {
     Map<String, String> copiedFiles = new HashMap<String, String>();

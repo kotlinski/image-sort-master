@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.utils;
 
+import com.google.inject.Inject;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,7 +13,12 @@ import java.util.GregorianCalendar;
  * template use File | Settings | File Templates.
  */
 public class DateToFileRenamer {
-  private static Calendar calendar = new GregorianCalendar();
+  private final Calendar calendar;
+
+  @Inject
+  public DateToFileRenamer(final Calendar calendar) {
+    this.calendar = calendar;
+  }
 
   public String formatPathDate(Date date) {
     calendar.setTime(date);

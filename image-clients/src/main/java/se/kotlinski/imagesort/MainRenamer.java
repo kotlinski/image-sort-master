@@ -19,7 +19,8 @@ public class MainRenamer {
 
     // No arguments, run FX gui application
     if (args.length == 0) {
-      ApplicationController.startApplication(args);
+      ApplicationController applicationController = injector.getInstance(ApplicationController.class);
+      applicationController.startApplication(args);
     }
     // Else Run the comman line
     else {

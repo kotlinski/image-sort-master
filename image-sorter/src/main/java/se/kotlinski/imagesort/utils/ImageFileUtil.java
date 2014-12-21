@@ -22,7 +22,7 @@ public class ImageFileUtil {
     return modifyPath(getSystemPath(), false);
   }
 
-  public static boolean isValidFolder(final File folder) {
+  public boolean isValidFolder(final File folder) {
 		return folder != null && folder.exists() && folder.isDirectory();
 	}
 
