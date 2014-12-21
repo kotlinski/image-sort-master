@@ -14,14 +14,14 @@ import javafx.stage.StageStyle;
  */
 public class JavaFXUtils {
 
-	public static void alert(String text) {
-		Stage dialog = new Stage();
-		dialog.initStyle(StageStyle.UTILITY);
+  public static void alert(String text) {
+    Stage dialog = new Stage();
+    dialog.initStyle(StageStyle.UTILITY);
 
-		Scene scene = new Scene(new Group(new Text(25, 25, text)));
-		dialog.setScene(scene);
-		dialog.setMinWidth(200.0d);
-		dialog.setMinHeight(120.0d);
-		dialog.show();
-	}
+    Scene scene = new Scene(new Group(new Text(25, 25, text)));
+    dialog.setScene(scene);
+    dialog.setMinWidth(200.0d);
+    dialog.setMinHeight(120.0d);
+    dialog.show();
+  }
 }

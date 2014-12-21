@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.controller;
 
+import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.exception.NoInputFolderException;
@@ -17,11 +18,17 @@ import java.util.Scanner;
  *
  * @author Simon Kotlinski
  */
-public class CmdController {
+public class CmdController implements IController{
 	private FolderIO folderIO;
 	private ImageMapper imageMapper;
+  private final FileExecutor fileExecutor;
 
-	private static void createMasterFolder(final File masterFolder) {
+  @Inject
+  public CmdController(final FileExecutor fileExecutor) {
+    this.fileExecutor = fileExecutor;
+  }
+
+  private static void createMasterFolder(final File masterFolder) {
 		System.out.println("Do you want to create " + masterFolder + "[y/n]");
 		Scanner in = new Scanner(System.in);
 		String answer = in.nextLine().trim().toLowerCase();
@@ -67,8 +74,7 @@ public class CmdController {
     FileIndexer fileIndexer = new FileIndexer(folderIO);
     try {
       imageMapper = fileIndexer.runIndexing();
-      FileExecutor copyFiles = new FileExecutor();
-      FileCopyReport fileCopyReport = copyFiles.copyFiles(imageMapper, folderIO);
+      FileCopyReport fileCopyReport = fileExecutor.copyFiles(imageMapper, folderIO);
 
       System.out.println(fileCopyReport);
     }

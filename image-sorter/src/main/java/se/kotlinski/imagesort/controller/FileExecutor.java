@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author Simon Kotlinski
  */
-public class FileExecutor {
+public class FileExecutor implements IFileExecutor{
 
   public FileCopyReport copyFiles(ImageMapper imageMapper, FolderIO folderIO) {
     Map<String, String> copiedFiles = new HashMap<String, String>();

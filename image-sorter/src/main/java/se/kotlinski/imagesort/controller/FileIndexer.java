@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.controller;
 
+import com.google.inject.Inject;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FolderIO;
@@ -13,8 +14,9 @@ import java.util.ArrayList;
  * template use File | Settings | File Templates.
  */
 public class FileIndexer {
-  private FolderIO folderIO;
+  private final FolderIO folderIO;
 
+  @Inject
   public FileIndexer(FolderIO folderIO) {
     this.folderIO = folderIO;
   }

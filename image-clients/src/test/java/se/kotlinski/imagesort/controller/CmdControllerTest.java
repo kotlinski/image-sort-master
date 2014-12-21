@@ -5,6 +5,7 @@ import org.junit.Test;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class CmdControllerTest {
 	CmdController cmdController;
@@ -13,7 +14,8 @@ public class CmdControllerTest {
   @Before
 	public void setUp() throws Exception {
     imageFileUtil = new ImageFileUtil();
-    cmdController = new CmdController();
+    FileExecutor fileExecutor = mock(FileExecutor.class);
+    cmdController = new CmdController(fileExecutor);
   }
 
 	@Test
