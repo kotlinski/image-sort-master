@@ -7,7 +7,6 @@ import org.junit.Test;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FileCopyReport;
-import se.kotlinski.imagesort.model.FileDescriber;
 import se.kotlinski.imagesort.model.FolderIO;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
 
@@ -35,7 +34,7 @@ public class FileExecuterTest {
     inputFolders.add(file);
     folderIO.inputFolders = inputFolders;
     folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
-    fileIndexer = new FileIndexer(folderIO);
+    fileIndexer = new FileIndexer();
 
     File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
@@ -52,14 +51,14 @@ public class FileExecuterTest {
     FileExecutor fileExecutor = spy(new FileExecutor());
     doThrow(new IOException()).when(fileExecutor).createNewFile(any(File.class),
                                                                 any(String.class));
-    ImageMapper imageMapper = fileIndexer.runIndexing();
+    ImageMapper imageMapper = fileIndexer.runIndexing(folderIO);
     FileCopyReport fileCopyReport = fileExecutor.copyFiles(imageMapper, folderIO);
     Assert.assertEquals(0, fileCopyReport.getNumberOfFilesCopied());
     Assert.assertEquals(9, fileCopyReport.getFilesNotCopied().size());
 
     File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
-    imageMapper = fileIndexer.runIndexing();
+    imageMapper = fileIndexer.runIndexing(folderIO);
     fileExecutor.copyFiles(imageMapper, folderIO);
     String[] list = outputFolder.list();
     for (String file : list) {
@@ -74,7 +73,7 @@ public class FileExecuterTest {
 
     File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
-    ImageMapper imageMapper = fileIndexer.runIndexing();
+    ImageMapper imageMapper = fileIndexer.runIndexing(folderIO);
     fileExecutor.copyFiles(imageMapper, folderIO);
     String[] list = outputFolder.list();
     for (String file : list) {

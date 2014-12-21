@@ -3,7 +3,6 @@ package se.kotlinski.imagesort.controller;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.controller.FileIndexer;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FolderIO;
@@ -21,40 +20,41 @@ import static org.mockito.Mockito.doThrow;
 public class FileIndexerTest {
   FileIndexer fileIndexer;
   private ImageFileUtil imageFileUtil;
+  private FolderIO folderIO;
 
   @Before
   public void setUp() {
     imageFileUtil = new ImageFileUtil();
 
-    FolderIO folderIO = new FolderIO();
+    folderIO = new FolderIO();
     File file = new File(imageFileUtil.getTestInputPath());
     ArrayList<File> inputFolders = new ArrayList<File>();
     inputFolders.add(file);
     folderIO.inputFolders = inputFolders;
     folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
-    fileIndexer = new FileIndexer(folderIO);
+    fileIndexer = new FileIndexer();
   }
 
   @Test
   public void testRunIndex() throws Exception {
-    ImageMapper imageMapper = fileIndexer.runIndexing();
+    ImageMapper imageMapper = fileIndexer.runIndexing(folderIO);
     Assert.assertEquals("Number of Unique images", 9, imageMapper.getSizeOfUniqueImages());
   }
 
   @Test
   public void testRunIndexInvalidInput() throws Exception {
-    fileIndexer = new FileIndexer(null);
+    fileIndexer = new FileIndexer();
     try {
-      fileIndexer.runIndexing();
+      fileIndexer.runIndexing(null);
       assert false;
     } catch (InvalidInputFolders e) {
       assert true;
     }
 
     FolderIO folderIO = new FolderIO();
-    fileIndexer = new FileIndexer(folderIO);
+    fileIndexer = new FileIndexer();
     try {
-      fileIndexer.runIndexing();
+      fileIndexer.runIndexing(folderIO);
       assert false;
     }
     catch (InvalidInputFolders e) {
@@ -65,9 +65,9 @@ public class FileIndexerTest {
     ArrayList<File> inputFolders = new ArrayList<File>();
     inputFolders.add(folderIO.masterFolder);
     folderIO.inputFolders = inputFolders;
-    fileIndexer = new FileIndexer(folderIO);
+    fileIndexer = new FileIndexer();
     try{
-      fileIndexer.runIndexing();
+      fileIndexer.runIndexing(folderIO);
       assert false;
     } catch (InvalidInputFolders e){
       assert true;
@@ -77,8 +77,8 @@ public class FileIndexerTest {
     inputFolders = new ArrayList<File>();
     inputFolders.add(folderIO.masterFolder);
     folderIO.inputFolders = inputFolders;
-    fileIndexer = new FileIndexer(folderIO);
-    Assert.assertNotNull("Valid folderIO", fileIndexer.runIndexing());
+    fileIndexer = new FileIndexer();
+    Assert.assertNotNull("Valid folderIO", fileIndexer.runIndexing(folderIO));
   }
 
 }

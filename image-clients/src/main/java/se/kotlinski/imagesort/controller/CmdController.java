@@ -22,16 +22,23 @@ public class CmdController implements IController{
 	private FolderIO folderIO;
 	private ImageMapper imageMapper;
   private final FileExecutor fileExecutor;
+  private final Scanner inScanner;
+  private final CommandLineUtil commandLineUtil;
+  private final FileIndexer fileIndexer;
 
   @Inject
-  public CmdController(final FileExecutor fileExecutor) {
+  public CmdController(final FileExecutor fileExecutor,
+                       final CommandLineUtil commandLineUtil,
+                       final FileIndexer fileIndexer) {
     this.fileExecutor = fileExecutor;
+    this.commandLineUtil = commandLineUtil;
+    this.fileIndexer = fileIndexer;
+    this.inScanner = new Scanner(System.in);
   }
 
-  private static void createMasterFolder(final File masterFolder) {
+  private void createMasterFolder(final File masterFolder) {
 		System.out.println("Do you want to create " + masterFolder + "[y/n]");
-		Scanner in = new Scanner(System.in);
-		String answer = in.nextLine().trim().toLowerCase();
+		String answer = inScanner.nextLine().trim().toLowerCase();
 		if ("y".equals(answer)) {
 			System.out.println("Creating " + masterFolder.getName() + "...");
 			boolean mkdirs = masterFolder.mkdirs();
@@ -54,10 +61,10 @@ public class CmdController implements IController{
 	}
 
 	public void startCmd(String[] argv) {
-		CommandLine cmd = CommandLineUtil.intepreterArgs(argv);
-		try {
+    CommandLine commandLine = commandLineUtil.intepreterArgs(argv);
+    try {
 			try {
-				folderIO = CommandLineUtil.runCmd(CommandLineUtil.getOptions(), cmd);
+				folderIO = commandLineUtil.runCmd(commandLineUtil.getOptions(), commandLine);
 			}
 			catch (NoInputFolderException e) {
 				e.printStackTrace();
@@ -71,9 +78,8 @@ public class CmdController implements IController{
 
     // We have created a folderIO
     // and now the image-sorter will do its magic.
-    FileIndexer fileIndexer = new FileIndexer(folderIO);
     try {
-      imageMapper = fileIndexer.runIndexing();
+      imageMapper = fileIndexer.runIndexing(folderIO);
       FileCopyReport fileCopyReport = fileExecutor.copyFiles(imageMapper, folderIO);
 
       System.out.println(fileCopyReport);

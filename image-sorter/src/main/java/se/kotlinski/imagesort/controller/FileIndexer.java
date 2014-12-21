@@ -14,18 +14,12 @@ import java.util.ArrayList;
  * template use File | Settings | File Templates.
  */
 public class FileIndexer {
-  private final FolderIO folderIO;
-
-  @Inject
-  public FileIndexer(FolderIO folderIO) {
-    this.folderIO = folderIO;
-  }
-
   /**
    * Take input folders, and run indexing on files
    *
+   * @param folderIO
    */
-  public ImageMapper runIndexing() throws InvalidInputFolders {
+  public ImageMapper runIndexing(final FolderIO folderIO) throws InvalidInputFolders {
     if (folderIO == null || folderIO.masterFolder == null || folderIO.inputFolders == null) {
       throw new InvalidInputFolders();
     }

@@ -1,6 +1,8 @@
 package se.kotlinski.imagesort.module;
 
 import com.google.inject.AbstractModule;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
 import se.kotlinski.imagesort.controller.CmdController;
 import se.kotlinski.imagesort.controller.FileExecutor;
 import se.kotlinski.imagesort.controller.IController;
@@ -16,5 +18,6 @@ public class ImageModule extends AbstractModule {
       */
     bind(IController.class).to(CmdController.class);
     bind(IFileExecutor.class).to(FileExecutor.class);
+    bind(CommandLineParser.class).to(GnuParser.class);
   }
 }

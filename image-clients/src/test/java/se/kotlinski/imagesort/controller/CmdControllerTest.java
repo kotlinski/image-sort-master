@@ -1,8 +1,13 @@
 package se.kotlinski.imagesort.controller;
 
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.utils.CommandLineUtil;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
+
+import java.util.Scanner;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -15,7 +20,10 @@ public class CmdControllerTest {
 	public void setUp() throws Exception {
     imageFileUtil = new ImageFileUtil();
     FileExecutor fileExecutor = mock(FileExecutor.class);
-    cmdController = new CmdController(fileExecutor);
+    CommandLineParser parser = new GnuParser();
+    CommandLineUtil commandLineUtil = new CommandLineUtil(parser);
+    FileIndexer fileIndexer = mock(FileIndexer.class);
+    cmdController = new CmdController(fileExecutor, commandLineUtil, fileIndexer);
   }
 
 	@Test

@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.utils;
 
+import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -22,12 +23,14 @@ import java.util.ArrayList;
  */
 public class CommandLineUtil {
 
-	public static Options getOptions() {
+  private final CommandLineParser parser;
 
-		//Implement CLI SourceDestArgument
-		//
+  @Inject
+  public CommandLineUtil(final CommandLineParser parser) {
+    this.parser = parser;
+  }
 
-
+  public Options getOptions() {
 		Options options = new Options();
 		Option option = new Option("s", "source", true, "Import from this folder.");
 		option.setArgs(Option.UNLIMITED_VALUES);
@@ -51,15 +54,15 @@ public class CommandLineUtil {
 		return options;
 	}
 
-	public static void printHelp(Options options) {
+	public void printHelp(Options options) {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("MainRenamer", options);
 	}
 
-	public static CommandLine intepreterArgs(final String[] argv) {
+	public CommandLine intepreterArgs(final String[] argv) {
 		CommandLine cmd = null;
 		try {
-			cmd = getParser().parse(getOptions(), argv);
+			cmd = parser.parse(getOptions(), argv);
 		}
 		catch (ParseException e) {
 			System.err.println("Parsing failed.  Reason: " + e.getMessage());
@@ -67,18 +70,14 @@ public class CommandLineUtil {
 		return cmd;
 	}
 
-	public static CommandLineParser getParser() {
-		return new GnuParser();
-	}
-
-	public static FolderIO runCmd(final Options options, final CommandLine cmd) throws NoMasterFolderException, NoInputFolderException {
+	public FolderIO runCmd(final Options options, final CommandLine cmd) throws NoMasterFolderException, NoInputFolderException {
 		FolderIO folderIO = new FolderIO();
 		if (cmd == null || cmd.hasOption("h")) {
 			printHelp(options);
 		}
 		else if (cmd.hasOption("s") && cmd.hasOption("o")) {
 			String[] sourcePaths = cmd.getOptionValues("s");
-			ArrayList<File> inputFolders = new ArrayList<File>();
+			ArrayList<File> inputFolders = new ArrayList<>();
 			for (String sourcePath : sourcePaths) {
 				File folder = new File(sourcePath);
 				if (ImageFileUtil.isValidFolder(folder)) {
