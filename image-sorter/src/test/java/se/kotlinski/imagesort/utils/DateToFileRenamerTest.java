@@ -14,11 +14,10 @@ import static org.junit.Assert.*;
 public class DateToFileRenamerTest {
 
   private DateToFileRenamer dateToFileRenamer;
-  private Calendar calendar;
 
   @Before
   public void setUp() throws Exception {
-    calendar = new GregorianCalendar();
+    Calendar calendar = new GregorianCalendar();
     dateToFileRenamer = new DateToFileRenamer(calendar);
   }
 
@@ -26,10 +25,10 @@ public class DateToFileRenamerTest {
   public void testFormatFileDate() throws Exception {
     GregorianCalendar calendar = new GregorianCalendar();
     calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String fomattedDate = dateToFileRenamer.formatFileDate(new Date(0), calendar);
-    assertEquals("1970-01-01 00.00.00", fomattedDate);
-    fomattedDate = dateToFileRenamer.formatFileDate(new Date(1356900595000l), calendar);
-    assertEquals("2012-12-30 20.49.55", fomattedDate);
+    String formattedDate = dateToFileRenamer.formatFileDate(new Date(0), calendar);
+    assertEquals("1970-01-01 00.00.00", formattedDate);
+    formattedDate = dateToFileRenamer.formatFileDate(new Date(1356900595000l), calendar);
+    assertEquals("2012-12-30 20.49.55", formattedDate);
 
   }
 
@@ -37,9 +36,9 @@ public class DateToFileRenamerTest {
   public void testFormatPathDate() throws Exception {
     GregorianCalendar calendar = new GregorianCalendar();
     calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String fomattedDate = dateToFileRenamer.formatPathDate(new Date(0));
-    assertEquals("1970" + File.separator + "01", fomattedDate);
-    fomattedDate = dateToFileRenamer.formatPathDate(new Date(1356900595000l));
-    assertEquals("2012" + File.separator + "12", fomattedDate);
+    String formattedDate = dateToFileRenamer.formatPathDate(new Date(0));
+    assertEquals("1970" + File.separator + "01", formattedDate);
+    formattedDate = dateToFileRenamer.formatPathDate(new Date(1356900595000l));
+    assertEquals("2012" + File.separator + "12", formattedDate);
   }
 }

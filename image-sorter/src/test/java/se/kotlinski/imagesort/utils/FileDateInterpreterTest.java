@@ -15,21 +15,20 @@ import java.util.TimeZone;
 public class FileDateInterpreterTest {
 
   private FileDateInterpreter fileDateInterpreter;
-  private ImageFileUtil imageFileUtil;
   private File imageWithDate;
   private File videoWithDate;
-  private File imageWitouthDate;
+  private File imageWithoutDate;
 
   @Before
   public void setUp() throws Exception {
 
-    imageFileUtil = new ImageFileUtil();
+    ImageFileUtil imageFileUtil = new ImageFileUtil();
     imageWithDate = new File(imageFileUtil.getTestInputPath() +
                              File.separator + "2013" +
                              File.separator + "snapchat" +
                              File.separator + "2013-10-03 13.43.20-kaffe.jpg");
 
-    imageWitouthDate = new File(imageFileUtil.getTestInputPath() +
+    imageWithoutDate = new File(imageFileUtil.getTestInputPath() +
                                 File.separator +
                                 "image-without-dates.jpg");
     videoWithDate = new File(imageFileUtil.getTestInputPath() +
@@ -41,9 +40,8 @@ public class FileDateInterpreterTest {
 
   @Test
   public void testGetFileDate() {
-    Date date = null;
     try {
-      date = fileDateInterpreter.getDate(imageWithDate);
+      Date date = fileDateInterpreter.getDate(imageWithDate);
       Date expectedDate = getExpectedDate("2013-10-03 13.43.20", null);
       Assert.assertEquals("Date from date with file", expectedDate, date);
     }
@@ -53,7 +51,7 @@ public class FileDateInterpreterTest {
     }
 
     try {
-      date = fileDateInterpreter.getDate(videoWithDate);
+      Date date = fileDateInterpreter.getDate(videoWithDate);
       Date expectedDate = getExpectedDate("2014-03-16 10.45.09", TimeZone.getTimeZone("UTC"));
       Assert.assertEquals("Date from date with file", expectedDate, date);
     }
@@ -63,7 +61,7 @@ public class FileDateInterpreterTest {
     }
 
     try {
-      date = fileDateInterpreter.getDate(imageWitouthDate);
+      fileDateInterpreter.getDate(imageWithoutDate);
       assert false;
     }
     catch (CouldNotParseDateException e) {

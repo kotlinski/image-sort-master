@@ -3,8 +3,6 @@ apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 
-mainClassName = "se.kotlinski.imagesort.MainRenamer"
-
 buildscript {
   repositories {
 	mavenCentral()
@@ -49,16 +47,13 @@ sourceSets {
 	java {
 	  srcDir 'src/main/java'
 	}
-	resources {
-	  srcDir 'src/main/resources'
-	}
   }
+  main.resources.srcDir('src/resources')
+
+  test.resources.srcDir('src/resources')
   test {
 	java {
 	  srcDir 'test/java'
-	}
-	resources {
-	  srcDir 'src/resources'
 	}
   }
 }

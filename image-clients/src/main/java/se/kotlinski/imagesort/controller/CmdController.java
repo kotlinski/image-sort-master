@@ -33,7 +33,7 @@ public class CmdController implements IController{
     this.fileExecutor = fileExecutor;
     this.commandLineUtil = commandLineUtil;
     this.fileIndexer = fileIndexer;
-    this.inScanner = new Scanner(System.in);
+		inScanner = new Scanner(System.in);
   }
 
   private void createMasterFolder(final File masterFolder) {
@@ -41,8 +41,8 @@ public class CmdController implements IController{
 		String answer = inScanner.nextLine().trim().toLowerCase();
 		if ("y".equals(answer)) {
 			System.out.println("Creating " + masterFolder.getName() + "...");
-			boolean mkdirs = masterFolder.mkdirs();
-			if (!mkdirs) {
+			boolean success = masterFolder.mkdirs();
+			if (!success) {
 				System.err.println("Couldn't create " + masterFolder.getName());
 			}
 		}
@@ -52,7 +52,7 @@ public class CmdController implements IController{
 		}
 	}
 
-	public Object getImageMapper() {
+	public ImageMapper getImageMapper() {
 		return imageMapper;
 	}
 
@@ -60,8 +60,8 @@ public class CmdController implements IController{
 		return folderIO;
 	}
 
-	public void startCmd(String[] argv) {
-    CommandLine commandLine = commandLineUtil.intepreterArgs(argv);
+	public void startCmd(String[] arguments) {
+    CommandLine commandLine = commandLineUtil.interpreterArgs(arguments);
     try {
 			try {
 				folderIO = commandLineUtil.runCmd(commandLineUtil.getOptions(), commandLine);

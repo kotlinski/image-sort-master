@@ -11,31 +11,36 @@ import static org.junit.Assert.*;
 
 public class FolderIOTest {
 
-	FolderIO folderIO;
+	private FolderIO folderIO;
   private ImageFileUtil imageFileUtil;
 
   @Before
 	public void setUp() throws Exception {
     imageFileUtil = new ImageFileUtil();
-    folderIO = new FolderIO();
-    folderIO.inputFolders = null;
-    folderIO.masterFolder = null;
-
+    setFolderIO(new FolderIO());
   }
 
 	@Test
 	public void testToString() throws Exception {
-		String folderIOString = folderIO.toString();
+		String folderIOString = getFolderIO().toString();
 		assertEquals("To String with null values", "Folders not set", folderIOString);
-		folderIO.inputFolders = new ArrayList<File>();
-		folderIO.inputFolders.add(new File(imageFileUtil.getTestInputPath()));
-		folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
+		getFolderIO().inputFolders = new ArrayList<>();
+		getFolderIO().inputFolders.add(new File(imageFileUtil.getTestInputPath()));
+		getFolderIO().masterFolder = new File(imageFileUtil.getTestOutputPath());
 
 		String filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "inputImages";
-		boolean contains = folderIO.toString().contains(filePart);
+		boolean contains = getFolderIO().toString().contains(filePart);
 		assertTrue("Check toString", contains);
 		filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "output";
-		contains = folderIO.toString().contains(filePart);
+		contains = getFolderIO().toString().contains(filePart);
 		assertTrue("Check toString", contains);
+	}
+
+	FolderIO getFolderIO() {
+		return folderIO;
+	}
+
+	void setFolderIO(final FolderIO folderIO) {
+		this.folderIO = folderIO;
 	}
 }

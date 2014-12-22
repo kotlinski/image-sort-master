@@ -15,13 +15,11 @@ public class FileDescriberTest {
 
   private FileDescriber imageDescriber;
   private FileDescriber imageDescriber2;
-  private ImageFileUtil imageFileUtil;
-  private Calendar calendar;
 
   @Before
   public void setup() {
-    calendar = new GregorianCalendar();
-    imageFileUtil = new ImageFileUtil();
+    Calendar calendar = new GregorianCalendar();
+    ImageFileUtil imageFileUtil = new ImageFileUtil();
 
     File file = new File(imageFileUtil.getTestInputPath() +
                          "//structure//2013-10-03 13.43.20-kaffe.jpg");
@@ -30,13 +28,11 @@ public class FileDescriberTest {
     imageDescriber = new FileDescriber(file,
                                        new Date(0),
                                        "a",
-                                       imageFileUtil.getTestInputPath(),
-                                       calendar);
+                                       imageFileUtil.getTestInputPath(), calendar);
     imageDescriber2 = new FileDescriber(file2,
                                         new Date(0),
                                         "b",
-                                        imageFileUtil.getTestInputPath(),
-                                        calendar);
+                                        imageFileUtil.getTestInputPath(), calendar);
   }
 
   @Test

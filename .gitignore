@@ -1,7 +1,6 @@
 # Intellij
 .idea/
 *.iml
-*.iws
 out/
 
 
@@ -9,18 +8,9 @@ out/
 *.class
 
 # generated files
-bin/
-gen/
-
 # Local configuration file (sdk path, etc)
-local.properties
-
 # Windows thumbnail db
-Thumbs.db
-
 # OSX files
-.DS_Store
-
 # Android Studio
 .gradle
 build/

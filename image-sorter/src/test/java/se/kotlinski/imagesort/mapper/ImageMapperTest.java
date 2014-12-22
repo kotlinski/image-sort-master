@@ -1,6 +1,5 @@
 package se.kotlinski.imagesort.mapper;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,38 +16,28 @@ import java.util.List;
 
 public class ImageMapperTest {
 
-  ImageMapper imageMapper;
+  private ImageMapper imageMapper;
   private ImageFileUtil imageFileUtil;
 
   private Calendar calendar;
-  private FileDescriberPathComperator fileDescriberPathComperator;
 
   @Before
   public void setUp() throws Exception {
     imageFileUtil = new ImageFileUtil();
-    fileDescriberPathComperator = new FileDescriberPathComperator();
+    FileDescriberPathComparator fileDescriberPathComparator = new FileDescriberPathComparator();
     calendar = new GregorianCalendar();
-    imageMapper = new ImageMapper(calendar, fileDescriberPathComperator);
+    imageMapper = new ImageMapper(calendar, fileDescriberPathComparator);
     calendar = new GregorianCalendar();
   }
 
-  @After
-  public void tearDown() throws Exception {
-
-  }
-
-  @Test
-  public void testAddImage() throws Exception {
-
-  }
 
   @Test
   public void testPopulateWithImages() throws Exception {
     File file = new File(imageFileUtil.getTestInputPath());
-    ArrayList<File> inputFolders = new ArrayList<File>();
+    ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(file);
     imageMapper.populateWithImages(inputFolders);
-    Assert.assertEquals("Number of unique images in testfolder",
+    Assert.assertEquals("Number of unique images in test folder",
                         9,
                         imageMapper.getSizeOfUniqueImages());
     //System.out.println("Expecting 6 files: \n" + imageMapper.toString());
@@ -68,8 +57,11 @@ public class ImageMapperTest {
 
     Date date = fileDateInterpreter.getDate(inputFile);
     FileDescriber fileDescriber;
-    fileDescriber= new FileDescriber(inputFile, date, "abc", imageFileUtil.getTestInputPath(),
-                                     calendar);
+    fileDescriber = new FileDescriber(inputFile,
+                                      date,
+                                      "abc",
+                                      imageFileUtil.getTestInputPath(),
+                                      calendar);
     imageMapper.addValidDescriberFile(fileDescriber);
     Assert.assertEquals("Files in input folder: \n" +
                         "abc, including files: \n" +
@@ -80,7 +72,7 @@ public class ImageMapperTest {
   @Test
   public void testNewFilesNames() throws Exception {
     File file = new File(imageFileUtil.getTestInputPath());
-    ArrayList<File> inputFolderList = new ArrayList<File>();
+    ArrayList<File> inputFolderList = new ArrayList<>();
     inputFolderList.add(file);
     imageMapper.populateWithImages(inputFolderList);
 
@@ -92,13 +84,13 @@ public class ImageMapperTest {
   @Test
   public void testGetRedundantFiles() throws Exception {
     Assert.assertEquals("To string function", "Files in input folder: \n", imageMapper.toString());
-    Assert.assertEquals("Size of reduntant file list", 0, imageMapper.getRedundantFiles().size());
+    Assert.assertEquals("Size of redundant file list", 0, imageMapper.getRedundantFiles().size());
 
 
     File folder = new File(imageFileUtil.getTestInputPath());
-    ArrayList<File> inputfolders = new ArrayList<File>();
-    inputfolders.add(folder);
-    imageMapper.populateWithImages(inputfolders);
+    ArrayList<File> inputFolders = new ArrayList<>();
+    inputFolders.add(folder);
+    imageMapper.populateWithImages(inputFolders);
     List<FileDescriber> redundantFiles = imageMapper.getRedundantFiles();
     Assert.assertEquals(3, redundantFiles.size());
   }

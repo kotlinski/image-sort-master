@@ -12,8 +12,6 @@ import se.kotlinski.imagesort.utils.JavaFXUtils;
 import java.io.File;
 
 public class ApplicationController extends Application {
-	private File inputFolder;
-	private File outputFolder;
 	private final DirectoryChooser directoryChooser;
   private final JavaFXUtils javaFxUtil;
 

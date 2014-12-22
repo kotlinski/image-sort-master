@@ -12,11 +12,7 @@ import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Date: 2014-10-24
@@ -24,9 +20,8 @@ import java.util.TimeZone;
  * @author Simon Kotlinski
  */
 public class FileDateInterpreter {
-  private String testInputPath;
 
-  public Date getImageDate(File file) throws CouldNotParseDateException {
+  Date getImageDate(File file) throws CouldNotParseDateException {
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
       ExifSubIFDDirectory exifSubIFDDirectory = metadata.getDirectory(ExifSubIFDDirectory.class);
@@ -48,10 +43,6 @@ public class FileDateInterpreter {
     }
   }
 
-  public String getTestInputPath() {
-    return testInputPath;
-  }
-
   public Date getDate(final File file) throws CouldNotParseDateException {
     try {
       return getImageDate(file);
@@ -71,12 +62,12 @@ public class FileDateInterpreter {
   private Date getVideoDate(File videoFile) throws CouldNotParseDateException {
     try {
       IsoFile isoFile = new IsoFile(videoFile.getAbsolutePath());
-      MovieBox moov = isoFile.getMovieBox();
-      MovieHeaderBox movieHeaderBox = moov.getMovieHeaderBox();
+      MovieBox movieBox = isoFile.getMovieBox();
+      MovieHeaderBox movieHeaderBox = movieBox.getMovieHeaderBox();
       return movieHeaderBox.getCreationTime();
     }
     catch (IOException | NullPointerException e) {
-      System.err.println("File is not a parsable mp4");
+      System.err.println("File is not a parcelable mp4");
       throw new CouldNotParseDateException();
     }
   }

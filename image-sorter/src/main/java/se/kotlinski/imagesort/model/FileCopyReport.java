@@ -9,11 +9,11 @@ import java.util.HashSet;
  * @author Simon Kotlinski
  */
 public class FileCopyReport {
-  private Collection<FileDescriber> filesNotCopied;
+  private final Collection<FileDescriber> filesNotCopied;
   private int numberOfFilesCopied;
 
   public FileCopyReport() {
-    filesNotCopied = new HashSet<FileDescriber>();
+    filesNotCopied = new HashSet<>();
     numberOfFilesCopied = 0;
   }
 

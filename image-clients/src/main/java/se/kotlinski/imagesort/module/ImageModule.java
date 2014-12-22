@@ -15,10 +15,6 @@ public class ImageModule extends AbstractModule {
   @Override
   protected void configure() {
 
-     /*
-      * This tells Guice that whenever it sees a dependency on a TransactionLog,
-      * it should satisfy the dependency using a DatabaseTransactionLog.
-      */
     bind(IController.class).to(CmdController.class);
     bind(IFileExecutor.class).to(FileExecutor.class);
     bind(CommandLineParser.class).to(GnuParser.class);

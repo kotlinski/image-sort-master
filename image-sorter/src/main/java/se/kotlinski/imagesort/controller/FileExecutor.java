@@ -19,14 +19,14 @@ import java.util.Map;
  *
  * @author Simon Kotlinski
  */
-public class FileExecutor implements IFileExecutor{
+public class FileExecutor implements IFileExecutor {
 
   @Inject
   public FileExecutor() {
   }
 
   public FileCopyReport copyFiles(ImageMapper imageMapper, FolderIO folderIO) {
-    Map<String, String> copiedFiles = new HashMap<String, String>();
+    Map<String, String> copiedFiles = new HashMap<>();
 
     ArrayList<FileDescriber> uniqueFileDescribers = imageMapper.getUniqueImageDescribers();
     FileCopyReport fileCopyReport = new FileCopyReport();
@@ -66,12 +66,7 @@ public class FileExecutor implements IFileExecutor{
                              final String fullPath,
                              final boolean appendMD5) {
     String newFileName;
-    try {
-      newFileName = fullPath + File.separator + uniqueFileDescriber.getDateFilename(appendMD5);
-    }
-    catch (CouldNotParseDateException e) {
-      newFileName = fullPath + File.separator + uniqueFileDescriber.getOriginalFileName();
-    }
+    newFileName = fullPath + File.separator + uniqueFileDescriber.getDateFilename(appendMD5);
     return newFileName;
   }
 
@@ -81,15 +76,13 @@ public class FileExecutor implements IFileExecutor{
       createNewFile(uniqueFileDescriber.getFile(), newFolder);
       return true;
     }
-    catch (IOException | CouldNotParseDateException e) {
+    catch (IOException e) {
       e.printStackTrace();
     }
     return false;
   }
 
-  public void createNewFile(final File oldFile, final String pathname) throws
-                                                                       IOException,
-                                                                       CouldNotParseDateException {
+  public void createNewFile(final File oldFile, final String pathname) throws IOException {
     File file = new File(pathname);
     boolean fileCreated = file.createNewFile();
     if (fileCreated) {
