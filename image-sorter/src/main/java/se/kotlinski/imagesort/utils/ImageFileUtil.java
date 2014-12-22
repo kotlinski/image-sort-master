@@ -26,7 +26,7 @@ public class ImageFileUtil {
 		return folder != null && folder.exists() && folder.isDirectory();
 	}
 
-  protected String getSystemPath() {
+  String getSystemPath() {
     return System.getProperty("user.dir") + File.separator;
   }
 

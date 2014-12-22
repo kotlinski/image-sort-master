@@ -11,7 +11,7 @@ import java.io.File;
  * @version $Revision: 1.1 $
  */
 public class NoMasterFolderException extends Exception {
-	private File masterFolder;
+	private final File masterFolder;
 
 	public NoMasterFolderException(final String message, final File masterFolder) {
 		super(message);

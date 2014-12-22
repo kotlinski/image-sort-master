@@ -10,12 +10,11 @@ import java.util.Comparator;
  *
  * @author Simon Kotlinski
  */
-public class FileDescriberPathComperator implements Comparator<FileDescriber> {
+public class FileDescriberPathComparator implements Comparator<FileDescriber> {
   @Override
   public int compare(final FileDescriber describer1, final FileDescriber describer2) {
-    String renamedFilePath = null;
     try {
-      renamedFilePath = describer1.getRenamedFilePath();
+      String renamedFilePath = describer1.getRenamedFilePath();
       return renamedFilePath.compareTo(describer2.getRenamedFilePath());
     }
     catch (CouldNotParseDateException e) {

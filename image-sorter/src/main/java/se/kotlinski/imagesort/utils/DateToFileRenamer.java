@@ -6,12 +6,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
-/**
- * Created with IntelliJ IDEA. User: Simon Kotlinski Date: 2014-02-10 Time: 21:40 To change this
- * template use File | Settings | File Templates.
- */
 public class DateToFileRenamer {
   private final Calendar calendar;
 

@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.model.FileDescriber;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
-import se.kotlinski.imagesort.utils.FileDateMD5Generator;
+import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,27 +15,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Simon Kotlinski on 2014-05-07.
- */
 public class ImageMapper {
-  Map<String, ArrayList<FileDescriber>> imageMap;
+  private final Map<String, ArrayList<FileDescriber>> imageMap;
 
   @Inject
   private final Calendar calendar;
   @Inject
-  private final FileDescriberPathComperator fileDescriberPathComperator;
+  private final FileDescriberPathComparator fileDescriberPathComparator;
 
   public ImageMapper(final Calendar calendar,
-                     final FileDescriberPathComperator fileDescriberPathComperator) {
+                     final FileDescriberPathComparator fileDescriberPathComparator) {
     this.calendar = calendar;
-    this.fileDescriberPathComperator = fileDescriberPathComperator;
+    this.fileDescriberPathComparator = fileDescriberPathComparator;
     imageMap = new HashMap<>();
   }
 
   public List<File> recursiveIterate(final File folder) {
-    List<File> imageDescriber = new ArrayList<File>();
-    for (File file : folder.listFiles()) {
+    List<File> imageDescriber = new ArrayList<>();
+    if (folder == null) {
+      return imageDescriber;
+    }
+    File[] files = folder.listFiles();
+    if (files == null) {
+      return imageDescriber;
+    }
+    for (File file : files) {
       if (file.isDirectory()) {
         imageDescriber.addAll(recursiveIterate(file));
       }
@@ -48,30 +52,30 @@ public class ImageMapper {
 
   public void addValidDescriberFile(FileDescriber fileDescriber) {
     String md5 = fileDescriber.getMd5();
-    ArrayList<FileDescriber> imageArray = getImageArrayForMd5(fileDescriber, md5);
+    ArrayList<FileDescriber> imageArray = getImageArrayForMd5(md5);
     imageArray.add(fileDescriber);
   }
 
-  private ArrayList<FileDescriber> getImageArrayForMd5(FileDescriber imageDescriber, String md5) {
+  private ArrayList<FileDescriber> getImageArrayForMd5(String md5) {
     ArrayList<FileDescriber> imageArray;
     if (imageMap.containsKey(md5)) {
       imageArray = imageMap.get(md5);
     }
     else {
-      imageArray = new ArrayList<FileDescriber>();
+      imageArray = new ArrayList<>();
       imageMap.put(md5, imageArray);
     }
     return imageArray;
   }
 
   public void populateWithImages(ArrayList<File> inputFolders) {
-    Map<String, List<File>> filesFromFolder = new HashMap<String, List<File>>();
+    Map<String, List<File>> filesFromFolder = new HashMap<>();
     for (File rootFolder : inputFolders) {
       filesFromFolder.put(rootFolder.getAbsolutePath(), recursiveIterate(rootFolder));
     }
 
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    FileDateMD5Generator fileDateMD5Generator = new FileDateMD5Generator();
+    FileDateUniqueGenerator fileDateUniqueGenerator = new FileDateUniqueGenerator();
 
     for (String rootFolder : filesFromFolder.keySet()) {
 
@@ -83,8 +87,11 @@ public class ImageMapper {
         catch (CouldNotParseDateException e) {
           e.printStackTrace();
         }
-        String imageIdentifier = fileDateMD5Generator.generateMd5(file);
-        FileDescriber fileDescriber = new FileDescriber(file, date, imageIdentifier, rootFolder,
+        String imageIdentifier = fileDateUniqueGenerator.generateMd5(file);
+        FileDescriber fileDescriber = new FileDescriber(file,
+                                                        date,
+                                                        imageIdentifier,
+                                                        rootFolder,
                                                         calendar);
         addValidDescriberFile(fileDescriber);
       }
@@ -92,13 +99,12 @@ public class ImageMapper {
     }
   }
 
-
   public ArrayList<FileDescriber> getUniqueImageDescribers() {
     ArrayList<FileDescriber> imageDescribers = new ArrayList<>();
     for (String s : imageMap.keySet()) {
       imageDescribers.add(imageMap.get(s).get(0));
     }
-    Collections.sort(imageDescribers, fileDescriberPathComperator);
+    Collections.sort(imageDescribers, fileDescriberPathComparator);
     return imageDescribers;
   }
 
@@ -118,15 +124,14 @@ public class ImageMapper {
     return retString;
   }
 
-
   public List<FileDescriber> getRedundantFiles() {
-    List<FileDescriber> imageDescribers = new ArrayList<FileDescriber>();
+    List<FileDescriber> imageDescribers = new ArrayList<>();
     for (String s : imageMap.keySet()) {
       if (imageMap.get(s).size() > 1) {
         imageDescribers.addAll(imageMap.get(s));
       }
     }
-    Collections.sort(imageDescribers, fileDescriberPathComperator);
+    Collections.sort(imageDescribers, fileDescriberPathComparator);
     return imageDescribers;
   }
 }

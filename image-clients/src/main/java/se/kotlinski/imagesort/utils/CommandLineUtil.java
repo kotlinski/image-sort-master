@@ -45,16 +45,16 @@ public class CommandLineUtil {
     options.addOption("h", "help", false, "MainRenamer usage\n" +
                                           "Main purpose is to read all images from a source-path " +
                                           "and\n" +
-                                          "export them to a given destionation. \n\n" +
+                                          "export them to a given destination. \n\n" +
                                           "When you have your images backed up via dropbox and " +
 																					"manually, \n" +
                                           "it may be hard giving them smart names. Sometimes you " +
 																					"will get\n" +
                                           "duplicated images on your back-up drive." +
                                           "java -jar ImageRename <sourcePath> <outputPath>. \n\n" +
-                                          "The sourcePath read folders and files recursivly, so " +
+                                          "The sourcePath read folders and files recursively, so " +
 																					"you can put all" +
-                                          "your folders in the same directary. For example " +
+                                          "your folders in the same directory. For example " +
 																					"Dropbox-folders, etc");
     return options;
   }
@@ -63,10 +63,10 @@ public class CommandLineUtil {
     formatter.printHelp("MainRenamer", options);
   }
 
-  public CommandLine intepreterArgs(final String[] argv) {
+  public CommandLine interpreterArgs(final String[] arguments) {
     CommandLine cmd = null;
     try {
-      cmd = parser.parse(getOptions(), argv);
+      cmd = parser.parse(getOptions(), arguments);
     }
     catch (ParseException e) {
       System.err.println("Parsing failed.  Reason: " + e.getMessage());

@@ -41,20 +41,16 @@ buildscript {
 }
 
 sourceSets {
+  main.resources.srcDir('src/main/resources')
   main {
 	java {
 	  srcDir 'src/main/java'
 	}
-	resources {
-	  srcDir 'src/main/resources'
-	}
   }
+  test.resources.srcDir('src/resources')
   test {
 	java {
 	  srcDir 'test/java'
-	}
-	resources {
-	  srcDir 'src/resources'
 	}
   }
 }

@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
-import se.kotlinski.imagesort.mapper.FileDescriberPathComperator;
+import se.kotlinski.imagesort.mapper.FileDescriberPathComparator;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FileCopyReport;
 import se.kotlinski.imagesort.model.FolderIO;
@@ -21,27 +21,24 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 
-public class FileExecuterTest {
+public class FileExecutorTest {
 
-  private ImageFileUtil imageFileUtil;
   private FileIndexer fileIndexer;
   private FolderIO folderIO;
-  private Calendar calendar;
-  private FileDescriberPathComperator fileDescriberPathComperator;
 
   @Before
   public void setUp() throws Exception {
-    imageFileUtil = new ImageFileUtil();
+    ImageFileUtil imageFileUtil = new ImageFileUtil();
 
     folderIO = new FolderIO();
     File file = new File(imageFileUtil.getTestInputPath());
-    ArrayList<File> inputFolders = new ArrayList<File>();
+    ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(file);
     folderIO.inputFolders = inputFolders;
     folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
-    calendar = new GregorianCalendar();
-    fileDescriberPathComperator = new FileDescriberPathComperator();
-    fileIndexer = new FileIndexer(imageFileUtil, calendar, fileDescriberPathComperator);
+    Calendar calendar = new GregorianCalendar();
+    FileDescriberPathComparator fileDescriberPathComparator = new FileDescriberPathComparator();
+    fileIndexer = new FileIndexer(imageFileUtil, calendar, fileDescriberPathComparator);
 
     File outputFolder = new File(new ImageFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
@@ -56,8 +53,7 @@ public class FileExecuterTest {
   @Test
   public void testCopyFiles() throws Exception {
     FileExecutor fileExecutor = spy(new FileExecutor());
-    doThrow(new IOException()).when(fileExecutor).createNewFile(any(File.class),
-                                                                any(String.class));
+    doThrow(new IOException()).when(fileExecutor).createNewFile(any(File.class), any(String.class));
     ImageMapper imageMapper = fileIndexer.runIndexing(folderIO);
     FileCopyReport fileCopyReport = fileExecutor.copyFiles(imageMapper, folderIO);
     Assert.assertEquals(0, fileCopyReport.getNumberOfFilesCopied());
@@ -87,11 +83,6 @@ public class FileExecuterTest {
       System.out.println(file);
     }
     Assert.assertEquals(5, list.length);
-  }
-
-  @Test
-  public void testCreateImageFile() throws Exception {
-
   }
 
   private void deleteFolderContent(File folder) {

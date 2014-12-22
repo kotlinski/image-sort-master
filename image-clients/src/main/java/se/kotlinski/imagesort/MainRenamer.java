@@ -9,7 +9,7 @@ import se.kotlinski.imagesort.module.ImageModule;
 /**
  * Entry point of the program, if any kind of arguments, run cmd-version, else application version
  */
-public class MainRenamer {
+class MainRenamer {
 
   private MainRenamer() {
   }
@@ -22,7 +22,7 @@ public class MainRenamer {
       ApplicationController applicationController = injector.getInstance(ApplicationController.class);
       applicationController.startApplication(args);
     }
-    // Else Run the comman line
+    // Else Run the command line
     else {
       CmdController cmdController = injector.getInstance(CmdController.class);
       cmdController.startCmd(args);

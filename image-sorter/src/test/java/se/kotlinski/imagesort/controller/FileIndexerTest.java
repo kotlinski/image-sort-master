@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
-import se.kotlinski.imagesort.mapper.FileDescriberPathComperator;
+import se.kotlinski.imagesort.mapper.FileDescriberPathComparator;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FolderIO;
 import se.kotlinski.imagesort.utils.ImageFileUtil;
@@ -14,15 +14,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-
 public class FileIndexerTest {
   private FileIndexer fileIndexer;
   private ImageFileUtil imageFileUtil;
   private FolderIO folderIO;
   private Calendar calendar;
-  private FileDescriberPathComperator fileDescriberPathComperator;
+  private FileDescriberPathComparator fileDescriberPathComparator;
 
   @Before
   public void setUp() {
@@ -30,13 +27,13 @@ public class FileIndexerTest {
 
     folderIO = new FolderIO();
     File file = new File(imageFileUtil.getTestInputPath());
-    ArrayList<File> inputFolders = new ArrayList<File>();
+    ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(file);
     folderIO.inputFolders = inputFolders;
     folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
     calendar = new GregorianCalendar();
-    fileDescriberPathComperator = new FileDescriberPathComperator();
-    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComperator));
+    fileDescriberPathComparator = new FileDescriberPathComparator();
+    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComparator));
   }
 
   @Test
@@ -47,7 +44,7 @@ public class FileIndexerTest {
 
   @Test
   public void testRunIndexInvalidInput() throws Exception {
-    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComperator));
+    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComparator));
     try {
       getFileIndexer().runIndexing(null);
       assert false;
@@ -56,7 +53,7 @@ public class FileIndexerTest {
     }
 
     FolderIO folderIO = new FolderIO();
-    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComperator));
+    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComparator));
     try {
       getFileIndexer().runIndexing(folderIO);
       assert false;
@@ -66,10 +63,10 @@ public class FileIndexerTest {
     }
 
     folderIO.masterFolder = new File("SomeInvalidFilePath");
-    ArrayList<File> inputFolders = new ArrayList<File>();
+    ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(folderIO.masterFolder);
     folderIO.inputFolders = inputFolders;
-    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComperator));
+    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComparator));
     try{
       getFileIndexer().runIndexing(folderIO);
       assert false;
@@ -78,18 +75,18 @@ public class FileIndexerTest {
     }
 
     folderIO.masterFolder = new File(imageFileUtil.getTestOutputPath());
-    inputFolders = new ArrayList<File>();
+    inputFolders = new ArrayList<>();
     inputFolders.add(folderIO.masterFolder);
     folderIO.inputFolders = inputFolders;
-    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComperator));
+    setFileIndexer(new FileIndexer(imageFileUtil, calendar, fileDescriberPathComparator));
     Assert.assertNotNull("Valid folderIO", getFileIndexer().runIndexing(folderIO));
   }
 
-  public FileIndexer getFileIndexer() {
+  FileIndexer getFileIndexer() {
     return fileIndexer;
   }
 
-  public void setFileIndexer(final FileIndexer fileIndexer) {
+  void setFileIndexer(final FileIndexer fileIndexer) {
     this.fileIndexer = fileIndexer;
   }
 }

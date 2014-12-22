@@ -4,10 +4,10 @@ Image Sort Master
 
 How and when do you sort and back up your images from your camera-devices? 
 
-I have my images stored on a few harddrive backups, dropbox and various devices; 
+I have my images stored on a few hard drive backups, dropbox and various devices;
 My dropbox, my nexus 5 and my old Samsung galaxy device. The problem is that 
 Dropbox, Nexus 5 and Samsung all have their own way of naming the images and their 
-storages always get full at different points of time. Dropbox gets full once in a year, 
+storage's always get full at different points of time. Dropbox gets full once in a year,
 my phone every two or three months, or sometimes, devices get wasted. 
 
 Over time it gets hard to detect duplicates and you don't bother delete poor-
@@ -18,9 +18,9 @@ With this tool your images will be sorted and renamed in this structure:
 `year/[month|quarter|nothing]/<flavor>/yyyy-mm-dd hh:mm:ss.[png|jpg|mp4]`
 <br>
 The month setting is optional, your different options is month, quarter or none. 
-The flavor may be Instagram, Screenshots, Elins wedding or what folder you 
+The flavor may be Instagram, Screenshots, Elins wedding or what folder you
 put your images in.<br>
-A flavor is all subfolders from the root folder, except year/quarter/month.
+A flavor is all sub folders from the root folder, except year/quarter/month.
 <br>Example:<br>
 `Root/2013/Wedding/TheKiss/imgA.png`
  <br>will be sorted as:<br> 
@@ -42,7 +42,7 @@ Pseudo code
  - Parse all images and videos from selected folders.
      - Detect flavors 
      - Read the image/video meta-data 
-     - Calcucate an unique id(MD5) of each image.
+     - Calculate an unique id(MD5) of each image.
      - Make a set of MD5.
  - Execute, export to master folder
  - Create report of duplicates and put it in output root folder
@@ -53,7 +53,7 @@ Pseudo code
 Example of an execution
 --------
 This is my problem: 
-I have a great back-up folder for images on different harddrives. With sub-folder
+I have a great back-up folder for images on different hard drives. With sub-folder
 names like '2011-12 to 2012-05', '2012 summer','dropbox 2012' etc. 
 And then in the middle of everything, your out of phone memory and need to dump 
 all images from your phone. 
@@ -149,7 +149,7 @@ Road map
 - [x] use image meta-data interpreters. 
 - [x] use some kind of mp4-meta data parser
 - [x] take an input folder and generate new folders from meta data
-- [x] use dependecy injection, (guice etc)
+- [x] use dependency injection, (Guice etc)
 - [x] add automatic builds
 - [ ] create a simple gui selecting two folders(input/output)
 - [ ] present the results of duplicates etc.

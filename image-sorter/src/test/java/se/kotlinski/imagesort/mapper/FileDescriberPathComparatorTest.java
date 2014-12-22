@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 
 import static org.junit.Assert.*;
 
-public class FileDescriberPathComperatorTest {
+public class FileDescriberPathComparatorTest {
 
   private ImageFileUtil imageFileUtil;
   private FileDescriber imageDescriber;
@@ -57,11 +57,11 @@ public class FileDescriberPathComperatorTest {
     FileDescriber imageDescriber3 = new FileDescriber(file2, null, "b", imageFileUtil.getTestInputPath(),
                                                       calendar);
 
-    FileDescriberPathComperator fileDescriberPathComperator = new FileDescriberPathComperator();
-    int compareResult = fileDescriberPathComperator.compare(imageDescriber, imageDescriber2);
+    FileDescriberPathComparator fileDescriberPathComparator = new FileDescriberPathComparator();
+    int compareResult = fileDescriberPathComparator.compare(imageDescriber, imageDescriber2);
     assertEquals(0, compareResult);
 
-    compareResult = fileDescriberPathComperator.compare(imageDescriber, imageDescriber3);
+    compareResult = fileDescriberPathComparator.compare(imageDescriber, imageDescriber3);
     assertEquals(-1, compareResult);
   }
 }

@@ -15,8 +15,8 @@ public class FileDescriber {
   private final File file;
   private final DateToFileRenamer dateToFileRenamer;
   private final String rootPath;
-  private String md5;
-  private Date date;
+  private final String md5;
+  private final Date date;
   private final Calendar calendar;
 
   @Inject
@@ -69,7 +69,7 @@ public class FileDescriber {
     return flavour;
   }
 
-  public String getDateFilename(boolean appendMD5) throws CouldNotParseDateException {
+  public String getDateFilename(boolean appendMD5) {
     if (date != null) {
       String formattedDate = dateToFileRenamer.formatFileDate(date, calendar);
       if (appendMD5) {
@@ -92,7 +92,4 @@ public class FileDescriber {
     return file.getName();
   }
 
-  public Date getDate() {
-    return date;
-  }
 }
