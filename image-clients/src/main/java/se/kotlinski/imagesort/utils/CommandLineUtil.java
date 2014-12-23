@@ -7,6 +7,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.NoInputFolderException;
 import se.kotlinski.imagesort.exception.NoMasterFolderException;
 import se.kotlinski.imagesort.model.FolderIO;
@@ -17,10 +19,10 @@ import java.util.ArrayList;
 
 public class CommandLineUtil {
 
+  private static final Logger logger = LogManager.getLogger(CommandLineUtil.class);
   private final HelpFormatter formatter;
   private final CommandLineParser parser;
   private final ImageFileUtil imageFileUtil;
-
 
   @Inject
   public CommandLineUtil(final HelpFormatter formatter,
@@ -47,15 +49,15 @@ public class CommandLineUtil {
                                           "and\n" +
                                           "export them to a given destination. \n\n" +
                                           "When you have your images backed up via dropbox and " +
-																					"manually, \n" +
+                                          "manually, \n" +
                                           "it may be hard giving them smart names. Sometimes you " +
-																					"will get\n" +
+                                          "will get\n" +
                                           "duplicated images on your back-up drive." +
                                           "java -jar ImageRename <sourcePath> <outputPath>. \n\n" +
                                           "The sourcePath read folders and files recursively, so " +
-																					"you can put all" +
+                                          "you can put all" +
                                           "your folders in the same directory. For example " +
-																					"Dropbox-folders, etc");
+                                          "Dropbox-folders, etc");
     return options;
   }
 
@@ -69,7 +71,7 @@ public class CommandLineUtil {
       cmd = parser.parse(getOptions(), arguments);
     }
     catch (ParseException e) {
-      System.err.println("Parsing failed.  Reason: " + e.getMessage());
+      logger.error("Parsing failed, " + e);
     }
     return cmd;
   }
@@ -107,7 +109,7 @@ public class CommandLineUtil {
       folderIO.masterFolder = masterFolder;
     }
     else {
-      System.out.println("No source no output folder chosen");
+      logger.error("No source no output folder chosen");
       printHelp(options);
     }
     return folderIO;

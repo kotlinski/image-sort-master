@@ -46,7 +46,6 @@ public class FileDateInterpreterTest {
       Assert.assertEquals("Date from date with file", expectedDate, date);
     }
     catch (CouldNotParseDateException e) {
-      e.printStackTrace();
       assert false;
     }
 
@@ -56,7 +55,6 @@ public class FileDateInterpreterTest {
       Assert.assertEquals("Date from date with file", expectedDate, date);
     }
     catch (CouldNotParseDateException e) {
-      e.printStackTrace();
       assert false;
     }
 
@@ -80,7 +78,7 @@ public class FileDateInterpreterTest {
       expectedDate = formatter.parse(source);
     }
     catch (ParseException e) {
-      e.printStackTrace();
+      assert false;
     }
     return expectedDate;
   }

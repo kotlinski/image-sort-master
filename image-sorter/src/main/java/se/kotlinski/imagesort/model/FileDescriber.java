@@ -2,6 +2,8 @@ package se.kotlinski.imagesort.model;
 
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 
@@ -18,6 +20,8 @@ public class FileDescriber {
   private final String md5;
   private final Date date;
   private final Calendar calendar;
+  private static final Logger logger = LogManager.getLogger(FileDescriber.class);
+
 
   @Inject
   public FileDescriber(File file, Date date, String md5, String rootPath, final Calendar calendar) {
@@ -42,12 +46,12 @@ public class FileDescriber {
     if (date != null) {
       return dateToFileRenamer.formatPathDate(date);
     }
-    throw new CouldNotParseDateException();
+    throw new CouldNotParseDateException("Could not parse date");
   }
 
   public String getFlavour() {
     String absolutePath = file.getAbsolutePath();
-    System.out.println(absolutePath);
+    logger.debug(absolutePath);
 
     String flavour = absolutePath.replace(rootPath, "");
     flavour = flavour.replace(file.getName(), "");
@@ -57,14 +61,14 @@ public class FileDescriber {
     flavour = removeDigitFolders(flavour, monthSequence);
     int yearSequence = 4;
     flavour = removeDigitFolders(flavour, yearSequence);
-    System.out.println("return flavour: " + flavour);
+    logger.debug("return flavour: " + flavour);
     return flavour;
   }
 
 
   public String removeDigitFolders(String flavour, int sequence) {
     String pattern = Pattern.quote(File.separator) + "\\d{"+sequence+"}" + Pattern.quote(File.separator);
-    System.err.println("pattern: " +  pattern);
+    logger.debug("pattern: " + pattern);
     flavour = flavour.replaceAll(pattern, Matcher.quoteReplacement(File.separator));
     return flavour;
   }

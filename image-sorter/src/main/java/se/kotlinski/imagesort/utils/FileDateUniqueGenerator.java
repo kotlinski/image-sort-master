@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.CouldNotGenerateIDException;
 
 import java.io.BufferedInputStream;
@@ -12,16 +14,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
 public class FileDateUniqueGenerator {
-  public FileDateUniqueGenerator() {
-  }
-
+  private static final Logger logger = LogManager.getLogger(FileDateUniqueGenerator.class);
 
   public String generateMd5(final File file) {
     try {
       return generateImageMD5(file);
     }
     catch (CouldNotGenerateIDException e) {
-      e.printStackTrace();
+      logger.error("Could not generate id for file: " + file, e);
     }
     // If no image file
     return file.getAbsolutePath();
@@ -45,7 +45,7 @@ public class FileDateUniqueGenerator {
       return byteArray2Hex(hash);
     }
     catch (NoSuchAlgorithmException | IOException e) {
-      e.printStackTrace();
+      logger.error("Could not generate image unique id", e);
       throw new CouldNotGenerateIDException();
     }
   }

@@ -1,7 +1,8 @@
 package se.kotlinski.imagesort.controller;
 
-import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.mapper.ImageMapper;
 import se.kotlinski.imagesort.model.FileCopyReport;
@@ -14,16 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Date: 2014-10-19
- *
- * @author Simon Kotlinski
- */
 public class FileExecutor implements IFileExecutor {
 
-  @Inject
-  public FileExecutor() {
-  }
+  private static final Logger logger = LogManager.getLogger(FileExecutor.class);
 
   public FileCopyReport copyFiles(ImageMapper imageMapper, FolderIO folderIO) {
     Map<String, String> copiedFiles = new HashMap<>();
@@ -38,7 +32,7 @@ public class FileExecutor implements IFileExecutor {
 
       String filePathName = getFileName(uniqueFileDescriber, fullPath, false);
       boolean appendMD5 = shouldAppendMD5(copiedFiles, uniqueFileDescriber, filePathName);
-      System.err.println("AppendMD5" + appendMD5);
+      logger.debug("AppendMD5" + appendMD5);
       filePathName = getFileName(uniqueFileDescriber, fullPath, appendMD5);
 
       boolean success = copyFileToNewFolder(uniqueFileDescriber, filePathName);
@@ -77,7 +71,7 @@ public class FileExecutor implements IFileExecutor {
       return true;
     }
     catch (IOException e) {
-      e.printStackTrace();
+      logger.error("Could not copy file: " + uniqueFileDescriber.getFile(), e);
     }
     return false;
   }
@@ -89,8 +83,8 @@ public class FileExecutor implements IFileExecutor {
       FileUtils.copyFile(oldFile, file);
     }
     else {
-      System.err.println("\ncouldn't move File: " + oldFile.getName());
-      System.err.println("\ncouldn't move File: " + file.getAbsolutePath());
+      logger.error("\ncouldn't move File: " + oldFile.getName());
+      logger.error("\ncouldn't move File: " + file.getAbsolutePath());
     }
   }
 
@@ -101,7 +95,7 @@ public class FileExecutor implements IFileExecutor {
     }
     catch (CouldNotParseDateException e) {
       newFolder += "other";
-      e.printStackTrace();
+      logger.error("Could not parse date: " + uniqueFileDescriber.getFile(), e);
     }
     newFolder += uniqueFileDescriber.getFlavour();
     return newFolder;

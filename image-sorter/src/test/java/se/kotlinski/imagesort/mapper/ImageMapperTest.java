@@ -40,7 +40,6 @@ public class ImageMapperTest {
     Assert.assertEquals("Number of unique images in test folder",
                         9,
                         imageMapper.getSizeOfUniqueImages());
-    //System.out.println("Expecting 6 files: \n" + imageMapper.toString());
   }
 
   @Test

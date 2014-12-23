@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,6 +27,8 @@ public class FileExecutorTest {
 
   private FileIndexer fileIndexer;
   private FolderIO folderIO;
+  private static final Logger logger = LogManager.getLogger(FileExecutorTest.class);
+
 
   @Before
   public void setUp() throws Exception {
@@ -65,7 +69,7 @@ public class FileExecutorTest {
     fileExecutor.copyFiles(imageMapper, folderIO);
     String[] list = outputFolder.list();
     for (String file : list) {
-      System.out.println(file);
+      logger.debug(file);
     }
     Assert.assertEquals(5, list.length);
   }
@@ -80,7 +84,7 @@ public class FileExecutorTest {
     fileExecutor.copyFiles(imageMapper, folderIO);
     String[] list = outputFolder.list();
     for (String file : list) {
-      System.out.println(file);
+      logger.debug(file);
     }
     Assert.assertEquals(5, list.length);
   }
@@ -96,10 +100,10 @@ public class FileExecutorTest {
           if (!".gitignore".equals(file.getName())) {
             boolean delete = file.delete();
             if (delete) {
-              System.out.println("Delete: " + file.getName());
+              logger.debug("Delete: " + file.getName());
             }
             else {
-              System.out.println("Could not delete: " + file.getName());
+              logger.debug("Could not delete: " + file.getName());
             }
 
           }

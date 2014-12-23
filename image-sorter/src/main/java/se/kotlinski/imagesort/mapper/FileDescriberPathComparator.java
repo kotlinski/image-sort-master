@@ -1,16 +1,15 @@
 package se.kotlinski.imagesort.mapper;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.model.FileDescriber;
 
 import java.util.Comparator;
 
-/**
- * Date: 2014-11-01
- *
- * @author Simon Kotlinski
- */
+
 public class FileDescriberPathComparator implements Comparator<FileDescriber> {
+  private static final Logger logger = LogManager.getLogger(FileDescriberPathComparator.class);
+
   @Override
   public int compare(final FileDescriber describer1, final FileDescriber describer2) {
     try {
@@ -18,7 +17,8 @@ public class FileDescriberPathComparator implements Comparator<FileDescriber> {
       return renamedFilePath.compareTo(describer2.getRenamedFilePath());
     }
     catch (CouldNotParseDateException e) {
-      e.printStackTrace();
+      logger.error("Could not parse date: " + describer1.getFile() + ", " + describer2.getFile(),
+                   e);
     }
     return -1;
   }

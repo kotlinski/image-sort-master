@@ -1,6 +1,8 @@
 package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.model.FileDescriber;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
@@ -17,12 +19,12 @@ import java.util.Map;
 
 public class ImageMapper {
   private final Map<String, ArrayList<FileDescriber>> imageMap;
-
-  @Inject
   private final Calendar calendar;
-  @Inject
   private final FileDescriberPathComparator fileDescriberPathComparator;
+  private static final Logger logger = LogManager.getLogger(ImageMapper.class);
 
+
+  @Inject
   public ImageMapper(final Calendar calendar,
                      final FileDescriberPathComparator fileDescriberPathComparator) {
     this.calendar = calendar;
@@ -78,6 +80,8 @@ public class ImageMapper {
     FileDateUniqueGenerator fileDateUniqueGenerator = new FileDateUniqueGenerator();
 
     for (String rootFolder : filesFromFolder.keySet()) {
+      System.out.println("");
+      System.out.println("Parsing files in: " + rootFolder + "... ");
 
       for (File file : filesFromFolder.get(rootFolder)) {
         Date date = null;
@@ -85,7 +89,8 @@ public class ImageMapper {
           date = fileDateInterpreter.getDate(file);
         }
         catch (CouldNotParseDateException e) {
-          e.printStackTrace();
+          System.out.println("Could not parse date for file: " + file);
+          logger.error("Could not parse date for file: " + file, e);
         }
         String imageIdentifier = fileDateUniqueGenerator.generateMd5(file);
         FileDescriber fileDescriber = new FileDescriber(file,
