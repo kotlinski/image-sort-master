@@ -11,21 +11,21 @@ import static org.mockito.Mockito.when;
 
 public class FileUtilTest {
 
-  private ImageFileUtil imageFileUtil;
+  private SortMasterFileUtil sortMasterFileUtil;
 
   @Before
   public void setUp() throws Exception {
-    imageFileUtil = new ImageFileUtil();
+    sortMasterFileUtil = new SortMasterFileUtil();
   }
 
   @Test
   public void testIsValidFolder() throws Exception {
-    Assert.assertFalse(imageFileUtil.isValidFolder(new File("invalid path")));
+    Assert.assertFalse(sortMasterFileUtil.isValidFolder(new File("invalid path")));
   }
 
   @Test
   public void testPathBuild() throws Exception {
-    ImageFileUtil fileUtilSpy = spy(new ImageFileUtil());
+    SortMasterFileUtil fileUtilSpy = spy(new SortMasterFileUtil());
     when(fileUtilSpy.getSystemPath()).thenReturn("system.path" + File.separator);
     Assert.assertEquals("system.path" +
                         File.separator +

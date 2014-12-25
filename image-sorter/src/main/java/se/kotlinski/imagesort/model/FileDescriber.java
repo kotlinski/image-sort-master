@@ -1,7 +1,6 @@
 package se.kotlinski.imagesort.model;
 
 import com.google.inject.Inject;
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
@@ -10,17 +9,15 @@ import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class FileDescriber {
+  private static final Logger logger = LogManager.getLogger(FileDescriber.class);
   private final File file;
   private final DateToFileRenamer dateToFileRenamer;
   private final String rootPath;
   private final String md5;
   private final Date date;
   private final Calendar calendar;
-  private static final Logger logger = LogManager.getLogger(FileDescriber.class);
 
 
   @Inject
@@ -42,50 +39,7 @@ public class FileDescriber {
     return md5;
   }
 
-  public String getRenamedFilePath() throws CouldNotParseDateException {
-    if (date != null) {
-      return dateToFileRenamer.formatPathDate(date);
-    }
-    throw new CouldNotParseDateException("Could not parse date");
-  }
 
-  public String getFlavour() {
-    String absolutePath = file.getAbsolutePath();
-    logger.debug(absolutePath);
-
-    String flavour = absolutePath.replace(rootPath, "");
-    flavour = flavour.replace(file.getName(), "");
-    flavour = flavour.replace("other" + File.separator, "");
-
-    int monthSequence = 2;
-    flavour = removeDigitFolders(flavour, monthSequence);
-    int yearSequence = 4;
-    flavour = removeDigitFolders(flavour, yearSequence);
-    logger.debug("return flavour: " + flavour);
-    return flavour;
-  }
-
-
-  public String removeDigitFolders(String flavour, int sequence) {
-    String pattern = Pattern.quote(File.separator) + "\\d{"+sequence+"}" + Pattern.quote(File.separator);
-    logger.debug("pattern: " + pattern);
-    flavour = flavour.replaceAll(pattern, Matcher.quoteReplacement(File.separator));
-    return flavour;
-  }
-
-  public String getDateFilename(boolean appendMD5) {
-    if (date != null) {
-      String formattedDate = dateToFileRenamer.formatFileDate(date, calendar);
-      if (appendMD5) {
-        formattedDate += "-" + md5;
-      }
-      formattedDate += "." + FileUtils.extension(file.getName());
-      return formattedDate;
-    }
-    else {
-      return file.getName();
-    }
-  }
 
   public String getOriginalFileName() {
     return file.getName();

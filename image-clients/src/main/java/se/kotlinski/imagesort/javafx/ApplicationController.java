@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.controller;
+package se.kotlinski.imagesort.javafx;
 
 import com.google.inject.Inject;
 import javafx.application.Application;
@@ -6,8 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import se.kotlinski.imagesort.view.FolderSelector;
-import se.kotlinski.imagesort.utils.JavaFXUtils;
+import se.kotlinski.imagesort.javafx.view.FolderSelector;
+import se.kotlinski.imagesort.javafx.JavaFXUtils;
 
 import java.io.File;
 

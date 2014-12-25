@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.utils;
+package se.kotlinski.imagesort.javafx;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;

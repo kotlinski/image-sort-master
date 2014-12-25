@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.utils;
+package se.kotlinski.imagesort.commandline;
 
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
@@ -9,28 +9,29 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.kotlinski.imagesort.exception.NoInputFolderException;
-import se.kotlinski.imagesort.exception.NoMasterFolderException;
+import se.kotlinski.imagesort.exception.InvalidInputFolderException;
+import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
 import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 
 
-public class CommandLineUtil {
+public class CmdUtils {
 
-  private static final Logger logger = LogManager.getLogger(CommandLineUtil.class);
+  private static final Logger logger = LogManager.getLogger(CmdUtils.class);
   private final HelpFormatter formatter;
   private final CommandLineParser parser;
-  private final ImageFileUtil imageFileUtil;
+  private final SortMasterFileUtil sortMasterFileUtil;
 
   @Inject
-  public CommandLineUtil(final HelpFormatter formatter,
-                         final CommandLineParser parser,
-                         final ImageFileUtil imageFileUtil) {
+  public CmdUtils(final HelpFormatter formatter,
+                  final CommandLineParser parser,
+                  final SortMasterFileUtil sortMasterFileUtil) {
     this.formatter = formatter;
     this.parser = parser;
-    this.imageFileUtil = imageFileUtil;
+    this.sortMasterFileUtil = sortMasterFileUtil;
   }
 
   public Options getOptions() {
@@ -65,20 +66,21 @@ public class CommandLineUtil {
     formatter.printHelp("MainRenamer", options);
   }
 
-  public CommandLine interpreterArgs(final String[] arguments) {
-    CommandLine cmd = null;
+  public CommandLine interpreterArgs(final String[] arguments) throws Exception {
+    CommandLine cmd;
     try {
       cmd = parser.parse(getOptions(), arguments);
     }
     catch (ParseException e) {
       logger.error("Parsing failed, " + e);
+      throw new Exception("Parsing failed");
     }
     return cmd;
   }
 
   public FolderIO runCmd(final Options options, final CommandLine cmd) throws
-                                                                       NoMasterFolderException,
-                                                                       NoInputFolderException {
+                                                                       InvalidMasterFolderException,
+                                                                       InvalidInputFolderException {
     FolderIO folderIO = new FolderIO();
     if (cmd == null || cmd.hasOption("h")) {
       printHelp(options);
@@ -88,25 +90,23 @@ public class CommandLineUtil {
       ArrayList<File> inputFolders = new ArrayList<>();
       for (String sourcePath : sourcePaths) {
         File folder = new File(sourcePath);
-        if (imageFileUtil.isValidFolder(folder)) {
+        if (sortMasterFileUtil.isValidFolder(folder)) {
           inputFolders.add(folder);
         }
         else {
-          throw new NoInputFolderException("SourcePath not valid: " + sourcePath);
+          throw new InvalidInputFolderException("SourcePath not valid: " + sourcePath);
         }
       }
       String outputPath = cmd.getOptionValue("o");
       File masterFolder = new File(outputPath);
 
-      if (imageFileUtil.isValidFolder(masterFolder)) {
-        inputFolders.add(masterFolder);
+      if (sortMasterFileUtil.isValidFolder(masterFolder)) {
+        folderIO.masterFolder = masterFolder;
       }
       else {
-        throw new NoMasterFolderException("SourcePath not valid: " + masterFolder, masterFolder);
+        throw new InvalidMasterFolderException("SourcePath not valid: " + masterFolder, masterFolder);
       }
-
       folderIO.inputFolders = inputFolders;
-      folderIO.masterFolder = masterFolder;
     }
     else {
       logger.error("No source no output folder chosen");

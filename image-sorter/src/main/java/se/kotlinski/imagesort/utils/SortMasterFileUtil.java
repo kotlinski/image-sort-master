@@ -1,17 +1,11 @@
 package se.kotlinski.imagesort.utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Describe class/interface here.
- *
- * Date: 2014-10-13
- *
- * @author Simon Kotlinski
- * @version $Revision: 1.1 $
- */
-public class ImageFileUtil {
-  public ImageFileUtil() {
+public class SortMasterFileUtil {
+  public SortMasterFileUtil() {
   }
 
   public String getTestInputPath(){
@@ -51,5 +45,25 @@ public class ImageFileUtil {
            "test" + File.separator +
            "resources" + File.separator +
            folder;
+  }
+
+  public List<File> readAllFilesInFolder(final File folder) {
+    List<File> imageDescriber = new ArrayList<>();
+    if (folder == null) {
+      return imageDescriber;
+    }
+    File[] files = folder.listFiles();
+    if (files == null) {
+      return imageDescriber;
+    }
+    for (File file : files) {
+      if (file.isDirectory()) {
+        imageDescriber.addAll(readAllFilesInFolder(file));
+      }
+      else {
+        imageDescriber.add(file);
+      }
+    }
+    return imageDescriber;
   }
 }
