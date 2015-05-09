@@ -23,9 +23,9 @@ public class FileDateInterpreter {
   Date getImageDate(File file) throws CouldNotParseDateException {
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
-      ExifSubIFDDirectory exifSubIFDDirectory = metadata.getDirectory(ExifSubIFDDirectory.class);
+      ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
       int tagDatetimeOriginal = ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL;
-      ExifIFD0Directory exifIFD0Directory = metadata.getDirectory(ExifIFD0Directory.class);
+      ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
       int tagDatetime = ExifIFD0Directory.TAG_DATETIME;
       if (exifSubIFDDirectory != null && exifSubIFDDirectory.getDate(tagDatetimeOriginal) != null) {
         return exifSubIFDDirectory.getDate(tagDatetimeOriginal);
