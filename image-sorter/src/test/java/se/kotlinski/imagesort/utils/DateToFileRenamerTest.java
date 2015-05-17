@@ -37,8 +37,8 @@ public class DateToFileRenamerTest {
     GregorianCalendar calendar = new GregorianCalendar();
     calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
     String formattedDate = dateToFileRenamer.formatPathDate(new Date(0));
-    assertEquals("1970" + File.separator + "01", formattedDate);
+    assertEquals("1970" + File.separator + "01" + File.separator, formattedDate);
     formattedDate = dateToFileRenamer.formatPathDate(new Date(1356900595000l));
-    assertEquals("2012" + File.separator + "12", formattedDate);
+    assertEquals("2012" + File.separator + "12" + File.separator, formattedDate);
   }
 }

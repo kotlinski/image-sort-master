@@ -22,16 +22,16 @@ public class FileDateInterpreterTest {
   @Before
   public void setUp() throws Exception {
 
-    ImageFileUtil imageFileUtil = new ImageFileUtil();
-    imageWithDate = new File(imageFileUtil.getTestInputPath() +
+    SortMasterFileUtil sortMasterFileUtil = new SortMasterFileUtil();
+    imageWithDate = new File(sortMasterFileUtil.getTestInputPath() +
                              File.separator + "2013" +
                              File.separator + "snapchat" +
                              File.separator + "2013-10-03 13.43.20-kaffe.jpg");
 
-    imageWithoutDate = new File(imageFileUtil.getTestInputPath() +
+    imageWithoutDate = new File(sortMasterFileUtil.getTestInputPath() +
                                 File.separator +
                                 "image-without-dates.jpg");
-    videoWithDate = new File(imageFileUtil.getTestInputPath() +
+    videoWithDate = new File(sortMasterFileUtil.getTestInputPath() +
                              File.separator +
                              "2014-03-16 10.45.09.mp4");
 
@@ -42,11 +42,10 @@ public class FileDateInterpreterTest {
   public void testGetFileDate() {
     try {
       Date date = fileDateInterpreter.getDate(imageWithDate);
-      Date expectedDate = getExpectedDate("2013-10-03 13.43.20", null);
+      Date expectedDate = getExpectedDate("2013-10-03 13.43.20", TimeZone.getTimeZone("UTC"));
       Assert.assertEquals("Date from date with file", expectedDate, date);
     }
     catch (CouldNotParseDateException e) {
-      e.printStackTrace();
       assert false;
     }
 
@@ -56,7 +55,6 @@ public class FileDateInterpreterTest {
       Assert.assertEquals("Date from date with file", expectedDate, date);
     }
     catch (CouldNotParseDateException e) {
-      e.printStackTrace();
       assert false;
     }
 
@@ -80,7 +78,7 @@ public class FileDateInterpreterTest {
       expectedDate = formatter.parse(source);
     }
     catch (ParseException e) {
-      e.printStackTrace();
+      assert false;
     }
     return expectedDate;
   }

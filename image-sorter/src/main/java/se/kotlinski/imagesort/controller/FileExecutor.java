@@ -1,34 +1,25 @@
 package se.kotlinski.imagesort.controller;
 
-import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
-import se.kotlinski.imagesort.exception.CouldNotParseDateException;
-import se.kotlinski.imagesort.mapper.ImageMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.model.FileCopyReport;
 import se.kotlinski.imagesort.model.FileDescriber;
 import se.kotlinski.imagesort.model.FolderIO;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Date: 2014-10-19
- *
- * @author Simon Kotlinski
- */
-public class FileExecutor implements IFileExecutor {
+public class FileExecutor {
 
-  @Inject
-  public FileExecutor() {
-  }
+  private static final Logger logger = LogManager.getLogger(FileExecutor.class);
 
-  public FileCopyReport copyFiles(ImageMapper imageMapper, FolderIO folderIO) {
-    Map<String, String> copiedFiles = new HashMap<>();
+  public FileCopyReport copyFiles(ExportFileDataMap exportFileDataMap, FolderIO folderIO) {
+/*    Map<String, String> copiedFiles = new HashMap<>();
 
-    ArrayList<FileDescriber> uniqueFileDescribers = imageMapper.getUniqueImageDescribers();
+    ArrayList<FileDescriber> uniqueFileDescribers = parsedFileDataMap.getUniqueImageDescribers();
     FileCopyReport fileCopyReport = new FileCopyReport();
     for (FileDescriber uniqueFileDescriber : uniqueFileDescribers) {
       String masterRoot = folderIO.masterFolder.getAbsolutePath() + File.separator;
@@ -38,7 +29,7 @@ public class FileExecutor implements IFileExecutor {
 
       String filePathName = getFileName(uniqueFileDescriber, fullPath, false);
       boolean appendMD5 = shouldAppendMD5(copiedFiles, uniqueFileDescriber, filePathName);
-      System.err.println("AppendMD5" + appendMD5);
+      logger.debug("AppendMD5" + appendMD5);
       filePathName = getFileName(uniqueFileDescriber, fullPath, appendMD5);
 
       boolean success = copyFileToNewFolder(uniqueFileDescriber, filePathName);
@@ -51,8 +42,8 @@ public class FileExecutor implements IFileExecutor {
 
       copiedFiles.put(filePathName, uniqueFileDescriber.getMd5());
 
-    }
-    return fileCopyReport;
+    }*/
+    return null;
   }
 
   private boolean shouldAppendMD5(final Map<String, String> copiedFiles,
@@ -65,8 +56,8 @@ public class FileExecutor implements IFileExecutor {
   private String getFileName(final FileDescriber uniqueFileDescriber,
                              final String fullPath,
                              final boolean appendMD5) {
-    String newFileName;
-    newFileName = fullPath + File.separator + uniqueFileDescriber.getDateFilename(appendMD5);
+    String newFileName = null;
+    //newFileName = fullPath + File.separator + uniqueFileDescriber.getDateFilename(appendMD5);
     return newFileName;
   }
 
@@ -77,7 +68,7 @@ public class FileExecutor implements IFileExecutor {
       return true;
     }
     catch (IOException e) {
-      e.printStackTrace();
+      logger.error("Could not copy file: " + uniqueFileDescriber.getFile(), e);
     }
     return false;
   }
@@ -89,21 +80,21 @@ public class FileExecutor implements IFileExecutor {
       FileUtils.copyFile(oldFile, file);
     }
     else {
-      System.err.println("\ncouldn't move File: " + oldFile.getName());
-      System.err.println("\ncouldn't move File: " + file.getAbsolutePath());
+      logger.error("\ncouldn't move File: " + oldFile.getName());
+      logger.error("\ncouldn't move File: " + file.getAbsolutePath());
     }
   }
 
   private String getFolderStructure(final FileDescriber uniqueFileDescriber) {
-    String newFolder = "";
-    try {
+    String newFolder = null;
+    /*try {
       newFolder += uniqueFileDescriber.getRenamedFilePath();
     }
     catch (CouldNotParseDateException e) {
       newFolder += "other";
-      e.printStackTrace();
-    }
-    newFolder += uniqueFileDescriber.getFlavour();
+      logger.error("Could not parse date: " + uniqueFileDescriber.getFile(), e);
+    }*/
+    //newFolder += uniqueFileDescriber.getFlavour();
     return newFolder;
   }
 }

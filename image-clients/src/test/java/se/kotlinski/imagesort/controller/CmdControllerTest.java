@@ -1,45 +1,69 @@
 package se.kotlinski.imagesort.controller;
 
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
+
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.mapper.ImageMapper;
-import se.kotlinski.imagesort.utils.CommandLineUtil;
-import se.kotlinski.imagesort.utils.ImageFileUtil;
+import org.mockito.Mockito;
+import se.kotlinski.imagesort.commandline.CmdController;
+import se.kotlinski.imagesort.commandline.CmdInterpreter;
+import se.kotlinski.imagesort.commandline.FilePrinter;
+import se.kotlinski.imagesort.mapper.ExportFileDataMap;
+import se.kotlinski.imagesort.utils.DateToFileRenamer;
+import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
+import se.kotlinski.imagesort.utils.FileDescriptor;
+import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 public class CmdControllerTest {
   private CmdController cmdController;
-  private ImageFileUtil imageFileUtil;
+  private SortMasterFileUtil sortMasterFileUtil;
+  private FilePrinter filePrinter;
+  private CmdInterpreter cmdInterpreter;
+  private ExportCollector exportCollector;
 
   @Before
   public void setUp() throws Exception {
-    imageFileUtil = new ImageFileUtil();
+    sortMasterFileUtil = new SortMasterFileUtil();
     FileExecutor fileExecutor = mock(FileExecutor.class);
-    CommandLineParser parser = new GnuParser();
-    HelpFormatter formatter = mock(HelpFormatter.class);
-    CommandLineUtil commandLineUtil = new CommandLineUtil(formatter, parser, imageFileUtil);
-    FileIndexer fileIndexer = mock(FileIndexer.class);
-    cmdController = new CmdController(fileExecutor, commandLineUtil, fileIndexer);
+    Calendar calendar = new GregorianCalendar();
+    FileDateUniqueGenerator fileDateUniqueGenerator = new FileDateUniqueGenerator();
+
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+    FileDescriptor fileDescriptor = new FileDescriptor();
+    DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
+    ExportForecaster exportForecasterort = new ExportForecaster(dateToFileRenamer);
+    FileAnalyzer fileAnalyzer = spy(new FileAnalyzer(sortMasterFileUtil,
+                                                     calendar,
+                                                     fileDateUniqueGenerator,
+                                                     fileDateInterpreter,
+                                                     fileDescriptor,
+                                                     dateToFileRenamer,
+                                                     exportForecasterort));
+    cmdInterpreter = mock(CmdInterpreter.class);
+    filePrinter = spy(new FilePrinter());
+    exportCollector = mock(ExportCollector.class);
+    cmdController = new CmdController(fileExecutor,
+                                      cmdInterpreter,
+                                      fileAnalyzer,
+                                      filePrinter,
+                                      exportCollector);
   }
 
   @Test
   public void testStartCmd() throws Exception {
-    String[] arguments = new String[]{"programName", "someCommand", "-s", imageFileUtil
-        .getTestInputPath(), "-o", imageFileUtil.getTestOutputPath()};
+    String[] arguments = new String[]{"programName", "someCommand", "-s", sortMasterFileUtil
+        .getTestInputPath(), "-o", sortMasterFileUtil.getTestOutputPath()};
+
     cmdController.startCmd(arguments);
-    assertNotNull(cmdController.getFolderIO());
-    assertNotNull(cmdController.getFolderIO().inputFolders);
-    assertNotNull(cmdController.getFolderIO().masterFolder);
-    ImageMapper imageMapper = cmdController.getImageMapper();
-    assertThat(imageMapper, is(nullValue()));
+    Mockito.verify(cmdInterpreter).getFolderIO(arguments);
+//    Mockito.verify(filePrinter).printFolderStructure(any(ExportFileDataMap.class));
   }
 
 }

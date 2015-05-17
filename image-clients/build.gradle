@@ -43,19 +43,11 @@ buildscript {
 }
 
 sourceSets {
-  main {
-	java {
-	  srcDir 'src/main/java'
-	}
-  }
+  main.java.srcDir('src/main/java')
   main.resources.srcDir('src/resources')
 
+  test.java.srcDir('test/java')
   test.resources.srcDir('src/resources')
-  test {
-	java {
-	  srcDir 'test/java'
-	}
-  }
 }
 
 dependencies {

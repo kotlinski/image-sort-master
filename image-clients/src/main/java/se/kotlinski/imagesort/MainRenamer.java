@@ -2,8 +2,8 @@ package se.kotlinski.imagesort;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import se.kotlinski.imagesort.controller.ApplicationController;
-import se.kotlinski.imagesort.controller.CmdController;
+import se.kotlinski.imagesort.javafx.ApplicationController;
+import se.kotlinski.imagesort.commandline.CmdController;
 import se.kotlinski.imagesort.module.ImageModule;
 
 /**

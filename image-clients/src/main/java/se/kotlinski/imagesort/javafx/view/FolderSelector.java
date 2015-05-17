@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.view;
+package se.kotlinski.imagesort.javafx.view;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
