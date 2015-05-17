@@ -1,6 +1,6 @@
 Image Sort Master
 ============
-[![Build Status](https://travis-ci.org/kotlinski/image-sort-master.svg?branch=feature%2Ftravis)](https://travis-ci.org/Springworks/android-utils) [![Coverage Status](https://img.shields.io/coveralls/kotlinski/image-sort-master.svg)](https://coveralls.io/r/kotlinski/image-sort-master)
+[![Build Status](https://travis-ci.org/kotlinski/image-sort-master.svg?branch=feature%2Ftravis)](https://travis-ci.org/kotlinski/image-sort-master) [![Coverage Status](https://img.shields.io/coveralls/kotlinski/image-sort-master.svg)](https://coveralls.io/r/kotlinski/image-sort-master)
 
 How and when do you sort and back up your images from your camera-devices? 
 
@@ -30,7 +30,7 @@ A flavor is all sub folders from the root folder, except year/quarter/month.
 
 Donate
 --------
-Bitcoin address `1CpVkqhrGbcQmD5WPuKsyWxPrJTiaVdmDq`
+Bitcoin address `36h3FR2xqVZg14TASLMPvDfETBDziUb1oo`
 
 ![Bitcoin address](chart.png)
 
