@@ -142,7 +142,9 @@ A nice way to set up the run configurations in Intellij is:
 Run > Edit Configurations > Add a new Application Configuration.
 
 Run the program and you end up with a merged result in the Master-folder.
- 
+Before running gradle>test in gradle, make sure you build the project.
+
+
 Road map
 --------
 

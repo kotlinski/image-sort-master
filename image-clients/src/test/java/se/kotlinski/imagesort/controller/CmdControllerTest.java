@@ -4,10 +4,9 @@ package se.kotlinski.imagesort.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import se.kotlinski.imagesort.commandline.CommandLineArgumentsInterpreter;
 import se.kotlinski.imagesort.commandline.CmdController;
-import se.kotlinski.imagesort.commandline.CmdInterpreter;
 import se.kotlinski.imagesort.commandline.FilePrinter;
-import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
@@ -25,8 +24,8 @@ public class CmdControllerTest {
   private CmdController cmdController;
   private SortMasterFileUtil sortMasterFileUtil;
   private FilePrinter filePrinter;
-  private CmdInterpreter cmdInterpreter;
   private ExportCollector exportCollector;
+  private CommandLineArgumentsInterpreter commandLineArgumentsInterpreter;
 
   @Before
   public void setUp() throws Exception {
@@ -38,22 +37,20 @@ public class CmdControllerTest {
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
     FileDescriptor fileDescriptor = new FileDescriptor();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
-    ExportForecaster exportForecasterort = new ExportForecaster(dateToFileRenamer);
+    ExportForecaster exportForecaster = new ExportForecaster(dateToFileRenamer);
     FileAnalyzer fileAnalyzer = spy(new FileAnalyzer(sortMasterFileUtil,
                                                      calendar,
                                                      fileDateUniqueGenerator,
                                                      fileDateInterpreter,
                                                      fileDescriptor,
-                                                     dateToFileRenamer,
-                                                     exportForecasterort));
-    cmdInterpreter = mock(CmdInterpreter.class);
+                                                     dateToFileRenamer, exportForecaster));
     filePrinter = spy(new FilePrinter());
     exportCollector = mock(ExportCollector.class);
-    cmdController = new CmdController(fileExecutor,
-                                      cmdInterpreter,
-                                      fileAnalyzer,
+    commandLineArgumentsInterpreter = mock(CommandLineArgumentsInterpreter.class);
+
+    cmdController = new CmdController(fileAnalyzer,
                                       filePrinter,
-                                      exportCollector);
+                                      exportCollector, commandLineArgumentsInterpreter);
   }
 
   @Test
@@ -62,7 +59,7 @@ public class CmdControllerTest {
         .getTestInputPath(), "-o", sortMasterFileUtil.getTestOutputPath()};
 
     cmdController.startCmd(arguments);
-    Mockito.verify(cmdInterpreter).getFolderIO(arguments);
+    Mockito.verify(commandLineArgumentsInterpreter).transformArguments(arguments);
 //    Mockito.verify(filePrinter).printFolderStructure(any(ExportFileDataMap.class));
   }
 
