@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 public class CmdInterpreterTest {
 
-  private CmdInterpreter cmdInterpreter;
+  private CommandLineArgumentsInterpreter cmdInterpreter;
   private SortMasterFileUtil sortMasterFileUtil;
 
   @Before
@@ -29,12 +29,12 @@ public class CmdInterpreterTest {
     sortMasterFileUtil = new SortMasterFileUtil();
     CommandLineParser parser = new GnuParser();
     HelpFormatter formatter = mock(HelpFormatter.class);
-    CmdUtils cmdUtils = new CmdUtils(formatter, parser, sortMasterFileUtil);
+    CommandLineArgumentsTransformer commandLineArgumentsTransformer = new CommandLineArgumentsTransformer(formatter, parser, sortMasterFileUtil);
 
     ScannerWrapper inScanner = mock(ScannerWrapper.class);
     when(inScanner.nextLine()).thenReturn("y");
 
-    cmdInterpreter = new CmdInterpreter(cmdUtils, inScanner, sortMasterFileUtil);
+    cmdInterpreter = new CommandLineArgumentsInterpreter(commandLineArgumentsTransformer, inScanner);
   }
 
   @Test

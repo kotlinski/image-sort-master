@@ -4,13 +4,9 @@ import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.controller.ExportCollector;
-import se.kotlinski.imagesort.controller.ExportPoints;
 import se.kotlinski.imagesort.controller.FileAnalyzer;
-import se.kotlinski.imagesort.controller.FileExecutor;
 import se.kotlinski.imagesort.exception.CouldNotCreateMasterFolderException;
-import se.kotlinski.imagesort.exception.InvalidFolderArgumentsException;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
-import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.model.FolderIO;
 
@@ -18,23 +14,20 @@ import java.util.Set;
 
 public class CmdController {
   private static final Logger logger = LogManager.getLogger(CmdController.class);
-  private final FileExecutor fileExecutor;
-  private final CmdInterpreter cmdInterpreter;
   private final FileAnalyzer fileAnalyzer;
   private final FilePrinter filePrinter;
   private final ExportCollector exportCollector;
+  private final CommandLineArgumentsInterpreter commandLineArgumentsInterpreter;
 
   @Inject
-  public CmdController(final FileExecutor fileExecutor,
-                       final CmdInterpreter cmdInterpreter,
-                       final FileAnalyzer fileAnalyzer,
+  public CmdController(final FileAnalyzer fileAnalyzer,
                        final FilePrinter filePrinter,
-                       final ExportCollector exportCollector) {
-    this.fileExecutor = fileExecutor;
-    this.cmdInterpreter = cmdInterpreter;
+                       final ExportCollector exportCollector,
+                       final CommandLineArgumentsInterpreter commandLineArgumentsInterpreter) {
     this.fileAnalyzer = fileAnalyzer;
     this.filePrinter = filePrinter;
     this.exportCollector = exportCollector;
+    this.commandLineArgumentsInterpreter = commandLineArgumentsInterpreter;
   }
 
   public void startCmd(String[] arguments) {
@@ -42,7 +35,7 @@ public class CmdController {
     FileAnalyzer fileAnalyzer = null;
 
     try {
-      folderIO = getFolderIO(arguments);
+      folderIO = commandLineArgumentsInterpreter.transformArguments(arguments);
     }
     catch (CouldNotCreateMasterFolderException e) {
       logger.error("Could not create master folder");
@@ -83,8 +76,6 @@ public class CmdController {
                                                         parsedFileData);*/
 
 
-
-
     //Print all export files will look like in master folder
     // printExportPoints(exportFileDataMap);
 
@@ -116,29 +107,5 @@ public class CmdController {
     filePrinter.printExportDestinations(finalExportPoints);
   }
 
-  private FolderIO getFolderIO(final String[] arguments) throws
-                                                         CouldNotCreateMasterFolderException {
-    FolderIO folderIO = null;
-    try {
-      folderIO = cmdInterpreter.getFolderIO(arguments);
-    }
-    catch (InvalidFolderArgumentsException e) {
-      System.out.println("Wrong input/output folder arguments, try again");
-      logger.error("Could not create input/output-folders, invlaid arguments", e);
-    }
-    catch (InvalidMasterFolderException e) {
-      logger.error(e);
-      boolean masterFolderCreated = cmdInterpreter.createMasterFolder(e.getMasterFolder());
-      if (masterFolderCreated) {
-        //lets try again
-        getFolderIO(arguments);
-      }
-      else {
-        // epic fail
-        throw new CouldNotCreateMasterFolderException("Could not create master folder, " +
-                                                      e.getMasterFolder());
-      }
-    }
-    return folderIO;
-  }
+
 }
