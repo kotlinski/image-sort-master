@@ -14,3 +14,4 @@ out/
 # Android Studio
 .gradle
 build/
+gradle-wrapper.properties
