@@ -36,25 +36,17 @@ public class CmdUtils {
 
   public Options getOptions() {
     Options options = new Options();
-    Option option = new Option("s", "source", true, "Import from this folder.");
-    option.setArgs(Option.UNLIMITED_VALUES);
-    option.setValueSeparator(',');
-
-    options.addOption(option);
-    options.getOption("s").setRequired(true);
-    options.addOption("o", "output", true, "Export to this folder");
-    options.getOption("o").setRequired(true);
+    options.addOption("f", "folder", true, "The path to your image sort folder. Put your images in this folder.");
+    options.getOption("f").setRequired(true);
 
     options.addOption("h", "help", false, "MainRenamer usage\n" +
-                                          "Main purpose is to read all images from a source-path " +
-                                          "and\n" +
-                                          "export them to a given destination. \n\n" +
+                                          "Main purpose is to read all images that you put in the image folder. \n \n" +
                                           "When you have your images backed up via dropbox and " +
                                           "manually, \n" +
                                           "it may be hard giving them smart names. Sometimes you " +
                                           "will get\n" +
                                           "duplicated images on your back-up drive." +
-                                          "java -jar ImageRename <sourcePath> <outputPath>. \n\n" +
+                                          "java -jar ImageRename <folder path>. \n\n" +
                                           "The sourcePath read folders and files recursively, so " +
                                           "you can put all" +
                                           "your folders in the same directory. For example " +
