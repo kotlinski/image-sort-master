@@ -6,14 +6,14 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.commandline.CommandLineArgumentsTransformer;
+import se.kotlinski.imagesort.commandline.argument.Transformer;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class CommandLineArgumentsTransformerTest {
+public class TransformerTest {
 
-  private CommandLineArgumentsTransformer commandLineArgumentsTransformer;
+  private Transformer transformer;
   private HelpFormatter formatter;
 
   @Before
@@ -21,13 +21,13 @@ public class CommandLineArgumentsTransformerTest {
     SortMasterFileUtil sortMasterFileUtil = new SortMasterFileUtil();
     CommandLineParser parser = new GnuParser();
     formatter = mock(HelpFormatter.class);
-    commandLineArgumentsTransformer = new CommandLineArgumentsTransformer(formatter, parser, sortMasterFileUtil);
+    transformer = new Transformer(formatter, parser, sortMasterFileUtil);
   }
 
   @Test
   public void testPrintHelp() throws Exception {
     Options options = mock(Options.class);
-    commandLineArgumentsTransformer.printHelp(options);
+    transformer.printHelp(options);
     verify(formatter).printHelp("MainRenamer", options);
   }
 }

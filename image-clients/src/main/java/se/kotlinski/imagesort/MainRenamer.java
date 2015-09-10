@@ -3,7 +3,7 @@ package se.kotlinski.imagesort;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import se.kotlinski.imagesort.javafx.ApplicationController;
-import se.kotlinski.imagesort.commandline.CmdController;
+import se.kotlinski.imagesort.commandline.CommandLineInterface;
 import se.kotlinski.imagesort.module.ImageModule;
 
 /**
@@ -24,8 +24,8 @@ class MainRenamer {
     }
     // Else Run the command line
     else {
-      CmdController cmdController = injector.getInstance(CmdController.class);
-      cmdController.startCmd(args);
+      CommandLineInterface commandLineInterface = injector.getInstance(CommandLineInterface.class);
+      commandLineInterface.runCommandLine(args);
     }
   }
 }

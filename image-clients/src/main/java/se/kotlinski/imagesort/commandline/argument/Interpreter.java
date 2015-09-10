@@ -1,8 +1,9 @@
-package se.kotlinski.imagesort.commandline;
+package se.kotlinski.imagesort.commandline.argument;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.kotlinski.imagesort.commandline.ScannerWrapper;
 import se.kotlinski.imagesort.exception.CouldNotCreateMasterFolderException;
 import se.kotlinski.imagesort.exception.InvalidFolderArgumentsException;
 import se.kotlinski.imagesort.exception.InvalidInputFolderException;
@@ -11,25 +12,22 @@ import se.kotlinski.imagesort.model.FolderIO;
 
 import java.io.File;
 
-public class CommandLineArgumentsInterpreter {
+public class Interpreter {
 
-  private static final Logger logger = LogManager.getLogger(CommandLineArgumentsInterpreter.class);
-  private CommandLineArgumentsTransformer commandLineArgumentsTransformer;
+  private static final Logger logger = LogManager.getLogger(Interpreter.class);
+  private Transformer transformer;
   private ScannerWrapper inScanner;
 
 
-  public CommandLineArgumentsInterpreter(final CommandLineArgumentsTransformer commandLineArgumentsTransformer,
-                                         ScannerWrapper inScanner) {
-    this.commandLineArgumentsTransformer = commandLineArgumentsTransformer;
+  public Interpreter(final Transformer transformer, ScannerWrapper inScanner) {
+    this.transformer = transformer;
     this.inScanner = inScanner;
   }
 
   public FolderIO transformArguments(final String[] arguments) throws
                                                                CouldNotCreateMasterFolderException {
-
-
-
     FolderIO folderIO = null;
+
     try {
       folderIO = getFolderIO(arguments);
     }
@@ -41,11 +39,9 @@ public class CommandLineArgumentsInterpreter {
       logger.error(e);
       boolean masterFolderCreated = createMasterFolder(e.getMasterFolder());
       if (masterFolderCreated) {
-        //lets try again
         transformArguments(arguments);
       }
       else {
-        // epic fail
         throw new CouldNotCreateMasterFolderException("Could not create master folder, " +
                                                       e.getMasterFolder());
       }
@@ -59,7 +55,7 @@ public class CommandLineArgumentsInterpreter {
                                                         InvalidMasterFolderException {
     CommandLine commandLine;
     try {
-      commandLine = commandLineArgumentsTransformer.interpreterArgs(arguments);
+      commandLine = transformer.interpreterArgs(arguments);
     }
     catch (Exception e) {
       logger.debug("Could not parse argumnets", e);
@@ -69,9 +65,7 @@ public class CommandLineArgumentsInterpreter {
 
     FolderIO folderIO;
     try {
-      folderIO = commandLineArgumentsTransformer.transformCommandLineArguments(
-          commandLineArgumentsTransformer.getOptions(),
-          commandLine);
+      folderIO = transformer.transformCommandLineArguments(transformer.getOptions(), commandLine);
       System.out.println(folderIO.toString());
     }
     catch (InvalidInputFolderException e) {
@@ -90,7 +84,7 @@ public class CommandLineArgumentsInterpreter {
 
 
   public boolean createMasterFolder(final File masterFolder) {
-    if(masterFolder == null) {
+    if (masterFolder == null) {
       return false;
     }
 
@@ -106,7 +100,8 @@ public class CommandLineArgumentsInterpreter {
         System.out.println("Couldn't create " + masterFolder.getName() + ", try again");
         logger.error("Couldn't create " + masterFolder.getName());
         return false;
-      } else {
+      }
+      else {
         System.out.println(masterFolder.getName() + " created ");
         return true;
       }
@@ -117,7 +112,6 @@ public class CommandLineArgumentsInterpreter {
       return createMasterFolder(masterFolder);
     }
   }
-
 
 
 }

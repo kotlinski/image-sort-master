@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.commandline;
+package se.kotlinski.imagesort.commandline.argument;
 
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
@@ -18,17 +18,17 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class CommandLineArgumentsTransformer {
+public class Transformer {
 
-  private static final Logger logger = LogManager.getLogger(CommandLineArgumentsTransformer.class);
+  private static final Logger logger = LogManager.getLogger(Transformer.class);
   private final HelpFormatter formatter;
   private final CommandLineParser parser;
   private final SortMasterFileUtil sortMasterFileUtil;
 
   @Inject
-  public CommandLineArgumentsTransformer(final HelpFormatter formatter,
-                                         final CommandLineParser parser,
-                                         final SortMasterFileUtil sortMasterFileUtil) {
+  public Transformer(final HelpFormatter formatter,
+      final CommandLineParser parser,
+      final SortMasterFileUtil sortMasterFileUtil) {
     this.formatter = formatter;
     this.parser = parser;
     this.sortMasterFileUtil = sortMasterFileUtil;
@@ -87,7 +87,7 @@ public class CommandLineArgumentsTransformer {
     }
     else if (commandLine.hasOption("s") && commandLine.hasOption("o")) {
       String[] sourcePaths = commandLine.getOptionValues("s");
-      ArrayList<File> inputFolders = new ArrayList<>();
+      ArrayList<File> inputFolders = new ArrayList<File>();
       for (String sourcePath : sourcePaths) {
         File folder = new File(sourcePath);
         if (sortMasterFileUtil.isValidFolder(folder)) {
