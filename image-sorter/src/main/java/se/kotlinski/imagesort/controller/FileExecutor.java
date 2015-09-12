@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.model.FileCopyReport;
 import se.kotlinski.imagesort.model.FileDescriber;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,13 +16,13 @@ public class FileExecutor {
 
   private static final Logger logger = LogManager.getLogger(FileExecutor.class);
 
-  public FileCopyReport copyFiles(ExportFileDataMap exportFileDataMap, FolderIO folderIO) {
+  public FileCopyReport copyFiles(ExportFileDataMap exportFileDataMap, SortSettings sortSettings) {
 /*    Map<String, String> copiedFiles = new HashMap<>();
 
     ArrayList<FileDescriber> uniqueFileDescribers = parsedFileDataMap.getUniqueImageDescribers();
     FileCopyReport fileCopyReport = new FileCopyReport();
     for (FileDescriber uniqueFileDescriber : uniqueFileDescribers) {
-      String masterRoot = folderIO.masterFolder.getAbsolutePath() + File.separator;
+      String masterRoot = sortSettings.masterFolder.getAbsolutePath() + File.separator;
       String newFolder = getFolderStructure(uniqueFileDescriber);
       String fullPath = masterRoot + newFolder;
       FileUtils.mkdir(fullPath);

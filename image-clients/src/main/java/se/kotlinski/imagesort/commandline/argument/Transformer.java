@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.InvalidInputFolderException;
 import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
@@ -78,10 +78,10 @@ public class Transformer {
     return cmd;
   }
 
-  public FolderIO transformCommandLineArguments(final Options options, final CommandLine commandLine) throws
+  public SortSettings transformCommandLineArguments(final Options options, final CommandLine commandLine) throws
                                                                                               InvalidMasterFolderException,
                                                                                               InvalidInputFolderException {
-    FolderIO folderIO = new FolderIO();
+    SortSettings sortSettings = new SortSettings();
     if (commandLine == null || commandLine.hasOption("h")) {
       printHelp(options);
     }
@@ -101,18 +101,18 @@ public class Transformer {
       File masterFolder = new File(outputPath);
 
       if (sortMasterFileUtil.isValidFolder(masterFolder)) {
-        folderIO.masterFolder = masterFolder;
+        sortSettings.masterFolder = masterFolder;
       }
       else {
         throw new InvalidMasterFolderException("SourcePath not valid: " + masterFolder,
                                                masterFolder);
       }
-      folderIO.inputFolders = inputFolders;
+      sortSettings.inputFolders = inputFolders;
     }
     else {
       logger.error("No source no output folder chosen");
       printHelp(options);
     }
-    return folderIO;
+    return sortSettings;
   }
 }

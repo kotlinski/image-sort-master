@@ -22,8 +22,6 @@ import static org.mockito.Mockito.spy;
 public class CommandLineInterfaceTest {
   private CommandLineInterface commandLineInterface;
   private SortMasterFileUtil sortMasterFileUtil;
-  private FilePrinter filePrinter;
-  private ExportCollector exportCollector;
   private Interpreter interpreter;
 
   @Before
@@ -42,13 +40,12 @@ public class CommandLineInterfaceTest {
                                                      fileDateInterpreter,
                                                      fileDescriptor,
                                                      dateToFileRenamer, exportForecaster));
-    filePrinter = spy(new FilePrinter());
-    exportCollector = mock(ExportCollector.class);
+    FilePrinter filePrinter = spy(new FilePrinter());
+    ExportCollector exportCollector = mock(ExportCollector.class);
     interpreter = mock(Interpreter.class);
 
-    commandLineInterface = new CommandLineInterface(fileAnalyzer,
-                                      filePrinter,
-                                      exportCollector, interpreter);
+    commandLineInterface = new CommandLineInterface(fileAnalyzer, filePrinter,
+                                                    exportCollector, interpreter);
   }
 
   @Test

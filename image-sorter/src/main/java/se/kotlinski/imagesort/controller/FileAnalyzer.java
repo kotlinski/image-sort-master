@@ -8,7 +8,7 @@ import se.kotlinski.imagesort.data.ParsedFileData;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
@@ -50,12 +50,12 @@ public class FileAnalyzer {
     this.exportForecaster = exportForecaster;
   }
 
-  public ExportFileDataMap createParsedFileMap(final FolderIO folderIO) throws InvalidInputFolders {
-    if (folderIO == null || folderIO.masterFolder == null || folderIO.inputFolders == null) {
+  public ExportFileDataMap createParsedFileMap(final SortSettings sortSettings) throws InvalidInputFolders {
+    if (sortSettings == null || sortSettings.masterFolder == null || sortSettings.inputFolders == null) {
       throw new InvalidInputFolders();
     }
-    if (isValidInputFolders(folderIO.inputFolders)) {
-      return analyzeFiles(folderIO);
+    if (isValidInputFolders(sortSettings.inputFolders)) {
+      return analyzeFiles(sortSettings);
     }
     else {
       throw new InvalidInputFolders();
@@ -71,10 +71,10 @@ public class FileAnalyzer {
     return true;
   }
 
-  private ExportFileDataMap analyzeFiles(final FolderIO folderIO) {
+  private ExportFileDataMap analyzeFiles(final SortSettings sortSettings) {
     ExportFileDataMap exportFileDataMap = new ExportFileDataMap(dateToFileRenamer);
 
-    Map<File, List<File>> filesFromFolder = getFilesInRootFolders(folderIO.inputFolders);
+    Map<File, List<File>> filesFromFolder = getFilesInRootFolders(sortSettings.inputFolders);
 
     for (File rootFolder : filesFromFolder.keySet()) {
       System.out.println("");
@@ -90,7 +90,7 @@ public class FileAnalyzer {
           logger.error("Could not parse date for file: " + file, e);
         }
 
-        boolean fileFromMasterFolder = rootFolder == folderIO.masterFolder;
+        boolean fileFromMasterFolder = rootFolder == sortSettings.masterFolder;
         ParsedFileData parsedFileData = getParsedFileData(file, rootFolder, date, fileFromMasterFolder);
 
         String exportName = exportForecaster.getFileName(parsedFileData);

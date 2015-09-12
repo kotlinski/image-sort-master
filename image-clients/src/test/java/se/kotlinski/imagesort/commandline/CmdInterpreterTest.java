@@ -9,7 +9,7 @@ import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.commandline.argument.Transformer;
 import se.kotlinski.imagesort.exception.InvalidFolderArgumentsException;
 import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -33,21 +33,18 @@ public class CmdInterpreterTest {
     HelpFormatter formatter = mock(HelpFormatter.class);
     Transformer transformer = new Transformer(formatter, parser, sortMasterFileUtil);
 
-    ScannerWrapper inScanner = mock(ScannerWrapper.class);
-    when(inScanner.nextLine()).thenReturn("y");
-
-    cmdInterpreter = new Interpreter(transformer, inScanner);
+    cmdInterpreter = new Interpreter(transformer);
   }
 
   @Test
   public void testGetFolderIO() throws Exception {
     String[] arguments = new String[]{"programName", "someCommand", "-s", sortMasterFileUtil
         .getTestInputPath(), "-o", sortMasterFileUtil.getTestOutputPath()};
-    FolderIO folderIO = cmdInterpreter.getFolderIO(arguments);
+    SortSettings sortSettings = cmdInterpreter.getFolderIO(arguments);
 
-    assertThat(folderIO, is(notNullValue()));
-    assertNotNull(folderIO.inputFolders);
-    assertNotNull(folderIO.masterFolder);
+    assertThat(sortSettings, is(notNullValue()));
+    assertNotNull(sortSettings.inputFolders);
+    assertNotNull(sortSettings.masterFolder);
   }
 
   @Test (expected = InvalidMasterFolderException.class)
@@ -71,9 +68,4 @@ public class CmdInterpreterTest {
     cmdInterpreter.getFolderIO(arguments);
   }
 
-  @Test
-  public void testMakeMasterFolder() throws Exception {
-    boolean masterFolderCreated = cmdInterpreter.createMasterFolder(null);
-    assertThat(masterFolderCreated, is(false));
-  }
 }

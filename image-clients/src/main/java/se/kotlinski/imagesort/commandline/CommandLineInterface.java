@@ -9,7 +9,7 @@ import se.kotlinski.imagesort.controller.FileAnalyzer;
 import se.kotlinski.imagesort.exception.CouldNotCreateMasterFolderException;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 
 import java.util.Set;
 
@@ -32,11 +32,11 @@ public class CommandLineInterface {
 	}
 
 	public void runCommandLine(String[] arguments) {
-		FolderIO folderIO;
+		SortSettings sortSettings;
 		ExportFileDataMap exportFileDataMap;
 
 		try {
-			folderIO = interpreter.transformArguments(arguments);
+			sortSettings = interpreter.transformArguments(arguments);
 		}
 		catch (CouldNotCreateMasterFolderException e) {
 			logger.error("Could not create master folder");
@@ -45,7 +45,7 @@ public class CommandLineInterface {
 		}
 
 		try {
-			exportFileDataMap = this.fileAnalyzer.createParsedFileMap(folderIO);
+			exportFileDataMap = this.fileAnalyzer.createParsedFileMap(sortSettings);
 		}
 		catch (InvalidInputFolders invalidInputFolders) {
 			System.out.print("Invalid input folders, try again");

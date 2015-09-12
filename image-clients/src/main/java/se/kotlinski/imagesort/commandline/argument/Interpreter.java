@@ -8,7 +8,7 @@ import se.kotlinski.imagesort.exception.CouldNotCreateMasterFolderException;
 import se.kotlinski.imagesort.exception.InvalidFolderArgumentsException;
 import se.kotlinski.imagesort.exception.InvalidInputFolderException;
 import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 
 import java.io.File;
 
@@ -16,20 +16,18 @@ public class Interpreter {
 
   private static final Logger logger = LogManager.getLogger(Interpreter.class);
   private Transformer transformer;
-  private ScannerWrapper inScanner;
 
 
-  public Interpreter(final Transformer transformer, ScannerWrapper inScanner) {
+  public Interpreter(final Transformer transformer) {
     this.transformer = transformer;
-    this.inScanner = inScanner;
   }
 
-  public FolderIO transformArguments(final String[] arguments) throws
-                                                               CouldNotCreateMasterFolderException {
-    FolderIO folderIO = null;
+  public SortSettings transformArguments(final String[] arguments) throws
+                                                                   CouldNotCreateMasterFolderException {
+    SortSettings sortSettings = null;
 
     try {
-      folderIO = getFolderIO(arguments);
+      sortSettings = getFolderIO(arguments);
     }
     catch (InvalidFolderArgumentsException e) {
       System.out.println("Wrong input/output folder arguments, try again");
@@ -37,7 +35,7 @@ public class Interpreter {
     }
     catch (InvalidMasterFolderException e) {
       logger.error(e);
-      boolean masterFolderCreated = createMasterFolder(e.getMasterFolder());
+      boolean masterFolderCreated = e.getMasterFolder() == null;
       if (masterFolderCreated) {
         transformArguments(arguments);
       }
@@ -46,27 +44,28 @@ public class Interpreter {
                                                       e.getMasterFolder());
       }
     }
-    return folderIO;
+    return sortSettings;
   }
 
 
-  public FolderIO getFolderIO(final String[] arguments) throws
-                                                        InvalidFolderArgumentsException,
-                                                        InvalidMasterFolderException {
+  public SortSettings getFolderIO(final String[] arguments) throws
+                                                            InvalidFolderArgumentsException,
+                                                            InvalidMasterFolderException {
     CommandLine commandLine;
     try {
       commandLine = transformer.interpreterArgs(arguments);
     }
     catch (Exception e) {
-      logger.debug("Could not parse argumnets", e);
+      logger.debug("Could not parse arguments", e);
       System.out.println("Could not parse arguments");
       throw new InvalidFolderArgumentsException("Could not parse arguments");
     }
 
-    FolderIO folderIO;
+    SortSettings sortSettings;
     try {
-      folderIO = transformer.transformCommandLineArguments(transformer.getOptions(), commandLine);
-      System.out.println(folderIO.toString());
+      sortSettings = transformer.transformCommandLineArguments(transformer.getOptions(),
+                                                               commandLine);
+      System.out.println(sortSettings.toString());
     }
     catch (InvalidInputFolderException e) {
       System.out.println("No input folder found, try again");
@@ -79,39 +78,7 @@ public class Interpreter {
       throw new InvalidMasterFolderException("Invalid folder output parameter",
                                              e.getMasterFolder());
     }
-    return folderIO;
+    return sortSettings;
   }
-
-
-  public boolean createMasterFolder(final File masterFolder) {
-    if (masterFolder == null) {
-      return false;
-    }
-
-    System.out.println("Do you want to create " + masterFolder + "[y/n]");
-    String answer = inScanner.nextLine().trim().toLowerCase();
-
-    if ("y".equals(answer)) {
-      System.out.println("Creating " + masterFolder.getName() + "...");
-      logger.info("Creating " + masterFolder.getName() + "...");
-
-      boolean success = masterFolder.mkdirs();
-      if (!success) {
-        System.out.println("Couldn't create " + masterFolder.getName() + ", try again");
-        logger.error("Couldn't create " + masterFolder.getName());
-        return false;
-      }
-      else {
-        System.out.println(masterFolder.getName() + " created ");
-        return true;
-      }
-
-    }
-    else {
-      System.out.println("Sorry, I didn't catch that. Please answer y/n");
-      return createMasterFolder(masterFolder);
-    }
-  }
-
 
 }
