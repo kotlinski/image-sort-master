@@ -12,16 +12,10 @@ import se.kotlinski.imagesort.javafx.JavaFXUtils;
 import java.io.File;
 
 public class ApplicationController extends Application {
-	private final DirectoryChooser directoryChooser;
-  private final JavaFXUtils javaFxUtil;
-
+	@Inject
+	private  DirectoryChooser directoryChooser;
   @Inject
-  public ApplicationController(final DirectoryChooser directoryChooser, final JavaFXUtils
-      javaFxUtil) {
-    this.directoryChooser = directoryChooser;
-    this.javaFxUtil = javaFxUtil;
-  }
-
+	private JavaFXUtils javaFxUtil;
 
   public void startApplication(final String[] args) {
 		//go to start()

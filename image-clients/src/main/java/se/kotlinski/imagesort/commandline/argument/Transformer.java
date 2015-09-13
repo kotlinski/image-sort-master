@@ -34,48 +34,61 @@ public class Transformer {
     this.sortMasterFileUtil = sortMasterFileUtil;
   }
 
+	public CommandLine parseArgs(final String[] arguments) throws Exception {
+		CommandLine cmd;
+		try {
+			cmd = parser.parse(getOptions(), arguments);
+		}
+		catch (ParseException e) {
+			printHelp(getOptions());
+			logger.error("Parsing failed, " + e);
+			throw new Exception("Parsing failed");
+		}
+		return cmd;
+	}
+
   public Options getOptions() {
     Options options = new Options();
-    Option option = new Option("s", "source", true, "Import from this folder.");
-    option.setArgs(Option.UNLIMITED_VALUES);
-    option.setValueSeparator(',');
 
-    options.addOption(option);
-    options.getOption("s").setRequired(true);
-    options.addOption("o", "output", true, "Export to this folder");
-    options.getOption("o").setRequired(true);
+	  Option sourceOption = new Option("s", "source", true, "Folder to 'image sort'");
+	  sourceOption.setRequired(true);
+	  options.addOption(sourceOption);
 
-    options.addOption("h", "help", false, "MainRenamer usage\n" +
-                                          "Main purpose is to read all images from a source-path " +
-                                          "and\n" +
-                                          "export them to a given destination. \n\n" +
-                                          "When you have your images backed up via dropbox and " +
-                                          "manually, \n" +
-                                          "it may be hard giving them smart names. Sometimes you " +
-                                          "will get\n" +
-                                          "duplicated images on your back-up drive." +
-                                          "java -jar ImageRename <sourcePath> <outputPath>. \n\n" +
-                                          "The sourcePath read folders and files recursively, so " +
-                                          "you can put all" +
-                                          "your folders in the same directory. For example " +
-                                          "Dropbox-folders, etc");
+    options.addOption("h", "help", false, "print help");
+
     return options;
   }
 
   public void printHelp(Options options) {
-    formatter.printHelp("MainRenamer", options);
-  }
+	  String helpText = "\n" +
+	                    "How and when do you sort and back up your images from your camera-devices? \n" +
+	                    "\n" +
+	                    "I have my images stored on a few hard drive backups, dropbox and various devices;\n" +
+	                    "My dropbox, my nexus 5 and my old Samsung galaxy device. The problem is that \n" +
+	                    "Dropbox, Nexus 5 and Samsung all have their own way of naming the images and their \n" +
+	                    "storage's always get full at different points of time. Dropbox gets full once in a year,\n" +
+	                    "my phone every two or three months, or sometimes, devices get wasted. \n" +
+	                    "\n" +
+	                    "Over time it gets hard to detect duplicates and you don't bother delete poor-\n" +
+	                    "quality images, because you know that it may exist in at least one more location.\n" +
+	                    "\n" +
+	                    "With this tool your images will be sorted and renamed in this structure:\n" +
+	                    "\n" +
+	                    "`year/[month(optional)]/<flavour(existing folder structure)>/yyyy-mm-dd hh:mm:ss.[png|jpg|mp4]`\n" +
+	                    "\n" +
+	                    "The month setting is optional. \n" +
+	                    "The flavor may be Instagram, Screenshots, Elins wedding or what folder you\n" +
+	                    "put your images in.\n" +
+	                    "A flavor is all sub folders from the root folder, except year/month.\n" +
+	                    "Example:\n" +
+	                    "`root-folder/2013/Wedding/TheKiss/imgA.png`\n" +
+	                    " will be sorted as: \n" +
+	                    "`root-folder/2013/04/Wedding/TheKiss/2013-04-22 13:17:00.png`\n" +
+	                    "\n" +
+	                    "The application will detect all duplicate files and merge them into one when possible. \n";
 
-  public CommandLine interpreterArgs(final String[] arguments) throws Exception {
-    CommandLine cmd;
-    try {
-      cmd = parser.parse(getOptions(), arguments);
-    }
-    catch (ParseException e) {
-      logger.error("Parsing failed, " + e);
-      throw new Exception("Parsing failed");
-    }
-    return cmd;
+	  System.out.println(helpText);
+	  formatter.printHelp("MainRenamer", options);
   }
 
   public SortSettings transformCommandLineArguments(final Options options, final CommandLine commandLine) throws
@@ -85,9 +98,9 @@ public class Transformer {
     if (commandLine == null || commandLine.hasOption("h")) {
       printHelp(options);
     }
-    else if (commandLine.hasOption("s") && commandLine.hasOption("o")) {
+    else if (commandLine.hasOption("s")) {
       String[] sourcePaths = commandLine.getOptionValues("s");
-      ArrayList<File> inputFolders = new ArrayList<File>();
+      ArrayList<File> inputFolders = new ArrayList<>();
       for (String sourcePath : sourcePaths) {
         File folder = new File(sourcePath);
         if (sortMasterFileUtil.isValidFolder(folder)) {
@@ -97,16 +110,15 @@ public class Transformer {
           throw new InvalidInputFolderException("SourcePath not valid: " + sourcePath);
         }
       }
-      String outputPath = commandLine.getOptionValue("o");
-      File masterFolder = new File(outputPath);
+      //File masterFolder = new File(outputPath);
 
-      if (sortMasterFileUtil.isValidFolder(masterFolder)) {
+      /*if (sortMasterFileUtil.isValidFolder(masterFolder)) {
         sortSettings.masterFolder = masterFolder;
       }
       else {
         throw new InvalidMasterFolderException("SourcePath not valid: " + masterFolder,
                                                masterFolder);
-      }
+      }*/
       sortSettings.inputFolders = inputFolders;
     }
     else {

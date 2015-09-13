@@ -4,6 +4,8 @@ apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 
+mainClassName = "se.kotlinski.imagesort.MainRenamer"
+
 findbugs {
   toolVersion = "3.0.1"
 }

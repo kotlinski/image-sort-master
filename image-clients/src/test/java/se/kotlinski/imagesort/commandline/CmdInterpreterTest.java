@@ -36,24 +36,6 @@ public class CmdInterpreterTest {
     cmdInterpreter = new Interpreter(transformer);
   }
 
-  @Test
-  public void testGetFolderIO() throws Exception {
-    String[] arguments = new String[]{"programName", "someCommand", "-s", sortMasterFileUtil
-        .getTestInputPath(), "-o", sortMasterFileUtil.getTestOutputPath()};
-    SortSettings sortSettings = cmdInterpreter.getFolderIO(arguments);
-
-    assertThat(sortSettings, is(notNullValue()));
-    assertNotNull(sortSettings.inputFolders);
-    assertNotNull(sortSettings.masterFolder);
-  }
-
-  @Test (expected = InvalidMasterFolderException.class)
-  public void testGetFolderOutputInvalid() throws Exception {
-    String[] arguments = new String[]{"programName", "someCommand", "-s", sortMasterFileUtil
-        .getTestInputPath(), "-o", "invalidpath"};
-    cmdInterpreter.getFolderIO(arguments);
-  }
-
   @Test (expected = InvalidFolderArgumentsException.class)
   public void testGetFolderInputInvalid() throws Exception {
     String[] arguments = new String[]{"programName", "someCommand", "-s", "", "-o", sortMasterFileUtil

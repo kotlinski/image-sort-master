@@ -43,12 +43,16 @@ public class CommandLineInterface {
 			System.out.println("Check your parameters...");
 			return;
 		}
+		catch (Exception e) {
+			logger.error("Invalid parameters");
+			return;
+		}
 
 		try {
 			exportFileDataMap = this.fileAnalyzer.createParsedFileMap(sortSettings);
 		}
 		catch (InvalidInputFolders invalidInputFolders) {
-			System.out.print("Invalid input folders, try again");
+			System.out.println("Invalid input folders, try again");
 			logger.error("Invalid input folders, try again", invalidInputFolders);
 			return;
 		}

@@ -121,10 +121,10 @@ public class FileExecutorTest {
           if (!".gitignore".equals(file.getName())) {
             boolean delete = file.delete();
             if (delete) {
-              logger.debug("Delete: " + file.getName());
+              logger.error("Delete: " + file.getName());
             }
             else {
-              logger.debug("Could not delete: " + file.getName());
+              logger.error("Could not delete: " + file.getName());
             }
 
           }
