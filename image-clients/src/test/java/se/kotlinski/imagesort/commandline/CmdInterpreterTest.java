@@ -5,9 +5,11 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.commandline.argument.Interpreter;
+import se.kotlinski.imagesort.commandline.argument.Transformer;
 import se.kotlinski.imagesort.exception.InvalidFolderArgumentsException;
 import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -19,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 public class CmdInterpreterTest {
 
-  private CommandLineArgumentsInterpreter cmdInterpreter;
+  private Interpreter cmdInterpreter;
   private SortMasterFileUtil sortMasterFileUtil;
 
   @Before
@@ -29,30 +31,9 @@ public class CmdInterpreterTest {
     sortMasterFileUtil = new SortMasterFileUtil();
     CommandLineParser parser = new GnuParser();
     HelpFormatter formatter = mock(HelpFormatter.class);
-    CommandLineArgumentsTransformer commandLineArgumentsTransformer = new CommandLineArgumentsTransformer(formatter, parser, sortMasterFileUtil);
+    Transformer transformer = new Transformer(formatter, parser, sortMasterFileUtil);
 
-    ScannerWrapper inScanner = mock(ScannerWrapper.class);
-    when(inScanner.nextLine()).thenReturn("y");
-
-    cmdInterpreter = new CommandLineArgumentsInterpreter(commandLineArgumentsTransformer, inScanner);
-  }
-
-  @Test
-  public void testGetFolderIO() throws Exception {
-    String[] arguments = new String[]{"programName", "someCommand", "-s", sortMasterFileUtil
-        .getTestInputPath(), "-o", sortMasterFileUtil.getTestOutputPath()};
-    FolderIO folderIO = cmdInterpreter.getFolderIO(arguments);
-
-    assertThat(folderIO, is(notNullValue()));
-    assertNotNull(folderIO.inputFolders);
-    assertNotNull(folderIO.masterFolder);
-  }
-
-  @Test (expected = InvalidMasterFolderException.class)
-  public void testGetFolderOutputInvalid() throws Exception {
-    String[] arguments = new String[]{"programName", "someCommand", "-s", sortMasterFileUtil
-        .getTestInputPath(), "-o", "invalidpath"};
-    cmdInterpreter.getFolderIO(arguments);
+    cmdInterpreter = new Interpreter(transformer);
   }
 
   @Test (expected = InvalidFolderArgumentsException.class)
@@ -69,9 +50,4 @@ public class CmdInterpreterTest {
     cmdInterpreter.getFolderIO(arguments);
   }
 
-  @Test
-  public void testMakeMasterFolder() throws Exception {
-    boolean masterFolderCreated = cmdInterpreter.createMasterFolder(null);
-    assertThat(masterFolderCreated, is(false));
-  }
 }

@@ -6,7 +6,7 @@ public class ScannerWrapper {
   private final Scanner inScanner;
 
   public ScannerWrapper() {
-    this.inScanner = new Scanner(System.in);
+    this.inScanner = new Scanner(System.in, "UTF-8");
   }
 
   public String nextLine() {

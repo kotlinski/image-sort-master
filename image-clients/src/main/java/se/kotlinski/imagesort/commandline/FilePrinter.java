@@ -1,25 +1,8 @@
 package se.kotlinski.imagesort.commandline;
 
-import se.kotlinski.imagesort.data.ExportFileData;
-import se.kotlinski.imagesort.mapper.ExportFileDataMap;
-import se.kotlinski.imagesort.mapper.FileGroup;
-
 import java.util.Set;
 
 public class FilePrinter {
-  public void printFolderStructure(final ExportFileDataMap fileAnalyzer) {
-    for (ExportFileData exportFileData : fileAnalyzer.getAllFiles()) {
-      System.out.println();
-      System.out.println(exportFileData.toString());
-    }
-  }
-
-  public void printFlavours(final ExportFileDataMap exportFileDataMap) {
-    System.out.println("Flavours: ");
-    for (FileGroup fileGroup : exportFileDataMap.values()) {
-      System.out.println(fileGroup.getFlavour());
-    }
-  }
 
   public void printExportDestinations(final Set<String> exportDestinations) {
     System.out.println();

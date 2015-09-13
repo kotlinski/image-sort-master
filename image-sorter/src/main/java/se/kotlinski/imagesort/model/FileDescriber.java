@@ -13,22 +13,15 @@ import java.util.Date;
 public class FileDescriber {
   private static final Logger logger = LogManager.getLogger(FileDescriber.class);
   private final File file;
-  private final DateToFileRenamer dateToFileRenamer;
-  private final String rootPath;
   private final String md5;
-  private final Date date;
-  private final Calendar calendar;
 
 
   @Inject
   public FileDescriber(File file, Date date, String md5, String rootPath, final Calendar calendar) {
     this.md5 = md5;
     this.file = file;
-    this.date = date;
-    this.rootPath = rootPath;
-    this.calendar = calendar;
 
-    dateToFileRenamer = new DateToFileRenamer(calendar);
+    DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
   }
 
   public File getFile() {

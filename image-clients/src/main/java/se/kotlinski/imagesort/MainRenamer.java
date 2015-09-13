@@ -3,7 +3,7 @@ package se.kotlinski.imagesort;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import se.kotlinski.imagesort.javafx.ApplicationController;
-import se.kotlinski.imagesort.commandline.CmdController;
+import se.kotlinski.imagesort.commandline.CommandLineInterface;
 import se.kotlinski.imagesort.module.ImageModule;
 
 /**
@@ -17,15 +17,19 @@ class MainRenamer {
   public static void main(String[] args) {
     Injector injector = Guice.createInjector(new ImageModule());
 
-    // No arguments, run FX gui application
-    if (args.length == 0) {
-      ApplicationController applicationController = injector.getInstance(ApplicationController.class);
-      applicationController.startApplication(args);
-    }
-    // Else Run the command line
-    else {
-      CmdController cmdController = injector.getInstance(CmdController.class);
-      cmdController.startCmd(args);
-    }
+	  runCLI(args, injector);
+
   }
+
+	private static void runCLI(final String[] args, final Injector injector) {
+		CommandLineInterface commandLineInterface = injector.getInstance(CommandLineInterface.class);
+		commandLineInterface.runCommandLine(args);
+	}
+
+/*
+	if args.length == 0
+	private static void runGUI(final String[] args, final Injector injector) {
+		ApplicationController applicationController = injector.getInstance(ApplicationController.class);
+		applicationController.startApplication(args);
+	}*/
 }

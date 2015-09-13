@@ -3,13 +3,8 @@ package se.kotlinski.imagesort.model;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Describe class/interface here.
- *
- * @author kristofer sommestad
- * @version $Revision: 1.1 $
- */
-public class FolderIO {
+
+public class SortSettings {
 	public ArrayList<File> inputFolders;
 	public File masterFolder;
 

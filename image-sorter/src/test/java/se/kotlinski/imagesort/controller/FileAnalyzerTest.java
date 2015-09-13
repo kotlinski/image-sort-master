@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.spy;
 public class FileAnalyzerTest {
   private FileAnalyzer fileAnalyzer;
   private SortMasterFileUtil sortMasterFileUtil;
-  private FolderIO folderIO;
+  private SortSettings sortSettings;
   private Calendar calendar;
   private FileDateUniqueGenerator fileDateUniqueGenerator;
   private FileDateInterpreter fileDateInterpreter;
@@ -35,12 +35,12 @@ public class FileAnalyzerTest {
   public void setUp() {
     sortMasterFileUtil = new SortMasterFileUtil();
 
-    folderIO = new FolderIO();
+    sortSettings = new SortSettings();
     File file = new File(sortMasterFileUtil.getTestInputPath());
     ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(file);
-    folderIO.inputFolders = inputFolders;
-    folderIO.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
+    sortSettings.inputFolders = inputFolders;
+    sortSettings.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
     calendar = new GregorianCalendar();
     fileDateUniqueGenerator = spy(new FileDateUniqueGenerator());
     fileDateInterpreter = spy(new FileDateInterpreter());
@@ -59,7 +59,7 @@ public class FileAnalyzerTest {
 
   @Test
   public void testRunIndex() throws Exception {
-    ExportFileDataMap exportFileDataMap = getFileAnalyzer().createParsedFileMap(folderIO);
+    ExportFileDataMap exportFileDataMap = getFileAnalyzer().createParsedFileMap(sortSettings);
     Assert.assertEquals("Number of Unique images", 9, exportFileDataMap.getNumberOfUniqueImages());
   }
 
@@ -80,7 +80,7 @@ public class FileAnalyzerTest {
       assert true;
     }
 
-    FolderIO folderIO = new FolderIO();
+    SortSettings sortSettings = new SortSettings();
     setFileAnalyzer(new FileAnalyzer(sortMasterFileUtil,
                                      calendar,
                                      fileDateUniqueGenerator,
@@ -89,17 +89,17 @@ public class FileAnalyzerTest {
                                      dateToFileRenamer,
                                      exportForecaster));
     try {
-      getFileAnalyzer().createParsedFileMap(folderIO);
+      getFileAnalyzer().createParsedFileMap(sortSettings);
       assert false;
     }
     catch (InvalidInputFolders e) {
       assert true;
     }
 
-    folderIO.masterFolder = new File("SomeInvalidFilePath");
+    sortSettings.masterFolder = new File("SomeInvalidFilePath");
     ArrayList<File> inputFolders = new ArrayList<>();
-    inputFolders.add(folderIO.masterFolder);
-    folderIO.inputFolders = inputFolders;
+    inputFolders.add(sortSettings.masterFolder);
+    sortSettings.inputFolders = inputFolders;
     setFileAnalyzer(new FileAnalyzer(sortMasterFileUtil,
                                      calendar,
                                      fileDateUniqueGenerator,
@@ -108,17 +108,17 @@ public class FileAnalyzerTest {
                                      dateToFileRenamer,
                                      exportForecaster));
     try {
-      getFileAnalyzer().createParsedFileMap(folderIO);
+      getFileAnalyzer().createParsedFileMap(sortSettings);
       assert false;
     }
     catch (InvalidInputFolders e) {
       assert true;
     }
 
-    folderIO.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
+    sortSettings.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
     inputFolders = new ArrayList<>();
-    inputFolders.add(folderIO.masterFolder);
-    folderIO.inputFolders = inputFolders;
+    inputFolders.add(sortSettings.masterFolder);
+    sortSettings.inputFolders = inputFolders;
     setFileAnalyzer(new FileAnalyzer(sortMasterFileUtil,
                                      calendar,
                                      fileDateUniqueGenerator,
@@ -126,7 +126,7 @@ public class FileAnalyzerTest {
                                      fileDescriptor,
                                      dateToFileRenamer,
                                      exportForecaster));
-    Assert.assertNotNull("Valid folderIO", getFileAnalyzer().createParsedFileMap(folderIO));
+    Assert.assertNotNull("Valid sortSettings", getFileAnalyzer().createParsedFileMap(sortSettings));
   }
 
   FileAnalyzer getFileAnalyzer() {
@@ -140,7 +140,7 @@ public class FileAnalyzerTest {
   @Test
   public void testPopulateWithImages() throws Exception {
     File file = new File(sortMasterFileUtil.getTestInputPath());
-    ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(folderIO);
+    ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(sortSettings);
     Assert.assertEquals("Number of unique images in test folder",
                         9,
                         exportFileDataMap.getNumberOfUniqueImages());

@@ -48,7 +48,7 @@ public class SortMasterFileUtil {
   }
 
   public List<File> readAllFilesInFolder(final File folder) {
-    List<File> imageDescriber = new ArrayList<>();
+    List<File> imageDescriber = new ArrayList<File>();
     if (folder == null) {
       return imageDescriber;
     }

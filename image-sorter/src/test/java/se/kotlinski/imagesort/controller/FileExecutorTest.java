@@ -9,7 +9,7 @@ import org.junit.Test;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.model.FileCopyReport;
-import se.kotlinski.imagesort.model.FolderIO;
+import se.kotlinski.imagesort.model.SortSettings;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
@@ -32,7 +32,7 @@ public class FileExecutorTest {
 
   private static final Logger logger = LogManager.getLogger(FileExecutorTest.class);
   private FileAnalyzer fileAnalyzer;
-  private FolderIO folderIO;
+  private SortSettings sortSettings;
   private FileDateUniqueGenerator fileDateUniqueGenerator;
   private FileDateInterpreter fileDateInterpreter;
   private DateToFileRenamer dateToFileRenamer;
@@ -43,12 +43,12 @@ public class FileExecutorTest {
   public void setUp() throws Exception {
     SortMasterFileUtil sortMasterFileUtil = new SortMasterFileUtil();
 
-    folderIO = new FolderIO();
+    sortSettings = new SortSettings();
     File file = new File(sortMasterFileUtil.getTestInputPath());
     ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(file);
-    folderIO.inputFolders = inputFolders;
-    folderIO.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
+    sortSettings.inputFolders = inputFolders;
+    sortSettings.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
     Calendar calendar = new GregorianCalendar();
     ExportForecaster exportForecaster = mock(ExportForecaster.class);
     fileDateUniqueGenerator = spy(new FileDateUniqueGenerator());
@@ -77,16 +77,16 @@ public class FileExecutorTest {
   public void testCopyFiles() throws Exception {
     FileExecutor fileExecutor = spy(new FileExecutor());
     doThrow(new IOException()).when(fileExecutor).createNewFile(any(File.class), any(String.class));
-    ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(folderIO);
-    FileCopyReport fileCopyReport = fileExecutor.copyFiles(exportFileDataMap, folderIO);
+    ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(sortSettings);
+    FileCopyReport fileCopyReport = fileExecutor.copyFiles(exportFileDataMap, sortSettings);
     assertThat(fileCopyReport, is(nullValue()));
 /*    Assert.assertEquals(0, fileCopyReport.getNumberOfFilesCopied());
     Assert.assertEquals(9, fileCopyReport.getFilesNotCopied().size());
 
     File outputFolder = new File(new SortMasterFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
-    ExportFileDataMap exportFileDataMap2 = fileAnalyzer.createParsedFileMap(folderIO);
-    fileExecutor.copyFiles(exportFileDataMap2, folderIO);
+    ExportFileDataMap exportFileDataMap2 = fileAnalyzer.createParsedFileMap(sortSettings);
+    fileExecutor.copyFiles(exportFileDataMap2, sortSettings);
     String[] list = outputFolder.list();
     for (String file : list) {
       logger.debug(file);
@@ -101,8 +101,8 @@ public class FileExecutorTest {
     File outputFolder = new File(new SortMasterFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
 
-    ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(folderIO);
-    fileExecutor.copyFiles(exportFileDataMap, folderIO);
+    ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(sortSettings);
+    fileExecutor.copyFiles(exportFileDataMap, sortSettings);
     String[] list = outputFolder.list();
     for (String file : list) {
       logger.debug(file);
@@ -121,10 +121,10 @@ public class FileExecutorTest {
           if (!".gitignore".equals(file.getName())) {
             boolean delete = file.delete();
             if (delete) {
-              logger.debug("Delete: " + file.getName());
+              logger.error("Delete: " + file.getName());
             }
             else {
-              logger.debug("Could not delete: " + file.getName());
+              logger.error("Could not delete: " + file.getName());
             }
 
           }

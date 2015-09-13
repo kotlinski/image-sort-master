@@ -9,38 +9,38 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class FolderIOTest {
+public class SortSettingsTest {
 
-	private FolderIO folderIO;
+	private SortSettings sortSettings;
   private SortMasterFileUtil sortMasterFileUtil;
 
   @Before
 	public void setUp() throws Exception {
     sortMasterFileUtil = new SortMasterFileUtil();
-    setFolderIO(new FolderIO());
+    setSortSettings(new SortSettings());
   }
 
 	@Test
 	public void testToString() throws Exception {
-		String folderIOString = getFolderIO().toString();
+		String folderIOString = getSortSettings().toString();
 		assertEquals("To String with null values", "Folders not set", folderIOString);
-		getFolderIO().inputFolders = new ArrayList<>();
-		getFolderIO().inputFolders.add(new File(sortMasterFileUtil.getTestInputPath()));
-		getFolderIO().masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
+		getSortSettings().inputFolders = new ArrayList<File>();
+		getSortSettings().inputFolders.add(new File(sortMasterFileUtil.getTestInputPath()));
+		getSortSettings().masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
 
 		String filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "inputImages";
-		boolean contains = getFolderIO().toString().contains(filePart);
+		boolean contains = getSortSettings().toString().contains(filePart);
 		assertTrue("Check toString", contains);
 		filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "output";
-		contains = getFolderIO().toString().contains(filePart);
+		contains = getSortSettings().toString().contains(filePart);
 		assertTrue("Check toString", contains);
 	}
 
-	FolderIO getFolderIO() {
-		return folderIO;
+	SortSettings getSortSettings() {
+		return sortSettings;
 	}
 
-	void setFolderIO(final FolderIO folderIO) {
-		this.folderIO = folderIO;
+	void setSortSettings(final SortSettings sortSettings) {
+		this.sortSettings = sortSettings;
 	}
 }
