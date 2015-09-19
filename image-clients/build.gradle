@@ -13,11 +13,11 @@ findbugs {
 
 buildscript {
   repositories {
-	mavenCentral()
+    mavenCentral()
   }
 
   dependencies {
-	classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
+    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
   }
 }
 
@@ -26,9 +26,9 @@ jacoco {
 }
 jacocoTestReport {
   reports {
-	xml.enabled true
-	csv.enabled true
-	html.destination "${buildDir}/jacocoHtml"
+    xml.enabled true
+    csv.enabled true
+    html.destination "${buildDir}/jacocoHtml"
   }
 }
 
@@ -37,26 +37,35 @@ repositories {
 }
 
 jar {
-  manifest{
-	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
+  manifest {
+    attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
   }
 }
 
 
 buildscript {
   repositories {
-	mavenCentral()
+    mavenCentral()
   }
 
 }
 
 sourceSets {
   main.java.srcDir('src/main/java')
-  main.resources.srcDir('src/resources')
 
-  test.java.srcDir('test/java')
+  test.java.srcDir('src/test/java')
   test.resources.srcDir('src/resources')
+
+  integTest.java.srcDir file('src/integTest/java')
+  integTest.resources.srcDir file('src/integTest/resources')
 }
+
+
+task integTest(type: Test) {
+  testClassesDir = sourceSets.integTest.output.classesDir
+  classpath = sourceSets.integTest.runtimeClasspath
+}
+
 
 dependencies {
   compile project(':image-sorter')
@@ -70,7 +79,14 @@ dependencies {
   testCompile 'junit:junit:4.11'
   testCompile 'org.mockito:mockito-all:1.10.8'
 
+  integTestCompile sourceSets.main.output
+  integTestCompile configurations.testCompile
+  integTestCompile sourceSets.test.output
+  integTestRuntime configurations.testRuntime
+
 }
+
+
 task wrapper(type: Wrapper) {
   gradleVersion = '2.0'
 }
