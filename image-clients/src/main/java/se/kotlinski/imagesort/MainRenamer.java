@@ -11,8 +11,6 @@ import se.kotlinski.imagesort.module.ImageModule;
  */
 class MainRenamer {
 
-  private MainRenamer() {
-  }
 
   public static void main(String[] args) {
     Injector injector = Guice.createInjector(new ImageModule());
