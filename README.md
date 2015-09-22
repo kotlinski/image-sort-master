@@ -106,10 +106,19 @@ How to build and use it
 
 ### Setup the project
 Make a jar with gradle: <br> 
-`  > gradlew build` <br>
+`  > ./gradlew build` <br>
 `  > java -jar imageRenamer.jar` <br>
 .. or generate a bat with:  <br>
-`  > gradlew installApp`
+`  > ./gradlew installApp`
+
+To run unit tests and integration test run: <br> 
+`  > ./gradlew clean build` <br>
+To only run unit or integration tests: <br>
+`  > ./gradlew clean build -x integrationTest` <br>
+`  > ./gradlew clean build -x test` 
+
+A guide for splitting up unit and integration tests in gradle: 
+[Integration Testing With the TestSets Plugin](http://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing-with-the-testsets-plugin/)
 
 ### GUI 
 Not in MVP 1

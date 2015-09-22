@@ -13,7 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class TransformerIntegTest {
+public class TransformerTest {
 
   private Transformer transformer;
   private HelpFormatter formatter;
@@ -31,6 +31,5 @@ public class TransformerIntegTest {
     Options options = mock(Options.class);
     transformer.printHelp(options);
     verify(formatter).printHelp("MainRenamer", options);
-    assertThat("jul", is("jufdgl"));
   }
 }

@@ -3,6 +3,7 @@ apply plugin: 'findbugs'
 apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'org.unbroken-dome.test-sets'
 
 mainClassName = "se.kotlinski.imagesort.MainRenamer"
 
@@ -13,12 +14,18 @@ findbugs {
 
 buildscript {
   repositories {
-    mavenCentral()
+	mavenCentral()
+	jcenter()
   }
 
   dependencies {
-    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
+	classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
+	classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.0.2'
   }
+}
+
+testSets {
+  integrationTest { dirName = 'integration-test' }
 }
 
 jacoco {
@@ -26,9 +33,9 @@ jacoco {
 }
 jacocoTestReport {
   reports {
-    xml.enabled true
-    csv.enabled true
-    html.destination "${buildDir}/jacocoHtml"
+	xml.enabled true
+	csv.enabled true
+	html.destination "${buildDir}/jacocoHtml"
   }
 }
 
@@ -38,14 +45,14 @@ repositories {
 
 jar {
   manifest {
-    attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
+	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
   }
 }
 
 
 buildscript {
   repositories {
-    mavenCentral()
+	mavenCentral()
   }
 
 }
@@ -55,17 +62,18 @@ sourceSets {
 
   test.java.srcDir('src/test/java')
   test.resources.srcDir('src/resources')
-
-  integTest.java.srcDir file('src/integTest/java')
-  integTest.resources.srcDir file('src/integTest/resources')
 }
 
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
 
-task integTest(type: Test) {
-  testClassesDir = sourceSets.integTest.output.classesDir
-  classpath = sourceSets.integTest.runtimeClasspath
+project.integrationTest {
+  outputs.upToDateWhen { false }
 }
 
+tasks.withType(Test) {
+  reports.html.destination = file("${reporting.baseDir}/${name}")
+}
 
 dependencies {
   compile project(':image-sorter')
@@ -79,11 +87,8 @@ dependencies {
   testCompile 'junit:junit:4.11'
   testCompile 'org.mockito:mockito-all:1.10.8'
 
-  integTestCompile sourceSets.main.output
-  integTestCompile configurations.testCompile
-  integTestCompile sourceSets.test.output
-  integTestRuntime configurations.testRuntime
-
+  integrationTestCompile 'junit:junit:4.11'
+  integrationTestCompile 'org.mockito:mockito-all:1.10.8'
 }
 
 
