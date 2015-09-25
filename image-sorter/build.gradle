@@ -2,13 +2,16 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'pmd'
+apply plugin: 'org.unbroken-dome.test-sets'
 
 buildscript {
   repositories {
 	mavenCentral()
+	jcenter()
   }
   dependencies {
 	classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
+	classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.0.2'
   }
 }
 
@@ -23,21 +26,14 @@ jacocoTestReport {
   }
 }
 
-repositories {
-  mavenCentral()
-}
-
 jar {
   manifest{
 	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
   }
 }
 
-
-buildscript {
-  repositories {
-	mavenCentral()
-  }
+testSets {
+  integrationTest { dirName = 'integration-test' }
 }
 
 sourceSets {
@@ -55,6 +51,18 @@ sourceSets {
   }
 }
 
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
+project.integrationTest {
+  outputs.upToDateWhen { false }
+}
+
+tasks.withType(Test) {
+  reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
+
 dependencies {
   compile 'com.adobe.xmp:xmpcore:5.1.1'
   compile 'commons-cli:commons-cli:20040117.000000'
@@ -69,6 +77,9 @@ dependencies {
 
   testCompile 'junit:junit:4.11'
   testCompile 'org.mockito:mockito-all:1.10.8'
+
+  integrationTestCompile 'junit:junit:4.11'
+  integrationTestCompile 'org.mockito:mockito-all:1.10.8'
 }
 task wrapper(type: Wrapper) {
   gradleVersion = '2.0'

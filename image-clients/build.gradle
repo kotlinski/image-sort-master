@@ -24,10 +24,6 @@ buildscript {
   }
 }
 
-testSets {
-  integrationTest { dirName = 'integration-test' }
-}
-
 jacoco {
   toolVersion = "0.7.0.201403182114"
 }
@@ -39,22 +35,14 @@ jacocoTestReport {
   }
 }
 
-repositories {
-  mavenCentral()
-}
-
 jar {
   manifest {
 	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
   }
 }
 
-
-buildscript {
-  repositories {
-	mavenCentral()
-  }
-
+testSets {
+  integrationTest { dirName = 'integration-test' }
 }
 
 sourceSets {
