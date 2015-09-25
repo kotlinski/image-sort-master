@@ -2,7 +2,7 @@
 .idea/
 *.iml
 out/
-
+*.html
 
 # Java class files
 *.class
