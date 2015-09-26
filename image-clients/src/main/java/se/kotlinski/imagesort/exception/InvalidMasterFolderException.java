@@ -11,7 +11,7 @@ public class InvalidMasterFolderException extends Exception {
     this.masterFolder = masterFolder;
   }
 
-  public File getMasterFolder() {
+  public final File getMasterFolder() {
     return masterFolder;
   }
 }

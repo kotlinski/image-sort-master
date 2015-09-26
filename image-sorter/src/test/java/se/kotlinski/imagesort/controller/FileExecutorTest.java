@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 public class FileExecutorTest {
 
-  private static final Logger logger = LogManager.getLogger(FileExecutorTest.class);
+  private static final Logger LOGGER = LogManager.getLogger(FileExecutorTest.class);
   private FileAnalyzer fileAnalyzer;
   private SortSettings sortSettings;
   private FileDateUniqueGenerator fileDateUniqueGenerator;
@@ -89,7 +89,7 @@ public class FileExecutorTest {
     fileExecutor.copyFiles(exportFileDataMap2, sortSettings);
     String[] list = outputFolder.list();
     for (String file : list) {
-      logger.debug(file);
+      LOGGER.debug(file);
     }
     Assert.assertEquals(5, list.length);*/
   }
@@ -105,7 +105,7 @@ public class FileExecutorTest {
     fileExecutor.copyFiles(exportFileDataMap, sortSettings);
     String[] list = outputFolder.list();
     for (String file : list) {
-      logger.debug(file);
+      LOGGER.debug(file);
     }
     Assert.assertEquals(1, list.length);
   }
@@ -121,10 +121,10 @@ public class FileExecutorTest {
           if (!".gitignore".equals(file.getName())) {
             boolean delete = file.delete();
             if (delete) {
-              logger.error("Delete: " + file.getName());
+              LOGGER.error("Delete: " + file.getName());
             }
             else {
-              logger.error("Could not delete: " + file.getName());
+              LOGGER.error("Could not delete: " + file.getName());
             }
 
           }

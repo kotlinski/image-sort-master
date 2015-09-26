@@ -16,7 +16,8 @@ public class FileGroup {
 
   private final String id;
   private final Set<ExportFileData> exportFileDataList = new HashSet<>();
-  private String fileGroupFlavour;
+  //not yet used variable.
+  //private String fileGroupFlavour;
   private ArrayList<ExportFileData> arrayOfExportData;
   private String flavour;
   private final DateToFileRenamer dateToFileRenamer;
@@ -24,15 +25,15 @@ public class FileGroup {
 
   @Inject
   public FileGroup(final String id,
-                   final ExportFileData exportFileData,
-                   final DateToFileRenamer dateToFileRenamer,
-                   final Date dateTaken) {
+      final ExportFileData exportFileData,
+      final DateToFileRenamer dateToFileRenamer,
+      final Date dateTaken) {
     this.id = id;
     this.dateToFileRenamer = dateToFileRenamer;
     this.dateTaken = dateTaken;
 
     exportFileDataList.add(exportFileData);
-    fileGroupFlavour = exportFileData.flavour;
+    //fileGroupFlavour = exportFileData.flavour;
   }
 
   public void add(ExportFileData exportFileData) {
@@ -43,15 +44,22 @@ public class FileGroup {
   private void updateGroupFlavour() {
     Set<String> splitSet = new HashSet<>();
 
+    int i = 0;
     for (ExportFileData fileData : exportFileDataList) {
+      i++;
       if (fileData.isMasterFolderFile) {
-        fileGroupFlavour = fileData.flavour;
+//        fileGroupFlavour = fileData.flavour;
         return;
       }
       else {
-        System.out.println();
-        System.out.println("Original: " + fileData.originFile.getAbsoluteFile());
-        System.out.println("Flavour: " + fileData.flavour);
+        if (exportFileDataList.size() > 1 && i == 1) {
+          System.out.println("");
+        }
+        System.out.printf("(%s/%s)Original: %s%n",
+                          i,
+                          exportFileDataList.size(),
+                          fileData.originFile.getAbsoluteFile());
+        // System.out.println("Flavour: " + fileData.flavour);
         if (fileData.flavour != null) {
           String pattern = Pattern.quote(System.getProperty("file.separator"));
           String[] splittedFlavour = fileData.flavour.split(pattern);
@@ -63,13 +71,13 @@ public class FileGroup {
     // Make some mismatch of all flavours =D room for improvement!!!
     // Hope set is deterministic
     for (String flavourPart : splitSet) {
-      flavour += flavourPart + File.separator;
+      flavour = String.format("%s%s%s", flavour, flavourPart, File.separator);
     }
     if (dateTaken != null) {
       String cleanYearFlavour = cleanUpYearFolders(dateTaken, flavour);
       flavour = cleanUpMonthFolders(dateTaken, cleanYearFlavour);
     }
-    fileGroupFlavour = flavour;
+ //   fileGroupFlavour = flavour;
 
   }
 

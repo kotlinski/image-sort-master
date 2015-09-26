@@ -31,17 +31,15 @@ public class CmdInterpreterIntegerTest {
 	}
 
 
-	@Test (expected = InvalidFolderArgumentsException.class)
+	@Test (expected = Exception.class)
 	public void testGetFolderInputInvalidIntegration() throws Exception {
-		String[] arguments = new String[]{"programName", "someCommand", "-s", "", "-o", sortMasterFileUtil
-				.getTestOutputPath()};
+		String[] arguments = new String[]{"programName", "someCommand", "-s", ""};
 		cmdInterpreter.getFolderIO(arguments);
 	}
 
-	@Test (expected = InvalidFolderArgumentsException.class)
+	@Test (expected = Exception.class)
 	public void testGetFolderInputNull() throws Exception {
-		String[] arguments = new String[]{"programName", "someCommand", "-s", null, "-o",
-				sortMasterFileUtil.getTestOutputPath()};
+		String[] arguments = new String[]{"programName", "someCommand", "-s", null};
 		cmdInterpreter.getFolderIO(arguments);
 	}
 

@@ -9,7 +9,7 @@ public class ScannerWrapper {
     this.inScanner = new Scanner(System.in, "UTF-8");
   }
 
-  public String nextLine() {
+  public final String nextLine() {
     return inScanner.nextLine();
   }
 }

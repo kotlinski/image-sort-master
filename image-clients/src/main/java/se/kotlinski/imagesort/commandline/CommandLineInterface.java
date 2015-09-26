@@ -14,7 +14,7 @@ import se.kotlinski.imagesort.model.SortSettings;
 import java.util.Set;
 
 public class CommandLineInterface {
-	private static final Logger logger = LogManager.getLogger(CommandLineInterface.class);
+	private static final Logger LOGGER = LogManager.getLogger(CommandLineInterface.class);
 	private final FileAnalyzer fileAnalyzer;
 	private final FilePrinter filePrinter;
 	private final ExportCollector exportCollector;
@@ -31,7 +31,7 @@ public class CommandLineInterface {
 		this.interpreter = interpreter;
 	}
 
-	public void runCommandLine(String[] arguments) {
+	public final void runCommandLine(String[] arguments) {
 		SortSettings sortSettings;
 		ExportFileDataMap exportFileDataMap;
 
@@ -39,12 +39,12 @@ public class CommandLineInterface {
 			sortSettings = interpreter.transformArguments(arguments);
 		}
 		catch (CouldNotCreateMasterFolderException e) {
-			logger.error("Could not create master folder");
+			LOGGER.error("Could not create master folder");
 			System.out.println("Check your parameters...");
 			return;
 		}
 		catch (Exception e) {
-			logger.error("Invalid parameters");
+			LOGGER.error("Invalid parameters");
 			return;
 		}
 
@@ -53,7 +53,7 @@ public class CommandLineInterface {
 		}
 		catch (InvalidInputFolders invalidInputFolders) {
 			System.out.println("Invalid input folders, try again");
-			logger.error("Invalid input folders, try again", invalidInputFolders);
+			LOGGER.error("Invalid input folders, try again", invalidInputFolders);
 			return;
 		}
 

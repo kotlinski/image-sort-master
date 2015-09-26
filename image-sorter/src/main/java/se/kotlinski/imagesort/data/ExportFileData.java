@@ -1,7 +1,5 @@
 package se.kotlinski.imagesort.data;
 
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-
 import java.io.File;
 import java.util.Date;
 

@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class FileExecutor {
 
-  private static final Logger logger = LogManager.getLogger(FileExecutor.class);
+  private static final Logger LOGGER = LogManager.getLogger(FileExecutor.class);
 
   public FileCopyReport copyFiles(ExportFileDataMap exportFileDataMap, SortSettings sortSettings) {
 /*    Map<String, String> copiedFiles = new HashMap<>();
@@ -29,7 +29,7 @@ public class FileExecutor {
 
       String filePathName = getFileName(uniqueFileDescriber, fullPath, false);
       boolean appendMD5 = shouldAppendMD5(copiedFiles, uniqueFileDescriber, filePathName);
-      logger.debug("AppendMD5" + appendMD5);
+      LOGGER.debug("AppendMD5" + appendMD5);
       filePathName = getFileName(uniqueFileDescriber, fullPath, appendMD5);
 
       boolean success = copyFileToNewFolder(uniqueFileDescriber, filePathName);
@@ -68,7 +68,7 @@ public class FileExecutor {
       return true;
     }
     catch (IOException e) {
-      logger.error("Could not copy file: " + uniqueFileDescriber.getFile(), e);
+      LOGGER.error("Could not copy file: " + uniqueFileDescriber.getFile(), e);
     }
     return false;
   }
@@ -80,8 +80,8 @@ public class FileExecutor {
       FileUtils.copyFile(oldFile, file);
     }
     else {
-      logger.error("\ncouldn't move File: " + oldFile.getName());
-      logger.error("\ncouldn't move File: " + file.getAbsolutePath());
+      LOGGER.error("\ncouldn't move File: " + oldFile.getName());
+      LOGGER.error("\ncouldn't move File: " + file.getAbsolutePath());
     }
   }
 
@@ -92,7 +92,7 @@ public class FileExecutor {
     }
     catch (CouldNotParseDateException e) {
       newFolder += "other";
-      logger.error("Could not parse date: " + uniqueFileDescriber.getFile(), e);
+      LOGGER.error("Could not parse date: " + uniqueFileDescriber.getFile(), e);
     }*/
     //newFolder += uniqueFileDescriber.getFlavour();
     return newFolder;
