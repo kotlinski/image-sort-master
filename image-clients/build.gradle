@@ -3,6 +3,7 @@ apply plugin: 'findbugs'
 apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'org.unbroken-dome.test-sets'
 
 mainClassName = "se.kotlinski.imagesort.MainRenamer"
 
@@ -14,10 +15,12 @@ findbugs {
 buildscript {
   repositories {
 	mavenCentral()
+	jcenter()
   }
 
   dependencies {
 	classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
+	classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.0.2'
   }
 }
 
@@ -32,30 +35,32 @@ jacocoTestReport {
   }
 }
 
-repositories {
-  mavenCentral()
-}
-
 jar {
-  manifest{
+  manifest {
 	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
   }
 }
 
-
-buildscript {
-  repositories {
-	mavenCentral()
-  }
-
+testSets {
+  integrationTest { dirName = 'integration-test' }
 }
 
 sourceSets {
   main.java.srcDir('src/main/java')
-  main.resources.srcDir('src/resources')
 
-  test.java.srcDir('test/java')
+  test.java.srcDir('src/test/java')
   test.resources.srcDir('src/resources')
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
+project.integrationTest {
+  outputs.upToDateWhen { false }
+}
+
+tasks.withType(Test) {
+  reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
 dependencies {
@@ -70,7 +75,11 @@ dependencies {
   testCompile 'junit:junit:4.11'
   testCompile 'org.mockito:mockito-all:1.10.8'
 
+  integrationTestCompile 'junit:junit:4.11'
+  integrationTestCompile 'org.mockito:mockito-all:1.10.8'
 }
+
+
 task wrapper(type: Wrapper) {
   gradleVersion = '2.0'
 }
