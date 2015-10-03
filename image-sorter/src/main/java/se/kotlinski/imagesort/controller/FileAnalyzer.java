@@ -50,8 +50,11 @@ public class FileAnalyzer {
     this.exportForecaster = exportForecaster;
   }
 
-  public ExportFileDataMap createParsedFileMap(final SortSettings sortSettings) throws InvalidInputFolders {
-    if (sortSettings == null || sortSettings.masterFolder == null || sortSettings.inputFolders == null) {
+  public ExportFileDataMap createParsedFileMap(final SortSettings sortSettings) throws
+                                                                                InvalidInputFolders {
+    if (sortSettings == null ||
+        sortSettings.masterFolder == null ||
+        sortSettings.inputFolders == null) {
       throw new InvalidInputFolders();
     }
     if (isValidInputFolders(sortSettings.inputFolders)) {
@@ -76,40 +79,49 @@ public class FileAnalyzer {
 
     Map<File, List<File>> filesFromFolder = getFilesInRootFolders(sortSettings.inputFolders);
 
-    for (File rootFolder : filesFromFolder.keySet()) {
+    for (Map.Entry<File, List<File>> fileListEntry : filesFromFolder.entrySet()) {
+      File rootFolder = fileListEntry.getKey();
       System.out.println("");
-      System.out.println("Parsing files in: " + rootFolder + "... ");
+      System.out.printf("Parsing files in: %s... %n", rootFolder);
 
-      for (File file : filesFromFolder.get(rootFolder)) {
-        Date date = null;
+      for (File file : fileListEntry.getValue()) {
+
         try {
-          date = fileDateInterpreter.getDate(file);
+          Date date = fileDateInterpreter.getDate(file);
+          addExportFileData(sortSettings, exportFileDataMap, rootFolder, file, date);
         }
         catch (CouldNotParseDateException e) {
           System.out.println("Could not parse date for file: " + file);
           logger.error("Could not parse date for file: " + file, e);
+          System.out.println("ERRRRR, cant get date for file: " + file.getName());
         }
-
-        boolean fileFromMasterFolder = rootFolder == sortSettings.masterFolder;
-        ParsedFileData parsedFileData = getParsedFileData(file, rootFolder, date, fileFromMasterFolder);
-
-        String exportName = exportForecaster.getFileName(parsedFileData);
-
-        String exportExtension = exportForecaster.getFileNameExtension(parsedFileData);
-
-
-        ExportFileData exportFileData = new ExportFileData(parsedFileData.uniqueId,
-                                                           parsedFileData.originFile,
-                                                           exportExtension,
-                                                           exportName,
-                                                           parsedFileData.flavour,
-                                                           parsedFileData.masterFolderFile,
-                                                           date);
-
-        exportFileDataMap.addExportFileData(exportFileData);
       }
     }
     return exportFileDataMap;
+  }
+
+  private void addExportFileData(final SortSettings sortSettings,
+                                 final ExportFileDataMap exportFileDataMap,
+                                 final File rootFolder,
+                                 final File file,
+                                 final Date date) {
+    boolean fileFromMasterFolder = rootFolder == sortSettings.masterFolder;
+    ParsedFileData parsedFileData = getParsedFileData(file, rootFolder, date, fileFromMasterFolder);
+
+    String exportName = exportForecaster.getFileName(parsedFileData);
+
+    String exportExtension = exportForecaster.getFileNameExtension(parsedFileData);
+
+
+    ExportFileData exportFileData = new ExportFileData(parsedFileData.uniqueId,
+                                                       parsedFileData.originFile,
+                                                       exportExtension,
+                                                       exportName,
+                                                       parsedFileData.flavour,
+                                                       parsedFileData.masterFolderFile,
+                                                       date);
+
+    exportFileDataMap.addExportFileData(exportFileData);
   }
 
   private ParsedFileData getParsedFileData(final File file,

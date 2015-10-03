@@ -1,15 +1,10 @@
 package se.kotlinski.imagesort.controller;
 
 import se.kotlinski.imagesort.data.ExportFileData;
-import se.kotlinski.imagesort.data.ParsedFileData;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.mapper.FileGroup;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 

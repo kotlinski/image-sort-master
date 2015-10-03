@@ -38,8 +38,8 @@ public class ExportFileDataMap {
     String retString = "Files in input folder: \n";
     for (String fileGroupId : fileIdMap.keySet()) {
       retString += fileGroupId + ", including files: " + "\n";
-      for (ExportFileData exportFileData : fileIdMap.get(fileGroupId).getArrayOfExportData()) {
-        retString += "\t" + exportFileData.toString() + "\n";
+      for (Map.Entry<String, FileGroup> stringFileGroupEntry : fileIdMap.entrySet()) {
+        retString = String.format("%s\t%s\n", retString, stringFileGroupEntry.getKey());
       }
     }
     return retString;
@@ -77,7 +77,8 @@ public class ExportFileDataMap {
   public Map<String, ArrayList<ExportFileData>> getGroupsOfDuplicates() {
     Map<String, ArrayList<ExportFileData>> groupsOfDuplicates = new HashMap<>();
 
-    for (String fileID : fileIdMap.keySet()) {
+    for (Map.Entry<String, ArrayList<ExportFileData>> stringArrayListEntry : groupsOfDuplicates.entrySet()) {
+      String fileID = stringArrayListEntry.getKey();
       ArrayList<ExportFileData> exportFileData = fileIdMap.get(fileID).getArrayOfExportData();
       if (exportFileData.size() > 1) {
         groupsOfDuplicates.put(fileID, exportFileData);
@@ -94,8 +95,8 @@ public class ExportFileDataMap {
   public int getNumberOfRemovableFiles() {
     Map<String, ArrayList<ExportFileData>> groupsOfDuplicates = getGroupsOfDuplicates();
     int numberOfRemovableFiles = 0;
-    for (String fileID : groupsOfDuplicates.keySet()) {
-      ArrayList<ExportFileData> parsedFileData = groupsOfDuplicates.get(fileID);
+    for (Map.Entry<String, ArrayList<ExportFileData>> stringArrayListEntry : groupsOfDuplicates.entrySet()) {
+      ArrayList<ExportFileData> parsedFileData = groupsOfDuplicates.get(stringArrayListEntry.getKey());
       numberOfRemovableFiles += parsedFileData.size() - 1;
     }
     return numberOfRemovableFiles;

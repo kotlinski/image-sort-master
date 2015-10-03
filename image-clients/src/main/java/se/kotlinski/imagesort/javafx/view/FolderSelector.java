@@ -17,7 +17,14 @@ import javafx.stage.Stage;
  * @version $Revision: 1.1 $
  */
 public class FolderSelector {
-	private final Stage primaryStage;
+	public static final int INPUT_BUTTON_COLUMN_INDEX = 0;
+	public static final int INPUT_BUTTON_ROW_INDEX = 0;
+	public static final int OUTPUT_BUTTON_COLUMN_INDEX = 1;
+	public static final int OUTPUT_BUTTON_ROW_INDEX = 0;
+	public static final int INPUT_HORIZONTAL_GAP = 6;
+	public static final int INPUT_VERTICAL_GAP = 6;
+  private static final int ROOT_GROUP_SPACING = 12;
+  private final Stage primaryStage;
 	private Button inputButton;
 	private Button outputButton;
 
@@ -26,28 +33,28 @@ public class FolderSelector {
 		primaryStage.setTitle("Set input/output folders");
 	}
 
-	public void setupInputButton(final EventHandler<ActionEvent> selectInputEvent){
+	public final void setupInputButton(final EventHandler<ActionEvent> selectInputEvent){
 		inputButton = new Button("Select source folder");
 		inputButton.setOnAction(selectInputEvent);
 	}
-	public void setupOutputButton(final EventHandler<ActionEvent> selectOutputEvent){
+	public final void setupOutputButton(final EventHandler<ActionEvent> selectOutputEvent){
 		outputButton = new Button("Select Output Folder");
 		outputButton.setOnAction(selectOutputEvent);
 	}
 
-	public void setupGridLayout(){
+	public final void setupGridLayout(){
 
 		final GridPane inputGridPane = new GridPane();
 
-		GridPane.setConstraints(inputButton, 0, 0);
-		GridPane.setConstraints(outputButton, 1, 0);
-		inputGridPane.setHgap(6);
-		inputGridPane.setVgap(6);
+		GridPane.setConstraints(inputButton, INPUT_BUTTON_COLUMN_INDEX, INPUT_BUTTON_ROW_INDEX);
+		GridPane.setConstraints(outputButton, OUTPUT_BUTTON_COLUMN_INDEX, OUTPUT_BUTTON_ROW_INDEX);
+		inputGridPane.setHgap(INPUT_HORIZONTAL_GAP);
+		inputGridPane.setVgap(INPUT_VERTICAL_GAP);
 		inputGridPane.getChildren().addAll(inputButton, outputButton);
 
-		final Pane rootGroup = new VBox(12);
+    final Pane rootGroup = new VBox(ROOT_GROUP_SPACING);
 		rootGroup.getChildren().addAll(inputGridPane);
-		rootGroup.setPadding(new Insets(12, 12, 12, 12));
+		rootGroup.setPadding(new Insets(ROOT_GROUP_SPACING, ROOT_GROUP_SPACING, ROOT_GROUP_SPACING, ROOT_GROUP_SPACING));
 
 		primaryStage.setScene(new Scene(rootGroup));
 		primaryStage.show();

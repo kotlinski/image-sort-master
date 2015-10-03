@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 public class FileAnalyzerTest {
@@ -60,7 +59,7 @@ public class FileAnalyzerTest {
   @Test
   public void testRunIndex() throws Exception {
     ExportFileDataMap exportFileDataMap = getFileAnalyzer().createParsedFileMap(sortSettings);
-    Assert.assertEquals("Number of Unique images", 9, exportFileDataMap.getNumberOfUniqueImages());
+    Assert.assertEquals("Number of Unique images", 8, exportFileDataMap.getNumberOfUniqueImages());
   }
 
   @Test
@@ -142,7 +141,7 @@ public class FileAnalyzerTest {
     File file = new File(sortMasterFileUtil.getTestInputPath());
     ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(sortSettings);
     Assert.assertEquals("Number of unique images in test folder",
-                        9,
+                        8,
                         exportFileDataMap.getNumberOfUniqueImages());
   }
 }

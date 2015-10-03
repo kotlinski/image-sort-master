@@ -40,7 +40,7 @@ public class FileCopyReport {
       out += "Files failed: \n";
     }
     for (FileDescriber imageDescriber : filesNotCopied) {
-      out += imageDescriber.getOriginalFileName() + "\n";
+      out = String.format("%s%s\n", out, imageDescriber.getOriginalFileName());
     }
     return out;
   }

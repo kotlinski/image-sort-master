@@ -24,13 +24,13 @@ public class SortMasterFileUtil {
     return System.getProperty("user.dir") + File.separator;
   }
 
-  private final String modifyPath(String path, boolean input) {
-    path = path.replace("image-clients" + File.separator, "");
-    if (path.contains("image-sorter")) {
-      return path + appendPathSpecifier(input);
+  private String modifyPath(String path, boolean input) {
+    String pathWithoutRoot = path.replace("image-clients" + File.separator, "");
+    if (pathWithoutRoot.contains("image-sorter")) {
+      return pathWithoutRoot + appendPathSpecifier(input);
     }
     else {
-      return path + "image-sorter" + File.separator + appendPathSpecifier(input);
+      return pathWithoutRoot + "image-sorter" + File.separator + appendPathSpecifier(input);
     }
   }
 

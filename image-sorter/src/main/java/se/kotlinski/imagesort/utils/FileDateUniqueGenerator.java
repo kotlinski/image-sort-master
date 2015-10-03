@@ -14,14 +14,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
 public class FileDateUniqueGenerator {
-  private static final Logger logger = LogManager.getLogger(FileDateUniqueGenerator.class);
+  private static final Logger LOGGER = LogManager.getLogger(FileDateUniqueGenerator.class);
 
   public String generateMd5(final File file) {
     try {
       return generateImageMD5(file);
     }
     catch (CouldNotGenerateIDException e) {
-      logger.error("Could not generate id for file: " + file, e);
+      LOGGER.error("Could not generate id for file: " + file, e);
     }
     // If no image file
     return file.getAbsolutePath();
@@ -40,12 +40,14 @@ public class FileDateUniqueGenerator {
         haveMore = dis.read() != -1;
       }
 
+      dis.close();
+
       // get the hash value as byte array
       byte[] hash = messageDigest.digest();
       return byteArray2Hex(hash);
     }
     catch (NoSuchAlgorithmException | IOException e) {
-      logger.error("Could not generate image unique id", e);
+      LOGGER.error("Could not generate image unique id", e);
       throw new CouldNotGenerateIDException();
     }
   }

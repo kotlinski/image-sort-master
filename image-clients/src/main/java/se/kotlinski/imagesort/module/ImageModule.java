@@ -8,9 +8,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class ImageModule extends AbstractModule {
-  @Override
-  protected void configure() {
 
+  @Override
+  protected final void configure() {
     bind(CommandLineParser.class).to(GnuParser.class);
     bind(Calendar.class).to(GregorianCalendar.class);
   }
