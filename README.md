@@ -105,11 +105,10 @@ How to build and use it
 --------
 
 ### Setup the project
-Make a jar with gradle: <br> 
-`  > ./gradlew build` <br>
-`  > java -jar imageRenamer.jar` <br>
-.. or generate a bat with:  <br>
-`  > ./gradlew installApp`
+Make a runnable bat with:  <br>
+`  > ./gradlew installApp` <br>
+`  > build/install/image-clients/bat/image-clients.bat -h` <br>
+
 
 To run unit tests and integration test run: <br> 
 `  > ./gradlew clean build` <br>
