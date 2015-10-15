@@ -7,17 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.commandline.argument.Transformer;
-import se.kotlinski.imagesort.exception.InvalidFolderArgumentsException;
-import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
-import se.kotlinski.imagesort.model.SortSettings;
-import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class CmdInterpreterTest {
 

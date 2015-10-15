@@ -15,9 +15,10 @@ final class MainRenamer {
 
 	public static void main(String[] args) {
     Injector injector = Guice.createInjector(new ImageModule());
-
-	  runCLI(args, injector);
-
+		for (String arg : args) {
+			System.out.println(arg);
+		}
+		runCLI(args, injector);
   }
 
 	private static void runCLI(final String[] args, final Injector injector) {

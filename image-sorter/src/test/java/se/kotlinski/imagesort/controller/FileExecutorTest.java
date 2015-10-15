@@ -6,7 +6,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.model.FileCopyReport;
 import se.kotlinski.imagesort.model.SortSettings;
@@ -14,7 +13,6 @@ import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
 import se.kotlinski.imagesort.utils.FileDescriptor;
-import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,7 +93,7 @@ public class FileExecutorTest {
   }
 
   @Test
-  public void sunShineTest() throws InvalidInputFolders {
+  public void sunShineTest() throws Exception {
     FileExecutor fileExecutor = spy(new FileExecutor());
 
     File outputFolder = new File(new SortMasterFileUtil().getTestOutputPath());

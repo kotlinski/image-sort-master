@@ -6,7 +6,6 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.commandline.CommandLineInterface;
 import se.kotlinski.imagesort.commandline.FilePrinter;
@@ -15,7 +14,6 @@ import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
 import se.kotlinski.imagesort.utils.FileDescriptor;
-import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

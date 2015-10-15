@@ -48,6 +48,9 @@ public class FileDateInterpreterTest {
     catch (CouldNotParseDateException e) {
       assert false;
     }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
 
     try {
       Date date = fileDateInterpreter.getDate(videoWithDate);
@@ -57,6 +60,9 @@ public class FileDateInterpreterTest {
     catch (CouldNotParseDateException e) {
       assert false;
     }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
 
     try {
       fileDateInterpreter.getDate(imageWithoutDate);
@@ -64,6 +70,9 @@ public class FileDateInterpreterTest {
     }
     catch (CouldNotParseDateException e) {
       assert true;
+    }
+    catch (Exception e) {
+      e.printStackTrace();
     }
   }
 

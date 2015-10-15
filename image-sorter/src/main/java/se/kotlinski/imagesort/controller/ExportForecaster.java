@@ -15,7 +15,7 @@ public class ExportForecaster {
     this.dateToFileRenamer = dateToFileRenamer;
   }
 
-  public String getExportPathName(final String masterFolderPath,
+  public final String getExportPathName(final String masterFolderPath,
                                   final ParsedFileData parsedFileData) {
 
     String fullExportPath = buildExportPath(masterFolderPath, parsedFileData);
@@ -23,7 +23,7 @@ public class ExportForecaster {
     return fullExportPath + fileName;
   }
 
-  public String getExportPath(final String masterFolderPath, final ParsedFileData parsedFileData) {
+  public final String getExportPath(final String masterFolderPath, final ParsedFileData parsedFileData) {
 
     return buildExportPath(masterFolderPath, parsedFileData);
   }

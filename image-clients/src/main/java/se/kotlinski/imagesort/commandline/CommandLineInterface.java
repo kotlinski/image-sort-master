@@ -56,6 +56,10 @@ public class CommandLineInterface {
 			LOGGER.error("Invalid input folders, try again", invalidInputFolders);
 			return;
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
 
 		//Print all images and videos read from inputfolders + master folder
 		filePrinter.printTotalNumberOfFiles(exportFileDataMap.totalNumberOfFiles());

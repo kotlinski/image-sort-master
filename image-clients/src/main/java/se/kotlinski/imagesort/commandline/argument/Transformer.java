@@ -10,13 +10,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.InvalidInputFolderException;
-import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
 import se.kotlinski.imagesort.model.SortSettings;
-import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-
 
 public class Transformer {
 
@@ -49,17 +45,14 @@ public class Transformer {
 
   public final Options getOptions() {
     Options options = new Options();
-
     Option sourceOption = new Option("s", "source", true, "Folder to 'image sort'");
-    sourceOption.setRequired(true);
+    sourceOption.setType(String.class);
     options.addOption(sourceOption);
-
     options.addOption("h", "help", false, "print help");
-
     return options;
   }
 
-  public final void printHelp(Options options) {
+  public void printHelp(Options options) {
     String helpText = "\n" +
                       "How and when do you sort and back up your images from your camera-devices?" +
                       " \n" +
@@ -103,39 +96,26 @@ public class Transformer {
 
   public final SortSettings transformCommandLineArguments(final Options options,
                                                           final CommandLine commandLine) throws
-                                                                                         InvalidMasterFolderException,
-                                                                                         InvalidInputFolderException {
+                                                                                         Exception {
     SortSettings sortSettings = new SortSettings();
-    if (commandLine == null || commandLine.hasOption("h")) {
+    if (commandLine == null || commandLine.hasOption("h") || !commandLine.hasOption('s')) {
       printHelp(options);
     }
     else if (commandLine.hasOption("s")) {
-      String[] sourcePaths = commandLine.getOptionValues("s");
-      ArrayList<File> inputFolders = new ArrayList<>();
-      for (String sourcePath : sourcePaths) {
-        File folder = new File(sourcePath);
-        if (sortMasterFileUtil.isValidFolder(folder)) {
-          inputFolders.add(folder);
-        }
-        else {
-          throw new InvalidInputFolderException("SourcePath not valid: " + sourcePath);
-        }
-      }
-      //File masterFolder = new File(outputPath);
-
-      /*if (sortMasterFileUtil.isValidFolder(masterFolder)) {
-        sortSettings.masterFolder = masterFolder;
+      String sourcePath = commandLine.getOptionValue("s");
+      File folder = new File(sourcePath);
+      if (sortMasterFileUtil.isValidFolder(folder)) {
+        sortSettings.masterFolder = folder;
+        return sortSettings;
       }
       else {
-        throw new InvalidMasterFolderException("SourcePath not valid: " + masterFolder,
-                                               masterFolder);
-      }*/
-      sortSettings.inputFolders = inputFolders;
+        throw new InvalidInputFolderException("SourcePath not valid: " + sourcePath);
+      }
     }
     else {
       LOGGER.error("No source no output folder chosen");
       printHelp(options);
     }
-    return sortSettings;
+    throw new InvalidInputFolderException("Could not create sortSettings for attributes");
   }
 }
