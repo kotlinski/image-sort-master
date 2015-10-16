@@ -61,7 +61,7 @@ public class CommandLineInterface {
 			return;
 		}
 
-		//Print all images and videos read from inputfolders + master folder
+		//Print all images and videos read from inputFolders + master folder
 		filePrinter.printTotalNumberOfFiles(exportFileDataMap.totalNumberOfFiles());
 
 		//Some files may be the same, but with different flavours

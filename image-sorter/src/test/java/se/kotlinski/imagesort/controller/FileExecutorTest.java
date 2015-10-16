@@ -13,6 +13,7 @@ import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
 import se.kotlinski.imagesort.utils.FileDescriptor;
+import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class FileExecutorTest {
 
     sortSettings = new SortSettings();
     File file = new File(sortMasterFileUtil.getTestInputPath());
-    ArrayList<File> inputFolders = new ArrayList<>();
+    ArrayList<File> inputFolders = new ArrayList<File>();
     inputFolders.add(file);
     sortSettings.inputFolders = inputFolders;
     sortSettings.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());

@@ -14,6 +14,7 @@ import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
 import se.kotlinski.imagesort.utils.FileDescriptor;
+import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

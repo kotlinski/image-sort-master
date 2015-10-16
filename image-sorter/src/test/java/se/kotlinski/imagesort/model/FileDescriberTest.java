@@ -3,6 +3,7 @@ package se.kotlinski.imagesort.model;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
 import java.util.Calendar;

@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.InvalidInputFolderException;
 import se.kotlinski.imagesort.model.SortSettings;
+import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
 
