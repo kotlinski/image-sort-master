@@ -110,17 +110,22 @@ Make a runnable bat with:  <br>
 `  > build/install/image-clients/bat/image-clients.bat -h` <br>
 
 
-To run unit tests and integration test run: <br> 
+To run unit and integration test* run: <br> 
 `  > ./gradlew clean build` <br>
 To only run unit or integration tests: <br>
 `  > ./gradlew clean build -x integrationTest` <br>
-`  > ./gradlew clean build -x test` 
+`  > ./gradlew clean build -x test` <br>
+ *_integration tests mainly tests the public interfaces with as few mocks as possible and images 
+ from the file system etc. Unit tests uses many mockes and focused on internal logic in package only
+ methods._
 
 A guide for splitting up unit and integration tests in gradle: 
 [Integration Testing With the TestSets Plugin](http://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing-with-the-testsets-plugin/)
 
-### GUI 
-Not in MVP 1
+The project also provides code coverage data, that can be found after a build in: 
+_image-clinets/build/jacoco/_. The jacoco code-coverage-files can be imported with 
+Intellij in _Analyze > Show coverage data..._
+
 
 ### Command-line interface
 
@@ -128,6 +133,10 @@ Not in MVP 1
  -h,--help           print help
  -s,--source <arg>   Folder to 'image sort'
 ```
+
+
+### GUI 
+Not in MVP 1
 
 Road map
 --------

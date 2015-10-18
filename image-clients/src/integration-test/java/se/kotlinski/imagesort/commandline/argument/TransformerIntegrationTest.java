@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.utils;
+package se.kotlinski.imagesort.commandline.argument;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -7,21 +7,26 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.commandline.argument.Transformer;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 import se.kotlinski.imagesort.model.SortSettings;
+import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
-public class TransformerTest {
+public class TransformerIntegrationTest {
 
   private Transformer transformer;
   private HelpFormatter formatter;
@@ -29,17 +34,10 @@ public class TransformerTest {
 
   @Before
   public void setUp() throws Exception {
-    sortMasterFileUtil = spy(new SortMasterFileUtil());
+    sortMasterFileUtil = new SortMasterFileUtil();
     CommandLineParser parser = new GnuParser();
-    formatter = spy(new HelpFormatter());
-    transformer = spy(new Transformer(formatter, parser, sortMasterFileUtil));
-  }
-
-  @Test
-  public void testPrintHelp() throws Exception {
-    Options options = spy(new Options());
-    transformer.printHelp(options);
-    verify(formatter).printHelp(eq("MainRenamer"), eq(options));
+    formatter = new HelpFormatter();
+    transformer = new Transformer(formatter, parser, sortMasterFileUtil);
   }
 
   @Test
@@ -47,22 +45,12 @@ public class TransformerTest {
     String[] args = {"-h"};
     CommandLine cmd = transformer.parseArgs(args);
     Option[] options = cmd.getOptions();
-    assertThat(options.length, equalTo(1));
+    MatcherAssert.assertThat(options.length, CoreMatchers.equalTo(1));
 
     args = new String[]{"--help"};
     cmd = transformer.parseArgs(args);
     options = cmd.getOptions();
-    assertThat(options.length, equalTo(1));
-  }
-
-  @Test
-  public void testParseArgsSource() throws Exception {
-    String[] args = {"-s", "sourceValue"};
-    CommandLine cmd = transformer.parseArgs(args);
-    Option[] options = cmd.getOptions();
-    assertThat(options.length, equalTo(1));
-    assertThat(options[0].getOpt(), equalTo("s"));
-    assertThat(options[0].getValue(), equalTo("sourceValue"));
+    MatcherAssert.assertThat(options.length, CoreMatchers.equalTo(1));
   }
 
   @Test (expected = Exception.class)
@@ -72,16 +60,20 @@ public class TransformerTest {
   }
 
   @Test
-  public void testGetOptions() throws Exception {
-    Options options = transformer.getOptions();
-    Collection optionsCollection = options.getOptions();
-    assertThat(optionsCollection.size(), equalTo(2));
+  public void testParseArgsSource() throws Exception {
+    String testIntputPath = sortMasterFileUtil.getTestInputPath();
+
+    String[] args = {"-s", testIntputPath};
+    CommandLine cmd = transformer.parseArgs(args);
+
+    Option[] options = cmd.getOptions();
+    MatcherAssert.assertThat(options.length, CoreMatchers.equalTo(1));
+    MatcherAssert.assertThat(options[0].getOpt(), CoreMatchers.equalTo("s"));
+    MatcherAssert.assertThat(options[0].getValue(), CoreMatchers.equalTo(testIntputPath));
   }
 
   @Test (expected = Exception.class)
   public void testTransformCommandLineArgumentsWithNoValues() throws Exception {
-    //With no arguments,
-    //Should print help and not return any sortSettings
     String[] args = {};
     Options options = transformer.getOptions();
     CommandLine commandLine = transformer.parseArgs(args);
@@ -92,8 +84,6 @@ public class TransformerTest {
 
   @Test (expected = Exception.class)
   public void testTransformCommandLineArgumentsWithHelpArgument() throws Exception {
-    //With help argument,
-    //Should print help and not return any sortSettings
     String[] args = {"-h"};
     Options options = transformer.getOptions();
     CommandLine commandLine = transformer.parseArgs(args);
@@ -104,24 +94,10 @@ public class TransformerTest {
 
   @Test (expected = Exception.class)
   public void testTransformCommandLineArgumentsWithSourceArguments() throws Exception {
-    //With empty source argument,
-    //Should not pass parsing
     String[] args = {"-s"};
     Options options = transformer.getOptions();
     CommandLine commandLine = transformer.parseArgs(args);
     transformer.transformCommandLineArguments(options, commandLine);
   }
 
-  @Test
-  public void testTransformCommandLineArgumentsWithValidSourceArguments() throws Exception {
-    //With empty source argument,
-    //Should pass parsing
-    String[] args = {"-s", "validPath"};
-    Options options = transformer.getOptions();
-    CommandLine commandLine = transformer.parseArgs(args);
-    when(sortMasterFileUtil.isValidFolder(any())).thenReturn(true);
-
-    SortSettings sortSettings = transformer.transformCommandLineArguments(options, commandLine);
-    assertThat(sortSettings.masterFolder.getName(), is("validPath"));
-  }
 }

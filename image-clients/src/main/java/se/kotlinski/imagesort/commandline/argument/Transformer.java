@@ -9,7 +9,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.kotlinski.imagesort.exception.InvalidInputFolderException;
+import se.kotlinski.imagesort.exception.InvalidArgumentsException;
 import se.kotlinski.imagesort.model.SortSettings;
 import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
@@ -44,7 +44,30 @@ public class Transformer {
     return cmd;
   }
 
-  public final Options getOptions() {
+  public final SortSettings transformCommandLineArguments(final Options options,
+                                                          final CommandLine commandLine) throws
+                                                                                         Exception {
+    SortSettings sortSettings = new SortSettings();
+    if (commandLine == null || commandLine.hasOption("h") || !commandLine.hasOption('s')) {
+      printHelp(options);
+    }
+    else if (commandLine.hasOption("s")) {
+      String sourcePath = commandLine.getOptionValue("s");
+      File folder = new File(sourcePath);
+      if (sortMasterFileUtil.isValidFolder(folder)) {
+        sortSettings.masterFolder = folder;
+        return sortSettings;
+      }
+      else {
+        throw new InvalidArgumentsException("SourcePath not valid: " + sourcePath);
+      }
+    }
+    throw new InvalidArgumentsException("Could not create sortSettings for attributes");
+  }
+
+
+
+  final Options getOptions() {
     Options options = new Options();
     Option sourceOption = new Option("s", "source", true, "Folder to 'image sort'");
     sourceOption.setType(String.class);
@@ -53,7 +76,7 @@ public class Transformer {
     return options;
   }
 
-  public void printHelp(Options options) {
+  void printHelp(Options options) {
     String helpText = "\n" +
                       "How and when do you sort and back up your images from your camera-devices?" +
                       " \n" +
@@ -95,28 +118,4 @@ public class Transformer {
     formatter.printHelp("MainRenamer", options);
   }
 
-  public final SortSettings transformCommandLineArguments(final Options options,
-                                                          final CommandLine commandLine) throws
-                                                                                         Exception {
-    SortSettings sortSettings = new SortSettings();
-    if (commandLine == null || commandLine.hasOption("h") || !commandLine.hasOption('s')) {
-      printHelp(options);
-    }
-    else if (commandLine.hasOption("s")) {
-      String sourcePath = commandLine.getOptionValue("s");
-      File folder = new File(sourcePath);
-      if (sortMasterFileUtil.isValidFolder(folder)) {
-        sortSettings.masterFolder = folder;
-        return sortSettings;
-      }
-      else {
-        throw new InvalidInputFolderException("SourcePath not valid: " + sourcePath);
-      }
-    }
-    else {
-      LOGGER.error("No source no output folder chosen");
-      printHelp(options);
-    }
-    throw new InvalidInputFolderException("Could not create sortSettings for attributes");
-  }
 }

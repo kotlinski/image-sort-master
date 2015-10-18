@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.controller.ExportCollector;
 import se.kotlinski.imagesort.controller.FileAnalyzer;
-import se.kotlinski.imagesort.exception.CouldNotCreateMasterFolderException;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.model.SortSettings;
@@ -38,12 +37,8 @@ public class CommandLineInterface {
 		try {
 			sortSettings = interpreter.transformArguments(arguments);
 		}
-		catch (CouldNotCreateMasterFolderException e) {
-			LOGGER.error("Could not create master folder");
-			System.out.println("Check your parameters...");
-			return;
-		}
 		catch (Exception e) {
+			System.out.println("Check your parameters...");
 			LOGGER.error("Invalid parameters");
 			return;
 		}

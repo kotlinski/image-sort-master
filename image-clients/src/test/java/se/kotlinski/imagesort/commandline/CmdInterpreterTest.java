@@ -22,8 +22,6 @@ public class CmdInterpreterTest {
 
   @Before
   public void setUp() throws Exception {
-
-    //Mock this up instead of running the real thing?
     sortMasterFileUtil = new SortMasterFileUtil();
     CommandLineParser parser = new GnuParser();
     HelpFormatter formatter = mock(HelpFormatter.class);
@@ -35,13 +33,13 @@ public class CmdInterpreterTest {
   @Test (expected = Exception.class)
   public void testGetFolderInputInvalid() throws Exception {
     String[] arguments = new String[]{"programName", "someCommand", "-s", ""};
-    cmdInterpreter.getFolderIO(arguments);
+    cmdInterpreter.getSortSettings(arguments);
   }
 
   @Test (expected = Exception.class)
   public void testGetFolderInputNull() throws Exception {
     String[] arguments = new String[]{"programName", "someCommand", "-s", null};
-    cmdInterpreter.getFolderIO(arguments);
+    cmdInterpreter.getSortSettings(arguments);
   }
 
 }
