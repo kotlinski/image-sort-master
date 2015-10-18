@@ -14,13 +14,13 @@ findbugs {
 
 buildscript {
   repositories {
-	mavenCentral()
-	jcenter()
+    mavenCentral()
+    jcenter()
   }
 
   dependencies {
-	classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
-	classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.0.2'
+    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
+    classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.0.2'
   }
 }
 
@@ -29,15 +29,15 @@ jacoco {
 }
 jacocoTestReport {
   reports {
-	xml.enabled true
-	csv.enabled true
-	html.destination "${buildDir}/jacocoHtml"
+    xml.enabled true
+    csv.enabled true
+    html.destination "${buildDir}/jacocoHtml"
   }
 }
 
 jar {
   manifest {
-	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
+    attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
   }
 }
 
@@ -63,6 +63,13 @@ tasks.withType(Test) {
   reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
+tasks.withType(FindBugs) {
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
+}
+
 dependencies {
   compile project(':image-sorter')
   compile 'com.adobe.xmp:xmpcore:5.1.1'
@@ -70,13 +77,14 @@ dependencies {
   compile 'commons-io:commons-io:20030203.000550'
   compile 'com.drewnoakes:metadata-extractor:2.+'
   compile 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
-  compile 'com.google.inject:guice:3.0'
+  compile 'com.google.inject:guice:4.0'
+
+
+  testCompile 'org.mockito:mockito-all:1.10.8'
+  integrationTestCompile 'org.mockito:mockito-all:1.10.8'
 
   testCompile 'junit:junit:4.11'
-  testCompile 'org.mockito:mockito-all:1.10.8'
-
   integrationTestCompile 'junit:junit:4.11'
-  integrationTestCompile 'org.mockito:mockito-all:1.10.8'
 }
 
 

@@ -23,11 +23,14 @@ public class FileDateUniqueGenerator {
     catch (CouldNotGenerateIDException e) {
       LOGGER.error("Could not generate id for file: " + file, e);
     }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
     // If no image file
     return file.getAbsolutePath();
   }
 
-  private String generateImageMD5(final File file) throws CouldNotGenerateIDException {
+  private String generateImageMD5(final File file) throws Exception {
     try {
       MessageDigest messageDigest = MessageDigest.getInstance("Md5");
       FileInputStream fis = new FileInputStream(file);

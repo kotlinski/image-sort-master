@@ -36,7 +36,7 @@ public class FileAnalyzerTest {
 
     sortSettings = new SortSettings();
     File file = new File(sortMasterFileUtil.getTestInputPath());
-    ArrayList<File> inputFolders = new ArrayList<>();
+    ArrayList<File> inputFolders = new ArrayList<File>();
     inputFolders.add(file);
     sortSettings.inputFolders = inputFolders;
     sortSettings.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
@@ -96,7 +96,7 @@ public class FileAnalyzerTest {
     }
 
     sortSettings.masterFolder = new File("SomeInvalidFilePath");
-    ArrayList<File> inputFolders = new ArrayList<>();
+    ArrayList<File> inputFolders = new ArrayList<File>();
     inputFolders.add(sortSettings.masterFolder);
     sortSettings.inputFolders = inputFolders;
     setFileAnalyzer(new FileAnalyzer(sortMasterFileUtil,
@@ -115,7 +115,7 @@ public class FileAnalyzerTest {
     }
 
     sortSettings.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
-    inputFolders = new ArrayList<>();
+    inputFolders = new ArrayList<File>();
     inputFolders.add(sortSettings.masterFolder);
     sortSettings.inputFolders = inputFolders;
     setFileAnalyzer(new FileAnalyzer(sortMasterFileUtil,

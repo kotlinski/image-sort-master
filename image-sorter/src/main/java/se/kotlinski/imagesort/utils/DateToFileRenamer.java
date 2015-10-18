@@ -34,7 +34,7 @@ public class DateToFileRenamer {
     return format.format(calendar.getTime());
   }
 
-  public String formatFileDate(Date date, Calendar calendar) throws CouldNotParseDateException {
+  public String formatFileDate(Date date, Calendar calendar) throws Exception {
     try {
       calendar.setTime(date);
     }

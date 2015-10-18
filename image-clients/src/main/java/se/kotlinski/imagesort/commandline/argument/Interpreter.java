@@ -4,8 +4,7 @@ import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.kotlinski.imagesort.exception.InvalidFolderArgumentsException;
-import se.kotlinski.imagesort.exception.InvalidInputFolderException;
+import se.kotlinski.imagesort.exception.InvalidArgumentsException;
 import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
 import se.kotlinski.imagesort.model.SortSettings;
 
@@ -23,9 +22,9 @@ public class Interpreter {
     SortSettings sortSettings = null;
 
     try {
-      sortSettings = getFolderIO(arguments);
+      sortSettings = getSortSettings(arguments);
     }
-    catch (InvalidFolderArgumentsException e) {
+    catch (InvalidArgumentsException e) {
       LOGGER.error("Could not create input/output-folders, invalid arguments", e);
       throw new Exception("Invalid arguments");
     }
@@ -43,7 +42,7 @@ public class Interpreter {
   }
 
 
-  public final SortSettings getFolderIO(final String[] arguments) throws
+  public final SortSettings getSortSettings(final String[] arguments) throws
                                                                   Exception {
     CommandLine commandLine;
     try {
@@ -60,10 +59,10 @@ public class Interpreter {
                                                                commandLine);
       System.out.println(sortSettings.toString());
     }
-    catch (InvalidInputFolderException e) {
+    catch (InvalidArgumentsException e) {
       System.out.println("No input folder found, try again");
       LOGGER.error("No input folder found, try again", e);
-      throw new InvalidFolderArgumentsException("Invalid folder input parameters");
+      throw new InvalidArgumentsException("Invalid folder input parameters");
     }
     catch (InvalidMasterFolderException e) {
       LOGGER.error("Could not create output folder", e);

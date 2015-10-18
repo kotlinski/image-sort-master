@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FileAnalyzer {
-  private static final Logger logger = LogManager.getLogger(FileAnalyzer.class);
+  private static final Logger LOGGER = LogManager.getLogger(FileAnalyzer.class);
   private final SortMasterFileUtil sortMasterFileUtil;
   private final Calendar calendar;
   private final FileDateUniqueGenerator fileDateUniqueGenerator;
@@ -51,7 +51,7 @@ public class FileAnalyzer {
   }
 
   public ExportFileDataMap createParsedFileMap(final SortSettings sortSettings) throws
-                                                                                InvalidInputFolders {
+                                                                                Exception {
     if (sortSettings == null ||
         sortSettings.masterFolder == null ||
         sortSettings.inputFolders == null) {
@@ -92,8 +92,11 @@ public class FileAnalyzer {
         }
         catch (CouldNotParseDateException e) {
           System.out.println("Could not parse date for file: " + file);
-          logger.error("Could not parse date for file: " + file, e);
+          LOGGER.error("Could not parse date for file: " + file, e);
           System.out.println("ERRRRR, cant get date for file: " + file.getName());
+        }
+        catch (Exception e) {
+          e.printStackTrace();
         }
       }
     }
@@ -139,7 +142,10 @@ public class FileAnalyzer {
     }
     catch (CouldNotParseDateException e) {
       System.out.println("Could not parse when " + file.getAbsoluteFile() + " was taken");
-      logger.error(e);
+      LOGGER.error(e);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
     }
     return new ParsedFileData(file,
                               parentFolder,

@@ -6,7 +6,6 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.commandline.CommandLineInterface;
 import se.kotlinski.imagesort.commandline.FilePrinter;

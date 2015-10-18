@@ -62,6 +62,12 @@ tasks.withType(Test) {
   reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
+tasks.withType(FindBugs) {
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
+}
 
 dependencies {
   compile 'com.adobe.xmp:xmpcore:5.1.1'
@@ -70,7 +76,8 @@ dependencies {
   compile 'com.drewnoakes:metadata-extractor:2.+'
   compile 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
   compile 'com.googlecode.mp4parser:isoparser:1.0-RC-27'
-  compile 'com.google.inject:guice:3.0'
+  compile 'com.google.inject:guice:4.0'
+
 
   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.1'
   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.1'

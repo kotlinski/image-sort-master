@@ -20,7 +20,7 @@ public class FileDateInterpreter {
 
   private static final Logger LOGGER = LogManager.getLogger(FileDateInterpreter.class);
 
-  Date getImageDate(File file) throws CouldNotParseDateException {
+  Date getImageDate(File file) throws Exception {
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
       ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType
@@ -43,12 +43,15 @@ public class FileDateInterpreter {
     }
   }
 
-  public Date getDate(final File file) throws CouldNotParseDateException {
+  public Date getDate(final File file) throws Exception {
     try {
       return getImageDate(file);
     }
     catch (CouldNotParseDateException e) {
       LOGGER.error("File is not an image with meta data, " + file, e);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
     }
     try {
       return getVideoDate(file);
@@ -56,10 +59,13 @@ public class FileDateInterpreter {
     catch (CouldNotParseDateException e) {
       LOGGER.error("File is not an video with meta data, " + file, e);
     }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
     throw new CouldNotParseDateException("Could not Parse: " + file);
   }
 
-  private Date getVideoDate(File videoFile) throws CouldNotParseDateException {
+  private Date getVideoDate(File videoFile) throws Exception {
     try {
       IsoFile isoFile = new IsoFile(videoFile.getAbsolutePath());
       MovieBox movieBox = isoFile.getMovieBox();
