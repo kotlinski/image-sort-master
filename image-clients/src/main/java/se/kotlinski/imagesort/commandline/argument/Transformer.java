@@ -31,7 +31,7 @@ public class Transformer {
     this.sortMasterFileUtil = sortMasterFileUtil;
   }
 
-  public final CommandLine parseArgs(final String[] arguments) throws Exception {
+  public CommandLine parseArgs(final String[] arguments) throws Exception {
     CommandLine cmd;
     try {
       cmd = parser.parse(getOptions(), arguments);
@@ -44,12 +44,11 @@ public class Transformer {
     return cmd;
   }
 
-  public final SortSettings transformCommandLineArguments(final Options options,
-                                                          final CommandLine commandLine) throws
+  public SortSettings transformCommandLineArguments(final CommandLine commandLine) throws
                                                                                          Exception {
     SortSettings sortSettings = new SortSettings();
     if (commandLine == null || commandLine.hasOption("h") || !commandLine.hasOption('s')) {
-      printHelp(options);
+      printHelp(getOptions());
     }
     else if (commandLine.hasOption("s")) {
       String sourcePath = commandLine.getOptionValue("s");
