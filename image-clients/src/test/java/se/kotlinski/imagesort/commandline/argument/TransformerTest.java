@@ -4,20 +4,14 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.commandline.argument.Transformer;
-import se.kotlinski.imagesort.model.SortSettings;
 import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;

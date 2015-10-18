@@ -5,7 +5,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.InvalidArgumentsException;
-import se.kotlinski.imagesort.exception.InvalidMasterFolderException;
 import se.kotlinski.imagesort.model.SortSettings;
 
 public class Interpreter {
@@ -18,32 +17,14 @@ public class Interpreter {
     this.transformer = transformer;
   }
 
-  public SortSettings transformArguments(final String[] arguments) throws Exception {
-    SortSettings sortSettings = null;
+  public final SortSettings transformArguments(final String[] arguments) throws
+      Exception {
+    CommandLine commandLine = getCommandLine(arguments);
 
-    try {
-      sortSettings = getSortSettings(arguments);
-    }
-    catch (InvalidArgumentsException e) {
-      LOGGER.error("Could not create input/output-folders, invalid arguments", e);
-      throw new Exception("Invalid arguments");
-    }
-    catch (InvalidMasterFolderException e) {
-      LOGGER.error(e);
-      boolean masterFolderCreated = e.getMasterFolder() == null;
-      if (masterFolderCreated) {
-        transformArguments(arguments);
-      }
-      else {
-        throw new Exception("Could not create master folder, " + e.getMasterFolder());
-      }
-    }
-    return sortSettings;
+    return getSortSettings(commandLine);
   }
 
-
-  public final SortSettings getSortSettings(final String[] arguments) throws
-                                                                  Exception {
+  private CommandLine getCommandLine(final String[] arguments) throws Exception {
     CommandLine commandLine;
     try {
       commandLine = transformer.parseArgs(arguments);
@@ -52,24 +33,19 @@ public class Interpreter {
       LOGGER.error("Could not parse arguments", e);
       throw e;
     }
+    return commandLine;
+  }
 
-    SortSettings sortSettings;
+  private SortSettings getSortSettings(final CommandLine commandLine) throws Exception {
     try {
-      sortSettings = transformer.transformCommandLineArguments(transformer.getOptions(),
-                                                               commandLine);
+      SortSettings sortSettings = transformer.transformCommandLineArguments(commandLine);
       System.out.println(sortSettings.toString());
+      return sortSettings;
     }
     catch (InvalidArgumentsException e) {
       System.out.println("No input folder found, try again");
       LOGGER.error("No input folder found, try again", e);
       throw new InvalidArgumentsException("Invalid folder input parameters");
     }
-    catch (InvalidMasterFolderException e) {
-      LOGGER.error("Could not create output folder", e);
-      System.out.println("No output folder found");
-      throw e;
-    }
-    return sortSettings;
   }
-
 }
