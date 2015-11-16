@@ -5,7 +5,6 @@ import se.kotlinski.imagesort.data.ExportFileData;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -17,9 +16,9 @@ public class FileGroup {
   private final String id;
   private final Set<ExportFileData> exportFileDataList = new HashSet<>();
   //not yet used variable.
-  //private String fileGroupFlavour;
-  private ArrayList<ExportFileData> arrayOfExportData;
-  private String flavour;
+  // private String fileGroupFlavour;
+  // private ArrayList<ExportFileData> arrayOfExportData;
+  // private String flavour;
   private final DateToFileRenamer dateToFileRenamer;
   private final Date dateTaken;
 
@@ -100,15 +99,6 @@ public class FileGroup {
   public int hashCode() {
     return id.hashCode();
   }
-
-  public ArrayList<ExportFileData> getArrayOfExportData() {
-    return arrayOfExportData;
-  }
-
-  public String getFlavour() {
-    return flavour;
-  }
-
 
   private String cleanUpYearFolders(final Date dateTaken, final String flavour) {
     String flavourWithFileSeparator = File.separator + flavour;

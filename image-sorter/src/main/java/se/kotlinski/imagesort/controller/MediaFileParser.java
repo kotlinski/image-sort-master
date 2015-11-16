@@ -16,15 +16,14 @@ import se.kotlinski.imagesort.utils.FileDescriptor;
 import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileAnalyzer {
-  private static final Logger LOGGER = LogManager.getLogger(FileAnalyzer.class);
+public class MediaFileParser {
+  private static final Logger LOGGER = LogManager.getLogger(MediaFileParser.class);
   private final SortMasterFileUtil sortMasterFileUtil;
   private final Calendar calendar;
   private final FileDateUniqueGenerator fileDateUniqueGenerator;
@@ -34,13 +33,13 @@ public class FileAnalyzer {
   private final ExportForecaster exportForecaster;
 
   @Inject
-  public FileAnalyzer(final SortMasterFileUtil sortMasterFileUtil,
-                      final Calendar calendar,
-                      final FileDateUniqueGenerator fileDateUniqueGenerator,
-                      final FileDateInterpreter fileDateInterpreter,
-                      final FileDescriptor fileDescriptor,
-                      final DateToFileRenamer dateToFileRenamer,
-                      final ExportForecaster exportForecaster) {
+  public MediaFileParser(final SortMasterFileUtil sortMasterFileUtil,
+                         final Calendar calendar,
+                         final FileDateUniqueGenerator fileDateUniqueGenerator,
+                         final FileDateInterpreter fileDateInterpreter,
+                         final FileDescriptor fileDescriptor,
+                         final DateToFileRenamer dateToFileRenamer,
+                         final ExportForecaster exportForecaster) {
     this.sortMasterFileUtil = sortMasterFileUtil;
     this.calendar = calendar;
     this.fileDateUniqueGenerator = fileDateUniqueGenerator;
@@ -50,14 +49,13 @@ public class FileAnalyzer {
     this.exportForecaster = exportForecaster;
   }
 
-  public ExportFileDataMap createParsedFileMap(final SortSettings sortSettings) throws
-                                                                                Exception {
+  public ExportFileDataMap parseSettingsToExportData(final SortSettings sortSettings) throws
+      Exception {
     if (sortSettings == null ||
-        sortSettings.masterFolder == null ||
-        sortSettings.inputFolders == null) {
+        sortSettings.masterFolder == null) {
       throw new InvalidInputFolders();
     }
-    if (isValidInputFolders(sortSettings.inputFolders)) {
+    if (sortMasterFileUtil.isValidFolder(sortSettings.masterFolder)) {
       return analyzeFiles(sortSettings);
     }
     else {
@@ -65,19 +63,11 @@ public class FileAnalyzer {
     }
   }
 
-  private boolean isValidInputFolders(final ArrayList<File> inputFolders) {
-    for (File inputFolder : inputFolders) {
-      if (!sortMasterFileUtil.isValidFolder(inputFolder)) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   private ExportFileDataMap analyzeFiles(final SortSettings sortSettings) {
     ExportFileDataMap exportFileDataMap = new ExportFileDataMap(dateToFileRenamer);
 
-    Map<File, List<File>> filesFromFolder = getFilesInRootFolders(sortSettings.inputFolders);
+    Map<File, List<File>> filesFromFolder = getFilesInRootFolders(sortSettings.masterFolder);
 
     for (Map.Entry<File, List<File>> fileListEntry : filesFromFolder.entrySet()) {
       File rootFolder = fileListEntry.getKey();
@@ -159,12 +149,11 @@ public class FileAnalyzer {
   }
 
 
-  private Map<File, List<File>> getFilesInRootFolders(final ArrayList<File> rootFolders) {
+  private Map<File, List<File>> getFilesInRootFolders(final File rootFolder) {
     Map<File, List<File>> filesFromFolder = new HashMap<>();
-    for (File rootFolder : rootFolders) {
-      List<File> files = sortMasterFileUtil.readAllFilesInFolder(rootFolder);
-      filesFromFolder.put(rootFolder, files);
-    }
+    List<File> files = sortMasterFileUtil.readAllFilesInFolder(rootFolder);
+    filesFromFolder.put(rootFolder, files);
+
     return filesFromFolder;
   }
 

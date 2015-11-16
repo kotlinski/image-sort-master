@@ -1,5 +1,4 @@
-package se.kotlinski.imagesort.controller;
-
+package se.kotlinski.imagesort.commandline;
 
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -7,9 +6,10 @@ import org.apache.commons.cli.HelpFormatter;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
-import se.kotlinski.imagesort.commandline.CommandLineInterface;
-import se.kotlinski.imagesort.commandline.FilePrinter;
 import se.kotlinski.imagesort.commandline.argument.Transformer;
+import se.kotlinski.imagesort.controller.ExportCollector;
+import se.kotlinski.imagesort.controller.ExportForecaster;
+import se.kotlinski.imagesort.controller.MediaFileParser;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.FileDateUniqueGenerator;
@@ -19,15 +19,15 @@ import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-public class CommandLineInterfaceTest {
+public class CommandLineInterfaceIntegrationTest {
   private CommandLineInterface commandLineInterface;
   private SortMasterFileUtil sortMasterFileUtil;
   private Interpreter interpreter;
+  FilePrinter filePrinter;
 
   @Before
   public void setUp() throws Exception {
@@ -39,14 +39,14 @@ public class CommandLineInterfaceTest {
     FileDescriptor fileDescriptor = new FileDescriptor();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
     ExportForecaster exportForecaster = new ExportForecaster(dateToFileRenamer);
-    FileAnalyzer fileAnalyzer = spy(new FileAnalyzer(sortMasterFileUtil,
-                                                     calendar,
-                                                     fileDateUniqueGenerator,
-                                                     fileDateInterpreter,
-                                                     fileDescriptor,
-                                                     dateToFileRenamer,
-                                                     exportForecaster));
-    FilePrinter filePrinter = spy(new FilePrinter());
+    MediaFileParser mediaFileParser = spy(new MediaFileParser(sortMasterFileUtil,
+                                                              calendar,
+                                                              fileDateUniqueGenerator,
+                                                              fileDateInterpreter,
+                                                              fileDescriptor,
+                                                              dateToFileRenamer,
+                                                              exportForecaster));
+    filePrinter = spy(new FilePrinter());
     ExportCollector exportCollector = mock(ExportCollector.class);
 
     HelpFormatter formatter = new HelpFormatter();
@@ -55,21 +55,22 @@ public class CommandLineInterfaceTest {
     Transformer transformer = new Transformer(formatter, parser, fileUtil);
     interpreter = spy(new Interpreter(transformer));
 
-    commandLineInterface = new CommandLineInterface(fileAnalyzer,
+    commandLineInterface = new CommandLineInterface(mediaFileParser,
                                                     filePrinter,
                                                     exportCollector,
                                                     interpreter);
   }
 
   @Test
-  public void testStartCmd() throws Exception {
-    String[] arguments = new String[]{"programName", "someCommand", "-s", sortMasterFileUtil
-        .getTestInputPath()};
+  public void testRunCommandLine() throws Exception {
+    String[] arguments = new String[]{
+        "-s",
+        sortMasterFileUtil.getTestInputPath()
+    };
 
     commandLineInterface.runCommandLine(arguments);
-    verify(interpreter).transformArguments(arguments);
 
-//    Mockito.verify(filePrinter).printFolderStructure(any(ExportFileDataMap.class));
+    verify(filePrinter).printTotalNumberOfDuplicates(0,8,0);
+
   }
-
 }

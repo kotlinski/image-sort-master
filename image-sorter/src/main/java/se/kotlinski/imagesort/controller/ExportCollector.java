@@ -31,7 +31,7 @@ public class ExportCollector {
 
     Set<String> sortedExportFolders = new TreeSet<>();
     for (FileGroup fileGroup : exportFileDataMap.values()) {
-      sortedExportFolders.add(fileGroup.getFlavour());
+    //  sortedExportFolders.add(fileGroup.getFlavour());
     }
     return sortedExportFolders;
   }
@@ -47,9 +47,9 @@ public class ExportCollector {
                                                final String fileId) {
     for (String fileId2 : exportFileDataMap.keySet()) {
       if (!fileId2.equals(fileId)) {
-        List<ExportFileData> exportFileData1 = exportFileDataMap.getFileNamesForId(fileId);
-        List<ExportFileData> exportFileData2 = exportFileDataMap.getFileNamesForId(fileId2);
-        tagDuplicateFileNames(exportFileData1, exportFileData2);
+     //   List<ExportFileData> exportFileData1 = exportFileDataMap.getFileNamesForId(fileId);
+     //   List<ExportFileData> exportFileData2 = exportFileDataMap.getFileNamesForId(fileId2);
+     //   tagDuplicateFileNames(exportFileData1, exportFileData2);
       }
     }
       //TODO continue here, search if there is another unique id with same file-name

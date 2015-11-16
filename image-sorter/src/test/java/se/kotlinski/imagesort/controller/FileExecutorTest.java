@@ -17,7 +17,6 @@ import se.kotlinski.imagesort.utils.SortMasterFileUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class FileExecutorTest {
 
   private static final Logger LOGGER = LogManager.getLogger(FileExecutorTest.class);
-  private FileAnalyzer fileAnalyzer;
+  private MediaFileParser mediaFileParser;
   private SortSettings sortSettings;
   private FileDateUniqueGenerator fileDateUniqueGenerator;
   private FileDateInterpreter fileDateInterpreter;
@@ -44,9 +43,6 @@ public class FileExecutorTest {
 
     sortSettings = new SortSettings();
     File file = new File(sortMasterFileUtil.getTestInputPath());
-    ArrayList<File> inputFolders = new ArrayList<File>();
-    inputFolders.add(file);
-    sortSettings.inputFolders = inputFolders;
     sortSettings.masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
     Calendar calendar = new GregorianCalendar();
     ExportForecaster exportForecaster = mock(ExportForecaster.class);
@@ -54,13 +50,13 @@ public class FileExecutorTest {
     fileDateInterpreter = mock(FileDateInterpreter.class);
     fileDescriptor = mock(FileDescriptor.class);
     dateToFileRenamer = mock(DateToFileRenamer.class);
-    fileAnalyzer = new FileAnalyzer(sortMasterFileUtil,
-                                    calendar,
-                                    fileDateUniqueGenerator,
-                                    fileDateInterpreter,
-                                    fileDescriptor,
-                                    dateToFileRenamer,
-                                    exportForecaster);
+    mediaFileParser = new MediaFileParser(sortMasterFileUtil,
+                                          calendar,
+                                          fileDateUniqueGenerator,
+                                          fileDateInterpreter,
+                                          fileDescriptor,
+                                          dateToFileRenamer,
+                                          exportForecaster);
 
     File outputFolder = new File(new SortMasterFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
@@ -76,7 +72,7 @@ public class FileExecutorTest {
   public void testCopyFiles() throws Exception {
     FileExecutor fileExecutor = spy(new FileExecutor());
     doThrow(new IOException()).when(fileExecutor).createNewFile(any(File.class), any(String.class));
-    ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(sortSettings);
+    ExportFileDataMap exportFileDataMap = mediaFileParser.parseSettingsToExportData(sortSettings);
     FileCopyReport fileCopyReport = fileExecutor.copyFiles(exportFileDataMap, sortSettings);
     assertThat(fileCopyReport, is(nullValue()));
 /*    Assert.assertEquals(0, fileCopyReport.getNumberOfFilesCopied());
@@ -84,7 +80,7 @@ public class FileExecutorTest {
 
     File outputFolder = new File(new SortMasterFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
-    ExportFileDataMap exportFileDataMap2 = fileAnalyzer.createParsedFileMap(sortSettings);
+    ExportFileDataMap exportFileDataMap2 = mediaFileParser.parseSettingsToExportData(sortSettings);
     fileExecutor.copyFiles(exportFileDataMap2, sortSettings);
     String[] list = outputFolder.list();
     for (String file : list) {
@@ -100,7 +96,7 @@ public class FileExecutorTest {
     File outputFolder = new File(new SortMasterFileUtil().getTestOutputPath());
     deleteFolderContent(outputFolder);
 
-    ExportFileDataMap exportFileDataMap = fileAnalyzer.createParsedFileMap(sortSettings);
+    ExportFileDataMap exportFileDataMap = mediaFileParser.parseSettingsToExportData(sortSettings);
     fileExecutor.copyFiles(exportFileDataMap, sortSettings);
     String[] list = outputFolder.list();
     for (String file : list) {

@@ -24,8 +24,6 @@ public class SortSettingsTest {
 	public void testToString() throws Exception {
 		String folderIOString = getSortSettings().toString();
 		assertEquals("To String with null values", "Folders not set", folderIOString);
-		getSortSettings().inputFolders = new ArrayList<File>();
-		getSortSettings().inputFolders.add(new File(sortMasterFileUtil.getTestInputPath()));
 		getSortSettings().masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
 
 		String filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "inputImages";

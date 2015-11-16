@@ -25,7 +25,7 @@ public class FilePrinter {
     System.out.println("Total number of parsed files: " + totalFiles);
   }
 
-  public final void printTotalNumberOfDuplicates(final int totalFiles,
+  public void printTotalNumberOfDuplicates(final int totalFiles,
                                            final int unique,
                                            final int removable) {
 

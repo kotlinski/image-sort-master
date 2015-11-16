@@ -67,9 +67,8 @@ public class ExportFileDataMap {
   public List<ExportFileData> getAllFiles() {
     ArrayList<ExportFileData> parsedFileDatas = new ArrayList<>();
     for (FileGroup fileGroup : fileIdMap.values()) {
-      ArrayList<ExportFileData> exportFileDataFromFolder = fileGroup.getArrayOfExportData();
-      parsedFileDatas.addAll(exportFileDataFromFolder);
-
+      //ArrayList<ExportFileData> exportFileDataFromFolder = fileGroup.getArrayOfExportData();
+      //parsedFileDatas.addAll(exportFileDataFromFolder);
     }
     return parsedFileDatas;
   }
@@ -79,10 +78,10 @@ public class ExportFileDataMap {
 
     for (Map.Entry<String, ArrayList<ExportFileData>> stringArrayListEntry : groupsOfDuplicates.entrySet()) {
       String fileID = stringArrayListEntry.getKey();
-      ArrayList<ExportFileData> exportFileData = fileIdMap.get(fileID).getArrayOfExportData();
-      if (exportFileData.size() > 1) {
-        groupsOfDuplicates.put(fileID, exportFileData);
-      }
+      //ArrayList<ExportFileData> exportFileData = fileIdMap.get(fileID).getArrayOfExportData();
+      //if (exportFileData.size() > 1) {
+        //groupsOfDuplicates.put(fileID, exportFileData);
+      //}
     }
 
     return groupsOfDuplicates;
@@ -102,9 +101,9 @@ public class ExportFileDataMap {
     return numberOfRemovableFiles;
   }
 
-  public List<ExportFileData> getFileNamesForId(final String fileId) {
+/*  public List<ExportFileData> getFileNamesForId(final String fileId) {
     return fileIdMap.get(fileId).getArrayOfExportData();
-  }
+  }*/
 
   public Set<String> keySet() {
     return fileIdMap.keySet();
