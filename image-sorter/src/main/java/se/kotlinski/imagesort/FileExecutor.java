@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.controller;
+package se.kotlinski.imagesort;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;

@@ -2,21 +2,21 @@ package se.kotlinski.imagesort.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.utils.SortMasterFileUtil;
+import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SortSettingsTest {
 
 	private SortSettings sortSettings;
-  private SortMasterFileUtil sortMasterFileUtil;
+  private MediaFileTestUtil mediaFileTestUtil;
 
   @Before
 	public void setUp() throws Exception {
-    sortMasterFileUtil = new SortMasterFileUtil();
+	  mediaFileTestUtil = new MediaFileTestUtil();
     setSortSettings(new SortSettings());
   }
 
@@ -24,7 +24,7 @@ public class SortSettingsTest {
 	public void testToString() throws Exception {
 		String folderIOString = getSortSettings().toString();
 		assertEquals("To String with null values", "Folders not set", folderIOString);
-		getSortSettings().masterFolder = new File(sortMasterFileUtil.getTestOutputPath());
+		getSortSettings().masterFolder = new File(mediaFileTestUtil.getTestOutputPath());
 
 		String filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "inputImages";
 		boolean contains = getSortSettings().toString().contains(filePart);

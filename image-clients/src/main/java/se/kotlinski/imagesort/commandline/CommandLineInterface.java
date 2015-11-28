@@ -3,13 +3,18 @@ package se.kotlinski.imagesort.commandline;
 import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
-import se.kotlinski.imagesort.controller.ExportCollector;
-import se.kotlinski.imagesort.controller.MediaFileParser;
+import se.kotlinski.imagesort.ExportCollector;
+import se.kotlinski.imagesort.data.MediaDataFolder;
+import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.mapper.ExportFileDataMap;
 import se.kotlinski.imagesort.model.SortSettings;
 
+import java.io.File;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class CommandLineInterface {
@@ -43,8 +48,9 @@ public class CommandLineInterface {
       return;
     }
 
+    Map<String, List<File>> mediaFilesInFolder;
     try {
-      exportFileDataMap = this.mediaFileParser.parseSettingsToExportData(sortSettings);
+      mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(sortSettings.masterFolder);
     }
     catch (InvalidInputFolders invalidInputFolders) {
       System.out.println("Invalid input folders, try again");
@@ -56,18 +62,44 @@ public class CommandLineInterface {
       return;
     }
 
+
+    MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator();
+    MediaDataFolder mediaDataBeforeExecution;
+    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
+
+    //TODO: 27/11
+
+    // Print size of FilesByMediaContent before running.
+    // + Duplicates for each file.
+
+    // For each (Media?) File.
+    //   Calculate their new destinations and decide where they will end up.
+
+    // Calculate a new "Map-tree" Based on exports.
+    //    Each key is : "2014<fileseparator>05<fileseparator>filename followed by a file-list
+
+    // Run Move/delete for each export with tracking on each operation.
+
+
+    // ReRun groupFilesByMediaContent and Print size of FilesByMediaContent after running move/delete.
+    // + Duplicates for each file.
+
+
+/////////////////////
+
+
     //Print all images and videos read from inputFolders + master folder
-    filePrinter.printTotalNumberOfFiles(exportFileDataMap.totalNumberOfFiles());
+    //filePrinter.printTotalNumberOfFiles(exportFileDataMap.totalNumberOfFiles());
 
     //Some files may be the same, but with different flavours
-    exportCollector.tagUniqueFilesWithSameName(exportFileDataMap);
+    // exportCollector.tagUniqueFilesWithSameName(exportFileDataMap);
 
-    printExportFolders(exportFileDataMap);
+//    printExportFolders(exportFileDataMap);
 
-    filePrinter.printTotalNumberOfDuplicates(exportFileDataMap.totalNumberOfFiles(),
+   /* filePrinter.printTotalNumberOfDuplicates(exportFileDataMap.totalNumberOfFiles(),
                                              exportFileDataMap.getNumberOfUniqueImages(),
                                              exportFileDataMap.getNumberOfRemovableFiles());
-
+*/
   }
 
   private void printExportFolders(final ExportFileDataMap exportFileDataMap) {

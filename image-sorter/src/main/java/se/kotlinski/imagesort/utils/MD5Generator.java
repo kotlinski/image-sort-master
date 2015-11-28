@@ -13,20 +13,19 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
-public class FileDateUniqueGenerator {
-  private static final Logger LOGGER = LogManager.getLogger(FileDateUniqueGenerator.class);
+public class MD5Generator {
+  private static final Logger LOGGER = LogManager.getLogger(MD5Generator.class);
 
   public String generateMd5(final File file) {
     try {
       return generateImageMD5(file);
     }
-    catch (CouldNotGenerateIDException e) {
-      LOGGER.error("Could not generate id for file: " + file, e);
-    }
     catch (Exception e) {
+      LOGGER.error("Could not generate id for file: " + file, e);
       e.printStackTrace();
     }
-    // If no image file
+
+    // Other files (Video)
     return file.getAbsolutePath();
   }
 
