@@ -7,7 +7,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.utils.SortMasterFileUtil;
+import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.util.Collection;
 
@@ -21,15 +21,15 @@ public class TransformerTest {
 
   private Transformer transformer;
   private HelpFormatter formatter;
-  private SortMasterFileUtil sortMasterFileUtil;
+  private MediaFileUtil mediaFileUtil;
   private CommandLineParser parser;
 
   @Before
   public void setUp() throws Exception {
-    sortMasterFileUtil = spy(new SortMasterFileUtil());
+    mediaFileUtil = spy(new MediaFileUtil());
     parser = mock(GnuParser.class);
     formatter = spy(new HelpFormatter());
-    transformer = spy(new Transformer(formatter, parser, sortMasterFileUtil));
+    transformer = spy(new Transformer(formatter, parser, mediaFileUtil));
   }
 
   @Test

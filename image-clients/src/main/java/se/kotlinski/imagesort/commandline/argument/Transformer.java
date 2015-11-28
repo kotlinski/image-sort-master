@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.InvalidArgumentsException;
 import se.kotlinski.imagesort.model.SortSettings;
-import se.kotlinski.imagesort.utils.SortMasterFileUtil;
+import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
 
@@ -20,15 +20,15 @@ public class Transformer {
   private static final Logger LOGGER = LogManager.getLogger(Transformer.class);
   private final HelpFormatter formatter;
   private final CommandLineParser parser;
-  private final SortMasterFileUtil sortMasterFileUtil;
+  private final MediaFileUtil mediaFileUtil;
 
   @Inject
   public Transformer(final HelpFormatter formatter,
                      final CommandLineParser parser,
-                     final SortMasterFileUtil sortMasterFileUtil) {
+                     final MediaFileUtil mediaFileUtil) {
     this.formatter = formatter;
     this.parser = parser;
-    this.sortMasterFileUtil = sortMasterFileUtil;
+    this.mediaFileUtil = mediaFileUtil;
   }
 
   public CommandLine parseArgs(final String[] arguments) throws Exception {
@@ -53,7 +53,7 @@ public class Transformer {
     else if (commandLine.hasOption("s")) {
       String sourcePath = commandLine.getOptionValue("s");
       File folder = new File(sourcePath);
-      if (sortMasterFileUtil.isValidFolder(folder)) {
+      if (mediaFileUtil.isValidFolder(folder)) {
         sortSettings.masterFolder = folder;
         return sortSettings;
       }

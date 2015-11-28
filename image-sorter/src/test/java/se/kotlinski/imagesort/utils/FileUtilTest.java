@@ -11,27 +11,29 @@ import static org.mockito.Mockito.when;
 
 public class FileUtilTest {
 
-  private SortMasterFileUtil sortMasterFileUtil;
+  private MediaFileUtil mediaFileUtil;
+  private MediaFileTestUtil mediaFileTestUtil;
 
   @Before
   public void setUp() throws Exception {
-    sortMasterFileUtil = new SortMasterFileUtil();
+    mediaFileUtil = new MediaFileUtil();
+    mediaFileTestUtil = new MediaFileTestUtil();
   }
 
   @Test
   public void testIsValidFolder() throws Exception {
-    Assert.assertFalse(sortMasterFileUtil.isValidFolder(new File("invalid path")));
+    Assert.assertFalse(mediaFileUtil.isValidFolder(new File("invalid path")));
   }
 
   @Test
   public void testPathBuild() throws Exception {
-    SortMasterFileUtil fileUtilSpy = spy(new SortMasterFileUtil());
+    MediaFileUtil fileUtilSpy = spy(new MediaFileUtil());
     when(fileUtilSpy.getSystemPath()).thenReturn("system.path" + File.separator);
     Assert.assertEquals("system.path" +
                         File.separator +
                         "image-sorter" + File.separator + "src" + File.separator + "test" +
                         File.separator + "resources" + File.separator + "inputImages",
-                        fileUtilSpy.getTestInputPath());
+                        mediaFileTestUtil.getTestInputPath());
 
     when(fileUtilSpy.getSystemPath()).thenReturn("system.path" +
                                                  File.separator +
@@ -41,6 +43,6 @@ public class FileUtilTest {
                         File.separator +
                         "image-sorter" + File.separator + "src" + File.separator + "test" +
                         File.separator + "resources" + File.separator + "output",
-                        fileUtilSpy.getTestOutputPath());
+                        mediaFileTestUtil.getTestOutputPath());
   }
 }

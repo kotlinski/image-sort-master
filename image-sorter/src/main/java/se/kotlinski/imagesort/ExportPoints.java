@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.controller;
+package se.kotlinski.imagesort;
 
 import se.kotlinski.imagesort.data.ParsedFileData;
 

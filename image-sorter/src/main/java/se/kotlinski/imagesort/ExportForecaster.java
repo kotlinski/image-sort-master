@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.controller;
+package se.kotlinski.imagesort;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.ParsedFileData;

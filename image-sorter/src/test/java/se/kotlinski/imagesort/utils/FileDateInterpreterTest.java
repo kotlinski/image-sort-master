@@ -22,16 +22,16 @@ public class FileDateInterpreterTest {
   @Before
   public void setUp() throws Exception {
 
-    SortMasterFileUtil sortMasterFileUtil = new SortMasterFileUtil();
-    imageWithDate = new File(sortMasterFileUtil.getTestInputPath() +
+    MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil();
+    imageWithDate = new File(mediaFileTestUtil.getTestInputPath() +
                              File.separator + "2013" +
                              File.separator + "snapchat" +
                              File.separator + "2013-10-03 13.43.20-kaffe.jpg");
 
-    imageWithoutDate = new File(sortMasterFileUtil.getTestInputPath() +
+    imageWithoutDate = new File(mediaFileTestUtil.getTestInputPath() +
                                 File.separator +
                                 "image-without-dates.jpg");
-    videoWithDate = new File(sortMasterFileUtil.getTestInputPath() +
+    videoWithDate = new File(mediaFileTestUtil.getTestInputPath() +
                              File.separator +
                              "2014-03-16 10.45.09.mp4");
 
