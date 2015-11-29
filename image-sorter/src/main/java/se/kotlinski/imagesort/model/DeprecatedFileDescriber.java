@@ -6,13 +6,17 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
-public class FileDescriber {
+public class DeprecatedFileDescriber {
   private final File file;
   private final String md5;
 
 
   @Inject
-  public FileDescriber(File file, Date date, String md5, String rootPath, final Calendar calendar) {
+  public DeprecatedFileDescriber(File file,
+                                 Date date,
+                                 String md5,
+                                 String rootPath,
+                                 final Calendar calendar) {
     this.md5 = md5;
     this.file = file;
 

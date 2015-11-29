@@ -2,7 +2,9 @@ package se.kotlinski.imagesort.model;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
+import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
 
@@ -16,27 +18,21 @@ public class SortSettingsTest {
 
   @Before
 	public void setUp() throws Exception {
-	  mediaFileTestUtil = new MediaFileTestUtil();
+	  mediaFileTestUtil = new MediaFileTestUtil(new MediaFileUtil());
     setSortSettings(new SortSettings());
   }
 
 	@Test
 	public void testToString() throws Exception {
-		String folderIOString = getSortSettings().toString();
-		assertEquals("To String with null values", "Folders not set", folderIOString);
-		getSortSettings().masterFolder = new File(mediaFileTestUtil.getTestOutputPath());
+		String folderIOString = sortSettings.toString();
+		assertEquals("To String with null values", "Master Folder not set", folderIOString);
+		sortSettings.masterFolder = mediaFileTestUtil.getTestInputFile();
 
 		String filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "inputImages";
-		boolean contains = getSortSettings().toString().contains(filePart);
-		assertTrue("Check toString", contains);
-		filePart = File.separator + "image-sorter" + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "output";
-		contains = getSortSettings().toString().contains(filePart);
+		boolean contains = sortSettings.toString().contains(filePart);
 		assertTrue("Check toString", contains);
 	}
-
-	SortSettings getSortSettings() {
-		return sortSettings;
-	}
+	
 
 	void setSortSettings(final SortSettings sortSettings) {
 		this.sortSettings = sortSettings;

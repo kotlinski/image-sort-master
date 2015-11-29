@@ -5,12 +5,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
-import se.kotlinski.imagesort.ExportCollector;
-import se.kotlinski.imagesort.data.MediaDataFolder;
+import se.kotlinski.imagesort.DeprecatedExportCollector;
+import se.kotlinski.imagesort.data.MediaFileDataInFolder;
+import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
+import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
+import se.kotlinski.imagesort.mapper.DeprecatedExportFileDataMap;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
-import se.kotlinski.imagesort.mapper.ExportFileDataMap;
-import se.kotlinski.imagesort.model.SortSettings;
+import se.kotlinski.imagesort.data.SortSettings;
 
 import java.io.File;
 import java.util.List;
@@ -21,23 +23,23 @@ public class CommandLineInterface {
   private static final Logger LOGGER = LogManager.getLogger(CommandLineInterface.class);
   private final MediaFileParser mediaFileParser;
   private final FilePrinter filePrinter;
-  private final ExportCollector exportCollector;
+  private final DeprecatedExportCollector deprecatedExportCollector;
   private final Interpreter interpreter;
 
   @Inject
   public CommandLineInterface(final MediaFileParser mediaFileParser,
                               final FilePrinter filePrinter,
-                              final ExportCollector exportCollector,
+                              final DeprecatedExportCollector deprecatedExportCollector,
                               final Interpreter interpreter) {
     this.mediaFileParser = mediaFileParser;
     this.filePrinter = filePrinter;
-    this.exportCollector = exportCollector;
+    this.deprecatedExportCollector = deprecatedExportCollector;
     this.interpreter = interpreter;
   }
 
   public final void runCommandLine(String[] arguments) {
     SortSettings sortSettings;
-    ExportFileDataMap exportFileDataMap;
+    DeprecatedExportFileDataMap deprecatedExportFileDataMap;
 
     try {
       sortSettings = interpreter.transformArguments(arguments);
@@ -63,17 +65,28 @@ public class CommandLineInterface {
     }
 
 
-    MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator();
-    MediaDataFolder mediaDataBeforeExecution;
-    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
-
     //TODO: 27/11
 
     // Print size of FilesByMediaContent before running.
     // + Duplicates for each file.
+    // (DONE BELOW)
+    MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator(); // TODO: inject
+    MediaFileDataInFolder mediaDataBeforeExecution;
+    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
 
+    System.out.println(mediaDataBeforeExecution.toString());
+
+    //TODO: 27/11
     // For each (Media?) File.
     //   Calculate their new destinations and decide where they will end up.
+
+    MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer,
+                                                                      fileDateInterpreter); // TODO: Inject
+    MediaFilesOutputForecaster mediaOutputCalculator = new MediaFilesOutputForecaster(mediaFileForecaster);
+
+    Map<String, List<File>> mediaFileDestinations;
+    mediaFileDestinations= mediaOutputCalculator.calculateOutputDestinations(mediaFilesInFolder);
+
 
     // Calculate a new "Map-tree" Based on exports.
     //    Each key is : "2014<fileseparator>05<fileseparator>filename followed by a file-list
@@ -89,21 +102,21 @@ public class CommandLineInterface {
 
 
     //Print all images and videos read from inputFolders + master folder
-    //filePrinter.printTotalNumberOfFiles(exportFileDataMap.totalNumberOfFiles());
+    //filePrinter.printTotalNumberOfFiles(deprecatedExportFileDataMap.totalNumberOfFiles());
 
     //Some files may be the same, but with different flavours
-    // exportCollector.tagUniqueFilesWithSameName(exportFileDataMap);
+    // deprecatedExportCollector.tagUniqueFilesWithSameName(deprecatedExportFileDataMap);
 
-//    printExportFolders(exportFileDataMap);
+//    printExportFolders(deprecatedExportFileDataMap);
 
-   /* filePrinter.printTotalNumberOfDuplicates(exportFileDataMap.totalNumberOfFiles(),
-                                             exportFileDataMap.getNumberOfUniqueImages(),
-                                             exportFileDataMap.getNumberOfRemovableFiles());
+   /* filePrinter.printTotalNumberOfDuplicates(deprecatedExportFileDataMap.totalNumberOfFiles(),
+                                             deprecatedExportFileDataMap.getNumberOfUniqueImages(),
+                                             deprecatedExportFileDataMap.getNumberOfRemovableFiles());
 */
   }
 
-  private void printExportFolders(final ExportFileDataMap exportFileDataMap) {
-    Set<String> foldersToExport = exportCollector.collectFoldersToExport(exportFileDataMap);
+  private void printExportFolders(final DeprecatedExportFileDataMap deprecatedExportFileDataMap) {
+    Set<String> foldersToExport = deprecatedExportCollector.collectFoldersToExport(deprecatedExportFileDataMap);
     filePrinter.printExportPaths(foldersToExport);
   }
 

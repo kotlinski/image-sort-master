@@ -3,7 +3,7 @@ package se.kotlinski.imagesort.data;
 import java.io.File;
 import java.util.Date;
 
-public class ExportFileData {
+public class DeprecatedExportFileData {
   public final String uniqueId;
   public final File originFile;
   public final String exportExtension;
@@ -14,13 +14,13 @@ public class ExportFileData {
   public Object flavours;
   public final Date date;
 
-  public ExportFileData(final String uniqueId,
-                        final File originFile,
-                        final String exportExtension,
-                        final String exportName,
-                        final String flavour,
-                        final boolean isMasterFolderFile,
-                        final Date date) {
+  public DeprecatedExportFileData(final String uniqueId,
+                                  final File originFile,
+                                  final String exportExtension,
+                                  final String exportName,
+                                  final String flavour,
+                                  final boolean isMasterFolderFile,
+                                  final Date date) {
     this.uniqueId = uniqueId;
 
     this.originFile = originFile;
@@ -35,7 +35,7 @@ public class ExportFileData {
 
   @Override
   public String toString() {
-    return "ExportFileData{\n" +
+    return "DeprecatedExportFileData{\n" +
            ", \n\tappendUniqueID=" + appendUniqueID +
            ", \n\flavour=" + flavour +
            ", \n\tappendUniqueID=" + uniqueId  +

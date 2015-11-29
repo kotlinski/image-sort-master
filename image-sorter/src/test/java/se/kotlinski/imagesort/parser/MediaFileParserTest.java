@@ -2,8 +2,8 @@ package se.kotlinski.imagesort.parser;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.ExportForecaster;
-import se.kotlinski.imagesort.model.SortSettings;
+import se.kotlinski.imagesort.DeprecatedExportForecaster;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.transformer.MediaFileTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
@@ -35,13 +35,13 @@ public class MediaFileParserTest {
   private FileDateInterpreter fileDateInterpreter;
   private FileDescriptor fileDescriptor;
   private DateToFileRenamer dateToFileRenamer;
-  private ExportForecaster exportForecaster;
+  private DeprecatedExportForecaster deprecatedExportForecaster;
   private MediaFileTransformer mediaFileTransform;
 
   @Before
   public void setUp() {
     mediaFileUtil = new MediaFileUtil();
-    mediaFileTestUtil = new MediaFileTestUtil();
+    mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
     sortSettings = new SortSettings();
     sortSettings.masterFolder = new File(mediaFileTestUtil.getTestOutputPath());
@@ -50,16 +50,9 @@ public class MediaFileParserTest {
     fileDateInterpreter = spy(new FileDateInterpreter());
     fileDescriptor = spy(new FileDescriptor());
     dateToFileRenamer = spy(new DateToFileRenamer(calendar));
-    exportForecaster = spy(new ExportForecaster(dateToFileRenamer));
+    deprecatedExportForecaster = spy(new DeprecatedExportForecaster(dateToFileRenamer));
     mediaFileTransform = mock(MediaFileTransformer.class);
-    MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil,
-                                                          calendar,
-                                                          MD5Generator,
-                                                          fileDateInterpreter,
-                                                          fileDescriptor,
-                                                          dateToFileRenamer,
-                                                          exportForecaster,
-                                                          mediaFileTransform);
+    MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);
     setMediaFileParser(mediaFileParser);
   }
 
@@ -113,20 +106,13 @@ public class MediaFileParserTest {
 
   @Test
   public void testRunIndex() throws Exception {/*
-    ExportFileDataMap exportFileDataMap = getMediaFileParser().transformFilesToMediaFiles(sortSettings);
+    DeprecatedExportFileDataMap exportFileDataMap = getMediaFileParser().transformFilesToMediaFiles(sortSettings);
     Assert.assertEquals("Number of Unique images", 8, exportFileDataMap.getNumberOfUniqueImages());*/
   }
 
   @Test
   public void testRunIndexInvalidInput() throws Exception {
-    setMediaFileParser(new MediaFileParser(mediaFileUtil,
-                                           calendar,
-                                           MD5Generator,
-                                           fileDateInterpreter,
-                                           fileDescriptor,
-                                           dateToFileRenamer,
-                                           exportForecaster,
-                                           mediaFileTransform));
+    setMediaFileParser(new MediaFileParser(mediaFileUtil, MD5Generator));
  /*   try {
      // getMediaFileParser().transformFilesToMediaFiles(null);
       assert false;
@@ -136,14 +122,7 @@ public class MediaFileParserTest {
     }*/
 
     SortSettings sortSettings = new SortSettings();
-    setMediaFileParser(new MediaFileParser(mediaFileUtil,
-                                           calendar,
-                                           MD5Generator,
-                                           fileDateInterpreter,
-                                           fileDescriptor,
-                                           dateToFileRenamer,
-                                           exportForecaster,
-                                           mediaFileTransform));
+    setMediaFileParser(new MediaFileParser(mediaFileUtil, MD5Generator));
 /*    try {
       getMediaFileParser().transformFilesToMediaFiles(sortSettings);
       assert false;
@@ -155,14 +134,7 @@ public class MediaFileParserTest {
     sortSettings.masterFolder = new File("SomeInvalidFilePath");
     ArrayList<File> inputFolders = new ArrayList<File>();
     inputFolders.add(sortSettings.masterFolder);
-    setMediaFileParser(new MediaFileParser(mediaFileUtil,
-                                           calendar,
-                                           MD5Generator,
-                                           fileDateInterpreter,
-                                           fileDescriptor,
-                                           dateToFileRenamer,
-                                           exportForecaster,
-                                           mediaFileTransform));
+    setMediaFileParser(new MediaFileParser(mediaFileUtil, MD5Generator));
 /*    try {
       getMediaFileParser().transformFilesToMediaFiles(sortSettings);
       assert false;
@@ -174,14 +146,7 @@ public class MediaFileParserTest {
     sortSettings.masterFolder = new File(mediaFileTestUtil.getTestOutputPath());
     inputFolders = new ArrayList<File>();
     inputFolders.add(sortSettings.masterFolder);
-    setMediaFileParser(new MediaFileParser(mediaFileUtil,
-                                           calendar,
-                                           MD5Generator,
-                                           fileDateInterpreter,
-                                           fileDescriptor,
-                                           dateToFileRenamer,
-                                           exportForecaster,
-                                           mediaFileTransform));
+    setMediaFileParser(new MediaFileParser(mediaFileUtil, MD5Generator));
     //Assert.assertNotNull("Valid sortSettings", getMediaFileParser().transformFilesToMediaFiles(sortSettings));
   }
 
@@ -196,7 +161,7 @@ public class MediaFileParserTest {
   @Test
   public void testPopulateWithImages() throws Exception {
 /*    File file = new File(mediaFileUtil.getTestInputPath());
-    ExportFileDataMap exportFileDataMap = mediaFileParser.transformFilesToMediaFiles(sortSettings);
+    DeprecatedExportFileDataMap exportFileDataMap = mediaFileParser.transformFilesToMediaFiles(sortSettings);
     Assert.assertEquals("Number of unique images in test folder",
                         8,
                         exportFileDataMap.getNumberOfUniqueImages());*/

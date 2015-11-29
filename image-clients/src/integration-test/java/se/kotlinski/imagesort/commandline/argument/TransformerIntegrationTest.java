@@ -11,7 +11,8 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.exception.InvalidArgumentsException;
-import se.kotlinski.imagesort.model.SortSettings;
+import se.kotlinski.imagesort.data.SortSettings;
+import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -26,9 +27,11 @@ public class TransformerIntegrationTest {
   private Transformer transformer;
   private HelpFormatter formatter;
   private MediaFileUtil mediaFileUtil;
+  private MediaFileTestUtil mediaFileTestUtil;
 
   @Before
   public void setUp() throws Exception {
+    mediaFileTestUtil = new MediaFileTestUtil();
     mediaFileUtil = new MediaFileUtil();
     CommandLineParser parser = new GnuParser();
     formatter = new HelpFormatter();
@@ -56,7 +59,7 @@ public class TransformerIntegrationTest {
 
   @Test
   public void testParseArgsSource() throws Exception {
-    String testInputPath = mediaFileUtil.getTestInputPath();
+    String testInputPath = mediaFileTestUtil.getTestInputPath();
 
     String[] args = {"-s", testInputPath};
     CommandLine cmd = transformer.parseArgs(args);

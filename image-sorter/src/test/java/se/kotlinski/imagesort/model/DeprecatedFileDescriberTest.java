@@ -11,25 +11,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class FileDescriberTest {
+public class DeprecatedFileDescriberTest {
 
-  private FileDescriber imageDescriber;
-  private FileDescriber imageDescriber2;
+  private DeprecatedFileDescriber imageDescriber;
+  private DeprecatedFileDescriber imageDescriber2;
 
   @Before
   public void setup() {
     Calendar calendar = new GregorianCalendar();
-    MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil();
+    MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(new MediaFileUtil());
 
     File file = new File(mediaFileTestUtil.getTestInputPath() +
                          "//structure//2013-10-03 13.43.20-kaffe.jpg");
     File file2 = new File(mediaFileTestUtil.getTestInputPath() +
                           "//structure//2013-10-26 20.20.46-kottbullar.jpg");
-    imageDescriber = new FileDescriber(file,
+    imageDescriber = new DeprecatedFileDescriber(file,
                                        new Date(0),
                                        "a",
                                        mediaFileTestUtil.getTestInputPath(), calendar);
-    imageDescriber2 = new FileDescriber(file2,
+    imageDescriber2 = new DeprecatedFileDescriber(file2,
                                         new Date(0),
                                         "b",
                                         mediaFileTestUtil.getTestInputPath(), calendar);

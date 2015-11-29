@@ -3,7 +3,7 @@ package se.kotlinski.imagesort.data;
 import java.io.File;
 import java.util.Date;
 
-public final class ParsedFileData {
+public final class DeprecatedParsedFileData {
   public final File originFile;
   public final File originBaseFolder;
   public final String flavour;
@@ -14,15 +14,15 @@ public final class ParsedFileData {
   public final String datePathFlavour;
   public final boolean masterFolderFile;
 
-  public ParsedFileData(final File originFile,
-                        final File originBaseFolder,
-                        final String flavour,
-                        final String uniqueId,
-                        final String fileNameExtension,
-                        final Date dateTaken,
-                        final String fileDateName,
-                        final String datePathFlavour,
-                        final boolean masterFolderFile) {
+  public DeprecatedParsedFileData(final File originFile,
+                                  final File originBaseFolder,
+                                  final String flavour,
+                                  final String uniqueId,
+                                  final String fileNameExtension,
+                                  final Date dateTaken,
+                                  final String fileDateName,
+                                  final String datePathFlavour,
+                                  final boolean masterFolderFile) {
     this.originFile = originFile;
     this.originBaseFolder = originBaseFolder;
     this.flavour = flavour;

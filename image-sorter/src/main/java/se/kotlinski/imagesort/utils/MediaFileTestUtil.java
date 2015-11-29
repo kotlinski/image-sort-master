@@ -5,8 +5,13 @@ import java.io.File;
 public class MediaFileTestUtil {
   private final MediaFileUtil mediaFileUtils;
 
-  public MediaFileTestUtil() {
-    mediaFileUtils = new MediaFileUtil();
+  public MediaFileTestUtil(MediaFileUtil mediaFileUtils) {
+    this.mediaFileUtils = mediaFileUtils;
+  }
+
+  public File getTestInputFile() {
+    String path = modifyPath(mediaFileUtils.getSystemPath(), true);
+    return new File(path);
   }
 
   public String getTestInputPath() {
@@ -54,7 +59,7 @@ public class MediaFileTestUtil {
   }
 
   public File getJpegWitouthDate() {
-    return new File(getTestInputPath() + File.separator + "image-without-dates.jpg");
+    return new File(getTestInputPath() + File.separator + "noxon on raindeer - no date.jpg");
   }
 
   public File getSnapchatFile() {
