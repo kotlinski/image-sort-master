@@ -1,7 +1,7 @@
 package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
-import se.kotlinski.imagesort.data.ExportFileData;
+import se.kotlinski.imagesort.data.DeprecatedExportFileData;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 
 import java.io.File;
@@ -11,32 +11,32 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class FileGroup {
+public class DeprecatedFileGroup {
 
   private final String id;
-  private final Set<ExportFileData> exportFileDataList = new HashSet<>();
+  private final Set<DeprecatedExportFileData> deprecatedExportFileDataList = new HashSet<>();
   //not yet used variable.
   // private String fileGroupFlavour;
-  // private ArrayList<ExportFileData> arrayOfExportData;
+  // private ArrayList<DeprecatedExportFileData> arrayOfExportData;
   // private String flavour;
   private final DateToFileRenamer dateToFileRenamer;
   private final Date dateTaken;
 
   @Inject
-  public FileGroup(final String id,
-      final ExportFileData exportFileData,
-      final DateToFileRenamer dateToFileRenamer,
-      final Date dateTaken) {
+  public DeprecatedFileGroup(final String id,
+                             final DeprecatedExportFileData deprecatedExportFileData,
+                             final DateToFileRenamer dateToFileRenamer,
+                             final Date dateTaken) {
     this.id = id;
     this.dateToFileRenamer = dateToFileRenamer;
     this.dateTaken = dateTaken;
 
-    exportFileDataList.add(exportFileData);
-    //fileGroupFlavour = exportFileData.flavour;
+    deprecatedExportFileDataList.add(deprecatedExportFileData);
+    //fileGroupFlavour = deprecatedExportFileData.flavour;
   }
 
-  public void add(ExportFileData exportFileData) {
-    exportFileDataList.add(exportFileData);
+  public void add(DeprecatedExportFileData deprecatedExportFileData) {
+    deprecatedExportFileDataList.add(deprecatedExportFileData);
     updateGroupFlavour();
   }
 
@@ -44,19 +44,19 @@ public class FileGroup {
     Set<String> splitSet = new HashSet<>();
 
     int i = 0;
-    for (ExportFileData fileData : exportFileDataList) {
+    for (DeprecatedExportFileData fileData : deprecatedExportFileDataList) {
       i++;
       if (fileData.isMasterFolderFile) {
 //        fileGroupFlavour = fileData.flavour;
         return;
       }
       else {
-        if (exportFileDataList.size() > 1 && i == 1) {
+        if (deprecatedExportFileDataList.size() > 1 && i == 1) {
           System.out.println("");
         }
         System.out.printf("(%s/%s)Original: %s%n",
                           i,
-                          exportFileDataList.size(),
+                          deprecatedExportFileDataList.size(),
                           fileData.originFile.getAbsoluteFile());
         // System.out.println("Flavour: " + fileData.flavour);
         if (fileData.flavour != null) {
@@ -89,9 +89,9 @@ public class FileGroup {
       return false;
     }
 
-    FileGroup fileGroup = (FileGroup) o;
+    DeprecatedFileGroup deprecatedFileGroup = (DeprecatedFileGroup) o;
 
-    return id.equals(fileGroup.id);
+    return id.equals(deprecatedFileGroup.id);
 
   }
 

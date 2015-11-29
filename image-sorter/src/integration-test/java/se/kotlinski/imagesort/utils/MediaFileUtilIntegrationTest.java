@@ -15,8 +15,8 @@ public class MediaFileUtilIntegrationTest {
 
   @Before
   public void setUp() throws Exception {
-    mediaFileTestUtil = new MediaFileTestUtil();
     mediaFileUtil = new MediaFileUtil();
+    mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
   }
 
   @Test

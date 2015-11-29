@@ -1,6 +1,6 @@
 package se.kotlinski.imagesort;
 
-import se.kotlinski.imagesort.data.ParsedFileData;
+import se.kotlinski.imagesort.data.DeprecatedParsedFileData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,21 +10,21 @@ import java.util.Set;
 
 public class ExportPoints {
   //String, list of parsed file datas
-  private Map<String, List<ParsedFileData>> exportPoints;
+  private Map<String, List<DeprecatedParsedFileData>> exportPoints;
 
   public ExportPoints() {
     exportPoints = new HashMap<>();
   }
 
-  public void put(final String fullExportPath, final ParsedFileData parsedFileData) {
+  public void put(final String fullExportPath, final DeprecatedParsedFileData deprecatedParsedFileData) {
     if (exportPoints.containsKey(fullExportPath)) {
-      List<ParsedFileData> parsedFileDatas = exportPoints.get(fullExportPath);
-      parsedFileDatas.add(parsedFileData);
+      List<DeprecatedParsedFileData> deprecatedParsedFileDatas = exportPoints.get(fullExportPath);
+      deprecatedParsedFileDatas.add(deprecatedParsedFileData);
     }
     else {
-      ArrayList<ParsedFileData> parsedFileDatas = new ArrayList<>();
-      parsedFileDatas.add(parsedFileData);
-      exportPoints.put(fullExportPath, parsedFileDatas);
+      ArrayList<DeprecatedParsedFileData> deprecatedParsedFileDatas = new ArrayList<>();
+      deprecatedParsedFileDatas.add(deprecatedParsedFileData);
+      exportPoints.put(fullExportPath, deprecatedParsedFileDatas);
     }
   }
 

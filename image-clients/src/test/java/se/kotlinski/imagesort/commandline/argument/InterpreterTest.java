@@ -3,7 +3,7 @@ package se.kotlinski.imagesort.commandline.argument;
 import org.apache.commons.cli.CommandLine;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.model.SortSettings;
+import se.kotlinski.imagesort.data.SortSettings;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -12,7 +12,7 @@ public class MediaFileUtilTest {
   @Before
   public void setUp() throws Exception {
 
-    mediaFileTestUtil = new MediaFileTestUtil();
+    mediaFileTestUtil = new MediaFileTestUtil(new MediaFileUtil());
   }
 
   @Test

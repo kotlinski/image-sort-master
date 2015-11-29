@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.model;
+package se.kotlinski.imagesort.data;
 
 import java.io.File;
 import java.util.ArrayList;

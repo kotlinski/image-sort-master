@@ -10,7 +10,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.InvalidArgumentsException;
-import se.kotlinski.imagesort.model.SortSettings;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;

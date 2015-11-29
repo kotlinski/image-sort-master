@@ -22,7 +22,7 @@ public class FileDateInterpreterTest {
   @Before
   public void setUp() throws Exception {
 
-    MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil();
+    MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(new MediaFileUtil());
     imageWithDate = new File(mediaFileTestUtil.getTestInputPath() +
                              File.separator + "2013" +
                              File.separator + "snapchat" +
@@ -30,7 +30,7 @@ public class FileDateInterpreterTest {
 
     imageWithoutDate = new File(mediaFileTestUtil.getTestInputPath() +
                                 File.separator +
-                                "image-without-dates.jpg");
+                                "nixon on raindeer - no date.jpg");
     videoWithDate = new File(mediaFileTestUtil.getTestInputPath() +
                              File.separator +
                              "2014-03-16 10.45.09.mp4");
