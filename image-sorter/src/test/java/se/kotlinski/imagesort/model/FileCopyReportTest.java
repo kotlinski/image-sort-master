@@ -12,7 +12,7 @@ public class FileCopyReportTest {
   public void testToString() throws Exception {
     FileCopyReport fileCopyReport = new FileCopyReport();
     fileCopyReport.fileCopySuccess();
-    FileDescriber fileDescriberMock = mock(FileDescriber.class);
+    DeprecatedFileDescriber fileDescriberMock = mock(DeprecatedFileDescriber.class);
     when(fileDescriberMock.getOriginalFileName()).thenReturn("mock-name");
     fileCopyReport.fileCopyFailed(fileDescriberMock);
     String expected = "Files Copied: 1\n" +

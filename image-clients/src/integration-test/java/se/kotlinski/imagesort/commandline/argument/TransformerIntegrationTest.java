@@ -31,8 +31,8 @@ public class TransformerIntegrationTest {
 
   @Before
   public void setUp() throws Exception {
-    mediaFileTestUtil = new MediaFileTestUtil();
     mediaFileUtil = new MediaFileUtil();
+    mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
     CommandLineParser parser = new GnuParser();
     formatter = new HelpFormatter();
     transformer = new Transformer(formatter, parser, mediaFileUtil);

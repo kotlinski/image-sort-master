@@ -46,11 +46,13 @@ public class DeprecatedMediaFileExportParser {
                                  final File file,
                                  final Date date) {
     boolean fileFromMasterFolder = rootFolder == sortSettings.masterFolder;
-    DeprecatedParsedFileData deprecatedParsedFileData = getParsedFileData(file, rootFolder, date, fileFromMasterFolder);
+    DeprecatedParsedFileData deprecatedParsedFileData =
+        getParsedFileData(file, rootFolder, date, fileFromMasterFolder);
 
     String exportName = deprecatedExportForecaster.getFileName(deprecatedParsedFileData);
 
-    String exportExtension = deprecatedExportForecaster.getFileNameExtension(deprecatedParsedFileData);
+    String exportExtension =
+        deprecatedExportForecaster.getFileNameExtension(deprecatedParsedFileData);
 
 
     DeprecatedExportFileData deprecatedExportFileData =
@@ -60,25 +62,20 @@ public class DeprecatedMediaFileExportParser {
   }
 
   private DeprecatedParsedFileData getParsedFileData(final File file,
-                                           final File parentFolder,
-                                           final Date date,
-                                           final boolean fileFromMasterFolder) {
+                                                     final File parentFolder,
+                                                     final Date date,
+                                                     final boolean fileFromMasterFolder) {
     String imageIdentifier = MD5Generator.generateMd5(file);
-    String flavour = fileDescriptor.getFlavour(parentFolder, file);
-    String fileExtension = fileDescriptor.getFileExtension(file);
+    //String flavour = fileDescriptor.getFlavour(parentFolder, file);
+    String flavour = null;
+    // String fileExtension = fileDescriptor.getFileExtension(file);
+    String fileExtension = null;
     String fileDateName = null;
     String datePathFlavour = null;
-    try {
-      fileDateName = dateToFileRenamer.formatFileDate(date, calendar);
-      datePathFlavour = dateToFileRenamer.formatPathDate(date);
-    }
-    catch (CouldNotParseDateException e) {
-      System.out.println("Could not parse when " + file.getAbsoluteFile() + " was taken");
-      LOGGER.error(e);
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
+
+    fileDateName = dateToFileRenamer.formatFileDate(date);
+    datePathFlavour = dateToFileRenamer.formatPathDate(date);
+
     return new DeprecatedParsedFileData(file, parentFolder, flavour, imageIdentifier, fileExtension, date, fileDateName, datePathFlavour, fileFromMasterFolder);
   }
 

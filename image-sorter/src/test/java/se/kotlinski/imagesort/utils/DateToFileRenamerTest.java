@@ -25,9 +25,9 @@ public class DateToFileRenamerTest {
   public void testFormatFileDate() throws Exception {
     GregorianCalendar calendar = new GregorianCalendar();
     calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String formattedDate = dateToFileRenamer.formatFileDate(new Date(0), calendar);
+    String formattedDate = dateToFileRenamer.formatFileDate(new Date(0));
     assertEquals("1970-01-01 00.00.00", formattedDate);
-    formattedDate = dateToFileRenamer.formatFileDate(new Date(1356900595000l), calendar);
+    formattedDate = dateToFileRenamer.formatFileDate(new Date(1356900595000l));
     assertEquals("2012-12-30 20.49.55", formattedDate);
 
   }

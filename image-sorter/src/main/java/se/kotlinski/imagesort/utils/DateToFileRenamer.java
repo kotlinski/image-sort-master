@@ -34,13 +34,8 @@ public class DateToFileRenamer {
     return format.format(calendar.getTime());
   }
 
-  public String formatFileDate(Date date, Calendar calendar) throws Exception {
-    try {
-      calendar.setTime(date);
-    }
-    catch (Exception e) {
-      throw new CouldNotParseDateException();
-    }
+  public String formatFileDate(Date date) {
+    calendar.setTime(date);
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
     format.setTimeZone(calendar.getTimeZone());
     return format.format(calendar.getTime());

@@ -23,9 +23,9 @@ public class InterpreterIntegrationTest {
 
 	@Before
 	public void setUp() {
-    mediaFileTestUtil = new MediaFileTestUtil();
-
     mediaFileUtil = new MediaFileUtil();
+    mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
+
 		CommandLineParser parser = spy(new GnuParser());
 		HelpFormatter formatter = new HelpFormatter();
 		Transformer transformer = new Transformer(formatter, parser, mediaFileUtil);

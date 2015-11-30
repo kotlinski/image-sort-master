@@ -51,7 +51,7 @@ public class CommandLineInterfaceTest {
 
     new CommandLineInterface(mediaFileParser,
                              filePrinter, deprecatedExportCollector,
-                             interpreter);
+                             interpreter, dateToFileRenamer, fileDateInterpreter);
   }
 
   @Test

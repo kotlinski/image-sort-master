@@ -70,9 +70,9 @@ tasks.withType(FindBugs) {
 }
 
 dependencies {
+  compile 'commons-io:commons-io:2.4'
   compile 'com.adobe.xmp:xmpcore:5.1.1'
   compile 'commons-cli:commons-cli:20040117.000000'
-  compile 'commons-io:commons-io:20030203.000550'
   compile 'com.drewnoakes:metadata-extractor:2.+'
   compile 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
   compile 'com.googlecode.mp4parser:isoparser:1.0-RC-27'

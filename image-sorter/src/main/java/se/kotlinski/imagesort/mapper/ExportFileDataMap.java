@@ -1,7 +1,7 @@
 package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
-import se.kotlinski.imagesort.data.ExportFileData;
+import se.kotlinski.imagesort.data.DeprecatedExportFileData;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class ExportFileDataMap {
   private final DateToFileRenamer dateToFileRenamer;
-  private Map<String, FileGroup> fileIdMap;
+  private Map<String, DeprecatedFileGroup> fileIdMap;
 
   @Inject
   public ExportFileDataMap(final DateToFileRenamer dateToFileRenamer) {
@@ -21,13 +21,13 @@ public class ExportFileDataMap {
     fileIdMap = new HashMap<>();
   }
 
-  public void addExportFileData(ExportFileData exportFileData) {
-    FileGroup fileGroup;
+  public void addExportFileData(DeprecatedExportFileData exportFileData) {
+    DeprecatedFileGroup fileGroup;
     if (fileIdMap.containsKey(exportFileData.uniqueId)) {
       fileGroup = fileIdMap.get(exportFileData.uniqueId);
     }
     else {
-      fileGroup = new FileGroup(exportFileData.uniqueId, exportFileData, dateToFileRenamer, exportFileData.date);
+      fileGroup = new DeprecatedFileGroup(exportFileData.uniqueId, exportFileData, dateToFileRenamer, exportFileData.date);
       fileIdMap.put(exportFileData.uniqueId, fileGroup);
     }
     fileGroup.add(exportFileData);
@@ -38,7 +38,7 @@ public class ExportFileDataMap {
     String retString = "Files in input folder: \n";
     for (String fileGroupId : fileIdMap.keySet()) {
       retString += fileGroupId + ", including files: " + "\n";
-      for (Map.Entry<String, FileGroup> stringFileGroupEntry : fileIdMap.entrySet()) {
+      for (Map.Entry<String, DeprecatedFileGroup> stringFileGroupEntry : fileIdMap.entrySet()) {
         retString = String.format("%s\t%s\n", retString, stringFileGroupEntry.getKey());
       }
     }
@@ -64,19 +64,19 @@ public class ExportFileDataMap {
     return fileIdMap.size();
   }
 
-  public List<ExportFileData> getAllFiles() {
-    ArrayList<ExportFileData> parsedFileDatas = new ArrayList<>();
-    for (FileGroup fileGroup : fileIdMap.values()) {
-      //ArrayList<ExportFileData> exportFileDataFromFolder = fileGroup.getArrayOfExportData();
+  public List<DeprecatedExportFileData> getAllFiles() {
+    ArrayList<DeprecatedExportFileData> parsedFileDatas = new ArrayList<>();
+    for (DeprecatedFileGroup fileGroup : fileIdMap.values()) {
+      //ArrayList<DeprecatedExportFileData> exportFileDataFromFolder = fileGroup.getArrayOfExportData();
       //parsedFileDatas.addAll(exportFileDataFromFolder);
     }
     return parsedFileDatas;
   }
 
-  public Map<String, ArrayList<ExportFileData>> getGroupsOfDuplicates() {
-    Map<String, ArrayList<ExportFileData>> groupsOfDuplicates = new HashMap<>();
+  public Map<String, ArrayList<DeprecatedExportFileData>> getGroupsOfDuplicates() {
+    Map<String, ArrayList<DeprecatedExportFileData>> groupsOfDuplicates = new HashMap<>();
 
-    for (Map.Entry<String, ArrayList<ExportFileData>> stringArrayListEntry : groupsOfDuplicates.entrySet()) {
+    for (Map.Entry<String, ArrayList<DeprecatedExportFileData>> stringArrayListEntry : groupsOfDuplicates.entrySet()) {
       String fileID = stringArrayListEntry.getKey();
       //ArrayList<ExportFileData> exportFileData = fileIdMap.get(fileID).getArrayOfExportData();
       //if (exportFileData.size() > 1) {
@@ -92,16 +92,16 @@ public class ExportFileDataMap {
   }
 
   public int getNumberOfRemovableFiles() {
-    Map<String, ArrayList<ExportFileData>> groupsOfDuplicates = getGroupsOfDuplicates();
+    Map<String, ArrayList<DeprecatedExportFileData>> groupsOfDuplicates = getGroupsOfDuplicates();
     int numberOfRemovableFiles = 0;
-    for (Map.Entry<String, ArrayList<ExportFileData>> stringArrayListEntry : groupsOfDuplicates.entrySet()) {
-      ArrayList<ExportFileData> parsedFileData = groupsOfDuplicates.get(stringArrayListEntry.getKey());
+    for (Map.Entry<String, ArrayList<DeprecatedExportFileData>> stringArrayListEntry : groupsOfDuplicates.entrySet()) {
+      ArrayList<DeprecatedExportFileData> parsedFileData = groupsOfDuplicates.get(stringArrayListEntry.getKey());
       numberOfRemovableFiles += parsedFileData.size() - 1;
     }
     return numberOfRemovableFiles;
   }
 
-/*  public List<ExportFileData> getFileNamesForId(final String fileId) {
+/*  public List<DeprecatedExportFileData> getFileNamesForId(final String fileId) {
     return fileIdMap.get(fileId).getArrayOfExportData();
   }*/
 
@@ -109,7 +109,7 @@ public class ExportFileDataMap {
     return fileIdMap.keySet();
   }
 
-  public Collection<FileGroup> values() {
+  public Collection<DeprecatedFileGroup> values() {
     return fileIdMap.values();
   }
 
