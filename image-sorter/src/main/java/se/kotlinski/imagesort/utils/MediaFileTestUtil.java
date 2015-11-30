@@ -54,6 +54,16 @@ public class MediaFileTestUtil {
                     "A 2014-02-22 11.48.48-1-anteckning(1.31MB).jpg");
   }
 
+  public File getAJpegFileFromASubFolder() {
+    return new File(getTestInputPath() +
+                    File.separator +
+                    "2014" +
+                    File.separator +
+                    "duplicate in subfolder" +
+                    File.separator +
+                    "A 2014-02-22 11.48.48-1-anteckning(1.31MB) - Copy.jpg");
+  }
+
   public File getMp4File() {
     return new File(getTestInputPath() + File.separator + "2014-03-16 10.45.09.mp4");
   }

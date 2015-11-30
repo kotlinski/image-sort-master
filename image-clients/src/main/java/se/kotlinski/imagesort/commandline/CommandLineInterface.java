@@ -13,11 +13,12 @@ import se.kotlinski.imagesort.mapper.DeprecatedExportFileDataMap;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.data.SortSettings;
+import se.kotlinski.imagesort.utils.DateToFileRenamer;
+import se.kotlinski.imagesort.utils.FileDateInterpreter;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class CommandLineInterface {
   private static final Logger LOGGER = LogManager.getLogger(CommandLineInterface.class);
@@ -25,16 +26,22 @@ public class CommandLineInterface {
   private final FilePrinter filePrinter;
   private final DeprecatedExportCollector deprecatedExportCollector;
   private final Interpreter interpreter;
+  private final DateToFileRenamer dateToFileRenamer;
+  private final FileDateInterpreter fileDateInterpreter;
 
   @Inject
   public CommandLineInterface(final MediaFileParser mediaFileParser,
                               final FilePrinter filePrinter,
                               final DeprecatedExportCollector deprecatedExportCollector,
-                              final Interpreter interpreter) {
+                              final Interpreter interpreter,
+                              final DateToFileRenamer dateToFileRenamer,
+                              final FileDateInterpreter fileDateInterpreter) {
     this.mediaFileParser = mediaFileParser;
     this.filePrinter = filePrinter;
     this.deprecatedExportCollector = deprecatedExportCollector;
     this.interpreter = interpreter;
+    this.dateToFileRenamer = dateToFileRenamer;
+    this.fileDateInterpreter = fileDateInterpreter;
   }
 
   public final void runCommandLine(String[] arguments) {
@@ -64,30 +71,16 @@ public class CommandLineInterface {
       return;
     }
 
-
-    //TODO: 27/11
-
-    // Print size of FilesByMediaContent before running.
-    // + Duplicates for each file.
-    // (DONE BELOW)
-    MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator(); // TODO: inject
-    MediaFileDataInFolder mediaDataBeforeExecution;
-    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
-
-    System.out.println(mediaDataBeforeExecution.toString());
-
-    //TODO: 27/11
-    // For each (Media?) File.
-    //   Calculate their new destinations and decide where they will end up.
-
-    MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer,
-                                                                      fileDateInterpreter); // TODO: Inject
-    MediaFilesOutputForecaster mediaOutputCalculator = new MediaFilesOutputForecaster(mediaFileForecaster);
+    printMediaFilesInFolderData(mediaFilesInFolder);
 
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations= mediaOutputCalculator.calculateOutputDestinations(mediaFilesInFolder);
+    mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder);
 
 
+    //TODO: Make a conflict handler.
+    // When several files have the same destination, some salutary checks have to be made.
+    // * what if the are different images, etc.
+    //
     // Calculate a new "Map-tree" Based on exports.
     //    Each key is : "2014<fileseparator>05<fileseparator>filename followed by a file-list
 
@@ -115,10 +108,20 @@ public class CommandLineInterface {
 */
   }
 
-  private void printExportFolders(final DeprecatedExportFileDataMap deprecatedExportFileDataMap) {
-    Set<String> foldersToExport = deprecatedExportCollector.collectFoldersToExport(deprecatedExportFileDataMap);
-    filePrinter.printExportPaths(foldersToExport);
+  private Map<String, List<File>> calculateOutputDirectories(final Map<String, List<File>> mediaFilesInFolder) {
+    MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter, fileDescriptor);
+    MediaFilesOutputForecaster mediaOutputCalculator;
+    mediaOutputCalculator= new MediaFilesOutputForecaster(mediaFileForecaster);
+
+    return mediaOutputCalculator.calculateOutputDestinations(mediaFilesInFolder);
   }
 
+  private void printMediaFilesInFolderData(final Map<String, List<File>> mediaFilesInFolder) {
+    MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator(); // TODO: inject
+    MediaFileDataInFolder mediaDataBeforeExecution;
+    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
+
+    System.out.println(mediaDataBeforeExecution.toString());
+  }
 
 }

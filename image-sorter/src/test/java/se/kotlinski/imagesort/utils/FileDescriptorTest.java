@@ -35,7 +35,7 @@ public class FileDescriptorTest {
     when(resourceFile.getAbsolutePath()).thenReturn(resourceFileString);
 
     when(resourceFile.getName()).thenReturn(fileFlavour);
-    String flavour = fileDescriptor.getFlavour(baseFolder, resourceFile);
+    String flavour = fileDescriptor.getFlavour(baseFolder.getAbsolutePath(), resourceFile);
 
     assertThat("jul", is("jul"));
   }

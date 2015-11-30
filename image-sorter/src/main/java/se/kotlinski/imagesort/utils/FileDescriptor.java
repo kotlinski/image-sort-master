@@ -1,6 +1,5 @@
 package se.kotlinski.imagesort.utils;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,10 +11,7 @@ public class FileDescriptor {
   private static final Logger LOGGER = LogManager.getLogger(FileDescriptor.class);
 
 
-  public String getFlavour(final File rootFolder, final File resourceFile) {
-
-    String absoluteRootPath = rootFolder.getAbsolutePath() + File.separator;
-
+  public String getFlavour(final String absoluteRootPath, final File resourceFile) {
     String absolutePath = resourceFile.getAbsolutePath();
     LOGGER.debug(absolutePath);
 
@@ -23,17 +19,18 @@ public class FileDescriptor {
     if (flavour != null) {
       flavour = flavour.replace(resourceFile.getName(), "");
     }
-/*    flavour = flavour.replace("other" + File.separator, "");
+    flavour = flavour.replace("other" + File.separator, "");
 
     int monthSequence = 2;
     flavour = removeDigitFolders(flavour, monthSequence);
     int yearSequence = 4;
-    flavour = removeDigitFolders(flavour, yearSequence);*/
+    flavour = removeDigitFolders(flavour, yearSequence);
+
     LOGGER.debug("return flavour: " + flavour);
     return flavour;
   }
 
-  public String removeDigitFolders(String flavour, int sequence) {
+  String removeDigitFolders(String flavour, int sequence) {
     String pattern = Pattern.quote(File.separator) +
                      "\\d{" +
                      sequence +
@@ -42,9 +39,9 @@ public class FileDescriptor {
     LOGGER.debug("pattern: " + pattern);
     return flavour.replaceAll(pattern, Matcher.quoteReplacement(File.separator));
   }
-
+/*
   public String getFileExtension(final File file) {
-    return "." + FileUtils.extension(file.getName());
-  }
+    return "." + FilenameUtils.getExtension(file.getName());
+  }*/
 
 }

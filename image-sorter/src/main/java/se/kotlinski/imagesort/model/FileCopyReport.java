@@ -9,7 +9,7 @@ import java.util.HashSet;
  * @author Simon Kotlinski
  */
 public class FileCopyReport {
-  private final Collection<FileDescriber> filesNotCopied;
+  private final Collection<DeprecatedFileDescriber> filesNotCopied;
   private int numberOfFilesCopied;
 
   public FileCopyReport() {
@@ -17,7 +17,7 @@ public class FileCopyReport {
     numberOfFilesCopied = 0;
   }
 
-  public void fileCopyFailed(FileDescriber imageDescriber) {
+  public void fileCopyFailed(DeprecatedFileDescriber imageDescriber) {
     getFilesNotCopied().add(imageDescriber);
   }
 
@@ -29,7 +29,7 @@ public class FileCopyReport {
     return numberOfFilesCopied;
   }
 
-  public Collection<FileDescriber> getFilesNotCopied() {
+  public Collection<DeprecatedFileDescriber> getFilesNotCopied() {
     return filesNotCopied;
   }
 
@@ -39,7 +39,7 @@ public class FileCopyReport {
     if (!filesNotCopied.isEmpty()) {
       out += "Files failed: \n";
     }
-    for (FileDescriber imageDescriber : filesNotCopied) {
+    for (DeprecatedFileDescriber imageDescriber : filesNotCopied) {
       out = String.format("%s%s\n", out, imageDescriber.getOriginalFileName());
     }
     return out;
