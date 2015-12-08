@@ -13,10 +13,10 @@ import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.transformer.MediaFileTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
-import se.kotlinski.imagesort.utils.FileDescriptor;
 import se.kotlinski.imagesort.utils.MD5Generator;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
+import java.io.FileDescriptor;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -37,7 +37,8 @@ public class CommandLineInterfaceTest {
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
     FileDescriptor fileDescriptor = new FileDescriptor();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
-    DeprecatedExportForecaster deprecatedExportForecaster = new DeprecatedExportForecaster(dateToFileRenamer);
+    DeprecatedExportForecaster deprecatedExportForecaster = new DeprecatedExportForecaster(
+        dateToFileRenamer);
     MediaFileTransformer mediaFileTransformer = new MediaFileTransformer();
     MediaFileParser mediaFileParser = spy(new MediaFileParser(mediaFileUtil, MD5Generator));
     FilePrinter filePrinter = spy(new FilePrinter());
@@ -49,9 +50,15 @@ public class CommandLineInterfaceTest {
     Transformer transformer = new Transformer(formatter, parser, fileUtil);
     interpreter = spy(new Interpreter(transformer));
 
+    FileSystemPrettyPrinter fileSystemPrettyPrinter = new FileSystemPrettyPrinter();
+
     new CommandLineInterface(mediaFileParser,
-                             filePrinter, deprecatedExportCollector,
-                             interpreter, dateToFileRenamer, fileDateInterpreter);
+                             filePrinter,
+                             deprecatedExportCollector,
+                             interpreter,
+                             dateToFileRenamer,
+                             fileDateInterpreter,
+                             fileSystemPrettyPrinter);
   }
 
   @Test

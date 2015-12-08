@@ -1,12 +1,18 @@
 package se.kotlinski.imagesort.utils;
 
+import se.kotlinski.imagesort.parser.MediaFileParser;
+
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 public class MediaFileTestUtil {
   private final MediaFileUtil mediaFileUtils;
+  private MediaFileParser mediaFileParser;
 
   public MediaFileTestUtil(MediaFileUtil mediaFileUtils) {
     this.mediaFileUtils = mediaFileUtils;
+    mediaFileParser = new MediaFileParser(mediaFileUtils, new MD5Generator());
   }
 
   public File getTestInputFile() {
@@ -72,6 +78,10 @@ public class MediaFileTestUtil {
     return new File(getTestInputPath() + File.separator + "noxon on raindeer - no date.jpg");
   }
 
+  public File getJpegWitouthDateInSubfolder() {
+    return new File(getTestInputPath() + File.separator + "2014" + File.separator + "nixon on raindeer - no date.jpg");
+  }
+
   public File getSnapchatFile() {
     return new File(getTestInputPath() +
                     File.separator +
@@ -88,5 +98,15 @@ public class MediaFileTestUtil {
                     File.separator +
                     "instagram" +
                     File.separator + "2013-10-26 20.20.46-kottbullar.jpg");
+  }
+
+  public Map<String, List<File>> getParsedMediaFiles(final File testInputFile) {
+    try {
+      return mediaFileParser.getMediaFilesInFolder(testInputFile);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

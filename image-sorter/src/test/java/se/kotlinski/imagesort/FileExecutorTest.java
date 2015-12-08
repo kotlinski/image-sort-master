@@ -12,7 +12,6 @@ import se.kotlinski.imagesort.transformer.MediaFileTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MD5Generator;
-import se.kotlinski.imagesort.utils.FileDescriptor;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -34,7 +33,6 @@ public class FileExecutorTest {
   private MD5Generator MD5Generator;
   private FileDateInterpreter fileDateInterpreter;
   private DateToFileRenamer dateToFileRenamer;
-  private FileDescriptor fileDescriptor;
   private MediaFileTestUtil mediaFileTestUtil;
 
 
@@ -50,7 +48,6 @@ public class FileExecutorTest {
     DeprecatedExportForecaster deprecatedExportForecaster = mock(DeprecatedExportForecaster.class);
     MD5Generator = spy(new MD5Generator());
     fileDateInterpreter = mock(FileDateInterpreter.class);
-    fileDescriptor = mock(FileDescriptor.class);
     dateToFileRenamer = mock(DateToFileRenamer.class);
     MediaFileTransformer mediaFileTransformer = mock(MediaFileTransformer.class);
     mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);

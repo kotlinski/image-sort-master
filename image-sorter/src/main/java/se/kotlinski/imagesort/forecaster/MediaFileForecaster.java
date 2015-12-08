@@ -4,7 +4,6 @@ import org.apache.commons.io.FilenameUtils;
 
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
-import se.kotlinski.imagesort.utils.FileDescriptor;
 
 import java.io.File;
 import java.util.Date;
@@ -12,43 +11,58 @@ import java.util.Date;
 public class MediaFileForecaster {
   private final DateToFileRenamer dateToFileRenamer;
   private final FileDateInterpreter fileDateInterpreter;
-  private final FileDescriptor fileDescriptor;
 
   public MediaFileForecaster(final DateToFileRenamer dateToFileRenamer,
-                             final FileDateInterpreter fileDateInterpreter,
-                             final FileDescriptor fileDescriptor) {
+                             final FileDateInterpreter fileDateInterpreter) {
     this.dateToFileRenamer = dateToFileRenamer;
     this.fileDateInterpreter = fileDateInterpreter;
-    this.fileDescriptor = fileDescriptor;
   }
 
   public String forecastOutputDestination(final File file, final String masterFolderPath) {
+
+    String flavour = getFlavour(masterFolderPath, file);
+
     Date date = getMediaFileDate(file);
-    String datePath = getPath(file, date);
-    String fileName = getFileName(file, date);
+    if (date != null) {
+      String flavourDatePrefix = getFlavourDatePrefix(date);
+      String reducedFlavour = reduceOldFlavourWithDateFlavour(flavour, flavourDatePrefix);
+      flavour = File.separator  + flavourDatePrefix + reducedFlavour;
+    }
 
-    String flavour = fileDescriptor.getFlavour(masterFolderPath, file);
+    String filename;
+    if (date == null) {
+      filename = file.getName();
+    }
+    else {
+      filename = getDateFilename(date, file);
+    }
 
+    return flavour + File.separator + filename;
+  }
+
+  String getFlavour(final String masterFolderPath, final File file) {
+    String flavourWithFileName = file.getPath().replace(masterFolderPath, "");
+    return flavourWithFileName.replace(File.separator + file.getName(), "");
+  }
+
+  private String reduceOldFlavourWithDateFlavour(final String flavour,
+                                                 final String flavourDatePrefix) {
+    String[] dateFlavours = flavourDatePrefix.split(File.separator);
+    String reducedFlavour = flavour;
+    for (String dateFlavour : dateFlavours) {
+      reducedFlavour = reducedFlavour.replace(File.separator + dateFlavour, "");
+    }
+    return reducedFlavour;
+  }
+
+  private String getDateFilename(final Date date, final File file) {
+    String dateFilename = dateToFileRenamer.formatFileDate(date);
     String fileExtension = FilenameUtils.getExtension(file.getName());
-    return datePath + flavour + fileName + "." + fileExtension;
+    return dateFilename + "." + fileExtension;
   }
 
-  private String getPath(final File file, Date date) {
-    if (date == null) {
-      return file.getPath();
-    }
-    else {
-      return dateToFileRenamer.formatPathDate(date);
-    }
-  }
-
-  private String getFileName(final File file, Date date) {
-    if (date == null) {
-      return file.getName();
-    }
-    else {
-      return dateToFileRenamer.formatFileDate(date);
-    }
+  private String getFlavourDatePrefix(final Date date) {
+    return dateToFileRenamer.formatPathDate(date);
   }
 
   private Date getMediaFileDate(File file) {

@@ -28,6 +28,7 @@ public class CommandLineInterface {
   private final Interpreter interpreter;
   private final DateToFileRenamer dateToFileRenamer;
   private final FileDateInterpreter fileDateInterpreter;
+  private final FileSystemPrettyPrinter fileSystemPrettyPrinter;
 
   @Inject
   public CommandLineInterface(final MediaFileParser mediaFileParser,
@@ -35,13 +36,15 @@ public class CommandLineInterface {
                               final DeprecatedExportCollector deprecatedExportCollector,
                               final Interpreter interpreter,
                               final DateToFileRenamer dateToFileRenamer,
-                              final FileDateInterpreter fileDateInterpreter) {
+                              final FileDateInterpreter fileDateInterpreter,
+                              final FileSystemPrettyPrinter fileSystemPrettyPrinter) {
     this.mediaFileParser = mediaFileParser;
     this.filePrinter = filePrinter;
     this.deprecatedExportCollector = deprecatedExportCollector;
     this.interpreter = interpreter;
     this.dateToFileRenamer = dateToFileRenamer;
     this.fileDateInterpreter = fileDateInterpreter;
+    this.fileSystemPrettyPrinter = fileSystemPrettyPrinter;
   }
 
   public final void runCommandLine(String[] arguments) {
@@ -74,8 +77,10 @@ public class CommandLineInterface {
     printMediaFilesInFolderData(mediaFilesInFolder);
 
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder);
+    mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder,
+                                                       sortSettings.masterFolder.getAbsolutePath());
 
+    fileSystemPrettyPrinter.prettyPrintFolderStructure(mediaFileDestinations);
 
     //TODO: Make a conflict handler.
     // When several files have the same destination, some salutary checks have to be made.
@@ -108,18 +113,21 @@ public class CommandLineInterface {
 */
   }
 
-  private Map<String, List<File>> calculateOutputDirectories(final Map<String, List<File>> mediaFilesInFolder) {
-    MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter, fileDescriptor);
+  private Map<String, List<File>> calculateOutputDirectories(final Map<String, List<File>> mediaFilesInFolder,
+                                                             final String masterFolder) {
+    MediaFileForecaster mediaFileForecaster;
+    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
     MediaFilesOutputForecaster mediaOutputCalculator;
-    mediaOutputCalculator= new MediaFilesOutputForecaster(mediaFileForecaster);
+    mediaOutputCalculator = new MediaFilesOutputForecaster(mediaFileForecaster);
 
-    return mediaOutputCalculator.calculateOutputDestinations(mediaFilesInFolder);
+    return mediaOutputCalculator.calculateOutputDestinations(mediaFilesInFolder, masterFolder);
   }
 
   private void printMediaFilesInFolderData(final Map<String, List<File>> mediaFilesInFolder) {
     MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator(); // TODO: inject
     MediaFileDataInFolder mediaDataBeforeExecution;
-    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
+    mediaDataBeforeExecution =
+        mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
 
     System.out.println(mediaDataBeforeExecution.toString());
   }
