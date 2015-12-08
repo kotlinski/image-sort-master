@@ -6,11 +6,9 @@ import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.DeprecatedExportForecaster;
 import se.kotlinski.imagesort.data.DeprecatedExportFileData;
 import se.kotlinski.imagesort.data.DeprecatedParsedFileData;
-import se.kotlinski.imagesort.exception.CouldNotParseDateException;
-import se.kotlinski.imagesort.mapper.DeprecatedExportFileDataMap;
 import se.kotlinski.imagesort.data.SortSettings;
+import se.kotlinski.imagesort.mapper.DeprecatedExportFileDataMap;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDescriptor;
 import se.kotlinski.imagesort.utils.MD5Generator;
 
 import java.io.File;
@@ -21,19 +19,16 @@ public class DeprecatedMediaFileExportParser {
   private static final Logger LOGGER = LogManager.getLogger(DeprecatedMediaFileExportParser.class);
   private final Calendar calendar;
   private final MD5Generator MD5Generator;
-  private final FileDescriptor fileDescriptor;
   private final DateToFileRenamer dateToFileRenamer;
   private final DeprecatedExportForecaster deprecatedExportForecaster;
 
   @Inject
   public DeprecatedMediaFileExportParser(final Calendar calendar,
                                          final MD5Generator MD5Generator,
-                                         final FileDescriptor fileDescriptor,
                                          final DateToFileRenamer dateToFileRenamer,
                                          final DeprecatedExportForecaster deprecatedExportForecaster) {
     this.calendar = calendar;
     this.MD5Generator = MD5Generator;
-    this.fileDescriptor = fileDescriptor;
     this.dateToFileRenamer = dateToFileRenamer;
     this.deprecatedExportForecaster = deprecatedExportForecaster;
 

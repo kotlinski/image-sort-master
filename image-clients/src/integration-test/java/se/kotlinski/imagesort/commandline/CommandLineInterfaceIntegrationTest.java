@@ -47,8 +47,15 @@ public class CommandLineInterfaceIntegrationTest {
     interpreter = spy(new Interpreter(transformer));
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    commandLineInterface =
-        new CommandLineInterface(mediaFileParser, filePrinter, deprecatedExportCollector, interpreter, dateToFileRenamer, fileDateInterpreter);
+    FileSystemPrettyPrinter fileSystemPrettyPrinter = new FileSystemPrettyPrinter();
+
+    commandLineInterface = new CommandLineInterface(mediaFileParser,
+                                                    filePrinter,
+                                                    deprecatedExportCollector,
+                                                    interpreter,
+                                                    dateToFileRenamer,
+                                                    fileDateInterpreter,
+                                                    fileSystemPrettyPrinter);
   }
 
   @Test

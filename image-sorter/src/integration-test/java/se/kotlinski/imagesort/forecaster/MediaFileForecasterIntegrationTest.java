@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
-import se.kotlinski.imagesort.utils.FileDescriptor;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -18,24 +17,18 @@ import static org.junit.Assert.*;
 
 public class MediaFileForecasterIntegrationTest {
 
-  private FileDateInterpreter fileDateInterpreter;
-  private DateToFileRenamer dateToFileRenamer;
-  private Calendar calendar;
   private MediaFileForecaster mediaFileForecaster;
   private MediaFileTestUtil mediaFileTestUtil;
-  private FileDescriptor fileDescriptor;
 
   @Before
   public void setUp() throws Exception {
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
-    calendar = new GregorianCalendar();
-    dateToFileRenamer = new DateToFileRenamer(calendar);
-    fileDateInterpreter = new FileDateInterpreter();
-    fileDescriptor = new FileDescriptor();
-    mediaFileForecaster =
-        new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter, fileDescriptor);
+    Calendar calendar = new GregorianCalendar();
+    DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
   }
 
   @Test
@@ -74,11 +67,36 @@ public class MediaFileForecasterIntegrationTest {
     String testInputPath = mediaFileTestUtil.getTestInputPath();
 
 
-    String jpegDestionationPath = mediaFileForecaster.forecastOutputDestination(aJpegFile, testInputPath);
-    assertThat(jpegDestionationPath, is("2014" +
-                                        File.separator +
-                                        "02" +
-                                        File.separator +
-                                        "2014-02-22 12.48.48.jpg"));
+    String jpegDestionationPath =
+        mediaFileForecaster.forecastOutputDestination(aJpegFile, testInputPath);
+    assertThat(jpegDestionationPath, is(File.separator + "noxon on raindeer - no date.jpg"));
   }
+
+  @Test
+  public void testGetFlavour_withoutDate() throws Exception {
+    File aJpegFile = mediaFileTestUtil.getJpegWitouthDate();
+    String masterFolderPath = mediaFileTestUtil.getTestInputPath();
+
+    String flavour = mediaFileForecaster.getFlavour(masterFolderPath, aJpegFile);
+    assertThat(flavour, is(""));
+  }
+
+  @Test
+  public void testGetFlavour_withoutDateInSubfolder() throws Exception {
+    File aJpegFile = mediaFileTestUtil.getJpegWitouthDateInSubfolder();
+    String masterFolderPath = mediaFileTestUtil.getTestInputPath();
+
+    String flavour = mediaFileForecaster.getFlavour(masterFolderPath, aJpegFile);
+    assertThat(flavour, is(File.separator + "2014"));
+  }
+
+  @Test
+  public void testGetFlavour_imageFromSubFolder() throws Exception {
+    File fileFromASubFolder = mediaFileTestUtil.getAJpegFileFromASubFolder();
+    String masterFolderPath = mediaFileTestUtil.getTestInputPath();
+
+    String flavour = mediaFileForecaster.getFlavour(masterFolderPath, fileFromASubFolder);
+    assertThat(flavour, is(File.separator + "2014" + File.separator + "duplicate in subfolder"));
+  }
+
 }
