@@ -19,11 +19,8 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 public class FileExecutorIntegrationTest {
 

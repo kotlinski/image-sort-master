@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.kotlinski.imagesort.exception.InvalidArgumentsException;
 import se.kotlinski.imagesort.data.SortSettings;
+import se.kotlinski.imagesort.exception.InvalidArgumentsException;
 
 public class Interpreter {
 

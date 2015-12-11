@@ -1,7 +1,6 @@
 package se.kotlinski.imagesort.forecaster;
 
 import org.apache.commons.io.FilenameUtils;
-
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 

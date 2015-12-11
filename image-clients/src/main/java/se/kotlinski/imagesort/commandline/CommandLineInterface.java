@@ -3,16 +3,17 @@ package se.kotlinski.imagesort.commandline;
 import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.kotlinski.imagesort.DeprecatedExportCollector;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
-import se.kotlinski.imagesort.DeprecatedExportCollector;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
+import se.kotlinski.imagesort.data.SortSettings;
+import se.kotlinski.imagesort.exception.InvalidInputFolders;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.mapper.DeprecatedExportFileDataMap;
 import se.kotlinski.imagesort.parser.MediaFileParser;
-import se.kotlinski.imagesort.exception.InvalidInputFolders;
-import se.kotlinski.imagesort.data.SortSettings;
+import se.kotlinski.imagesort.resolver.OutputConflictResolver;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 
@@ -29,6 +30,7 @@ public class CommandLineInterface {
   private final DateToFileRenamer dateToFileRenamer;
   private final FileDateInterpreter fileDateInterpreter;
   private final FileSystemPrettyPrinter fileSystemPrettyPrinter;
+  private final OutputConflictResolver outputConflictResolver;
 
   @Inject
   public CommandLineInterface(final MediaFileParser mediaFileParser,
@@ -37,7 +39,8 @@ public class CommandLineInterface {
                               final Interpreter interpreter,
                               final DateToFileRenamer dateToFileRenamer,
                               final FileDateInterpreter fileDateInterpreter,
-                              final FileSystemPrettyPrinter fileSystemPrettyPrinter) {
+                              final FileSystemPrettyPrinter fileSystemPrettyPrinter,
+                              final OutputConflictResolver outputConflictResolver) {
     this.mediaFileParser = mediaFileParser;
     this.filePrinter = filePrinter;
     this.deprecatedExportCollector = deprecatedExportCollector;
@@ -45,6 +48,7 @@ public class CommandLineInterface {
     this.dateToFileRenamer = dateToFileRenamer;
     this.fileDateInterpreter = fileDateInterpreter;
     this.fileSystemPrettyPrinter = fileSystemPrettyPrinter;
+    this.outputConflictResolver = outputConflictResolver;
   }
 
   public final void runCommandLine(String[] arguments) {
@@ -80,7 +84,10 @@ public class CommandLineInterface {
     mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder,
                                                        sortSettings.masterFolder.getAbsolutePath());
 
-    fileSystemPrettyPrinter.prettyPrintFolderStructure(mediaFileDestinations);
+    fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
+
+    outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
+
 
     //TODO: Make a conflict handler.
     // When several files have the same destination, some salutary checks have to be made.

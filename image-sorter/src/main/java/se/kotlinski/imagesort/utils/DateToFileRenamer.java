@@ -1,7 +1,6 @@
 package se.kotlinski.imagesort.utils;
 
 import com.google.inject.Inject;
-import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

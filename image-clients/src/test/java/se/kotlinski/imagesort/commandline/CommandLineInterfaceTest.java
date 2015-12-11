@@ -58,7 +58,7 @@ public class CommandLineInterfaceTest {
                              interpreter,
                              dateToFileRenamer,
                              fileDateInterpreter,
-                             fileSystemPrettyPrinter);
+                             fileSystemPrettyPrinter, outputConflictResolver);
   }
 
   @Test

@@ -20,7 +20,6 @@ import java.util.GregorianCalendar;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 public class CommandLineInterfaceIntegrationTest {
   private CommandLineInterface commandLineInterface;
@@ -55,7 +54,7 @@ public class CommandLineInterfaceIntegrationTest {
                                                     interpreter,
                                                     dateToFileRenamer,
                                                     fileDateInterpreter,
-                                                    fileSystemPrettyPrinter);
+                                                    fileSystemPrettyPrinter, outputConflictResolver);
   }
 
   @Test
