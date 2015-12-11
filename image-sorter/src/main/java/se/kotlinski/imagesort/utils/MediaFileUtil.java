@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MediaFileUtil {
-  public MediaFileUtil() {
+  private final FileTypeDetector fileTypeDetector;
 
+  public MediaFileUtil() {
+    fileTypeDetector = new FileTypeDetector();
   }
 
   public boolean isValidFolder(final File folder) {
@@ -55,6 +57,13 @@ public class MediaFileUtil {
       System.err.println(err);
     }
     return false;
+  }
+
+  public String appendToFileName(final String outputDirectory, final String appendPart) {
+    String outputPathWithoutExtension = outputDirectory.substring(0, outputDirectory.lastIndexOf('.'));
+    String extension = outputDirectory.substring(outputDirectory.lastIndexOf('.'), outputDirectory.length());
+
+    return (outputPathWithoutExtension + appendPart + extension);
   }
 
 }

@@ -23,10 +23,12 @@ public class OutputConflictResolverTest {
   private MediaFileTestUtil mediaFileTestUtil;
   private MediaFileForecaster mediaFileForecaster;
   Map<String, List<File>> mediaFileDestinations;
+  private MediaFileUtil mediaFileUtil;
 
   @Before
   public void setUp() throws Exception {
-    outputConflictResolver = new OutputConflictResolver(new MD5Generator());
+    mediaFileUtil = new MediaFileUtil();
+    outputConflictResolver = new OutputConflictResolver(new MD5Generator(), mediaFileUtil);
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
@@ -47,7 +49,12 @@ public class OutputConflictResolverTest {
 
   @Test
   public void testResolveOutputConflicts() throws Exception {
-    outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
+    Map<List<File>, String> listStringMap;
+    listStringMap = outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
+
+    for (String s : listStringMap.values()) {
+      System.out.println(s);
+    }
 
   }
 }

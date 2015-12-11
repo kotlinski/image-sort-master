@@ -1,36 +1,74 @@
 package se.kotlinski.imagesort.resolver;
 
 import se.kotlinski.imagesort.utils.MD5Generator;
+import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
 
 public class OutputConflictResolver {
-  final MD5Generator md5Generator;
+  private final MD5Generator md5Generator;
+  private final MediaFileUtil mediaFileUtil;
 
-  public OutputConflictResolver(final MD5Generator md5Generator) {
+
+  public OutputConflictResolver(final MD5Generator md5Generator,
+                                final MediaFileUtil mediaFileUtil) {
     this.md5Generator = md5Generator;
+    this.mediaFileUtil = mediaFileUtil;
   }
 
   public enum Destany {
     MOVE, DELETE, IGNORE
   }
 
-  public void resolveOutputConflicts(final Map<String, List<File>> mediaFileDestinations) {
-    Map<File, String> resolvedDestinations;
+  public Map<List<File>, String> resolveOutputConflicts(final Map<String, List<File>> mediaFileDestinations) {
+    Map<List<File>, String> filesToOutputDestination = new HashMap<>();
+
+    for (String outputDirectory : mediaFileDestinations.keySet()) {
+      List<File> files = mediaFileDestinations.get(outputDirectory);
+
+      Map<String, List<File>> md5Groups = new HashMap<>();
+      for (File file : files) {
+        String fileMd5 = md5Generator.generateMd5(file);
+        if (!md5Groups.containsKey(fileMd5)) {
+          md5Groups.put(fileMd5, new ArrayList<>());
+        }
+        md5Groups.get(fileMd5).add(file);
+      }
+
+      if (severalGroupsWithSameOutput(md5Groups)) {
+        int append = 1;
+        for (List<File> fileList : md5Groups.values()) {
+          String outputWithAppendedValue = mediaFileUtil.appendToFileName(outputDirectory, "_" + append);
+          filesToOutputDestination.put(fileList, outputWithAppendedValue);
+          append++;
+        }
+      }
+      else {
+        filesToOutputDestination.put(files, outputDirectory);
+      }
+    }
+
+    return filesToOutputDestination;
+
+
+    /*Map<File, String> resolvedDestinations;
     for (String outputDestination : mediaFileDestinations.keySet()) {
       List<DestanyFilePath> destanyFiles = resolveConflicts(mediaFileDestinations.get(
           outputDestination));
-      //    System.out.println(outputDestination);
-      //   System.out.println(mediaFileDestinations.get(outputDestination));
-      //  System.out.println();
-    }
+    */  //    System.out.println(outputDestination);
+    //   System.out.println(mediaFileDestinations.get(outputDestination));
+    //  System.out.println();
   }
 
+  private boolean severalGroupsWithSameOutput(final Map<String, List<File>> md5Groups) {
+    return md5Groups.size() > 1;
+  }
+
+/*
   private List<DestanyFilePath> resolveConflicts(final List<File> files) {
     Stack<File> stack = new Stack<>();
     stack.addAll(files);
@@ -38,7 +76,7 @@ public class OutputConflictResolver {
     //TODO 2015 -12 - 09
     //What we really want to do here is to group files.
     // Groups of they who need to be renamed
-    // Gropus of they who can be directly translated.
+    // Gropus of they who can be directly translated/moved.
 
     //So,,,
     // What we really want to export is a Map<List<File>>, String>.
@@ -112,5 +150,5 @@ public class OutputConflictResolver {
       this.destionation = destionation;
       this.filePath = filePath;
     }
-  }
+  }*/
 }
