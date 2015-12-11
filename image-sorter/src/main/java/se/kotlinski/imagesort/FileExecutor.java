@@ -3,10 +3,10 @@ package se.kotlinski.imagesort;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.mapper.DeprecatedExportFileDataMap;
 import se.kotlinski.imagesort.model.DeprecatedFileCopyReport;
 import se.kotlinski.imagesort.model.DeprecatedFileDescriber;
-import se.kotlinski.imagesort.data.SortSettings;
 
 import java.io.File;
 import java.io.IOException;

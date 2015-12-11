@@ -7,7 +7,6 @@ import javafx.event.EventHandler;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import se.kotlinski.imagesort.javafx.view.FolderSelector;
-import se.kotlinski.imagesort.javafx.JavaFXUtils;
 
 import java.io.File;
 

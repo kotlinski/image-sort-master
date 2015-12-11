@@ -2,36 +2,35 @@ package se.kotlinski.imagesort.commandline;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class FileSystemPrettyPrinter {
 
 
-  public void prettyPrintFolderStructure(final Map<String, List<File>> mediaFileDestinations) {
+  public String convertFolderStructureToString(final Map<String, List<File>> mediaFileDestinations) {
     StringTree stringTree = new StringTree(File.separator);
     for (String filePath : mediaFileDestinations.keySet()) {
       List<String> subFolders = getFolders(filePath);
       addChild(stringTree.root, subFolders, 1);
     }
-    printTree(stringTree.root, 0);
+    return printTree(stringTree.root, 0);
   }
 
-  private void printTree(final StringTree.Node root, int level) {
+  private String printTree(final StringTree.Node root, int level) {
+    String returnString = "";
     for (StringTree.Node child : root.children) {
       String prefix = " |";
       for (int i = 0; i < child.level; i++) {
-        System.out.print(prefix);
+        returnString += prefix;
       }
-      System.out.println("-" + child.data);
-      printTree(child, level++);
-
+      returnString += "-" + child.data + "\n";
+      returnString += printTree(child, level++);
     }
+    return returnString;
   }
 
   private void addChild(StringTree.Node node, List<String> list, int index) {

@@ -15,7 +15,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FileSystemPrettyPrinterTest {
 
@@ -48,6 +49,29 @@ public class FileSystemPrettyPrinterTest {
     mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
                                                                                    testInputPath);
 
-    fileSystemPrettyPrinter.prettyPrintFolderStructure(mediaFileDestinations);
+    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
+
+    System.out.println(fileSystem);
+
+    assertThat(fileSystem, is(" |-noxon on raindeer - no date.jpg\n" +
+                              " |-2014\n" +
+                              " | |-nixon on raindeer - no date.jpg\n" +
+                              " | |-03\n" +
+                              " | | |-2014-03-16 11.45.09.mp4\n" +
+                              " | | |-2014-03-02 02.09.34.jpg\n" +
+                              " | |-02\n" +
+                              " | | |-duplicate in subfolder\n" +
+                              " | | | |-2014-02-22 12.48.48.jpg\n" +
+                              " | | |-2014-02-22 12.48.48.jpg\n" +
+                              " | | |-2014-02-22 12.48.47.jpg\n" +
+                              " |-2013\n" +
+                              " | |-10\n" +
+                              " | | |-snapchat\n" +
+                              " | | | |-2013-10-03 15.43.20.jpg\n" +
+                              " | | |-instagram\n" +
+                              " | | | |-2013-10-26 22.20.46.jpg\n" +
+                              " |-2007\n" +
+                              " | |-06\n" +
+                              " | | |-2007-06-15 19.41.19.jpg\n"));
   }
 }

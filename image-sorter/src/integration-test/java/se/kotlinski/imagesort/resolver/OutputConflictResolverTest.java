@@ -1,9 +1,12 @@
-package se.kotlinski.imagesort.forecaster;
+package se.kotlinski.imagesort.resolver;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
+import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.utils.MD5Generator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -13,17 +16,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+public class OutputConflictResolverTest {
 
-
-public class MediaFilesOutputForecasterTest {
+  private OutputConflictResolver outputConflictResolver;
   private MediaFilesOutputForecaster mediaFilesOutputForecaster;
   private MediaFileTestUtil mediaFileTestUtil;
   private MediaFileForecaster mediaFileForecaster;
+  Map<String, List<File>> mediaFileDestinations;
 
   @Before
   public void setUp() throws Exception {
+    outputConflictResolver = new OutputConflictResolver(new MD5Generator());
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
@@ -33,19 +36,18 @@ public class MediaFilesOutputForecasterTest {
     mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
 
     mediaFilesOutputForecaster = new MediaFilesOutputForecaster(mediaFileForecaster);
-  }
-
-  @Test
-  public void testCalculateOutputDestinations() throws Exception {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     String testInputPath = mediaFileTestUtil.getTestInputPath();
     Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile);
 
-    Map<String, List<File>> stringListMap;
-    stringListMap = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
-                                                                           testInputPath);
-    assertThat(stringListMap.size(), is(10));
+    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
+                                                                                   testInputPath);
   }
 
+  @Test
+  public void testResolveOutputConflicts() throws Exception {
+    outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
+
+  }
 }
