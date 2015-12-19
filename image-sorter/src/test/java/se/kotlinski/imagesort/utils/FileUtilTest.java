@@ -57,6 +57,6 @@ public class FileUtilTest {
                         File.separator +
                         "image-sorter" + File.separator + "src" + File.separator + "test" +
                         File.separator + "resources" + File.separator + "output",
-                        mediaFileTestUtil.getTestOutputPath());
+                        mediaFileTestUtil.getRestorableTestMasterPath());
   }
 }

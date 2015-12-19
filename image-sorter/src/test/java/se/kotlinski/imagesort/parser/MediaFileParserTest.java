@@ -2,7 +2,6 @@ package se.kotlinski.imagesort.parser;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.DeprecatedExportForecaster;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.transformer.MediaFileTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
@@ -33,7 +32,6 @@ public class MediaFileParserTest {
   private MD5Generator MD5Generator;
   private FileDateInterpreter fileDateInterpreter;
   private DateToFileRenamer dateToFileRenamer;
-  private DeprecatedExportForecaster deprecatedExportForecaster;
   private MediaFileTransformer mediaFileTransform;
 
   @Before
@@ -42,12 +40,11 @@ public class MediaFileParserTest {
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
     sortSettings = new SortSettings();
-    sortSettings.masterFolder = new File(mediaFileTestUtil.getTestOutputPath());
+    sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     calendar = new GregorianCalendar();
     MD5Generator = spy(new MD5Generator());
     fileDateInterpreter = spy(new FileDateInterpreter());
     dateToFileRenamer = spy(new DateToFileRenamer(calendar));
-    deprecatedExportForecaster = spy(new DeprecatedExportForecaster(dateToFileRenamer));
     mediaFileTransform = mock(MediaFileTransformer.class);
     MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);
     setMediaFileParser(mediaFileParser);
@@ -140,7 +137,7 @@ public class MediaFileParserTest {
       assert true;
     }*/
 
-    sortSettings.masterFolder = new File(mediaFileTestUtil.getTestOutputPath());
+    sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     inputFolders = new ArrayList<File>();
     inputFolders.add(sortSettings.masterFolder);
     setMediaFileParser(new MediaFileParser(mediaFileUtil, MD5Generator));

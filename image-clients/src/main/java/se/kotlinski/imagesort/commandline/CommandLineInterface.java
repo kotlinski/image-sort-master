@@ -3,15 +3,14 @@ package se.kotlinski.imagesort.commandline;
 import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.kotlinski.imagesort.DeprecatedExportCollector;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
+import se.kotlinski.imagesort.executor.FileMover;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
-import se.kotlinski.imagesort.mapper.DeprecatedExportFileDataMap;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
@@ -25,35 +24,34 @@ public class CommandLineInterface {
   private static final Logger LOGGER = LogManager.getLogger(CommandLineInterface.class);
   private final MediaFileParser mediaFileParser;
   private final FilePrinter filePrinter;
-  private final DeprecatedExportCollector deprecatedExportCollector;
   private final Interpreter interpreter;
   private final DateToFileRenamer dateToFileRenamer;
   private final FileDateInterpreter fileDateInterpreter;
   private final FileSystemPrettyPrinter fileSystemPrettyPrinter;
   private final OutputConflictResolver outputConflictResolver;
+  private final FileMover fileMover;
 
   @Inject
   public CommandLineInterface(final MediaFileParser mediaFileParser,
                               final FilePrinter filePrinter,
-                              final DeprecatedExportCollector deprecatedExportCollector,
                               final Interpreter interpreter,
                               final DateToFileRenamer dateToFileRenamer,
                               final FileDateInterpreter fileDateInterpreter,
                               final FileSystemPrettyPrinter fileSystemPrettyPrinter,
-                              final OutputConflictResolver outputConflictResolver) {
+                              final OutputConflictResolver outputConflictResolver,
+                              final FileMover fileMover) {
     this.mediaFileParser = mediaFileParser;
     this.filePrinter = filePrinter;
-    this.deprecatedExportCollector = deprecatedExportCollector;
     this.interpreter = interpreter;
     this.dateToFileRenamer = dateToFileRenamer;
     this.fileDateInterpreter = fileDateInterpreter;
     this.fileSystemPrettyPrinter = fileSystemPrettyPrinter;
     this.outputConflictResolver = outputConflictResolver;
+    this.fileMover = fileMover;
   }
 
   public final void runCommandLine(String[] arguments) {
     SortSettings sortSettings;
-    DeprecatedExportFileDataMap deprecatedExportFileDataMap;
 
     try {
       sortSettings = interpreter.transformArguments(arguments);
@@ -81,13 +79,15 @@ public class CommandLineInterface {
     printMediaFilesInFolderData(mediaFilesInFolder);
 
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder,
-                                                       sortSettings.masterFolder.getAbsolutePath());
+    String masterFolderPath = sortSettings.masterFolder.getAbsolutePath();
+    mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder, masterFolderPath);
 
     fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
 
-    outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
+    Map<List<File>, String> resolvedFilesToOutputMap;
+    resolvedFilesToOutputMap = outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
 
+    fileMover.moveFilesToNewDestionation(resolvedFilesToOutputMap, masterFolderPath);
 
     //TODO: Make a conflict handler.
     // When several files have the same destination, some salutary checks have to be made.
@@ -133,8 +133,8 @@ public class CommandLineInterface {
   private void printMediaFilesInFolderData(final Map<String, List<File>> mediaFilesInFolder) {
     MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator(); // TODO: inject
     MediaFileDataInFolder mediaDataBeforeExecution;
-    mediaDataBeforeExecution =
-        mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
+    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(
+        mediaFilesInFolder);
 
     System.out.println(mediaDataBeforeExecution.toString());
   }

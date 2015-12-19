@@ -21,16 +21,17 @@ public class FileSystemPrettyPrinter {
   }
 
   private String printTree(final StringTree.Node root, int level) {
-    String returnString = "";
+    StringBuffer buf = new StringBuffer();
+
     for (StringTree.Node child : root.children) {
       String prefix = " |";
       for (int i = 0; i < child.level; i++) {
-        returnString += prefix;
+        buf.append(prefix);
       }
-      returnString += "-" + child.data + "\n";
-      returnString += printTree(child, level++);
+      buf.append("-" + child.data + "\n");
+      buf.append(printTree(child, level++));
     }
-    return returnString;
+    return buf.toString();
   }
 
   private void addChild(StringTree.Node node, List<String> list, int index) {
@@ -54,7 +55,8 @@ public class FileSystemPrettyPrinter {
   }
 
   private List<String> getFolders(final String filePath) {
-    List<String> separated = new LinkedList<>(Arrays.asList(filePath.split(File.separator)));
+    String regexFileSeparator = File.separatorChar == '\\' ? "\\\\" : File.separator;
+    List<String> separated = new LinkedList<>(Arrays.asList(filePath.split(regexFileSeparator)));
     separated.remove(0);
     separated.add(0, File.separator);
     return separated;

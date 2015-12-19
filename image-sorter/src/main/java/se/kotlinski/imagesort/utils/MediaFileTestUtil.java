@@ -1,8 +1,10 @@
 package se.kotlinski.imagesort.utils;
 
+import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -10,46 +12,48 @@ public class MediaFileTestUtil {
   private final MediaFileUtil mediaFileUtils;
   private MediaFileParser mediaFileParser;
 
+  private final String defaultTestFolderName = "inputImages";
+  private final String restoreableTestFolderName = "restoreable_master_folder";
+
   public MediaFileTestUtil(MediaFileUtil mediaFileUtils) {
     this.mediaFileUtils = mediaFileUtils;
     mediaFileParser = new MediaFileParser(mediaFileUtils, new MD5Generator());
   }
 
   public File getTestInputFile() {
-    String path = modifyPath(mediaFileUtils.getSystemPath(), true);
+    String path = modifyPath(mediaFileUtils.getSystemPath(), defaultTestFolderName);
     return new File(path);
   }
 
   public String getTestInputPath() {
-    return modifyPath(mediaFileUtils.getSystemPath(), true);
+    return modifyPath(mediaFileUtils.getSystemPath(), defaultTestFolderName);
   }
 
-  public String getTestOutputPath() {
-    return modifyPath(mediaFileUtils.getSystemPath(), false);
+  public File getRestorableTestMasterFile() {
+    String path = modifyPath(mediaFileUtils.getSystemPath(), restoreableTestFolderName);
+    return new File(path);
   }
 
-  private String modifyPath(String path, boolean input) {
+  public String getRestorableTestMasterPath() {
+    return modifyPath(mediaFileUtils.getSystemPath(), restoreableTestFolderName);
+  }
+
+  private String modifyPath(String path, final String folderName) {
     String pathWithoutRoot = path.replace("image-clients" + File.separator, "");
     if (pathWithoutRoot.contains("image-sorter")) {
-      return pathWithoutRoot + appendPathSpecifier(input);
+      return pathWithoutRoot + appendPathSpecifier(folderName);
     }
     else {
-      return pathWithoutRoot + "image-sorter" + File.separator + appendPathSpecifier(input);
+      return pathWithoutRoot + "image-sorter" + File.separator + appendPathSpecifier(folderName);
     }
   }
 
-  private String appendPathSpecifier(final boolean input) {
-    String folder;
-    if (input) {
-      folder = "inputImages";
-    }
-    else {
-      folder = "output";
-    }
+  private String appendPathSpecifier(final String folderName) {
+
     return "src" + File.separator +
            "test" + File.separator +
            "resources" + File.separator +
-           folder;
+           folderName;
   }
 
   public File getAJpegFile() {
@@ -108,5 +112,26 @@ public class MediaFileTestUtil {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public void cleanRestoreableMasterFolder() {
+    File restorableTestMasterFile = getRestorableTestMasterFile();
+    try {
+      FileUtils.cleanDirectory(restorableTestMasterFile);
+    }
+    catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+
+  public void copyTestFilesToOutputDirectory() {
+    File testInputFile = getTestInputFile();
+    File restorableTestMasterFile = getRestorableTestMasterFile();
+    try {
+      FileUtils.copyDirectory(testInputFile, restorableTestMasterFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

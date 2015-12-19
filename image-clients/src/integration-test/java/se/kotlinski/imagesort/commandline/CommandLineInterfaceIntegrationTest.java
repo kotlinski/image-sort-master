@@ -5,10 +5,11 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.DeprecatedExportCollector;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.commandline.argument.Transformer;
+import se.kotlinski.imagesort.executor.FileMover;
 import se.kotlinski.imagesort.parser.MediaFileParser;
+import se.kotlinski.imagesort.resolver.OutputConflictResolver;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MD5Generator;
@@ -32,12 +33,10 @@ public class CommandLineInterfaceIntegrationTest {
   public void setUp() throws Exception {
     mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
-    Calendar calendar = new GregorianCalendar();
     MD5Generator MD5Generator = new MD5Generator();
 
     MediaFileParser mediaFileParser = spy(new MediaFileParser(mediaFileUtil, MD5Generator));
     filePrinter = spy(new FilePrinter());
-    DeprecatedExportCollector deprecatedExportCollector = mock(DeprecatedExportCollector.class);
 
     HelpFormatter formatter = new HelpFormatter();
     CommandLineParser parser = new GnuParser();
@@ -48,13 +47,16 @@ public class CommandLineInterfaceIntegrationTest {
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
     FileSystemPrettyPrinter fileSystemPrettyPrinter = new FileSystemPrettyPrinter();
 
+    OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MD5Generator(),
+                                                                               mediaFileUtil);
     commandLineInterface = new CommandLineInterface(mediaFileParser,
                                                     filePrinter,
-                                                    deprecatedExportCollector,
                                                     interpreter,
                                                     dateToFileRenamer,
                                                     fileDateInterpreter,
-                                                    fileSystemPrettyPrinter, outputConflictResolver);
+                                                    fileSystemPrettyPrinter,
+                                                    outputConflictResolver,
+                                                    new FileMover(mediaFileUtil));
   }
 
   @Test
