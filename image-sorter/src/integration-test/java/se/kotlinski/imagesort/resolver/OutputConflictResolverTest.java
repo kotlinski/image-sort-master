@@ -12,9 +12,13 @@ import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OutputConflictResolverTest {
 
@@ -55,6 +59,19 @@ public class OutputConflictResolverTest {
     for (String s : listStringMap.values()) {
       System.out.println(s);
     }
-
-  }
+    Collection<String> outputPaths = listStringMap.values();
+    assertThat(listStringMap.size(), is(11));
+    assertThat(outputPaths.size(), is(11));
+    assertThat(outputPaths.contains("/2013/10/snapchat/2013-10-03 15.43.20.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/03/2014-03-02 02.09.34.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/02/2014-02-22 12.48.47_1.jpg"), is(true));
+    assertThat(outputPaths.contains("/2013/10/instagram/2013-10-26 22.20.46.jpg"), is(true));
+    assertThat(outputPaths.contains("/2007/06/2007-06-15 19.41.19.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/02/2014-02-22 12.48.48.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/nixon on raindeer - no date.jpg"), is(true));
+    assertThat(outputPaths.contains("/noxon on raindeer - no date.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/03/2014-03-16 11.45.09.mp4"), is(true));
+    assertThat(outputPaths.contains("/2014/02/duplicate in subfolder/2014-02-22 12.48.48.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/02/2014-02-22 12.48.47_2.jpg"), is(true));
+}
 }

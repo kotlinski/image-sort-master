@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.DeprecatedExportForecaster;
-import se.kotlinski.imagesort.FileExecutor;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.transformer.MediaFileTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
@@ -40,22 +38,21 @@ public class FileExecutorIntegrationTest {
 
     sortSettings = new SortSettings();
     File file = new File(mediaFileTestUtil.getTestInputPath());
-    sortSettings.masterFolder = new File(mediaFileTestUtil.getTestOutputPath());
+    sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     Calendar calendar = new GregorianCalendar();
-    DeprecatedExportForecaster deprecatedExportForecaster = mock(DeprecatedExportForecaster.class);
     MD5Generator = spy(new MD5Generator());
     fileDateInterpreter = mock(FileDateInterpreter.class);
     dateToFileRenamer = mock(DateToFileRenamer.class);
     MediaFileTransformer mediaFileTransformer = mock(MediaFileTransformer.class);
     mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);
 
-    File outputFolder = new File(mediaFileTestUtil.getTestOutputPath());
+    File outputFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     deleteFolderContent(outputFolder);
   }
 
   @After
   public void tearDown() throws Exception {
-    File outputFolder = new File(mediaFileTestUtil.getTestOutputPath());
+    File outputFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     deleteFolderContent(outputFolder);
   }
 
@@ -69,7 +66,7 @@ public class FileExecutorIntegrationTest {
    Assert.assertEquals(0, fileCopyReport.getNumberOfFilesCopied());
     Assert.assertEquals(9, fileCopyReport.getFilesNotCopied().size());
 
-    File outputFolder = new File(new MediaFileUtil().getTestOutputPath());
+    File outputFolder = new File(new MediaFileUtil().getRestorableTestMasterPath());
     deleteFolderContent(outputFolder);
     DeprecatedExportFileDataMap exportFileDataMap2 = mediaFileParser.transformFilesToMediaFiles(sortSettings);
     fileExecutor.copyFiles(exportFileDataMap2, sortSettings);
@@ -82,9 +79,8 @@ public class FileExecutorIntegrationTest {
 
   @Test
   public void sunShineTest() throws Exception {
-    FileExecutor fileExecutor = spy(new FileExecutor());
 
-    File outputFolder = new File(mediaFileTestUtil.getTestOutputPath());
+    File outputFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     deleteFolderContent(outputFolder);
 /*
     DeprecatedExportFileDataMap exportFileDataMap = mediaFileParser.transformFilesToMediaFiles(sortSettings);

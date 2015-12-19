@@ -13,7 +13,6 @@ public class ParsedFileDataMapTest {
 
   private MediaFileUtil mediaFileUtil;
   private Calendar calendar;
-  private DeprecatedExportFileDataMap deprecatedExportFileDataMap;
   private DateToFileRenamer dateToFileRenamer;
 
   @Before
@@ -22,7 +21,6 @@ public class ParsedFileDataMapTest {
     mediaFileUtil = new MediaFileUtil();
     calendar = mock(Calendar.class);
     dateToFileRenamer = spy(new DateToFileRenamer(calendar));
-    deprecatedExportFileDataMap = new DeprecatedExportFileDataMap(dateToFileRenamer);
   }
 /*
   @Test

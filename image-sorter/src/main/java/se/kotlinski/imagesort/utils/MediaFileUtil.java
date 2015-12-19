@@ -7,11 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MediaFileUtil {
-  private final FileTypeDetector fileTypeDetector;
-
-  public MediaFileUtil() {
-    fileTypeDetector = new FileTypeDetector();
-  }
 
   public boolean isValidFolder(final File folder) {
     return folder != null && folder.exists() && folder.isDirectory();
@@ -54,7 +49,7 @@ public class MediaFileUtil {
       }
     }
     catch (IOException err) {
-      System.err.println(err);
+      err.printStackTrace();
     }
     return false;
   }
