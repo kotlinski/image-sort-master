@@ -7,7 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.commandline.argument.Transformer;
+import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.executor.FileMover;
+import se.kotlinski.imagesort.executor.ImageSorter;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
@@ -16,7 +18,6 @@ import se.kotlinski.imagesort.utils.MD5Generator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static org.mockito.Mockito.mock;
@@ -49,19 +50,28 @@ public class CommandLineInterfaceIntegrationTest {
 
     OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MD5Generator(),
                                                                                mediaFileUtil);
-    commandLineInterface = new CommandLineInterface(mediaFileParser,
-                                                    filePrinter,
-                                                    interpreter,
+    FileMover fileMover = new FileMover(mediaFileUtil);
+    ClientInterface clientInterface = mock(ClientInterface.class);
+
+    ImageSorter imageSorter = new ImageSorter(clientInterface,
+                                              mediaFileParser,
+                                              dateToFileRenamer,
+                                              fileDateInterpreter,
+                                              outputConflictResolver,
+                                              fileMover);
+
+    commandLineInterface = new CommandLineInterface(interpreter,
                                                     dateToFileRenamer,
                                                     fileDateInterpreter,
-                                                    fileSystemPrettyPrinter,
-                                                    outputConflictResolver,
-                                                    new FileMover(mediaFileUtil));
+                                                    imageSorter,
+                                                    fileSystemPrettyPrinter);
   }
 
   @Test
   public void testRunCommandLine() throws Exception {
-    String[] arguments = new String[]{"-s", mediaFileTestUtil.getTestInputPath()};
+    mediaFileTestUtil.cleanRestoreableMasterFolder();
+    mediaFileTestUtil.copyTestFilesToRestoreableDirectory();
+    String[] arguments = new String[]{"-s", mediaFileTestUtil.getRestorableTestMasterPath()};
 
     commandLineInterface.runCommandLine(arguments);
   }
