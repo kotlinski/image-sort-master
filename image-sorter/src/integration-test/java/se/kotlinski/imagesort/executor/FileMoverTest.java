@@ -1,10 +1,10 @@
 package se.kotlinski.imagesort.executor;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
-import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.parser.MediaFileParser;
@@ -96,29 +96,30 @@ public class FileMoverTest {
   public void testMoveFilesToNewDestionationWhenHavingConflictingNames() throws Exception {
     //TODO the test defined below
 
-    File masterFolder = mediaFileTestUtil.getRestorableTestMasterFile();
-    File inputMasterFolderFile = mediaFileTestUtil.getTestInputFile();
+    mediaFileTestUtil.cleanRestoreableMasterFolder();
+
+    String testInputPath = mediaFileTestUtil.getTestInputPath();
+    String restorableTestMasterPath = mediaFileTestUtil.getRestorableTestMasterPath();
 
     File snapchatFile = mediaFileTestUtil.getSnapchatFile();
     File instagramFile = mediaFileTestUtil.getInstagramFile();
 
+    DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
+    MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer,
+                                                                      new FileDateInterpreter());
+
+    String snapchatOutputDestination = mediaFileForecaster.forecastOutputDestination(snapchatFile,
+                                                                                     testInputPath);
+    String instagramOutputDestination = mediaFileForecaster.forecastOutputDestination(instagramFile,
+                                                                                      testInputPath);
+
+    FileUtils.moveFile(snapchatFile,
+                       FileUtils.getFile(restorableTestMasterPath + instagramOutputDestination));
+    FileUtils.moveFile(instagramFile,
+                       FileUtils.getFile(restorableTestMasterPath + snapchatOutputDestination));
 
 
-/*
-    Fila A;
-    File B;
-
-    String exportDestionationA;
-    String exportDestionationB;
-
-    moveA to exportDestionationB;
-    moveB to exportDestionationA;*/
-
-    // TODO
-    // Don't pass around relative strings, try to pass around absolute string-paths.
-    //    or even try to pass around files.
-
-
+    //fileMover.moveFilesToNewDestionation();
   }
 
 
