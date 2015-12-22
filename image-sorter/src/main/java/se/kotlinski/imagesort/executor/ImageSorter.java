@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.executor;
 
+
+import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.data.SortSettings;
@@ -25,6 +27,7 @@ public class ImageSorter {
   private final OutputConflictResolver outputConflictResolver;
   private final FileMover fileMover;
 
+  @Inject
   public ImageSorter(final ClientInterface clientInterface,
                      final MediaFileParser mediaFileParser,
                      final DateToFileRenamer dateToFileRenamer,
@@ -75,7 +78,6 @@ public class ImageSorter {
     }
     catch (Exception e) {
       clientInterface.masterFolderFailedParsed();
-      e.printStackTrace();
     }
     return null;
   }

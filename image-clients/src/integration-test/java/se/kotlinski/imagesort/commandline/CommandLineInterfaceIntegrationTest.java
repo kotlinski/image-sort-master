@@ -3,6 +3,7 @@ package se.kotlinski.imagesort.commandline;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
@@ -28,7 +29,6 @@ public class CommandLineInterfaceIntegrationTest {
   private MediaFileUtil mediaFileUtil;
   private MediaFileTestUtil mediaFileTestUtil;
   private Interpreter interpreter;
-  FilePrinter filePrinter;
 
   @Before
   public void setUp() throws Exception {
@@ -37,7 +37,6 @@ public class CommandLineInterfaceIntegrationTest {
     MD5Generator MD5Generator = new MD5Generator();
 
     MediaFileParser mediaFileParser = spy(new MediaFileParser(mediaFileUtil, MD5Generator));
-    filePrinter = spy(new FilePrinter());
 
     HelpFormatter formatter = new HelpFormatter();
     CommandLineParser parser = new GnuParser();
@@ -46,7 +45,6 @@ public class CommandLineInterfaceIntegrationTest {
     interpreter = spy(new Interpreter(transformer));
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    FileSystemPrettyPrinter fileSystemPrettyPrinter = new FileSystemPrettyPrinter();
 
     OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MD5Generator(),
                                                                                mediaFileUtil);
@@ -60,11 +58,12 @@ public class CommandLineInterfaceIntegrationTest {
                                               outputConflictResolver,
                                               fileMover);
 
-    commandLineInterface = new CommandLineInterface(interpreter,
-                                                    dateToFileRenamer,
-                                                    fileDateInterpreter,
-                                                    imageSorter,
-                                                    fileSystemPrettyPrinter);
+    commandLineInterface = new CommandLineInterface(interpreter, imageSorter);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    mediaFileTestUtil.cleanRestoreableMasterFolder();
   }
 
   @Test

@@ -26,7 +26,9 @@ public class MediaFileTestUtil {
   }
 
   public String getTestInputPath() {
-    return modifyPath(mediaFileUtils.getSystemPath(), defaultTestFolderName);
+    String modifyPath = modifyPath(mediaFileUtils.getSystemPath(), defaultTestFolderName);
+    createDir(modifyPath);
+    return modifyPath;
   }
 
   public File getRestorableTestMasterFile() {
@@ -35,7 +37,22 @@ public class MediaFileTestUtil {
   }
 
   public String getRestorableTestMasterPath() {
-    return modifyPath(mediaFileUtils.getSystemPath(), restoreableTestFolderName);
+    String modifyPath = modifyPath(mediaFileUtils.getSystemPath(), restoreableTestFolderName);
+    createDir(modifyPath);
+    return modifyPath;
+  }
+
+  private void createDir(final String modifyPath) {
+    File file = new File(modifyPath);
+    if (!file.exists()) {
+      try {
+        FileUtils.forceMkdir(file);
+      }
+      catch (IOException e) {
+        e.printStackTrace();
+      }
+
+    }
   }
 
   private String modifyPath(String path, final String folderName) {
@@ -83,7 +100,11 @@ public class MediaFileTestUtil {
   }
 
   public File getJpegWitouthDateInSubfolder() {
-    return new File(getTestInputPath() + File.separator + "2014" + File.separator + "nixon on raindeer - no date.jpg");
+    return new File(getTestInputPath() +
+                    File.separator +
+                    "2014" +
+                    File.separator +
+                    "nixon on raindeer - no date.jpg");
   }
 
   public File getSnapchatFile() {
@@ -116,6 +137,8 @@ public class MediaFileTestUtil {
 
   public void cleanRestoreableMasterFolder() {
     File restorableTestMasterFile = getRestorableTestMasterFile();
+    createDir(restorableTestMasterFile.getAbsolutePath());
+
     try {
       FileUtils.cleanDirectory(restorableTestMasterFile);
     }
@@ -130,7 +153,8 @@ public class MediaFileTestUtil {
     File restorableTestMasterFile = getRestorableTestMasterFile();
     try {
       FileUtils.copyDirectory(testInputFile, restorableTestMasterFile);
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       e.printStackTrace();
     }
   }

@@ -37,11 +37,9 @@ public class MediaFileParser {
 
     Map<String, List<File>> fileMap = new HashMap<>();
     for (File file : files) {
-      if (!mediaFileUtil.isValidMediaFile(file)) {
-        //Ignore Files
-        // TODO: Something smart for logging etc.
-      }
-      else {
+      // TODO: Something smart for logging etc.
+      //Else Ignore Files
+      if (mediaFileUtil.isValidMediaFile(file)) {
         addMediaFileToMap(fileMap, file);
       }
     }
@@ -58,6 +56,7 @@ public class MediaFileParser {
       imageFileList.add(file);
     }
     catch (Exception e) {
+      e.printStackTrace();
       //Ignore Files
     }
   }

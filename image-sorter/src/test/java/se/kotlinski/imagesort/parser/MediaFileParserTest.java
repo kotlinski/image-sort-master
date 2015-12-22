@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.parser;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.SortSettings;
@@ -48,6 +49,11 @@ public class MediaFileParserTest {
     mediaFileTransform = mock(MediaFileTransformer.class);
     MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);
     setMediaFileParser(mediaFileParser);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    mediaFileTestUtil.cleanRestoreableMasterFolder();
   }
 
   @Test

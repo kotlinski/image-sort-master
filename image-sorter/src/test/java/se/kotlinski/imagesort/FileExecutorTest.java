@@ -47,14 +47,12 @@ public class FileExecutorTest {
     MediaFileTransformer mediaFileTransformer = mock(MediaFileTransformer.class);
     mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);
 
-    File outputFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
-    deleteFolderContent(outputFolder);
   }
+
 
   @After
   public void tearDown() throws Exception {
-    File outputFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
-    deleteFolderContent(outputFolder);
+    mediaFileTestUtil.cleanRestoreableMasterFolder();
   }
 
   @Test
@@ -80,9 +78,6 @@ public class FileExecutorTest {
 
   @Test
   public void sunShineTest() throws Exception {
-
-    File outputFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
-    deleteFolderContent(outputFolder);
 /*
     DeprecatedExportFileDataMap exportFileDataMap = mediaFileParser.transformFilesToMediaFiles(sortSettings);
     fileExecutor.copyFiles(exportFileDataMap, sortSettings);
@@ -93,26 +88,4 @@ public class FileExecutorTest {
     Assert.assertEquals(1, list.length);*/
   }
 
-  private void deleteFolderContent(File folder) {
-    File[] files = folder.listFiles();
-    if (files != null) { //some JVMs return null for empty dirs
-      for (File file : files) {
-        if (file.isDirectory()) {
-          deleteFolderContent(file);
-        }
-        else {
-          if (!".gitignore".equals(file.getName())) {
-            boolean delete = file.delete();
-            if (delete) {
-              LOGGER.error("Delete: " + file.getName());
-            }
-            else {
-              LOGGER.error("Could not delete: " + file.getName());
-            }
-
-          }
-        }
-      }
-    }
-  }
 }

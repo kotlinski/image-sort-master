@@ -69,7 +69,6 @@ public class MediaFileForecaster {
       return fileDateInterpreter.getDate(file);
     }
     catch (Exception e) {
-      e.printStackTrace();
       return null;
     }
   }

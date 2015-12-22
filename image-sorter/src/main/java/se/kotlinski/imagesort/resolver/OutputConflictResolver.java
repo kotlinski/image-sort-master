@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.resolver;
 
+import com.google.inject.Inject;
 import se.kotlinski.imagesort.utils.MD5Generator;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -13,6 +14,7 @@ public class OutputConflictResolver {
   private final MD5Generator md5Generator;
   private final MediaFileUtil mediaFileUtil;
 
+  @Inject
   public OutputConflictResolver(final MD5Generator md5Generator,
                                 final MediaFileUtil mediaFileUtil) {
     this.md5Generator = md5Generator;

@@ -48,19 +48,19 @@ public class FileDateInterpreter {
       return getImageDate(file);
     }
     catch (CouldNotParseDateException e) {
-      LOGGER.error("File is not an image with meta data, " + file, e);
+      LOGGER.error("File is not an image with meta data, " + file);
     }
     catch (Exception e) {
-      e.printStackTrace();
+      System.err.println("Can't get date for : " + file);
     }
     try {
       return getVideoDate(file);
     }
     catch (CouldNotParseDateException e) {
-      LOGGER.error("File is not an video with meta data, " + file, e);
+      LOGGER.error("File is not an video with meta data, " + file);
     }
     catch (Exception e) {
-      e.printStackTrace();
+      System.err.println("Can't get date for : " + file);
     }
     throw new CouldNotParseDateException("Could not Parse: " + file);
   }
