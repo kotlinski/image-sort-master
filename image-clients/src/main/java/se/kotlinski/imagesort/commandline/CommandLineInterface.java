@@ -82,6 +82,8 @@ public class CommandLineInterface {
     String masterFolderPath = sortSettings.masterFolder.getAbsolutePath();
     mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder, masterFolderPath);
 
+    //TODO: instead of fileSystemPrinter here,
+    //Send in a file system printer to an image-sorter...
     fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
 
     Map<List<File>, String> resolvedFilesToOutputMap;
