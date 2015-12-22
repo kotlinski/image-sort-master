@@ -58,7 +58,7 @@ public class MediaFileUtil {
     String outputPathWithoutExtension = outputDirectory.substring(0, outputDirectory.lastIndexOf('.'));
     String extension = outputDirectory.substring(outputDirectory.lastIndexOf('.'), outputDirectory.length());
 
-    return (outputPathWithoutExtension + appendPart + extension);
+    return outputPathWithoutExtension + appendPart + extension;
   }
 
 }

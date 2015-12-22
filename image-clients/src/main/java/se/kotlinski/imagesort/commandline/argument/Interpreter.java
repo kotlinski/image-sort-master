@@ -30,7 +30,7 @@ public class Interpreter {
       commandLine = transformer.parseArgs(arguments);
     }
     catch (Exception e) {
-      LOGGER.error("Could not parse arguments", e);
+      LOGGER.error("Could not parse arguments");
       throw e;
     }
     return commandLine;

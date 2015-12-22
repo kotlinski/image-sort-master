@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.executor;
 
+import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -17,6 +18,7 @@ public class FileMover {
 
   private final MediaFileUtil mediaFileUtil;
 
+  @Inject
   public FileMover(final MediaFileUtil mediaFileUtil) {
     this.mediaFileUtil = mediaFileUtil;
   }
@@ -43,10 +45,13 @@ public class FileMover {
 
     for (List<File> files : resolvedFilesToOutputMap.keySet()) {
       for (File file : files) {
-        boolean conflictFound = checkIfFileConflictsWithOutputs(resolvedFilesToOutputMap, file, masterFolderPath);
+        boolean conflictFound = checkIfFileConflictsWithOutputs(resolvedFilesToOutputMap,
+                                                                file,
+                                                                masterFolderPath);
         if (conflictFound) {
           String randomString = new BigInteger(130, new SecureRandom()).toString(32);
-          String newAbsolutePath = mediaFileUtil.appendToFileName(file.getAbsolutePath(), randomString);
+          String newAbsolutePath = mediaFileUtil.appendToFileName(file.getAbsolutePath(),
+                                                                  randomString);
           try {
             FileUtils.moveFile(file, FileUtils.getFile(newAbsolutePath));
           }

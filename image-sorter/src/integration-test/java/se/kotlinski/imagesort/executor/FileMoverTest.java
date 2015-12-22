@@ -66,8 +66,6 @@ public class FileMoverTest {
   @After
   public void tearDown() throws Exception {
     mediaFileTestUtil.cleanRestoreableMasterFolder();
-
-
   }
 
   @Test
