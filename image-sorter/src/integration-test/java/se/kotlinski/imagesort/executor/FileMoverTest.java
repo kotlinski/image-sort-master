@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.parser.MediaFileParser;
@@ -20,76 +21,53 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+
 public class FileMoverTest {
 
-  private MediaInFolderCalculator mediaInFolderCalculator;
   private MediaFileUtil mediaFileUtil;
-  private MD5Generator md5Generator;
-  private Map<String, List<File>> mediaFilesInFolder;
   private MediaFileTestUtil mediaFileTestUtil;
+  private ImageSorter imageSorter;
   private FileMover fileMover;
-  private OutputConflictResolver outputConflictResolver;
-  private MediaFilesOutputForecaster mediaFilesOutputForecaster;
-  private Map<List<File>, String> resolvedOutputConflicts;
+  private DateToFileRenamer dateToFileRenamer;
+  private MediaFileForecaster mediaFileForecaster;
 
   @Before
   public void setUp() throws Exception {
-    mediaInFolderCalculator = new MediaInFolderCalculator();
+    MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator();
 
     mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
 
     mediaFileTestUtil.cleanRestoreableMasterFolder();
-    mediaFileTestUtil.copyTestFilesToOutputDirectory();
+    mediaFileTestUtil.copyTestFilesToRestoreableDirectory();
 
     // TODO :
     // Clean output-folder
     // Copy all files from inputImages-folder to output-folder.
     // Do the move-operations on output-folder.
 
-    md5Generator = new MD5Generator();
-
-    File masterFolder = mediaFileTestUtil.getRestorableTestMasterFile();
-
-    MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, md5Generator);
-    mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(masterFolder);
-
-
-    File restorableTestMasterFile = mediaFileTestUtil.getRestorableTestMasterFile();
-    String restoreableMasterPath = mediaFileTestUtil.getRestorableTestMasterPath();
-
-    Map<String, List<File>> parsedMediaFiles;
-    parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(restorableTestMasterFile);
-
-
-    MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(new DateToFileRenamer(new GregorianCalendar()),
-                                                                      new FileDateInterpreter());
-    mediaFilesOutputForecaster = new MediaFilesOutputForecaster(mediaFileForecaster);
-    Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
-                                                                                   restoreableMasterPath);
-
-    outputConflictResolver = new OutputConflictResolver(new MD5Generator(), new MediaFileUtil());
-    resolvedOutputConflicts = outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
-
-
+    ClientInterface clientInterface = mock(ClientInterface.class);
+    MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, new MD5Generator());
+    dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+    OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MD5Generator(), mediaFileUtil);
     fileMover = new FileMover(mediaFileUtil);
-
+    imageSorter = new ImageSorter(clientInterface,
+                                  mediaFileParser,
+                                  dateToFileRenamer,
+                                  fileDateInterpreter,
+                                  outputConflictResolver,
+                                  fileMover);
   }
 
   @After
   public void tearDown() throws Exception {
-    // mediaFileTestUtil.cleanRestoreableMasterFolder();
+    mediaFileTestUtil.cleanRestoreableMasterFolder();
 
 
-  }
-
-  @Test
-  public void testMoveFilesToNewDestionation() throws Exception {
-    String restoreableMasterPath = mediaFileTestUtil.getRestorableTestMasterPath();
-
-    fileMover.moveFilesToNewDestionation(resolvedOutputConflicts, restoreableMasterPath);
   }
 
   @Test
@@ -105,7 +83,7 @@ public class FileMoverTest {
     File instagramFile = mediaFileTestUtil.getInstagramFile();
 
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
-    MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer,
+    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer,
                                                                       new FileDateInterpreter());
 
     String snapchatOutputDestination = mediaFileForecaster.forecastOutputDestination(snapchatFile,
@@ -113,12 +91,23 @@ public class FileMoverTest {
     String instagramOutputDestination = mediaFileForecaster.forecastOutputDestination(instagramFile,
                                                                                       testInputPath);
 
-    FileUtils.moveFile(snapchatFile,
+    FileUtils.copyFile(snapchatFile,
                        FileUtils.getFile(restorableTestMasterPath + instagramOutputDestination));
-    FileUtils.moveFile(instagramFile,
+    FileUtils.copyFile(instagramFile,
                        FileUtils.getFile(restorableTestMasterPath + snapchatOutputDestination));
 
+    SortSettings sortSettings = new SortSettings();
+    sortSettings.masterFolder = FileUtils.getFile(restorableTestMasterPath);
+    imageSorter.sortImages(sortSettings);
 
+    List<File> filesInFolder = mediaFileUtil.getFilesInFolder(sortSettings.masterFolder);
+    System.out.println(filesInFolder);
+    for (File file : filesInFolder) {
+      System.out.println(file);
+      String dateOutput = mediaFileForecaster.forecastOutputDestination(file, restorableTestMasterPath);
+      System.out.println(dateOutput);
+    }
+    //assertThat();
     //fileMover.moveFilesToNewDestionation();
   }
 

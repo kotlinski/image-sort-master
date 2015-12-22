@@ -125,7 +125,7 @@ public class MediaFileTestUtil {
   }
 
 
-  public void copyTestFilesToOutputDirectory() {
+  public void copyTestFilesToRestoreableDirectory() {
     File testInputFile = getTestInputFile();
     File restorableTestMasterFile = getRestorableTestMasterFile();
     try {

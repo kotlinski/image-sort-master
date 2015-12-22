@@ -7,12 +7,8 @@ import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.exception.InvalidInputFolders;
-import se.kotlinski.imagesort.executor.FileMover;
-import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
-import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
-import se.kotlinski.imagesort.parser.MediaFileParser;
-import se.kotlinski.imagesort.resolver.OutputConflictResolver;
+import se.kotlinski.imagesort.executor.ClientInterface;
+import se.kotlinski.imagesort.executor.ImageSorter;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 
@@ -20,34 +16,25 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class CommandLineInterface {
+public class CommandLineInterface extends ClientInterface {
   private static final Logger LOGGER = LogManager.getLogger(CommandLineInterface.class);
-  private final MediaFileParser mediaFileParser;
-  private final FilePrinter filePrinter;
   private final Interpreter interpreter;
   private final DateToFileRenamer dateToFileRenamer;
   private final FileDateInterpreter fileDateInterpreter;
+  private final ImageSorter imageSorter;
   private final FileSystemPrettyPrinter fileSystemPrettyPrinter;
-  private final OutputConflictResolver outputConflictResolver;
-  private final FileMover fileMover;
 
   @Inject
-  public CommandLineInterface(final MediaFileParser mediaFileParser,
-                              final FilePrinter filePrinter,
-                              final Interpreter interpreter,
+  public CommandLineInterface(final Interpreter interpreter,
                               final DateToFileRenamer dateToFileRenamer,
                               final FileDateInterpreter fileDateInterpreter,
-                              final FileSystemPrettyPrinter fileSystemPrettyPrinter,
-                              final OutputConflictResolver outputConflictResolver,
-                              final FileMover fileMover) {
-    this.mediaFileParser = mediaFileParser;
-    this.filePrinter = filePrinter;
+                              final ImageSorter imageSorter,
+                              final FileSystemPrettyPrinter fileSystemPrettyPrinter) {
     this.interpreter = interpreter;
     this.dateToFileRenamer = dateToFileRenamer;
     this.fileDateInterpreter = fileDateInterpreter;
+    this.imageSorter = imageSorter;
     this.fileSystemPrettyPrinter = fileSystemPrettyPrinter;
-    this.outputConflictResolver = outputConflictResolver;
-    this.fileMover = fileMover;
   }
 
   public final void runCommandLine(String[] arguments) {
@@ -62,34 +49,8 @@ public class CommandLineInterface {
       return;
     }
 
-    Map<String, List<File>> mediaFilesInFolder;
-    try {
-      mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(sortSettings.masterFolder);
-    }
-    catch (InvalidInputFolders invalidInputFolders) {
-      System.out.println("Invalid input folders, try again");
-      LOGGER.error("Invalid input folders, try again", invalidInputFolders);
-      return;
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-      return;
-    }
+    imageSorter.sortImages(sortSettings);
 
-    printMediaFilesInFolderData(mediaFilesInFolder);
-
-    Map<String, List<File>> mediaFileDestinations;
-    String masterFolderPath = sortSettings.masterFolder.getAbsolutePath();
-    mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder, masterFolderPath);
-
-    //TODO: instead of fileSystemPrinter here,
-    //Send in a file system printer to an image-sorter...
-    fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
-
-    Map<List<File>, String> resolvedFilesToOutputMap;
-    resolvedFilesToOutputMap = outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
-
-    fileMover.moveFilesToNewDestionation(resolvedFilesToOutputMap, masterFolderPath);
 
     //TODO: Make a conflict handler.
     // When several files have the same destination, some salutary checks have to be made.
@@ -122,23 +83,34 @@ public class CommandLineInterface {
 */
   }
 
-  private Map<String, List<File>> calculateOutputDirectories(final Map<String, List<File>> mediaFilesInFolder,
-                                                             final String masterFolder) {
-    MediaFileForecaster mediaFileForecaster;
-    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
-    MediaFilesOutputForecaster mediaOutputCalculator;
-    mediaOutputCalculator = new MediaFilesOutputForecaster(mediaFileForecaster);
-
-    return mediaOutputCalculator.calculateOutputDestinations(mediaFilesInFolder, masterFolder);
-  }
 
   private void printMediaFilesInFolderData(final Map<String, List<File>> mediaFilesInFolder) {
     MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator(); // TODO: inject
     MediaFileDataInFolder mediaDataBeforeExecution;
-    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(
-        mediaFilesInFolder);
+    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
 
     System.out.println(mediaDataBeforeExecution.toString());
   }
 
+
+  @Override
+  public boolean masterFolderSuccessfulParsed(final Map<String, List<File>> mediaFilesInFolder) {
+    printMediaFilesInFolderData(mediaFilesInFolder);
+    return true;
+  }
+
+  @Override
+  public void masterFolderFailedParsed() {
+    System.out.println("Invalid input folders, try again");
+  }
+
+  @Override
+  public void successfulCalculatedOutputDestinations(final Map<String, List<File>> mediaFileDestinations) {
+    fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
+  }
+
+  @Override
+  public void successfulResolvedOutputConflicts(final Map<List<File>, String> resolvedFilesToOutputMap) {
+    //TODO: implement this
+  }
 }
