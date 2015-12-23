@@ -75,7 +75,7 @@ dependencies {
   compile 'commons-cli:commons-cli:20040117.000000'
   compile 'com.drewnoakes:metadata-extractor:2.+'
   compile 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
-  compile 'com.googlecode.mp4parser:isoparser:1.0-RC-27'
+  compile 'com.googlecode.mp4parser:isoparser:1.1.17'
   compile 'com.google.inject:guice:4.0'
   compile 'org.apache.tika:tika-core:1.11'
 
