@@ -45,7 +45,7 @@ public class MediaFilesOutputForecasterTest {
     Map<String, List<File>> stringListMap;
     stringListMap = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
                                                                            testInputPath);
-    assertThat(stringListMap.size(), is(10));
+    assertThat(stringListMap.size(), is(11));
   }
 
 }

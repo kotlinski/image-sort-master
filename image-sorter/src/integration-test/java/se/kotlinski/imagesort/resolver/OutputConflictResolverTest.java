@@ -60,9 +60,10 @@ public class OutputConflictResolverTest {
       System.out.println(s);
     }
     Collection<String> outputPaths = listStringMap.values();
-    assertThat(listStringMap.size(), is(11));
-    assertThat(outputPaths.size(), is(11));
+    assertThat(listStringMap.size(), is(12));
+    assertThat(outputPaths.size(), is(12));
 
+    assertThat(outputPaths.contains("/2015/06/printscreens/2015-06-05 21.19.28.png"), is(true));
     assertThat(outputPaths.contains("/2013/10/snapchat/2013-10-03 13.43.20.jpg"), is(true));
     assertThat(outputPaths.contains("/2014/03/2014-03-02 01.09.34.jpg"), is(true));
     assertThat(outputPaths.contains("/2014/02/2014-02-22 11.48.47_1.jpg"), is(true));
@@ -72,7 +73,8 @@ public class OutputConflictResolverTest {
     assertThat(outputPaths.contains("/2014/nixon on raindeer - no date.jpg"), is(true));
     assertThat(outputPaths.contains("/noxon on raindeer - no date.jpg"), is(true));
     assertThat(outputPaths.contains("/2014/03/2014-03-16 11.45.09.mp4"), is(true));
-    assertThat(outputPaths.contains("/2014/02/duplicate in subfolder/2014-02-22 11.48.48.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/02/duplicate in subfolder/2014-02-22 11.48.48.jpg"),
+               is(true));
     assertThat(outputPaths.contains("/2014/02/2014-02-22 11.48.47_2.jpg"), is(true));
-}
+  }
 }
