@@ -29,8 +29,8 @@ public class MediaFilesOutputForecaster {
   void addMediaFileToMap(final Map<String, List<File>> fileMap,
                          final File file,
                          final String masterFolderPath) {
-    String outputDestination =
-        mediaFileForecaster.forecastOutputDestination(file, masterFolderPath);
+    String outputDestination;
+    outputDestination = mediaFileForecaster.forecastOutputDestination(file, masterFolderPath);
 
     if (!fileMap.containsKey(outputDestination)) {
       fileMap.put(outputDestination, new ArrayList<>());
