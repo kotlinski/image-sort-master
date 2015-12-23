@@ -15,6 +15,7 @@ import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class FileDateInterpreter {
 
@@ -23,17 +24,19 @@ public class FileDateInterpreter {
   Date getImageDate(File file) throws Exception {
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
-      ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType
-          (ExifSubIFDDirectory.class);
+      ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
       int tagDatetimeOriginal = ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL;
-      ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory
-                                                                                 .class);
+
+      ExifIFD0Directory exifIFD0Directory;
+      exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
       int tagDatetime = ExifIFD0Directory.TAG_DATETIME;
-      if (exifSubIFDDirectory != null && exifSubIFDDirectory.getDate(tagDatetimeOriginal) != null) {
-        return exifSubIFDDirectory.getDate(tagDatetimeOriginal);
+      if (exifSubIFDDirectory != null &&
+          exifSubIFDDirectory.getDate(tagDatetimeOriginal, TimeZone.getDefault()) != null) {
+        return exifSubIFDDirectory.getDate(tagDatetimeOriginal, TimeZone.getDefault());
       }
-      if (exifIFD0Directory != null && exifIFD0Directory.getDate(tagDatetime) != null) {
-        return exifIFD0Directory.getDate(tagDatetime);
+      if (exifIFD0Directory != null &&
+          exifIFD0Directory.getDate(tagDatetime, TimeZone.getDefault()) != null) {
+        return exifIFD0Directory.getDate(tagDatetime, TimeZone.getDefault());
       }
       throw new CouldNotParseDateException();
     }
@@ -48,29 +51,33 @@ public class FileDateInterpreter {
       return getImageDate(file);
     }
     catch (CouldNotParseDateException e) {
-      LOGGER.error("File is not an image with meta data, " + file, e);
+      LOGGER.error("File is not an image with meta data, " + file);
     }
     catch (Exception e) {
-      e.printStackTrace();
+      System.err.println("Can't get date for : " + file);
     }
     try {
       return getVideoDate(file);
     }
     catch (CouldNotParseDateException e) {
-      LOGGER.error("File is not an video with meta data, " + file, e);
+      LOGGER.error("File is not an video with meta data, " + file);
     }
     catch (Exception e) {
-      e.printStackTrace();
+      System.err.println("Can't get date for : " + file);
     }
     throw new CouldNotParseDateException("Could not Parse: " + file);
   }
 
   private Date getVideoDate(File videoFile) throws Exception {
+    TimeZone.setDefault(TimeZone.getTimeZone("CET"));
     try {
       IsoFile isoFile = new IsoFile(videoFile.getAbsolutePath());
       MovieBox movieBox = isoFile.getMovieBox();
       MovieHeaderBox movieHeaderBox = movieBox.getMovieHeaderBox();
-      return movieHeaderBox.getCreationTime();
+      System.out.println(movieHeaderBox);
+      Date creationTime = movieHeaderBox.getCreationTime();
+      System.out.println(creationTime);
+      return creationTime;
     }
     catch (IOException | NullPointerException e) {
       LOGGER.error("File is not a parcelable mp4");

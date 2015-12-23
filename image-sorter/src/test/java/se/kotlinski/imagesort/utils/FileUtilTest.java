@@ -6,41 +6,57 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FileUtilTest {
 
-  private SortMasterFileUtil sortMasterFileUtil;
+  private MediaFileUtil mediaFileUtil;
+  private MediaFileTestUtil mediaFileTestUtil;
 
   @Before
   public void setUp() throws Exception {
-    sortMasterFileUtil = new SortMasterFileUtil();
   }
 
   @Test
   public void testIsValidFolder() throws Exception {
-    Assert.assertFalse(sortMasterFileUtil.isValidFolder(new File("invalid path")));
+    mediaFileUtil = new MediaFileUtil();
+
+    Assert.assertFalse(mediaFileUtil.isValidFolder(new File("invalid path")));
   }
 
   @Test
   public void testPathBuild() throws Exception {
-    SortMasterFileUtil fileUtilSpy = spy(new SortMasterFileUtil());
-    when(fileUtilSpy.getSystemPath()).thenReturn("system.path" + File.separator);
+    MediaFileUtil fileUtilMock = mock(MediaFileUtil.class);
+    when(fileUtilMock.getSystemPath()).thenReturn("system.path" + File.separator);
+
+    mediaFileTestUtil = new MediaFileTestUtil(fileUtilMock);
+
     Assert.assertEquals("system.path" +
                         File.separator +
                         "image-sorter" + File.separator + "src" + File.separator + "test" +
                         File.separator + "resources" + File.separator + "inputImages",
-                        fileUtilSpy.getTestInputPath());
+                        mediaFileTestUtil.getTestInputPath());
 
-    when(fileUtilSpy.getSystemPath()).thenReturn("system.path" +
+
+  }
+
+
+  public void testPathBuildWithImageClients() throws Exception {
+    MediaFileUtil fileUtilMock = mock(MediaFileUtil.class);
+
+    when(fileUtilMock.getSystemPath()).thenReturn("system.path" +
                                                  File.separator +
                                                  "image-clients" +
                                                  File.separator);
+
+    mediaFileUtil = new MediaFileUtil();
+    mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
+
     Assert.assertEquals("system.path" +
                         File.separator +
                         "image-sorter" + File.separator + "src" + File.separator + "test" +
                         File.separator + "resources" + File.separator + "output",
-                        fileUtilSpy.getTestOutputPath());
+                        mediaFileTestUtil.getRestorableTestMasterPath());
   }
 }
