@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.parser.MediaFileParser;
-import se.kotlinski.imagesort.transformer.MediaFileTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MD5Generator;
@@ -44,7 +43,6 @@ public class FileExecutorTest {
     MD5Generator = spy(new MD5Generator());
     fileDateInterpreter = mock(FileDateInterpreter.class);
     dateToFileRenamer = mock(DateToFileRenamer.class);
-    MediaFileTransformer mediaFileTransformer = mock(MediaFileTransformer.class);
     mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);
 
   }

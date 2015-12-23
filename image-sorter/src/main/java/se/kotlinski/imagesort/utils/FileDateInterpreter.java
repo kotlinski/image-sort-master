@@ -14,7 +14,12 @@ import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class FileDateInterpreter {
@@ -65,7 +70,39 @@ public class FileDateInterpreter {
     catch (Exception e) {
       System.err.println("Can't get date for : " + file);
     }
+    try {
+      return getDateOutOfFileName(file);
+    }
+    catch (Exception e) {
+      System.err.println("Can't get date for : " + file);
+    }
     throw new CouldNotParseDateException("Could not Parse: " + file);
+  }
+
+  private Date getDateOutOfFileName(final File file) throws CouldNotParseDateException {
+    String fileName = file.getName();
+    String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+    System.out.println(fileNameWithoutExtension);
+
+
+    String datePatterns[] = {"yyyy:MM:dd HH:mm:ss",
+                             "yyyy:MM:dd HH:mm",
+                             "yyyy-MM-dd HH:mm:ss",
+                             "yyyy-MM-dd HH:mm",
+                             "yyyy.MM.dd HH:mm:ss",
+                             "yyyy.MM.dd HH:mm",
+                             "yyyy-MM-dd HH.mm.ss"};
+    for (String datePattern : datePatterns) {
+      try {
+        DateFormat parser = new SimpleDateFormat(datePattern);
+        return parser.parse(fileNameWithoutExtension);
+      }
+      catch (ParseException e) {
+        LOGGER.debug("Trying to parse date from string");
+      }
+
+    }
+    throw new CouldNotParseDateException();
   }
 
   private Date getVideoDate(File videoFile) throws Exception {

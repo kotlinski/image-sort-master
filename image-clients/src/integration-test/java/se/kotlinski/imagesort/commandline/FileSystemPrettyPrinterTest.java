@@ -58,6 +58,10 @@ public class FileSystemPrettyPrinterTest {
 
 
     String expectedOutput = " |-noxon on raindeer - no date.jpg\n" +
+                            " |-2015\n" +
+                            " | |-06\n" +
+                            " | | |-printscreens\n" +
+                            " | | | |-2015-06-05 21.19.28.png\n" +
                             " |-2014\n" +
                             " | |-nixon on raindeer - no date.jpg\n" +
                             " | |-03\n" +
