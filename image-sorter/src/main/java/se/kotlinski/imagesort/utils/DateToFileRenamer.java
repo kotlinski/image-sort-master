@@ -1,7 +1,6 @@
 package se.kotlinski.imagesort.utils;
 
 import com.google.inject.Inject;
-import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -18,29 +17,24 @@ public class DateToFileRenamer {
 
   public String formatPathDate(Date date) {
     calendar.setTime(date);
-    SimpleDateFormat format = new SimpleDateFormat("yyyy" + File.separator + "MM" + File.separator);
+    SimpleDateFormat format = new SimpleDateFormat("yyyy" + File.separator + "MM");
     return format.format(calendar.getTime());
   }
 
   public String getYearFolder(Date date) {
     calendar.setTime(date);
-    SimpleDateFormat format = new SimpleDateFormat(File.separator + "yyyy" + File.separator);
+    SimpleDateFormat format = new SimpleDateFormat(File.separator + "yyyy");
     return format.format(calendar.getTime());
   }
 
   public String getMonthFolder(Date date) {
     calendar.setTime(date);
-    SimpleDateFormat format = new SimpleDateFormat(File.separator + "MM" + File.separator);
+    SimpleDateFormat format = new SimpleDateFormat(File.separator + "MM");
     return format.format(calendar.getTime());
   }
 
-  public String formatFileDate(Date date, Calendar calendar) throws Exception {
-    try {
-      calendar.setTime(date);
-    }
-    catch (Exception e) {
-      throw new CouldNotParseDateException();
-    }
+  public String formatFileDate(Date date) {
+    calendar.setTime(date);
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
     format.setTimeZone(calendar.getTimeZone());
     return format.format(calendar.getTime());

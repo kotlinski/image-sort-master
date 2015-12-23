@@ -10,14 +10,14 @@ import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.exception.InvalidArgumentsException;
-import se.kotlinski.imagesort.model.SortSettings;
-import se.kotlinski.imagesort.utils.SortMasterFileUtil;
+import se.kotlinski.imagesort.utils.MediaFileTestUtil;
+import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
 
@@ -25,14 +25,16 @@ public class TransformerIntegrationTest {
 
   private Transformer transformer;
   private HelpFormatter formatter;
-  private SortMasterFileUtil sortMasterFileUtil;
+  private MediaFileUtil mediaFileUtil;
+  private MediaFileTestUtil mediaFileTestUtil;
 
   @Before
   public void setUp() throws Exception {
-    sortMasterFileUtil = new SortMasterFileUtil();
+    mediaFileUtil = new MediaFileUtil();
+    mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
     CommandLineParser parser = new GnuParser();
     formatter = new HelpFormatter();
-    transformer = new Transformer(formatter, parser, sortMasterFileUtil);
+    transformer = new Transformer(formatter, parser, mediaFileUtil);
   }
 
   @Test
@@ -56,7 +58,7 @@ public class TransformerIntegrationTest {
 
   @Test
   public void testParseArgsSource() throws Exception {
-    String testInputPath = sortMasterFileUtil.getTestInputPath();
+    String testInputPath = mediaFileTestUtil.getTestInputPath();
 
     String[] args = {"-s", testInputPath};
     CommandLine cmd = transformer.parseArgs(args);

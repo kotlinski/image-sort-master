@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.exception.InvalidArgumentsException;
-import se.kotlinski.imagesort.model.SortSettings;
 
 public class Interpreter {
 
@@ -30,7 +30,7 @@ public class Interpreter {
       commandLine = transformer.parseArgs(arguments);
     }
     catch (Exception e) {
-      LOGGER.error("Could not parse arguments", e);
+      LOGGER.error("Could not parse arguments");
       throw e;
     }
     return commandLine;
