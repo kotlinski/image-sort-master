@@ -7,7 +7,6 @@ import org.junit.Test;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
-import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
@@ -19,7 +18,6 @@ import se.kotlinski.imagesort.utils.MediaFileUtil;
 import java.io.File;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;

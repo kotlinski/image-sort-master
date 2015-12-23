@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.transformer.MediaFileTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MD5Generator;
@@ -21,7 +20,6 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 public class MediaFileParserTest {
@@ -33,7 +31,6 @@ public class MediaFileParserTest {
   private MD5Generator MD5Generator;
   private FileDateInterpreter fileDateInterpreter;
   private DateToFileRenamer dateToFileRenamer;
-  private MediaFileTransformer mediaFileTransform;
 
   @Before
   public void setUp() {
@@ -46,7 +43,6 @@ public class MediaFileParserTest {
     MD5Generator = spy(new MD5Generator());
     fileDateInterpreter = spy(new FileDateInterpreter());
     dateToFileRenamer = spy(new DateToFileRenamer(calendar));
-    mediaFileTransform = mock(MediaFileTransformer.class);
     MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);
     setMediaFileParser(mediaFileParser);
   }
