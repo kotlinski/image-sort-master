@@ -40,7 +40,7 @@ public class MediaFileForecasterIntegrationTest {
     jpegDestionationPath = mediaFileForecaster.forecastOutputDestination(aJpegFile, testInputPath);
     String expectedValue = File.separator + "2014" +
                            File.separator + "02" +
-                           File.separator + "2014-02-22 12.48.48.jpg";
+                           File.separator + "2014-02-22 11.48.48.jpg";
 
     assertThat(jpegDestionationPath, is(expectedValue));
   }
@@ -55,7 +55,7 @@ public class MediaFileForecasterIntegrationTest {
     String expectedValue = File.separator + "2014" +
                            File.separator + "02" +
                            File.separator + "duplicate in subfolder" +
-                           File.separator + "2014-02-22 12.48.48.jpg";
+                           File.separator + "2014-02-22 11.48.48.jpg";
     System.out.println(jpegDestionationPath);
     System.out.println(expectedValue);
     assertThat(jpegDestionationPath, is(expectedValue));

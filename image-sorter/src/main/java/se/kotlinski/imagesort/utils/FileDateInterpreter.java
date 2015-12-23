@@ -15,6 +15,7 @@ import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class FileDateInterpreter {
 
@@ -23,17 +24,19 @@ public class FileDateInterpreter {
   Date getImageDate(File file) throws Exception {
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
-      ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType
-          (ExifSubIFDDirectory.class);
+      ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
       int tagDatetimeOriginal = ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL;
-      ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory
-                                                                                 .class);
+
+      ExifIFD0Directory exifIFD0Directory;
+      exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
       int tagDatetime = ExifIFD0Directory.TAG_DATETIME;
-      if (exifSubIFDDirectory != null && exifSubIFDDirectory.getDate(tagDatetimeOriginal) != null) {
-        return exifSubIFDDirectory.getDate(tagDatetimeOriginal);
+      if (exifSubIFDDirectory != null &&
+          exifSubIFDDirectory.getDate(tagDatetimeOriginal, TimeZone.getDefault()) != null) {
+        return exifSubIFDDirectory.getDate(tagDatetimeOriginal, TimeZone.getDefault());
       }
-      if (exifIFD0Directory != null && exifIFD0Directory.getDate(tagDatetime) != null) {
-        return exifIFD0Directory.getDate(tagDatetime);
+      if (exifIFD0Directory != null &&
+          exifIFD0Directory.getDate(tagDatetime, TimeZone.getDefault()) != null) {
+        return exifIFD0Directory.getDate(tagDatetime, TimeZone.getDefault());
       }
       throw new CouldNotParseDateException();
     }

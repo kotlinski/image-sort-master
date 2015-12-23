@@ -42,7 +42,7 @@ public class FileDateInterpreterTest {
   public void testGetFileDate() {
     try {
       Date date = fileDateInterpreter.getDate(imageWithDate);
-      Date expectedDate = getExpectedDate("2013-10-03 13.43.20", TimeZone.getTimeZone("UTC"));
+      Date expectedDate = getExpectedDate("2013-10-03 13.43.20", null);
       Assert.assertEquals("Date from date with file", expectedDate, date);
     }
     catch (CouldNotParseDateException e) {
@@ -54,7 +54,7 @@ public class FileDateInterpreterTest {
 
     try {
       Date date = fileDateInterpreter.getDate(videoWithDate);
-      Date expectedDate = getExpectedDate("2014-03-16 10.45.09", TimeZone.getTimeZone("UTC"));
+      Date expectedDate = getExpectedDate("2014-03-16 11.45.09", null);
       Assert.assertEquals("Date from date with file", expectedDate, date);
     }
     catch (CouldNotParseDateException e) {

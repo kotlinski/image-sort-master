@@ -62,16 +62,17 @@ public class OutputConflictResolverTest {
     Collection<String> outputPaths = listStringMap.values();
     assertThat(listStringMap.size(), is(11));
     assertThat(outputPaths.size(), is(11));
-    assertThat(outputPaths.contains("/2013/10/snapchat/2013-10-03 15.43.20.jpg"), is(true));
-    assertThat(outputPaths.contains("/2014/03/2014-03-02 02.09.34.jpg"), is(true));
-    assertThat(outputPaths.contains("/2014/02/2014-02-22 12.48.47_1.jpg"), is(true));
-    assertThat(outputPaths.contains("/2013/10/instagram/2013-10-26 22.20.46.jpg"), is(true));
-    assertThat(outputPaths.contains("/2007/06/2007-06-15 19.41.19.jpg"), is(true));
-    assertThat(outputPaths.contains("/2014/02/2014-02-22 12.48.48.jpg"), is(true));
+
+    assertThat(outputPaths.contains("/2013/10/snapchat/2013-10-03 13.43.20.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/03/2014-03-02 01.09.34.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/02/2014-02-22 11.48.47_1.jpg"), is(true));
+    assertThat(outputPaths.contains("/2013/10/instagram/2013-10-26 20.20.46.jpg"), is(true));
+    assertThat(outputPaths.contains("/2007/06/2007-06-15 17.41.19.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/02/2014-02-22 11.48.48.jpg"), is(true));
     assertThat(outputPaths.contains("/2014/nixon on raindeer - no date.jpg"), is(true));
     assertThat(outputPaths.contains("/noxon on raindeer - no date.jpg"), is(true));
     assertThat(outputPaths.contains("/2014/03/2014-03-16 11.45.09.mp4"), is(true));
-    assertThat(outputPaths.contains("/2014/02/duplicate in subfolder/2014-02-22 12.48.48.jpg"), is(true));
-    assertThat(outputPaths.contains("/2014/02/2014-02-22 12.48.47_2.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/02/duplicate in subfolder/2014-02-22 11.48.48.jpg"), is(true));
+    assertThat(outputPaths.contains("/2014/02/2014-02-22 11.48.47_2.jpg"), is(true));
 }
 }
