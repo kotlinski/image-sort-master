@@ -69,11 +69,15 @@ public class FileDateInterpreter {
   }
 
   private Date getVideoDate(File videoFile) throws Exception {
+    TimeZone.setDefault(TimeZone.getTimeZone("CET"));
     try {
       IsoFile isoFile = new IsoFile(videoFile.getAbsolutePath());
       MovieBox movieBox = isoFile.getMovieBox();
       MovieHeaderBox movieHeaderBox = movieBox.getMovieHeaderBox();
-      return movieHeaderBox.getCreationTime();
+      System.out.println(movieHeaderBox);
+      Date creationTime = movieHeaderBox.getCreationTime();
+      System.out.println(creationTime);
+      return creationTime;
     }
     catch (IOException | NullPointerException e) {
       LOGGER.error("File is not a parcelable mp4");

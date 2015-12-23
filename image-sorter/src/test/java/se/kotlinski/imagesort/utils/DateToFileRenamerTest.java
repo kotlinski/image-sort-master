@@ -20,18 +20,7 @@ public class DateToFileRenamerTest {
     Calendar calendar = new GregorianCalendar();
     dateToFileRenamer = new DateToFileRenamer(calendar);
   }
-
-  @Test
-  public void testFormatFileDate() throws Exception {
-    GregorianCalendar calendar = new GregorianCalendar();
-    calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String formattedDate = dateToFileRenamer.formatFileDate(new Date(0));
-    assertEquals("1970-01-01 01.00.00", formattedDate);
-    formattedDate = dateToFileRenamer.formatFileDate(new Date(1356900595000l));
-    assertEquals("2012-12-30 21.49.55", formattedDate);
-
-  }
-
+  
   @Test
   public void testFormatPathDate() throws Exception {
     GregorianCalendar calendar = new GregorianCalendar();

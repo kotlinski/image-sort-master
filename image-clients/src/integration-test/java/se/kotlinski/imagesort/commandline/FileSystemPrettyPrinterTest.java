@@ -49,9 +49,13 @@ public class FileSystemPrettyPrinterTest {
     mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
                                                                                    testInputPath);
 
+    for (Map.Entry<String, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
+      System.out.println(stringListEntry.getKey());
+      System.out.println(stringListEntry.getValue());
+      System.out.println("-");
+    }
     String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
 
-    System.out.println(fileSystem);
 
     String expectedOutput = " |-noxon on raindeer - no date.jpg\n" +
                             " |-2014\n" +
