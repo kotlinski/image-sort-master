@@ -46,11 +46,11 @@ public class FileDateInterpreter {
       throw new CouldNotParseDateException();
     }
     catch (ImageProcessingException | IOException e) {
-      System.out.println("Failure in getImageDate(file)");
       throw new CouldNotParseDateException("File: " + file.getName());
     }
   }
 
+  @SuppressWarnings("PMD.EmptyCatchBlock")
   public Date getDate(final File file) throws Exception {
     try {
       return getImageDate(file);
@@ -59,7 +59,7 @@ public class FileDateInterpreter {
       LOGGER.error("File is not an image with meta data, " + file);
     }
     catch (Exception e) {
-      System.err.println("Can't get date for : " + file);
+      // This is expected
     }
     try {
       return getVideoDate(file);
@@ -68,13 +68,13 @@ public class FileDateInterpreter {
       LOGGER.error("File is not an video with meta data, " + file);
     }
     catch (Exception e) {
-      System.err.println("Can't get date for : " + file);
+      // This is expected
     }
     try {
       return getDateOutOfFileName(file);
     }
     catch (Exception e) {
-      System.err.println("Can't get date for : " + file);
+      // This is expected
     }
     throw new CouldNotParseDateException("Could not Parse: " + file);
   }
@@ -82,16 +82,15 @@ public class FileDateInterpreter {
   private Date getDateOutOfFileName(final File file) throws CouldNotParseDateException {
     String fileName = file.getName();
     String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
-    System.out.println(fileNameWithoutExtension);
 
-
+    String dropbox_printscreen_format = "yyyy-MM-dd HH.mm.ss";
     String datePatterns[] = {"yyyy:MM:dd HH:mm:ss",
                              "yyyy:MM:dd HH:mm",
                              "yyyy-MM-dd HH:mm:ss",
                              "yyyy-MM-dd HH:mm",
                              "yyyy.MM.dd HH:mm:ss",
                              "yyyy.MM.dd HH:mm",
-                             "yyyy-MM-dd HH.mm.ss"};
+                             dropbox_printscreen_format};
     for (String datePattern : datePatterns) {
       try {
         DateFormat parser = new SimpleDateFormat(datePattern);
@@ -111,10 +110,7 @@ public class FileDateInterpreter {
       IsoFile isoFile = new IsoFile(videoFile.getAbsolutePath());
       MovieBox movieBox = isoFile.getMovieBox();
       MovieHeaderBox movieHeaderBox = movieBox.getMovieHeaderBox();
-      System.out.println(movieHeaderBox);
-      Date creationTime = movieHeaderBox.getCreationTime();
-      System.out.println(creationTime);
-      return creationTime;
+      return movieHeaderBox.getCreationTime();
     }
     catch (IOException | NullPointerException e) {
       LOGGER.error("File is not a parcelable mp4");
