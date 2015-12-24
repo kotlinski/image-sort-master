@@ -48,6 +48,11 @@ public class ImageSortProgressFeedback extends ClientInterface {
   }
 
   @Override
+  public void startMovingFiles() {
+    System.out.println("Copying files to new folder(s)...");
+  }
+
+  @Override
   public boolean masterFolderSuccessfulParsed(final Map<String, List<File>> mediaFilesInFolder) {
     System.out.println();
     System.out.println("Folder successfully parse!");
@@ -65,7 +70,7 @@ public class ImageSortProgressFeedback extends ClientInterface {
 
   @Override
   public void successfulCalculatedOutputDestinations(final Map<String, List<File>> mediaFileDestinations) {
-    String outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
+    String outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations, false);
     System.out.println();
     System.out.println(outputTree);
   }

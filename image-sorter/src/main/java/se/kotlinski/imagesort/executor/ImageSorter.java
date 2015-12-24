@@ -60,6 +60,7 @@ public class ImageSorter {
     //Print after move-action
     clientInterface.successfulResolvedOutputConflicts(resolvedFilesToOutputMap);
 
+    clientInterface.startMovingFiles();
     fileMover.moveFilesToNewDestionation(resolvedFilesToOutputMap, masterFolderPath);
 
     //Print after move-action

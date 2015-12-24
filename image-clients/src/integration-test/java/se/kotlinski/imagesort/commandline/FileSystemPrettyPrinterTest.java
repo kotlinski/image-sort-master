@@ -59,7 +59,7 @@ public class FileSystemPrettyPrinterTest {
       System.out.println(stringListEntry.getValue());
       System.out.println("-");
     }
-    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
+    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations, true);
 
 
     String expectedOutput = " |-noxon on raindeer - no date.jpg\n" +

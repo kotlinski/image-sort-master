@@ -30,10 +30,12 @@ public class FileMoverTest {
   private FileMover fileMover;
   private DateToFileRenamer dateToFileRenamer;
   private MediaFileForecaster mediaFileForecaster;
+  private ClientInterface clientInterface;
 
   @Before
   public void setUp() throws Exception {
     MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator();
+    clientInterface = mock(ClientInterface.class);
 
     mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);

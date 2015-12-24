@@ -21,4 +21,6 @@ public abstract class ClientInterface {
   public abstract void startGroupFilesByContent();
 
   public abstract void groupFilesByContentProgress(final int total, final int progress);
+
+  public abstract void startMovingFiles();
 }
