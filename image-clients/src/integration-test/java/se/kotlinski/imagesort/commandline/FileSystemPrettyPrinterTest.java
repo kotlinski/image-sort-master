@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.commandline;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
@@ -24,6 +25,7 @@ public class FileSystemPrettyPrinterTest {
   private MediaFilesOutputForecaster mediaFilesOutputForecaster;
   private MediaFileTestUtil mediaFileTestUtil;
   private MediaFileForecaster mediaFileForecaster;
+  private ClientInterface clientInterface;
 
   @Before
   public void setUp() throws Exception {
@@ -36,6 +38,8 @@ public class FileSystemPrettyPrinterTest {
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
     mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
 
+    clientInterface = new ImageSortProgressFeedback(fileSystemPrettyPrinter);
+
     mediaFilesOutputForecaster = new MediaFilesOutputForecaster(mediaFileForecaster);
   }
 
@@ -43,7 +47,8 @@ public class FileSystemPrettyPrinterTest {
   public void testPrettyPrintFolderStructure() throws Exception {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     String testInputPath = mediaFileTestUtil.getTestInputPath();
-    Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile);
+    Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile,
+                                                                                     clientInterface);
 
     Map<String, List<File>> mediaFileDestinations;
     mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,

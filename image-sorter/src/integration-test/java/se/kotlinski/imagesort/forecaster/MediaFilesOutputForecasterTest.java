@@ -40,7 +40,8 @@ public class MediaFilesOutputForecasterTest {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     String testInputPath = mediaFileTestUtil.getTestInputPath();
-    Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile);
+    Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile,
+                                                                                     clientInterface);
 
     Map<String, List<File>> stringListMap;
     stringListMap = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,

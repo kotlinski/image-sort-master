@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.utils;
 
+import se.kotlinski.imagesort.executor.ClientInterface;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,17 +18,18 @@ public class MediaFileUtil {
     return System.getProperty("user.dir") + File.separator;
   }
 
-  public List<File> getFilesInFolder(final File folder) {
+  public List<File> getFilesInFolder(final File folder, final ClientInterface clientInterface) {
     List<File> files = new ArrayList<>();
     if (folder == null || folder.listFiles() == null) {
       return files;
     }
     for (File file : folder.listFiles()) {
       if (file.isDirectory()) {
-        files.addAll(getFilesInFolder(file));
+        files.addAll(getFilesInFolder(file, clientInterface));
       }
       else {
         files.add(file);
+        clientInterface.parsedFilesInMasterFolderProgress(files.size());
       }
     }
     return files;

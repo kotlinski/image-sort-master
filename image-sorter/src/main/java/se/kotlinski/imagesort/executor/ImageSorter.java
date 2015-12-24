@@ -46,8 +46,8 @@ public class ImageSorter {
     Map<String, List<File>> mediaFilesInFolder;
     String masterFolderPath = sortSettings.masterFolder.getAbsolutePath();
 
+    clientInterface.startParsingMasterFolder();
     mediaFilesInFolder = getMediaFilesInMasterFolder(sortSettings);
-
     clientInterface.masterFolderSuccessfulParsed(mediaFilesInFolder);
 
     Map<String, List<File>> mediaFileDestinations;
@@ -70,7 +70,7 @@ public class ImageSorter {
 
   private Map<String, List<File>> getMediaFilesInMasterFolder(final SortSettings sortSettings) {
     try {
-      return mediaFileParser.getMediaFilesInFolder(sortSettings.masterFolder);
+      return mediaFileParser.getMediaFilesInFolder(sortSettings.masterFolder, clientInterface);
     }
     catch (InvalidInputFolders invalidInputFolders) {
       LOGGER.error("Invalid input folders, try again", invalidInputFolders);

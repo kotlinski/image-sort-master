@@ -96,7 +96,8 @@ public class FileMoverTest {
     sortSettings.masterFolder = FileUtils.getFile(restorableTestMasterPath);
     imageSorter.sortImages(sortSettings);
 
-    List<File> filesInFolder = mediaFileUtil.getFilesInFolder(sortSettings.masterFolder);
+    List<File> filesInFolder = mediaFileUtil.getFilesInFolder(sortSettings.masterFolder,
+                                                              clientInterface);
     System.out.println(filesInFolder);
     for (File file : filesInFolder) {
       System.out.println(file);

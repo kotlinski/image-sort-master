@@ -57,6 +57,7 @@ public class FileSystemPrettyPrinter {
   private List<String> getFolders(final String filePath) {
     String regexFileSeparator = File.separatorChar == '\\' ? "\\\\" : File.separator;
     List<String> separated = new LinkedList<>(Arrays.asList(filePath.split(regexFileSeparator)));
+    separated.remove(separated.size()-1);
     separated.remove(0);
     separated.add(0, File.separator);
     return separated;
