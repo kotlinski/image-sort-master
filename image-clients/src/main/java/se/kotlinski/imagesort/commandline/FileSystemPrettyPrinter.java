@@ -10,11 +10,11 @@ import java.util.TreeSet;
 
 public class FileSystemPrettyPrinter {
 
-
-  public String convertFolderStructureToString(final Map<String, List<File>> mediaFileDestinations) {
+  public String convertFolderStructureToString(final Map<String, List<File>> mediaFileDestinations,
+                                               final boolean detailedString) {
     StringTree stringTree = new StringTree(File.separator);
     for (String filePath : mediaFileDestinations.keySet()) {
-      List<String> subFolders = getFolders(filePath);
+      List<String> subFolders = getFolders(filePath, detailedString);
       addChild(stringTree.root, subFolders, 1);
     }
     return printTree(stringTree.root, 0);
@@ -54,9 +54,12 @@ public class FileSystemPrettyPrinter {
     }
   }
 
-  private List<String> getFolders(final String filePath) {
+  private List<String> getFolders(final String filePath, final boolean detailedString) {
     String regexFileSeparator = File.separatorChar == '\\' ? "\\\\" : File.separator;
     List<String> separated = new LinkedList<>(Arrays.asList(filePath.split(regexFileSeparator)));
+    if (!detailedString) {
+      separated.remove(separated.size() - 1);
+    }
     separated.remove(0);
     separated.add(0, File.separator);
     return separated;

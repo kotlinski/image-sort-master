@@ -13,4 +13,14 @@ public abstract class ClientInterface {
   public abstract void successfulCalculatedOutputDestinations(final Map<String, List<File>> mediaFileDestinations);
 
   public abstract void successfulResolvedOutputConflicts(final Map<List<File>, String> resolvedFilesToOutputMap);
+
+  public abstract void startParsingMasterFolder();
+
+  public abstract void parsedFilesInMasterFolderProgress(final int size);
+
+  public abstract void startGroupFilesByContent();
+
+  public abstract void groupFilesByContentProgress(final int total, final int progress);
+
+  public abstract void startMovingFiles();
 }

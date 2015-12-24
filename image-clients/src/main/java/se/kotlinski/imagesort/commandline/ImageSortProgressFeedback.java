@@ -17,9 +17,49 @@ public class ImageSortProgressFeedback extends ClientInterface {
     this.fileSystemPrettyPrinter = fileSystemPrettyPrinter;
   }
 
+
+  @Override
+  public void startParsingMasterFolder() {
+    System.out.println("Parsing input folder for videos and images...");
+  }
+
+  @Override
+  public void parsedFilesInMasterFolderProgress(final int size) {
+    System.out.print("Files found: " + size + "\r");
+  }
+
+  @Override
+  public void startGroupFilesByContent() {
+    System.out.println();
+    System.out.println("Grouping files by content...");
+  }
+
+  @Override
+  public void groupFilesByContentProgress(final int total, final int progress) {
+    float percentageProgress = progress * 1f / total * 1f;
+
+    System.out.print("Current progress: " +
+                     (int) (percentageProgress * 100f) +
+                     "%, " +
+                     progress +
+                     " of " +
+                     total +
+                     "\r");
+  }
+
+  @Override
+  public void startMovingFiles() {
+    System.out.println("Copying files to new folder(s)...");
+  }
+
   @Override
   public boolean masterFolderSuccessfulParsed(final Map<String, List<File>> mediaFilesInFolder) {
+    System.out.println();
+    System.out.println("Folder successfully parse!");
+    System.out.println();
+    System.out.println("Folder data stats: ");
     printMediaFilesInFolderData(mediaFilesInFolder);
+    System.out.println();
     return true;
   }
 
@@ -30,7 +70,9 @@ public class ImageSortProgressFeedback extends ClientInterface {
 
   @Override
   public void successfulCalculatedOutputDestinations(final Map<String, List<File>> mediaFileDestinations) {
-    fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations);
+    String outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations, false);
+    System.out.println();
+    System.out.println(outputTree);
   }
 
   @Override
@@ -38,10 +80,12 @@ public class ImageSortProgressFeedback extends ClientInterface {
     //TODO: implement this
   }
 
+
   private void printMediaFilesInFolderData(final Map<String, List<File>> mediaFilesInFolder) {
     MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator(); // TODO: inject
     MediaFileDataInFolder mediaDataBeforeExecution;
-    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
+    mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(
+        mediaFilesInFolder);
 
     System.out.println(mediaDataBeforeExecution.toString());
   }

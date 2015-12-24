@@ -12,4 +12,13 @@ public class MediaFileDataInFolder {
     this.numberOfMediaFilesWithDuplicates = numberOfFilesWithDuplicates;
     this.totalNumberOfFiles = totalNumberOfFiles;
   }
+
+  @Override
+  public String toString() {
+    return "MediaFileDataInFolder{" +
+           "numberOfUniqueFiles=" + numberOfUniqueFiles +
+           ", numberOfMediaFilesWithDuplicates=" + numberOfMediaFilesWithDuplicates +
+           ", totalNumberOfFiles=" + totalNumberOfFiles +
+           '}';
+  }
 }

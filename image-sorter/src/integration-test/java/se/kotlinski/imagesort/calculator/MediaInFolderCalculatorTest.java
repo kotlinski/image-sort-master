@@ -3,6 +3,7 @@ package se.kotlinski.imagesort.calculator;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
+import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.utils.MD5Generator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class MediaInFolderCalculatorTest {
 
@@ -21,9 +23,12 @@ public class MediaInFolderCalculatorTest {
   private MediaFileUtil mediaFileUtil;
   private MD5Generator md5Generator;
   private Map<String, List<File>> mediaFilesInFolder;
+  private ClientInterface clientInterface;
 
   @Before
   public void setUp() throws Exception {
+    clientInterface = mock(ClientInterface.class);
+
     mediaInFolderCalculator = new MediaInFolderCalculator();
 
     mediaFileUtil = new MediaFileUtil();
@@ -33,7 +38,7 @@ public class MediaInFolderCalculatorTest {
     File masterFolder = mediaFileTestUtil.getTestInputFile();
 
     MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, md5Generator);
-    mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(masterFolder);
+    mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(masterFolder, clientInterface);
   }
 
   @Test

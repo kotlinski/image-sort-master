@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.exception.InvalidInputFolders;
+import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.utils.MD5Generator;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -24,19 +25,25 @@ public class MediaFileParser {
     this.MD5Generator = MD5Generator;
   }
 
-  public Map<String, List<File>> getMediaFilesInFolder(final File masterFolder) throws Exception {
+  public Map<String, List<File>> getMediaFilesInFolder(final File masterFolder,
+                                                       final ClientInterface clientInterface) throws Exception {
     if (!mediaFileUtil.isValidFolder(masterFolder)) {
       throw new InvalidInputFolders();
     }
 
-    List<File> filesInMasterFolder = mediaFileUtil.getFilesInFolder(masterFolder);
-    return groupFilesByMediaContent(filesInMasterFolder);
+    List<File> filesInMasterFolder = mediaFileUtil.getFilesInFolder(masterFolder, clientInterface);
+    return groupFilesByMediaContent(filesInMasterFolder, clientInterface);
   }
 
-  private Map<String, List<File>> groupFilesByMediaContent(final List<File> files) {
+  private Map<String, List<File>> groupFilesByMediaContent(final List<File> files,
+                                                           final ClientInterface clientInterface) {
 
+    clientInterface.startGroupFilesByContent();
     Map<String, List<File>> fileMap = new HashMap<>();
+    int progress = 0;
     for (File file : files) {
+      progress++;
+      clientInterface.groupFilesByContentProgress(files.size(), progress);
       // TODO: Something smart for logging etc.
       //Else Ignore Files
       if (mediaFileUtil.isValidMediaFile(file)) {
@@ -45,6 +52,7 @@ public class MediaFileParser {
     }
     return fileMap;
   }
+
 
   void addMediaFileToMap(final Map<String, List<File>> fileMap, final File file) {
     try {

@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.resolver;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class OutputConflictResolverTest {
 
@@ -28,9 +30,12 @@ public class OutputConflictResolverTest {
   private MediaFileForecaster mediaFileForecaster;
   Map<String, List<File>> mediaFileDestinations;
   private MediaFileUtil mediaFileUtil;
+  private ClientInterface clientInterface;
 
   @Before
   public void setUp() throws Exception {
+    clientInterface = mock(ClientInterface.class);
+
     mediaFileUtil = new MediaFileUtil();
     outputConflictResolver = new OutputConflictResolver(new MD5Generator(), mediaFileUtil);
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
@@ -45,7 +50,8 @@ public class OutputConflictResolverTest {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     String testInputPath = mediaFileTestUtil.getTestInputPath();
-    Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile);
+    Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile,
+                                                                                     clientInterface);
 
     mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
                                                                                    testInputPath);

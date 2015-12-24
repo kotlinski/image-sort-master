@@ -1,6 +1,7 @@
 package se.kotlinski.imagesort.utils;
 
 import org.apache.commons.io.FileUtils;
+import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 
 import java.io.File;
@@ -125,9 +126,10 @@ public class MediaFileTestUtil {
                     File.separator + "2013-10-26 20.20.46-kottbullar.jpg");
   }
 
-  public Map<String, List<File>> getParsedMediaFiles(final File testInputFile) {
+  public Map<String, List<File>> getParsedMediaFiles(final File testInputFile,
+                                                     final ClientInterface clientInterface) {
     try {
-      return mediaFileParser.getMediaFilesInFolder(testInputFile);
+      return mediaFileParser.getMediaFilesInFolder(testInputFile, clientInterface);
     }
     catch (Exception e) {
       e.printStackTrace();
