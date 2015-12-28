@@ -129,7 +129,7 @@ public class MediaFileTestUtil {
   public Map<String, List<File>> getParsedMediaFiles(final File testInputFile,
                                                      final ClientInterface clientInterface) {
     try {
-      return mediaFileParser.getMediaFilesInFolder(testInputFile, clientInterface);
+      return mediaFileParser.getMediaFilesInFolder(clientInterface, testInputFile);
     }
     catch (Exception e) {
       e.printStackTrace();

@@ -1,15 +1,12 @@
 package se.kotlinski.imagesort.executor;
 
 import com.google.inject.Inject;
-import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.math.BigInteger;
-import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,7 +23,7 @@ public class FileMover {
     this.mediaFileUtil = mediaFileUtil;
   }
 
-  public void moveFilesToNewDestionation(final Map<List<File>, String> resolvedFilesToOutputMap,
+  public void moveFilesToNewDestionation(final ClientInterface clientInterface, final Map<List<File>, String> resolvedFilesToOutputMap,
                                          final String masterFolderPath) {
 
     skipFilesAlreadyNamedAsOutput(resolvedFilesToOutputMap, masterFolderPath);

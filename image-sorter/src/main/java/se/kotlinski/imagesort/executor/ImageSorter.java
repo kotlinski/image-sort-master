@@ -61,7 +61,7 @@ public class ImageSorter {
     clientInterface.successfulResolvedOutputConflicts(resolvedFilesToOutputMap);
 
     clientInterface.startMovingFiles();
-    fileMover.moveFilesToNewDestionation(resolvedFilesToOutputMap, masterFolderPath);
+    fileMover.moveFilesToNewDestionation(clientInterface, resolvedFilesToOutputMap, masterFolderPath);
 
     //Print after move-action
     mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder, masterFolderPath);
@@ -71,7 +71,7 @@ public class ImageSorter {
 
   private Map<String, List<File>> getMediaFilesInMasterFolder(final SortSettings sortSettings) {
     try {
-      return mediaFileParser.getMediaFilesInFolder(sortSettings.masterFolder, clientInterface);
+      return mediaFileParser.getMediaFilesInFolder(clientInterface, sortSettings.masterFolder);
     }
     catch (InvalidInputFolders invalidInputFolders) {
       LOGGER.error("Invalid input folders, try again", invalidInputFolders);

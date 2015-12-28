@@ -25,8 +25,8 @@ public class MediaFileParser {
     this.MD5Generator = MD5Generator;
   }
 
-  public Map<String, List<File>> getMediaFilesInFolder(final File masterFolder,
-                                                       final ClientInterface clientInterface) throws Exception {
+  public Map<String, List<File>> getMediaFilesInFolder(final ClientInterface clientInterface,
+                                                       final File masterFolder) throws Exception {
     if (!mediaFileUtil.isValidFolder(masterFolder)) {
       throw new InvalidInputFolders();
     }

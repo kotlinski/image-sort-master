@@ -38,7 +38,7 @@ public class MediaInFolderCalculatorTest {
     File masterFolder = mediaFileTestUtil.getTestInputFile();
 
     MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, md5Generator);
-    mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(masterFolder, clientInterface);
+    mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(clientInterface, masterFolder);
   }
 
   @Test
