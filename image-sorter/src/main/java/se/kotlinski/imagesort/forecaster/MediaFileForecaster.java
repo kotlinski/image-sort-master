@@ -6,6 +6,7 @@ import se.kotlinski.imagesort.utils.FileDateInterpreter;
 
 import java.io.File;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class MediaFileForecaster {
   private final DateToFileRenamer dateToFileRenamer;
@@ -41,12 +42,13 @@ public class MediaFileForecaster {
 
   String getFlavour(final String masterFolderPath, final File file) {
     String flavourWithFileName = file.getPath().replace(masterFolderPath, "");
+
     return flavourWithFileName.replace(File.separator + file.getName(), "");
   }
 
   private String reduceOldFlavourWithDateFlavour(final String flavour,
                                                  final String flavourDatePrefix) {
-    String[] dateFlavours = flavourDatePrefix.split(File.separator);
+    String[] dateFlavours = flavourDatePrefix.split(Pattern.quote(File.separator));
     String reducedFlavour = flavour;
     for (String dateFlavour : dateFlavours) {
       reducedFlavour = reducedFlavour.replace(File.separator + dateFlavour, "");

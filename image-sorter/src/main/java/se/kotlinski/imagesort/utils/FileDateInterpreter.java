@@ -17,9 +17,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class FileDateInterpreter {
@@ -50,7 +48,7 @@ public class FileDateInterpreter {
     }
   }
 
-  @SuppressWarnings("PMD.EmptyCatchBlock")
+  @SuppressWarnings ("PMD.EmptyCatchBlock")
   public Date getDate(final File file) throws Exception {
     try {
       return getImageDate(file);
@@ -84,12 +82,16 @@ public class FileDateInterpreter {
     String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
 
     String dropbox_printscreen_format = "yyyy-MM-dd HH.mm.ss";
+    String instagram_format = "'IMG'_yyyyMMdd_HHmmss";
+    String screenshot_format = "'Screenshot'_yyyy-MM-dd-HH-mm-ss";
     String datePatterns[] = {"yyyy:MM:dd HH:mm:ss",
                              "yyyy:MM:dd HH:mm",
                              "yyyy-MM-dd HH:mm:ss",
                              "yyyy-MM-dd HH:mm",
                              "yyyy.MM.dd HH:mm:ss",
                              "yyyy.MM.dd HH:mm",
+                             instagram_format,
+                             screenshot_format,
                              dropbox_printscreen_format};
     for (String datePattern : datePatterns) {
       try {
