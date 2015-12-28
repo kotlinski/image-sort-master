@@ -1,12 +1,15 @@
 package se.kotlinski.imagesort.executor;
 
 import com.google.inject.Inject;
+import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -167,11 +170,24 @@ public class FileMover {
   }
 
   private void deleteFile(final File file) {
+    deleteFile(file, 0);
+  }
+
+  private void deleteFile(final File file, int attempts) {
+
+    if (attempts > 5) {
+      return;
+    }
     try {
       FileUtils.forceDelete(file);
     }
     catch (IOException e) {
-      e.printStackTrace();
+      System.gc();//Added this part
+      try {
+        Thread.sleep(1500);
+      } catch (InterruptedException e2) {
+        e2.printStackTrace();
+      }
     }
   }
 

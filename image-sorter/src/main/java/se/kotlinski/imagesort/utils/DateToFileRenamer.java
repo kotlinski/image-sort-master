@@ -21,17 +21,6 @@ public class DateToFileRenamer {
     return format.format(calendar.getTime());
   }
 
-  public String getYearFolder(Date date) {
-    calendar.setTime(date);
-    SimpleDateFormat format = new SimpleDateFormat(File.separator + "yyyy");
-    return format.format(calendar.getTime());
-  }
-
-  public String getMonthFolder(Date date) {
-    calendar.setTime(date);
-    SimpleDateFormat format = new SimpleDateFormat(File.separator + "MM");
-    return format.format(calendar.getTime());
-  }
 
   public String formatFileDate(Date date) {
     calendar.setTime(date);

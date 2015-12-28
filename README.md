@@ -19,7 +19,7 @@ quality images, because you know that it may exist in at least one more location
 
 With this tool your images will be sorted and renamed in this structure:
 <br>
-`year/[month(optional)]/<flavour(existing folder structure)>/yyyy-mm-dd hh:mm:ss.[png|jpg|mp4]`
+`year/[month(optional)]/<flavour(existing folder structure)>/yyyy-mm-dd hh.mm.ss.[png|jpg|mp4]`
 <br>
 The month setting is optional. 
 The flavor may be Instagram, Screenshots, Elins wedding or what folder you
@@ -28,7 +28,7 @@ A flavor is all sub folders from the root folder, except year/month.
 <br>Example:<br>
 `root-folder/2013/Wedding/TheKiss/imgA.png`
  <br>will be sorted as:<br> 
-`root-folder/2013/04/Wedding/TheKiss/2013-04-22 13:17:00.png`
+`root-folder/2013/04/Wedding/TheKiss/2013-04-22 13.17.00.png`
 <br>
 The application will detect all duplicate files and merge them into one when possible. 
 
