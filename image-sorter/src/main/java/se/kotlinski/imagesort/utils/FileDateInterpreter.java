@@ -54,7 +54,7 @@ public class FileDateInterpreter {
       return getImageDate(file);
     }
     catch (CouldNotParseDateException e) {
-      LOGGER.error("File is not an image with meta data, " + file);
+      //LOGGER.error("File is not an image with meta data, " + file);
     }
     catch (Exception e) {
       // This is expected
@@ -63,7 +63,7 @@ public class FileDateInterpreter {
       return getVideoDate(file);
     }
     catch (CouldNotParseDateException e) {
-      LOGGER.error("File is not an video with meta data, " + file);
+      //LOGGER.error("File is not an video with meta data, " + file);
     }
     catch (Exception e) {
       // This is expected
@@ -115,7 +115,7 @@ public class FileDateInterpreter {
       return movieHeaderBox.getCreationTime();
     }
     catch (IOException | NullPointerException e) {
-      LOGGER.error("File is not a parcelable mp4");
+      //LOGGER.error("File is not a parcelable mp4");
       throw new CouldNotParseDateException();
     }
   }
