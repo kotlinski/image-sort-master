@@ -32,11 +32,11 @@ public class MediaFileParser {
     }
 
     List<File> filesInMasterFolder = mediaFileUtil.getFilesInFolder(masterFolder, clientInterface);
-    return groupFilesByMediaContent(filesInMasterFolder, clientInterface);
+    return groupFilesByMediaContent(clientInterface, filesInMasterFolder);
   }
 
-  private Map<String, List<File>> groupFilesByMediaContent(final List<File> files,
-                                                           final ClientInterface clientInterface) {
+  private Map<String, List<File>> groupFilesByMediaContent(final ClientInterface clientInterface,
+                                                           final List<File> files) {
 
     clientInterface.startGroupFilesByContent();
     Map<String, List<File>> fileMap = new HashMap<>();
@@ -44,11 +44,7 @@ public class MediaFileParser {
     for (File file : files) {
       progress++;
       clientInterface.groupFilesByContentProgress(files.size(), progress);
-      // TODO: Something smart for logging etc.
-      //Else Ignore Files
-      if (mediaFileUtil.isValidMediaFile(file)) {
-        addMediaFileToMap(fileMap, file);
-      }
+      addMediaFileToMap(fileMap, file);
     }
     return fileMap;
   }

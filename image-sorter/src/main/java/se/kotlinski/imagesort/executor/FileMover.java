@@ -23,32 +23,44 @@ public class FileMover {
     this.mediaFileUtil = mediaFileUtil;
   }
 
-  public void moveFilesToNewDestionation(final ClientInterface clientInterface, final Map<List<File>, String> resolvedFilesToOutputMap,
+  public void moveFilesToNewDestionation(final ClientInterface clientInterface,
+                                         final Map<List<File>, String> resolvedFilesToOutputMap,
                                          final String masterFolderPath) {
 
-    skipFilesAlreadyNamedAsOutput(resolvedFilesToOutputMap, masterFolderPath);
+    skipFilesAlreadyNamedAsOutput(clientInterface, resolvedFilesToOutputMap, masterFolderPath);
 
 
     //TODO: run recusivley, Move to Conflict resolver.
-    boolean noMoreConflicts = resolveOutputConflictsWithOldFiles(resolvedFilesToOutputMap,
-                                                                 masterFolderPath);
+    boolean foundConflicts = true;
+    while (foundConflicts) {
+      foundConflicts = resolveOutputConflictsWithOldFiles(resolvedFilesToOutputMap,
+                                                          masterFolderPath);
+    }
 
-    copyFilesToNewDestinations(resolvedFilesToOutputMap, masterFolderPath);
+    if (resolvedFilesToOutputMap.size() > 0) {
+      clientInterface.prepareMovePhase();
 
-    cleanUpOldFiles(resolvedFilesToOutputMap, masterFolderPath);
+      copyFilesToNewDestinations(resolvedFilesToOutputMap, masterFolderPath);
 
-    deleteEmptyDirectories(FileUtils.getFile(masterFolderPath));
+      cleanUpOldFiles(resolvedFilesToOutputMap, masterFolderPath);
+
+      deleteEmptyDirectories(FileUtils.getFile(masterFolderPath));
+
+    }
   }
 
   private boolean resolveOutputConflictsWithOldFiles(final Map<List<File>, String> resolvedFilesToOutputMap,
                                                      final String masterFolderPath) {
-
+    return false;
+/*    boolean foundConflicts = false;
     for (List<File> files : resolvedFilesToOutputMap.keySet()) {
       for (File file : files) {
         boolean conflictFound = checkIfFileConflictsWithOutputs(resolvedFilesToOutputMap,
                                                                 file,
                                                                 masterFolderPath);
+
         if (conflictFound) {
+          foundConflicts = true;
           String randomString = new BigInteger(130, new SecureRandom()).toString(32);
           String newAbsolutePath = mediaFileUtil.appendToFileName(file.getAbsolutePath(),
                                                                   randomString);
@@ -58,13 +70,12 @@ public class FileMover {
           catch (IOException e) {
             e.printStackTrace();
           }
-          file = FileUtils.getFile(newAbsolutePath);
+          // file = FileUtils.getFile(newAbsolutePath);
         }
       }
     }
 
-
-    return false;
+    return foundConflicts;*/
   }
 
   private boolean checkIfFileConflictsWithOutputs(final Map<List<File>, String> resolvedFilesToOutputMap,
@@ -95,8 +106,11 @@ public class FileMover {
   }
 
 
-  private void skipFilesAlreadyNamedAsOutput(final Map<List<File>, String> resolvedFilesToOutputMap,
+  private void skipFilesAlreadyNamedAsOutput(final ClientInterface clientInterface,
+                                             final Map<List<File>, String> resolvedFilesToOutputMap,
                                              final String masterFolderPath) {
+    int skippedFiles = 0;
+    int filesToMove = 0;
     for (Map.Entry<List<File>, String> listStringEntry : resolvedFilesToOutputMap.entrySet()) {
 
       List<File> fileList = listStringEntry.getKey();
@@ -106,8 +120,13 @@ public class FileMover {
 
         String folderPath = masterFolderPath + listStringEntry.getValue();
         if (file.getAbsolutePath().equals(folderPath)) {
+          skippedFiles++;
           it.remove();
         }
+        else {
+          filesToMove++;
+        }
+        clientInterface.skippingFilesToMove(skippedFiles, filesToMove);
       }
     }
   }
@@ -182,7 +201,8 @@ public class FileMover {
       System.gc();//Added this part
       try {
         Thread.sleep(1500);
-      } catch (InterruptedException e2) {
+      }
+      catch (InterruptedException e2) {
         e2.printStackTrace();
       }
     }

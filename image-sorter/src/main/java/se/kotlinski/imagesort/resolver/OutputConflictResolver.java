@@ -1,6 +1,7 @@
 package se.kotlinski.imagesort.resolver;
 
 import com.google.inject.Inject;
+import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.utils.MD5Generator;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -21,11 +22,16 @@ public class OutputConflictResolver {
     this.mediaFileUtil = mediaFileUtil;
   }
 
-  public Map<List<File>, String> resolveOutputConflicts(final Map<String, List<File>> mediaFileDestinations) {
+  public Map<List<File>, String> resolveOutputConflicts(final ClientInterface clientInterface,
+                                                        final Map<String, List<File>> mediaFileDestinations) {
     Map<List<File>, String> filesToOutputDestination = new HashMap<>();
 
+    int progress = 0;
     for (String outputDirectory : mediaFileDestinations.keySet()) {
-      resolvConflictForMd5FileList(mediaFileDestinations,
+      clientInterface.searchingForConflictsProgress(mediaFileDestinations.size(), ++progress);
+
+      resolvConflictForMd5FileList(clientInterface,
+                                   mediaFileDestinations,
                                    filesToOutputDestination,
                                    outputDirectory);
     }
@@ -34,7 +40,8 @@ public class OutputConflictResolver {
 
   }
 
-  private void resolvConflictForMd5FileList(final Map<String, List<File>> mediaFileDestinations,
+  private void resolvConflictForMd5FileList(final ClientInterface clientInterface,
+                                            final Map<String, List<File>> mediaFileDestinations,
                                             final Map<List<File>, String> filesToOutputDestination,
                                             final String outputDirectory) {
     List<File> files = mediaFileDestinations.get(outputDirectory);
@@ -42,17 +49,25 @@ public class OutputConflictResolver {
     Map<String, List<File>> md5Groups = new HashMap<>();
     groupFilesByMd5(files, md5Groups);
 
-    renameOutputsWhenConflitcts(filesToOutputDestination, outputDirectory, files, md5Groups);
+    renameOutputsWhenConflicts(clientInterface,
+                               filesToOutputDestination,
+                               outputDirectory,
+                               files,
+                               md5Groups);
   }
 
-  private void renameOutputsWhenConflitcts(final Map<List<File>, String> filesToOutputDestination,
-                                           final String outputDirectory,
-                                           final List<File> files,
-                                           final Map<String, List<File>> md5Groups) {
+  private void renameOutputsWhenConflicts(final ClientInterface clientInterface,
+                                          final Map<List<File>, String> filesToOutputDestination,
+                                          final String outputDirectory,
+                                          final List<File> files,
+                                          final Map<String, List<File>> md5Groups) {
+
     if (severalGroupsWithSameOutput(md5Groups)) {
+      clientInterface.conflictFound(outputDirectory);
       int append = 1;
       for (List<File> fileList : md5Groups.values()) {
-        String outputWithAppendedValue = mediaFileUtil.appendToFileName(outputDirectory, "_" + append);
+        String outputWithAppendedValue = mediaFileUtil.appendToFileName(outputDirectory,
+                                                                        "_" + append);
         filesToOutputDestination.put(fileList, outputWithAppendedValue);
         append++;
       }

@@ -60,7 +60,7 @@ public class OutputConflictResolverTest {
   @Test
   public void testResolveOutputConflicts() throws Exception {
     Map<List<File>, String> listStringMap;
-    listStringMap = outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
+    listStringMap = outputConflictResolver.resolveOutputConflicts(clientInterface, mediaFileDestinations);
 
     for (String s : listStringMap.values()) {
       System.out.println(s);

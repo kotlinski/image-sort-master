@@ -43,30 +43,34 @@ public class ImageSorter {
   }
 
   public void sortImages(SortSettings sortSettings) {
-    Map<String, List<File>> mediaFilesInFolder;
     String masterFolderPath = sortSettings.masterFolder.getAbsolutePath();
 
     clientInterface.startParsingMasterFolder();
+    Map<String, List<File>> mediaFilesInFolder;
     mediaFilesInFolder = getMediaFilesInMasterFolder(sortSettings);
     clientInterface.masterFolderSuccessfulParsed(mediaFilesInFolder);
 
+    clientInterface.startCalculatingOutputDirectories();
     Map<String, List<File>> mediaFileDestinations;
     mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder, masterFolderPath);
     clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
+    clientInterface.startResolvingConflicts();
     Map<List<File>, String> resolvedFilesToOutputMap;
-    resolvedFilesToOutputMap = outputConflictResolver.resolveOutputConflicts(mediaFileDestinations);
-
-    //Print after move-action
+    resolvedFilesToOutputMap = outputConflictResolver.resolveOutputConflicts(clientInterface, mediaFileDestinations);
     clientInterface.successfulResolvedOutputConflicts(resolvedFilesToOutputMap);
 
     clientInterface.startMovingFiles();
     fileMover.moveFilesToNewDestionation(clientInterface, resolvedFilesToOutputMap, masterFolderPath);
 
-    //Print after move-action
-    mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder, masterFolderPath);
-    clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
+    // TODO: Clean up clientInterface.
+    // TODO: Name after relative paths, alt store in files instead of strings. 
+
+
+    // Compare number of duplicates before and after....
+
+    // Print link to btc.
   }
 
   private Map<String, List<File>> getMediaFilesInMasterFolder(final SortSettings sortSettings) {
@@ -86,6 +90,8 @@ public class ImageSorter {
 
   private Map<String, List<File>> calculateOutputDirectories(final Map<String, List<File>> mediaFilesInFolder,
                                                              final String masterFolder) {
+
+    //TODO: inject this..
     MediaFileForecaster mediaFileForecaster;
     mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
     MediaFilesOutputForecaster mediaOutputCalculator;

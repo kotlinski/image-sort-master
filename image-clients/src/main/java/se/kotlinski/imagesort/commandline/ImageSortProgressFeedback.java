@@ -48,13 +48,48 @@ public class ImageSortProgressFeedback extends ClientInterface {
   }
 
   @Override
-  public void startMovingFiles() {
-    System.out.println("Copying files to new folder(s)...");
+  public void startResolvingConflicts() {
+    System.out.println("Resolving conflicts...");
+    System.out.println();
   }
 
   @Override
+  public void searchingForConflictsProgress(final int total, final int progress) {
+    float percentageProgress = progress * 1f / total * 1f;
+
+    System.out.print("Current progress: " +
+                     (int) (percentageProgress * 100f) +
+                     "%, " +
+                     progress +
+                     " of " +
+                     total +
+                     "\r");
+  }
+
+  @Override
+  public void conflictFound(final String outputDirectory) {
+    System.out.println("Multiple files want this output: " +
+                       outputDirectory +
+                       ",\n ...conflict resolved.");
+  }
+
+  @Override
+  public void successfulResolvedOutputConflicts(final Map<List<File>, String> resolvedFilesToOutputMap) {
+    System.out.println("");
+    System.out.println("Resolved output conflicts!");
+    System.out.println("");
+  }
+
+  @Override
+  public void startMovingFiles() {
+    System.out.println("Preparing files to be renamed and moved to new folder(s)...");
+    System.out.println("");
+  }
+
+
+  @Override
   public boolean masterFolderSuccessfulParsed(final Map<String, List<File>> mediaFilesInFolder) {
-    System.out.println();
+    System.out.println("");
     System.out.println("Folder successfully parse!");
     System.out.println();
     System.out.println("Folder data stats: ");
@@ -69,15 +104,37 @@ public class ImageSortProgressFeedback extends ClientInterface {
   }
 
   @Override
+  public void startCalculatingOutputDirectories() {
+    System.out.println("");
+    System.out.println("Start calculating new output directories.");
+    System.out.println("");
+  }
+
+  @Override
   public void successfulCalculatedOutputDestinations(final Map<String, List<File>> mediaFileDestinations) {
-    String outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations, false);
+    System.out.println("");
+    System.out.println("Total number of output destinations: " + mediaFileDestinations.size());
+    System.out.println("The new output tree: ");
+    String outputTree;
+    outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations,
+                                                                        false);
     System.out.println();
     System.out.println(outputTree);
   }
 
   @Override
-  public void successfulResolvedOutputConflicts(final Map<List<File>, String> resolvedFilesToOutputMap) {
-    //TODO: implement this
+  public void skippingFilesToMove(final int skippedFiles, final int filesToMove) {
+    System.out.print(filesToMove +
+                     " files will be renamed and/or moved. Skipping " +
+                     skippedFiles +
+                     " files." +
+                     "\r");
+  }
+
+  @Override
+  public void prepareMovePhase() {
+    System.out.println("");
+    System.out.println("Moving files...");
   }
 
 

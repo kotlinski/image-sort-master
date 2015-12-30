@@ -26,12 +26,16 @@ public class MediaFileUtil {
     for (File file : folder.listFiles()) {
       if (file.isDirectory()) {
         files.addAll(getFilesInFolder(file, clientInterface));
-      }
-      else {
-        files.add(file);
         clientInterface.parsedFilesInMasterFolderProgress(files.size());
       }
+      else {
+        if (isValidMediaFile(file)) {
+          files.add(file);
+          clientInterface.parsedFilesInMasterFolderProgress(files.size());
+        }
+      }
     }
+    clientInterface.parsedFilesInMasterFolderProgress(files.size());
     return files;
   }
 

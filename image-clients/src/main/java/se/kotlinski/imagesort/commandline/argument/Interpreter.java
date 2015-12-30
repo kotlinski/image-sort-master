@@ -10,6 +10,7 @@ import se.kotlinski.imagesort.exception.InvalidArgumentsException;
 public class Interpreter {
 
   private static final Logger LOGGER = LogManager.getLogger(Interpreter.class);
+
   private Transformer transformer;
 
   @Inject
