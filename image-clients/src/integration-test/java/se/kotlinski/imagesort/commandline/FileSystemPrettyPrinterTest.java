@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.commandline;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
@@ -47,8 +48,8 @@ public class FileSystemPrettyPrinterTest {
   public void testPrettyPrintFolderStructure() throws Exception {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     String testInputPath = mediaFileTestUtil.getTestInputPath();
-    Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile,
-                                                                                     clientInterface);
+    Map<MediaFileDataHash, List<File>> parsedMediaFiles;
+    parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(clientInterface, testInputFile);
 
     Map<String, List<File>> mediaFileDestinations;
     mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
@@ -59,7 +60,8 @@ public class FileSystemPrettyPrinterTest {
       System.out.println(stringListEntry.getValue());
       System.out.println("-");
     }
-    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations, true);
+    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations,
+                                                                               true);
 
 
     String expectedOutput = " |-noxon on raindeer - no date.jpg\n" +

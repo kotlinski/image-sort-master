@@ -3,6 +3,7 @@ package se.kotlinski.imagesort.commandline;
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
+import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.executor.ClientInterface;
 
 import java.io.File;
@@ -19,13 +20,48 @@ public class ImageSortProgressFeedback extends ClientInterface {
 
 
   @Override
-  public void startParsingMasterFolder() {
+  public void initiateMediaFileParsingPhase() {
     System.out.println("Parsing input folder for videos and images...");
+  }
+
+  @Override
+  public void masterFolderFailedParsed() {
+    System.out.println("Invalid input folders, try again");
   }
 
   @Override
   public void parsedFilesInMasterFolderProgress(final int size) {
     System.out.print("Files found: " + size + "\r");
+  }
+
+  @Override
+  public boolean masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
+    System.out.println("");
+    System.out.println("Folder successfully parse!");
+    System.out.println();
+    System.out.println("Folder data stats: ");
+    printMediaFilesInFolderData(mediaFilesInFolder);
+    System.out.println();
+    return true;
+  }
+
+  @Override
+  public void startCalculatingOutputDirectories() {
+    System.out.println("");
+    System.out.println("Start calculating new output directories.");
+    System.out.println("");
+  }
+
+  @Override
+  public void successfulCalculatedOutputDestinations(final Map<String, List<File>> mediaFileDestinations) {
+    System.out.println("");
+    System.out.println("Total number of output destinations: " + mediaFileDestinations.size());
+    System.out.println("The new output tree: ");
+    String outputTree;
+    outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations,
+                                                                        false);
+    System.out.println();
+    System.out.println(outputTree);
   }
 
   @Override
@@ -46,6 +82,7 @@ public class ImageSortProgressFeedback extends ClientInterface {
                      total +
                      "\r");
   }
+
 
   @Override
   public void startResolvingConflicts() {
@@ -88,41 +125,6 @@ public class ImageSortProgressFeedback extends ClientInterface {
 
 
   @Override
-  public boolean masterFolderSuccessfulParsed(final Map<String, List<File>> mediaFilesInFolder) {
-    System.out.println("");
-    System.out.println("Folder successfully parse!");
-    System.out.println();
-    System.out.println("Folder data stats: ");
-    printMediaFilesInFolderData(mediaFilesInFolder);
-    System.out.println();
-    return true;
-  }
-
-  @Override
-  public void masterFolderFailedParsed() {
-    System.out.println("Invalid input folders, try again");
-  }
-
-  @Override
-  public void startCalculatingOutputDirectories() {
-    System.out.println("");
-    System.out.println("Start calculating new output directories.");
-    System.out.println("");
-  }
-
-  @Override
-  public void successfulCalculatedOutputDestinations(final Map<String, List<File>> mediaFileDestinations) {
-    System.out.println("");
-    System.out.println("Total number of output destinations: " + mediaFileDestinations.size());
-    System.out.println("The new output tree: ");
-    String outputTree;
-    outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations,
-                                                                        false);
-    System.out.println();
-    System.out.println(outputTree);
-  }
-
-  @Override
   public void skippingFilesToMove(final int skippedFiles, final int filesToMove) {
     System.out.print(filesToMove +
                      " files will be renamed and/or moved. Skipping " +
@@ -138,7 +140,7 @@ public class ImageSortProgressFeedback extends ClientInterface {
   }
 
 
-  private void printMediaFilesInFolderData(final Map<String, List<File>> mediaFilesInFolder) {
+  private void printMediaFilesInFolderData(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
     MediaInFolderCalculator mediaInFolderCalculator = new MediaInFolderCalculator(); // TODO: inject
     MediaFileDataInFolder mediaDataBeforeExecution;
     mediaDataBeforeExecution = mediaInFolderCalculator.calculateMediaFileDataInFolder(

@@ -3,7 +3,6 @@ package se.kotlinski.imagesort.module;
 import com.google.inject.AbstractModule;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
-import se.kotlinski.imagesort.commandline.CommandLineInterface;
 import se.kotlinski.imagesort.commandline.ImageSortProgressFeedback;
 import se.kotlinski.imagesort.executor.ClientInterface;
 

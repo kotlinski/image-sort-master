@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.executor.ImageSorter;
+import se.kotlinski.imagesort.main.ImageSorter;
 
 public class CommandLineInterface {
   private static final Logger LOGGER = LogManager.getLogger(CommandLineInterface.class);

@@ -6,8 +6,6 @@ import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;

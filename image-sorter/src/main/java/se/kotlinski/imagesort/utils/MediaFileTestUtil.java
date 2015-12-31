@@ -1,8 +1,10 @@
 package se.kotlinski.imagesort.utils;
 
 import org.apache.commons.io.FileUtils;
+import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.parser.MediaFileParser;
+import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,14 +13,13 @@ import java.util.Map;
 
 public class MediaFileTestUtil {
   private final MediaFileUtil mediaFileUtils;
-  private MediaFileParser mediaFileParser;
-
   private final String defaultTestFolderName = "inputImages";
   private final String restoreableTestFolderName = "restoreable_master_folder";
+  private MediaFileParser mediaFileParser;
 
   public MediaFileTestUtil(MediaFileUtil mediaFileUtils) {
     this.mediaFileUtils = mediaFileUtils;
-    mediaFileParser = new MediaFileParser(mediaFileUtils, new MD5Generator());
+    mediaFileParser = new MediaFileParser(mediaFileUtils);
   }
 
   public File getTestInputFile() {
@@ -126,10 +127,14 @@ public class MediaFileTestUtil {
                     File.separator + "2013-10-26 20.20.46-kottbullar.jpg");
   }
 
-  public Map<String, List<File>> getParsedMediaFiles(final File testInputFile,
-                                                     final ClientInterface clientInterface) {
+  public Map<MediaFileDataHash, List<File>> getParsedMediaFiles(final ClientInterface clientInterface,
+                                                                final File testInputFile) {
     try {
-      return mediaFileParser.getMediaFilesInFolder(clientInterface, testInputFile);
+      List<File> mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(clientInterface,
+                                                                            testInputFile);
+      MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer;
+      mediaFileHashDataMapTransformer = new MediaFileHashDataMapTransformer(new MediaFileHashGenerator());
+      return mediaFileHashDataMapTransformer.transform(clientInterface, mediaFilesInFolder);
     }
     catch (Exception e) {
       e.printStackTrace();

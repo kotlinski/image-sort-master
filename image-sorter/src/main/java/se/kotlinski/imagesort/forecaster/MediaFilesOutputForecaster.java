@@ -1,5 +1,8 @@
 package se.kotlinski.imagesort.forecaster;
 
+import com.google.inject.Inject;
+import se.kotlinski.imagesort.data.MediaFileDataHash;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,11 +13,12 @@ public class MediaFilesOutputForecaster {
 
   private final MediaFileForecaster mediaFileForecaster;
 
+  @Inject
   public MediaFilesOutputForecaster(final MediaFileForecaster mediaFileForecaster) {
     this.mediaFileForecaster = mediaFileForecaster;
   }
 
-  public Map<String, List<File>> calculateOutputDestinations(final Map<String, List<File>> mediaFilesInFolder,
+  public Map<String, List<File>> calculateOutputDestinations(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder,
                                                              final String masterFolderPath) {
     Map<String, List<File>> exportFiles = new HashMap<>();
 

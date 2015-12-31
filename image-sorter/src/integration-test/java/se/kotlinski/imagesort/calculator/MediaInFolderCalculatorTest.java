@@ -2,10 +2,12 @@ package se.kotlinski.imagesort.calculator;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.parser.MediaFileParser;
-import se.kotlinski.imagesort.utils.MD5Generator;
+import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
+import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -21,9 +23,10 @@ public class MediaInFolderCalculatorTest {
 
   private MediaInFolderCalculator mediaInFolderCalculator;
   private MediaFileUtil mediaFileUtil;
-  private MD5Generator md5Generator;
-  private Map<String, List<File>> mediaFilesInFolder;
+  private MediaFileHashGenerator mediaFileHashGenerator;
+  private Map<MediaFileDataHash, List<File>> mediaFilesInFolder;
   private ClientInterface clientInterface;
+  private MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer;
 
   @Before
   public void setUp() throws Exception {
@@ -33,18 +36,23 @@ public class MediaInFolderCalculatorTest {
 
     mediaFileUtil = new MediaFileUtil();
     MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
-    md5Generator = new MD5Generator();
+    mediaFileHashGenerator = new MediaFileHashGenerator();
 
     File masterFolder = mediaFileTestUtil.getTestInputFile();
 
-    MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, md5Generator);
-    mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(clientInterface, masterFolder);
+    MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil);
+    List<File> mediaFiles = mediaFileParser.getMediaFilesInFolder(clientInterface, masterFolder);
+
+    mediaFileHashDataMapTransformer = new MediaFileHashDataMapTransformer(mediaFileHashGenerator);
+    mediaFilesInFolder = mediaFileHashDataMapTransformer.transform(clientInterface, mediaFiles);
+
   }
 
   @Test
   public void testCalculateMediaFileDataInFolder() throws Exception {
     MediaFileDataInFolder mediaFileDataInFolder;
-    mediaFileDataInFolder = mediaInFolderCalculator.calculateMediaFileDataInFolder(mediaFilesInFolder);
+    mediaFileDataInFolder = mediaInFolderCalculator.calculateMediaFileDataInFolder(
+        mediaFilesInFolder);
 
     assertThat(mediaFileDataInFolder.numberOfUniqueFiles, is(10));
     assertThat(mediaFileDataInFolder.numberOfMediaFilesWithDuplicates, is(2));

@@ -1,15 +1,17 @@
-package se.kotlinski.imagesort.executor;
+package se.kotlinski.imagesort.main;
 
 
 import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.exception.InvalidInputFolders;
-import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
+import se.kotlinski.imagesort.executor.ClientInterface;
+import se.kotlinski.imagesort.executor.FileMover;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
+import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 
@@ -26,16 +28,22 @@ public class ImageSorter {
   private final FileDateInterpreter fileDateInterpreter;
   private final OutputConflictResolver outputConflictResolver;
   private final FileMover fileMover;
+  private final MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer;
+  private final MediaFilesOutputForecaster mediaOutputCalculator;
 
   @Inject
   public ImageSorter(final ClientInterface clientInterface,
                      final MediaFileParser mediaFileParser,
-                     final DateToFileRenamer dateToFileRenamer,
+                     final MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer,
+                     final MediaFilesOutputForecaster mediaOutputCalculator,
                      final FileDateInterpreter fileDateInterpreter,
+                     final DateToFileRenamer dateToFileRenamer,
                      final OutputConflictResolver outputConflictResolver,
                      final FileMover fileMover) {
     this.clientInterface = clientInterface;
     this.mediaFileParser = mediaFileParser;
+    this.mediaFileHashDataMapTransformer = mediaFileHashDataMapTransformer;
+    this.mediaOutputCalculator = mediaOutputCalculator;
     this.dateToFileRenamer = dateToFileRenamer;
     this.fileDateInterpreter = fileDateInterpreter;
     this.outputConflictResolver = outputConflictResolver;
@@ -45,14 +53,19 @@ public class ImageSorter {
   public void sortImages(SortSettings sortSettings) {
     String masterFolderPath = sortSettings.masterFolder.getAbsolutePath();
 
-    clientInterface.startParsingMasterFolder();
-    Map<String, List<File>> mediaFilesInFolder;
-    mediaFilesInFolder = getMediaFilesInMasterFolder(sortSettings);
-    clientInterface.masterFolderSuccessfulParsed(mediaFilesInFolder);
+    clientInterface.initiateMediaFileParsingPhase();
+
+    List<File> mediaFiles;
+    mediaFiles = mediaFileParser.getMediaFilesInFolder(clientInterface, sortSettings.masterFolder);
+
+    Map<MediaFileDataHash, List<File>> mediaFileHashDataListMap;
+    mediaFileHashDataListMap = mediaFileHashDataMapTransformer.transform(clientInterface, mediaFiles);
+    clientInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);
+
 
     clientInterface.startCalculatingOutputDirectories();
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = calculateOutputDirectories(mediaFilesInFolder, masterFolderPath);
+    mediaFileDestinations = mediaOutputCalculator.calculateOutputDestinations(mediaFileHashDataListMap, masterFolderPath);
     clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
     clientInterface.startResolvingConflicts();
@@ -71,32 +84,5 @@ public class ImageSorter {
     // Compare number of duplicates before and after....
 
     // Print link to btc.
-  }
-
-  private Map<String, List<File>> getMediaFilesInMasterFolder(final SortSettings sortSettings) {
-    try {
-      return mediaFileParser.getMediaFilesInFolder(clientInterface, sortSettings.masterFolder);
-    }
-    catch (InvalidInputFolders invalidInputFolders) {
-      LOGGER.error("Invalid input folders, try again", invalidInputFolders);
-      clientInterface.masterFolderFailedParsed();
-    }
-    catch (Exception e) {
-      clientInterface.masterFolderFailedParsed();
-    }
-    return null;
-  }
-
-
-  private Map<String, List<File>> calculateOutputDirectories(final Map<String, List<File>> mediaFilesInFolder,
-                                                             final String masterFolder) {
-
-    //TODO: inject this..
-    MediaFileForecaster mediaFileForecaster;
-    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
-    MediaFilesOutputForecaster mediaOutputCalculator;
-    mediaOutputCalculator = new MediaFilesOutputForecaster(mediaFileForecaster);
-
-    return mediaOutputCalculator.calculateOutputDestinations(mediaFilesInFolder, masterFolder);
   }
 }

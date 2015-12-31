@@ -9,7 +9,7 @@ import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
-import se.kotlinski.imagesort.utils.MD5Generator;
+import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -25,7 +25,7 @@ public class FileExecutorTest {
   private static final Logger LOGGER = LogManager.getLogger(FileExecutorTest.class);
   private MediaFileParser mediaFileParser;
   private SortSettings sortSettings;
-  private MD5Generator MD5Generator;
+  private MediaFileHashGenerator MediaFileHashGenerator;
   private FileDateInterpreter fileDateInterpreter;
   private DateToFileRenamer dateToFileRenamer;
   private MediaFileTestUtil mediaFileTestUtil;
@@ -40,10 +40,10 @@ public class FileExecutorTest {
     File file = new File(mediaFileTestUtil.getTestInputPath());
     sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     Calendar calendar = new GregorianCalendar();
-    MD5Generator = spy(new MD5Generator());
+    MediaFileHashGenerator = spy(new MediaFileHashGenerator());
     fileDateInterpreter = mock(FileDateInterpreter.class);
     dateToFileRenamer = mock(DateToFileRenamer.class);
-    mediaFileParser = new MediaFileParser(mediaFileUtil, MD5Generator);
+    mediaFileParser = new MediaFileParser(mediaFileUtil);
 
   }
 

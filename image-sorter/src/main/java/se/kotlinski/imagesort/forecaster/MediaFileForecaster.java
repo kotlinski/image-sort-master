@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.forecaster;
 
+import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
@@ -12,6 +13,7 @@ public class MediaFileForecaster {
   private final DateToFileRenamer dateToFileRenamer;
   private final FileDateInterpreter fileDateInterpreter;
 
+  @Inject
   public MediaFileForecaster(final DateToFileRenamer dateToFileRenamer,
                              final FileDateInterpreter fileDateInterpreter) {
     this.dateToFileRenamer = dateToFileRenamer;

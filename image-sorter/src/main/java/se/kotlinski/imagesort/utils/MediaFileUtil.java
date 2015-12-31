@@ -18,14 +18,14 @@ public class MediaFileUtil {
     return System.getProperty("user.dir") + File.separator;
   }
 
-  public List<File> getFilesInFolder(final File folder, final ClientInterface clientInterface) {
+  public List<File> getMediaFilesInFolder(final File folder, final ClientInterface clientInterface) {
     List<File> files = new ArrayList<>();
     if (folder == null || folder.listFiles() == null) {
       return files;
     }
     for (File file : folder.listFiles()) {
       if (file.isDirectory()) {
-        files.addAll(getFilesInFolder(file, clientInterface));
+        files.addAll(getMediaFilesInFolder(file, clientInterface));
         clientInterface.parsedFilesInMasterFolderProgress(files.size());
       }
       else {

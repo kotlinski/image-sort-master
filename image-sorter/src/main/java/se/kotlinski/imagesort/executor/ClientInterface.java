@@ -1,17 +1,19 @@
 package se.kotlinski.imagesort.executor;
 
+import se.kotlinski.imagesort.data.MediaFileDataHash;
+
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 public abstract class ClientInterface {
-  public abstract void startParsingMasterFolder();
-
-  public abstract void parsedFilesInMasterFolderProgress(final int size);
-
-  public abstract boolean masterFolderSuccessfulParsed(final Map<String, List<File>> mediaFilesInFolder);
+  public abstract void initiateMediaFileParsingPhase();
 
   public abstract void masterFolderFailedParsed();
+  public abstract void parsedFilesInMasterFolderProgress(final int size);
+
+  public abstract boolean masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder);
+
 
 
 

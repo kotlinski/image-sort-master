@@ -7,11 +7,14 @@ import org.junit.Test;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
+import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
+import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
+import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
-import se.kotlinski.imagesort.utils.MD5Generator;
+import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -19,7 +22,6 @@ import java.io.File;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class FileMoverTest {
@@ -50,15 +52,27 @@ public class FileMoverTest {
     // Do the move-operations on output-folder.
 
     ClientInterface clientInterface = mock(ClientInterface.class);
-    MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil, new MD5Generator());
+    MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil);
     dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MD5Generator(), mediaFileUtil);
+    OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MediaFileHashGenerator(),
+                                                                               mediaFileUtil);
     fileMover = new FileMover(mediaFileUtil);
+    MediaFileHashDataMapTransformer mediaFileHashMapTransformer;
+    mediaFileHashMapTransformer = new MediaFileHashDataMapTransformer(new MediaFileHashGenerator());
+
+    DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
+    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, new FileDateInterpreter());
+
+    MediaFilesOutputForecaster mediaOutputCalculator;
+    mediaOutputCalculator = new MediaFilesOutputForecaster(mediaFileForecaster);
+
     imageSorter = new ImageSorter(clientInterface,
                                   mediaFileParser,
-                                  dateToFileRenamer,
+                                  mediaFileHashMapTransformer,
+                                  mediaOutputCalculator,
                                   fileDateInterpreter,
+                                  dateToFileRenamer,
                                   outputConflictResolver,
                                   fileMover);
   }
@@ -80,9 +94,6 @@ public class FileMoverTest {
     File snapchatFile = mediaFileTestUtil.getSnapchatFile();
     File instagramFile = mediaFileTestUtil.getInstagramFile();
 
-    DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
-    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer,
-                                                                      new FileDateInterpreter());
 
     String snapchatOutputDestination = mediaFileForecaster.forecastOutputDestination(snapchatFile,
                                                                                      testInputPath);
@@ -98,12 +109,13 @@ public class FileMoverTest {
     sortSettings.masterFolder = FileUtils.getFile(restorableTestMasterPath);
     imageSorter.sortImages(sortSettings);
 
-    List<File> filesInFolder = mediaFileUtil.getFilesInFolder(sortSettings.masterFolder,
-                                                              clientInterface);
+    List<File> filesInFolder = mediaFileUtil.getMediaFilesInFolder(sortSettings.masterFolder,
+                                                                   clientInterface);
     System.out.println(filesInFolder);
     for (File file : filesInFolder) {
       System.out.println(file);
-      String dateOutput = mediaFileForecaster.forecastOutputDestination(file, restorableTestMasterPath);
+      String dateOutput = mediaFileForecaster.forecastOutputDestination(file,
+                                                                        restorableTestMasterPath);
       System.out.println(dateOutput);
     }
     //assertThat();

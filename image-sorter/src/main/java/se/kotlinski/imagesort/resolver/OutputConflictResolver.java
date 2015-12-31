@@ -1,8 +1,9 @@
 package se.kotlinski.imagesort.resolver;
 
 import com.google.inject.Inject;
+import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.executor.ClientInterface;
-import se.kotlinski.imagesort.utils.MD5Generator;
+import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
@@ -12,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 public class OutputConflictResolver {
-  private final MD5Generator md5Generator;
+  private final MediaFileHashGenerator mediaFileHashGenerator;
   private final MediaFileUtil mediaFileUtil;
 
   @Inject
-  public OutputConflictResolver(final MD5Generator md5Generator,
+  public OutputConflictResolver(final MediaFileHashGenerator mediaFileHashGenerator,
                                 final MediaFileUtil mediaFileUtil) {
-    this.md5Generator = md5Generator;
+    this.mediaFileHashGenerator = mediaFileHashGenerator;
     this.mediaFileUtil = mediaFileUtil;
   }
 
@@ -46,7 +47,7 @@ public class OutputConflictResolver {
                                             final String outputDirectory) {
     List<File> files = mediaFileDestinations.get(outputDirectory);
 
-    Map<String, List<File>> md5Groups = new HashMap<>();
+    Map<MediaFileDataHash, List<File>> md5Groups = new HashMap<>();
     groupFilesByMd5(files, md5Groups);
 
     renameOutputsWhenConflicts(clientInterface,
@@ -60,7 +61,7 @@ public class OutputConflictResolver {
                                           final Map<List<File>, String> filesToOutputDestination,
                                           final String outputDirectory,
                                           final List<File> files,
-                                          final Map<String, List<File>> md5Groups) {
+                                          final Map<MediaFileDataHash, List<File>> md5Groups) {
 
     if (severalGroupsWithSameOutput(md5Groups)) {
       clientInterface.conflictFound(outputDirectory);
@@ -77,17 +78,17 @@ public class OutputConflictResolver {
     }
   }
 
-  private void groupFilesByMd5(final List<File> files, final Map<String, List<File>> md5Groups) {
+  private void groupFilesByMd5(final List<File> files, final Map<MediaFileDataHash, List<File>> md5Groups) {
     for (File file : files) {
-      String fileMd5 = md5Generator.generateMd5(file);
-      if (!md5Groups.containsKey(fileMd5)) {
-        md5Groups.put(fileMd5, new ArrayList<>());
+      MediaFileDataHash hashDataValue = mediaFileHashGenerator.generateMediaFileDataHash(file);
+      if (!md5Groups.containsKey(hashDataValue)) {
+        md5Groups.put(hashDataValue, new ArrayList<>());
       }
-      md5Groups.get(fileMd5).add(file);
+      md5Groups.get(hashDataValue).add(file);
     }
   }
 
-  private boolean severalGroupsWithSameOutput(final Map<String, List<File>> md5Groups) {
+  private boolean severalGroupsWithSameOutput(final Map<MediaFileDataHash, List<File>> md5Groups) {
     return md5Groups.size() > 1;
   }
 
