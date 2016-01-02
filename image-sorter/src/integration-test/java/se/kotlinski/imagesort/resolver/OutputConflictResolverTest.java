@@ -52,10 +52,10 @@ public class OutputConflictResolverTest {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     String testInputPath = mediaFileTestUtil.getTestInputPath();
-    Map<MediaFileDataHash, List<File>> parsedMediaFiles;
-    parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(clientInterface, testInputFile);
 
-    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
+
+    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(mediaFiles,
                                                                                    testInputPath);
   }
 

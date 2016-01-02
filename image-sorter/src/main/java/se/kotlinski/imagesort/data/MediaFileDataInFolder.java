@@ -15,10 +15,8 @@ public class MediaFileDataInFolder {
 
   @Override
   public String toString() {
-    return "MediaFileDataInFolder{" +
-           "numberOfUniqueFiles=" + numberOfUniqueFiles +
-           ", numberOfMediaFilesWithDuplicates=" + numberOfMediaFilesWithDuplicates +
-           ", totalNumberOfFiles=" + totalNumberOfFiles +
-           '}';
+    return "Number of unique files: " + numberOfUniqueFiles + "\n" +
+           "Number of duplicates: " + numberOfMediaFilesWithDuplicates + "\n" +
+           "Total number of files: " + totalNumberOfFiles;
   }
 }

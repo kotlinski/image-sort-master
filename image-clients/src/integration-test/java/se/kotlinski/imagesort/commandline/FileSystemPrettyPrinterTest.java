@@ -6,6 +6,7 @@ import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
+import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
@@ -28,6 +29,7 @@ public class FileSystemPrettyPrinterTest {
   private MediaFileForecaster mediaFileForecaster;
   private ClientInterface clientInterface;
 
+
   @Before
   public void setUp() throws Exception {
     fileSystemPrettyPrinter = new FileSystemPrettyPrinter();
@@ -48,11 +50,11 @@ public class FileSystemPrettyPrinterTest {
   public void testPrettyPrintFolderStructure() throws Exception {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     String testInputPath = mediaFileTestUtil.getTestInputPath();
-    Map<MediaFileDataHash, List<File>> parsedMediaFiles;
-    parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(clientInterface, testInputFile);
+
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
+    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(mediaFiles,
                                                                                    testInputPath);
 
     for (Map.Entry<String, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {

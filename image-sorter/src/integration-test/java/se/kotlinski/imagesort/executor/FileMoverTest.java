@@ -70,10 +70,7 @@ public class FileMoverTest {
     imageSorter = new ImageSorter(clientInterface,
                                   mediaFileParser,
                                   mediaFileHashMapTransformer,
-                                  mediaOutputCalculator,
-                                  fileDateInterpreter,
-                                  dateToFileRenamer,
-                                  outputConflictResolver,
+                                  mediaOutputCalculator, outputConflictResolver,
                                   fileMover);
   }
 

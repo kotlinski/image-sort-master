@@ -47,11 +47,10 @@ public class MediaFilesOutputForecasterTest {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     String testInputPath = mediaFileTestUtil.getTestInputPath();
-    Map<MediaFileDataHash, List<File>> parsedMediaFiles;
-    parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(clientInterface, testInputFile);
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
     Map<String, List<File>> stringListMap;
-    stringListMap = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
+    stringListMap = mediaFilesOutputForecaster.calculateOutputDestinations(mediaFiles,
                                                                            testInputPath);
     assertThat(stringListMap.size(), is(11));
   }

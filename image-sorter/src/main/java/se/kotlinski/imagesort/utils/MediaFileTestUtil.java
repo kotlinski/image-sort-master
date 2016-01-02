@@ -127,19 +127,10 @@ public class MediaFileTestUtil {
                     File.separator + "2013-10-26 20.20.46-kottbullar.jpg");
   }
 
-  public Map<MediaFileDataHash, List<File>> getParsedMediaFiles(final ClientInterface clientInterface,
-                                                                final File testInputFile) {
-    try {
-      List<File> mediaFilesInFolder = mediaFileParser.getMediaFilesInFolder(clientInterface,
-                                                                            testInputFile);
-      MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer;
-      mediaFileHashDataMapTransformer = new MediaFileHashDataMapTransformer(new MediaFileHashGenerator());
-      return mediaFileHashDataMapTransformer.transform(clientInterface, mediaFilesInFolder);
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
+  public List<File> getMediaFiles(final ClientInterface clientInterface, final File testInputFile) {
+
+    return mediaFileParser.getMediaFilesInFolder(clientInterface, testInputFile);
+
   }
 
   public void cleanRestoreableMasterFolder() {

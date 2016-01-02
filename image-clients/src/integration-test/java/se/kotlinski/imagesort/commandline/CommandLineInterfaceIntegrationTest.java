@@ -60,10 +60,7 @@ public class CommandLineInterfaceIntegrationTest {
     ImageSorter imageSorter = new ImageSorter(clientInterface,
                                               mediaFileParser,
                                               mediaFileHashMapTransformer,
-                                              mediaOutputCalculator,
-                                              fileDateInterpreter,
-                                              dateToFileRenamer,
-                                              outputConflictResolver,
+                                              mediaOutputCalculator, outputConflictResolver,
                                               fileMover);
 
     commandLineInterface = new CommandLineInterface(interpreter, imageSorter);

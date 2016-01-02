@@ -36,8 +36,6 @@ public class ImageSortProgressFeedback extends ClientInterface {
 
   @Override
   public boolean masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
-    System.out.println("");
-    System.out.println("Folder successfully parse!");
     System.out.println();
     System.out.println("Folder data stats: ");
     printMediaFilesInFolderData(mediaFilesInFolder);

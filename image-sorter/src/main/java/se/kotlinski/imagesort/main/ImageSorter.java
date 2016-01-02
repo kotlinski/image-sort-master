@@ -24,8 +24,6 @@ public class ImageSorter {
 
   private final ClientInterface clientInterface;
   private final MediaFileParser mediaFileParser;
-  private final DateToFileRenamer dateToFileRenamer;
-  private final FileDateInterpreter fileDateInterpreter;
   private final OutputConflictResolver outputConflictResolver;
   private final FileMover fileMover;
   private final MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer;
@@ -35,17 +33,12 @@ public class ImageSorter {
   public ImageSorter(final ClientInterface clientInterface,
                      final MediaFileParser mediaFileParser,
                      final MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer,
-                     final MediaFilesOutputForecaster mediaOutputCalculator,
-                     final FileDateInterpreter fileDateInterpreter,
-                     final DateToFileRenamer dateToFileRenamer,
-                     final OutputConflictResolver outputConflictResolver,
+                     final MediaFilesOutputForecaster mediaOutputCalculator, final OutputConflictResolver outputConflictResolver,
                      final FileMover fileMover) {
     this.clientInterface = clientInterface;
     this.mediaFileParser = mediaFileParser;
     this.mediaFileHashDataMapTransformer = mediaFileHashDataMapTransformer;
     this.mediaOutputCalculator = mediaOutputCalculator;
-    this.dateToFileRenamer = dateToFileRenamer;
-    this.fileDateInterpreter = fileDateInterpreter;
     this.outputConflictResolver = outputConflictResolver;
     this.fileMover = fileMover;
   }
@@ -58,14 +51,11 @@ public class ImageSorter {
     List<File> mediaFiles;
     mediaFiles = mediaFileParser.getMediaFilesInFolder(clientInterface, sortSettings.masterFolder);
 
-    Map<MediaFileDataHash, List<File>> mediaFileHashDataListMap;
-    mediaFileHashDataListMap = mediaFileHashDataMapTransformer.transform(clientInterface, mediaFiles);
-    clientInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);
-
+    printMediaFileStatsInFolder(mediaFiles);
 
     clientInterface.startCalculatingOutputDirectories();
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = mediaOutputCalculator.calculateOutputDestinations(mediaFileHashDataListMap, masterFolderPath);
+    mediaFileDestinations = mediaOutputCalculator.calculateOutputDestinations(mediaFiles, masterFolderPath);
     clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
     clientInterface.startResolvingConflicts();
@@ -76,6 +66,7 @@ public class ImageSorter {
     clientInterface.startMovingFiles();
     fileMover.moveFilesToNewDestionation(clientInterface, resolvedFilesToOutputMap, masterFolderPath);
 
+    printMediaFileStatsInFolder(mediaFiles);
 
     // TODO: Clean up clientInterface.
     // TODO: Name after relative paths, alt store in files instead of strings. 
@@ -84,5 +75,11 @@ public class ImageSorter {
     // Compare number of duplicates before and after....
 
     // Print link to btc.
+  }
+
+  private void printMediaFileStatsInFolder(final List<File> mediaFiles) {
+    Map<MediaFileDataHash, List<File>> mediaFileHashDataListMap;
+    mediaFileHashDataListMap = mediaFileHashDataMapTransformer.transform(clientInterface, mediaFiles);
+    clientInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);
   }
 }

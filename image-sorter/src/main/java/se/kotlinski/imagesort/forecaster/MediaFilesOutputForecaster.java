@@ -18,15 +18,14 @@ public class MediaFilesOutputForecaster {
     this.mediaFileForecaster = mediaFileForecaster;
   }
 
-  public Map<String, List<File>> calculateOutputDestinations(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder,
+  public Map<String, List<File>> calculateOutputDestinations(final List<File> mediaFiles,
                                                              final String masterFolderPath) {
     Map<String, List<File>> exportFiles = new HashMap<>();
 
-    for (List<File> files : mediaFilesInFolder.values()) {
-      for (File file : files) {
-        addMediaFileToMap(exportFiles, file, masterFolderPath);
-      }
+    for (File file : mediaFiles) {
+      addMediaFileToMap(exportFiles, file, masterFolderPath);
     }
+
     return exportFiles;
   }
 
