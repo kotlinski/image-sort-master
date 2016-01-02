@@ -1,6 +1,7 @@
 package se.kotlinski.imagesort.commandline;
 
 import com.google.inject.Inject;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.statistics.MediaFilesInFolderCalculator;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
@@ -51,7 +52,7 @@ public class ImageSortProgressFeedback extends ClientInterface {
   }
 
   @Override
-  public void successfulCalculatedOutputDestinations(final Map<String, List<File>> mediaFileDestinations) {
+  public void successfulCalculatedOutputDestinations(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
     System.out.println("");
     System.out.println("Total number of output destinations: " + mediaFileDestinations.size());
     System.out.println("The new output tree: ");
@@ -81,6 +82,13 @@ public class ImageSortProgressFeedback extends ClientInterface {
                      "\r");
   }
 
+  @Override
+  public void successfulResolvedOutputConflicts(final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
+    System.out.println("");
+    System.out.println("Resolved output conflicts!");
+    System.out.println("");
+  }
+
 
   @Override
   public void startResolvingConflicts() {
@@ -102,17 +110,10 @@ public class ImageSortProgressFeedback extends ClientInterface {
   }
 
   @Override
-  public void conflictFound(final String outputDirectory) {
+  public void conflictFound(final RelativeMediaFolderOutput outputDirectory) {
     System.out.println("Multiple files want this output: " +
-                       outputDirectory +
+                       outputDirectory.relativePath +
                        ",\n ...conflict resolved.");
-  }
-
-  @Override
-  public void successfulResolvedOutputConflicts(final Map<List<File>, String> resolvedFilesToOutputMap) {
-    System.out.println("");
-    System.out.println("Resolved output conflicts!");
-    System.out.println("");
   }
 
   @Override

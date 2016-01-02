@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.commandline;
 
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -10,10 +12,10 @@ import java.util.TreeSet;
 
 public class FileSystemPrettyPrinter {
 
-  public String convertFolderStructureToString(final Map<String, List<File>> mediaFileDestinations,
+  public String convertFolderStructureToString(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations,
                                                final boolean detailedString) {
     StringTree stringTree = new StringTree(File.separator);
-    for (String filePath : mediaFileDestinations.keySet()) {
+    for (RelativeMediaFolderOutput filePath : mediaFileDestinations.keySet()) {
       List<String> subFolders = getFolders(filePath, detailedString);
       addChild(stringTree.root, subFolders, 1);
     }
@@ -54,9 +56,9 @@ public class FileSystemPrettyPrinter {
     }
   }
 
-  private List<String> getFolders(final String filePath, final boolean detailedString) {
+  private List<String> getFolders(final RelativeMediaFolderOutput filePath, final boolean detailedString) {
     String regexFileSeparator = File.separatorChar == '\\' ? "\\\\" : File.separator;
-    List<String> separated = new LinkedList<>(Arrays.asList(filePath.split(regexFileSeparator)));
+    List<String> separated = new LinkedList<>(Arrays.asList(filePath.relativePath.split(regexFileSeparator)));
     if (!detailedString) {
       separated.remove(separated.size() - 1);
     }

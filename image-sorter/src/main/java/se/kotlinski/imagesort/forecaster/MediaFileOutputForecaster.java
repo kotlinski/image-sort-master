@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.forecaster;
 
 import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 
@@ -20,7 +21,7 @@ public class MediaFileOutputForecaster {
     this.fileDateInterpreter = fileDateInterpreter;
   }
 
-  public String forecastOutputDestination(final File masterFolderFile, final File file) {
+  public RelativeMediaFolderOutput forecastOutputDestination(final File masterFolderFile, final File file) {
 
     String flavour = getFlavour(masterFolderFile, file);
 
@@ -39,7 +40,7 @@ public class MediaFileOutputForecaster {
       filename = getDateFilename(date, file);
     }
 
-    return flavour + File.separator + filename;
+    return new RelativeMediaFolderOutput(flavour + File.separator + filename);
   }
 
   String getFlavour(final File masterFolderFile, final File file) {

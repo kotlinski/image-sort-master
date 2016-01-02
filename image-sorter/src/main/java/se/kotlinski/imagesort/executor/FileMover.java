@@ -1,9 +1,8 @@
 package se.kotlinski.imagesort.executor;
 
-import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.main.ClientInterface;
-import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class FileMover {
 
   public void moveFilesToNewDestination(final ClientInterface clientInterface,
                                         final File masterFolderFile,
-                                        final Map<List<File>, String> resolvedFilesToOutputMap) {
+                                        final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
 
     skipFilesAlreadyNamedAsOutput(clientInterface, resolvedFilesToOutputMap, masterFolderFile);
 
@@ -42,7 +41,7 @@ public class FileMover {
   }
 
   private boolean resolveOutputConflictsWithOldFiles(final File masterFolderFile,
-                                                     final Map<List<File>, String> resolvedFilesToOutputMap) {
+                                                     final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
     return false;
 /*    boolean foundConflicts = false;
     for (List<File> files : resolvedFilesToOutputMap.keySet()) {
@@ -99,11 +98,11 @@ public class FileMover {
 
 
   private void skipFilesAlreadyNamedAsOutput(final ClientInterface clientInterface,
-                                             final Map<List<File>, String> resolvedFilesToOutputMap,
+                                             final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap,
                                              final File masterFolderFile) {
     int skippedFiles = 0;
     int filesToMove = 0;
-    for (Map.Entry<List<File>, String> listStringEntry : resolvedFilesToOutputMap.entrySet()) {
+    for (Map.Entry<List<File>, RelativeMediaFolderOutput> listStringEntry : resolvedFilesToOutputMap.entrySet()) {
 
       List<File> fileList = listStringEntry.getKey();
 
@@ -124,9 +123,9 @@ public class FileMover {
   }
 
   private void cleanUpOldFiles(final File masterFolderFile,
-                               final Map<List<File>, String> resolvedFilesToOutputMap) {
+                               final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
     Set<File> filesToNotCleanUp = new HashSet<>();
-    for (String relativeOutputPath : resolvedFilesToOutputMap.values()) {
+    for (RelativeMediaFolderOutput relativeOutputPath : resolvedFilesToOutputMap.values()) {
       String newOutPutPath = masterFolderFile.getAbsolutePath() + relativeOutputPath;
       filesToNotCleanUp.add(FileUtils.getFile(newOutPutPath));
     }
@@ -141,8 +140,8 @@ public class FileMover {
   }
 
   private void copyFilesToNewDestinations(final File masterFolderFile,
-                                          final Map<List<File>, String> resolvedFilesToOutputMap) {
-    for (Map.Entry<List<File>, String> fileListToNewOutput : resolvedFilesToOutputMap.entrySet()) {
+                                          final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
+    for (Map.Entry<List<File>, RelativeMediaFolderOutput> fileListToNewOutput : resolvedFilesToOutputMap.entrySet()) {
       List<File> fileList = fileListToNewOutput.getKey();
 
       String newOutputPath = masterFolderFile.getAbsolutePath() + fileListToNewOutput.getValue();

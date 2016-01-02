@@ -1,6 +1,7 @@
 package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 
 import java.io.File;
@@ -18,9 +19,9 @@ public class OutputMapper {
     this.mediaFileOutputForecaster = mediaFileOutputForecaster;
   }
 
-  public Map<String, List<File>> calculateOutputDestinations(final File masterFolderFile,
-                                                             final List<File> mediaFiles) {
-    Map<String, List<File>> exportFiles = new HashMap<>();
+  public Map<RelativeMediaFolderOutput, List<File>> calculateOutputDestinations(final File masterFolderFile,
+                                                                                final List<File> mediaFiles) {
+    Map<RelativeMediaFolderOutput, List<File>> exportFiles = new HashMap<>();
 
     for (File file : mediaFiles) {
       addMediaFileToMap(exportFiles, masterFolderFile, file);
@@ -29,12 +30,11 @@ public class OutputMapper {
     return exportFiles;
   }
 
-  void addMediaFileToMap(final Map<String, List<File>> fileMap,
+  void addMediaFileToMap(final Map<RelativeMediaFolderOutput, List<File>> fileMap,
                          final File masterFolderFile,
                          final File file) {
-    String outputDestination;
-    outputDestination = mediaFileOutputForecaster.forecastOutputDestination(masterFolderFile,
-                                                                            file);
+    RelativeMediaFolderOutput outputDestination;
+    outputDestination = mediaFileOutputForecaster.forecastOutputDestination(masterFolderFile, file);
 
     if (!fileMap.containsKey(outputDestination)) {
       fileMap.put(outputDestination, new ArrayList<>());

@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.forecaster;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
@@ -37,14 +38,14 @@ public class MediaFileOutputForecasterIntegrationTest {
     File aJpegFile = mediaFileTestUtil.getAJpegFile();
     File testInputFile = mediaFileTestUtil.getTestInputFile();
 
-    String jpegDestionationPath;
+    RelativeMediaFolderOutput jpegDestionationPath;
     jpegDestionationPath = mediaFileOutputForecaster.forecastOutputDestination(testInputFile,
                                                                                aJpegFile);
     String expectedValue = File.separator + "2014" +
                            File.separator + "02" +
                            File.separator + "2014-02-22 11.48.48.jpg";
 
-    assertThat(jpegDestionationPath, is(expectedValue));
+    assertThat(jpegDestionationPath.relativePath, is(expectedValue));
   }
 
   @Test
@@ -52,7 +53,7 @@ public class MediaFileOutputForecasterIntegrationTest {
     File aJpegFile = mediaFileTestUtil.getAJpegFileFromASubFolder();
     File testInputFile = mediaFileTestUtil.getTestInputFile();
 
-    String jpegDestionationPath;
+    RelativeMediaFolderOutput jpegDestionationPath;
     jpegDestionationPath = mediaFileOutputForecaster.forecastOutputDestination(testInputFile,
                                                                                aJpegFile);
     String expectedValue = File.separator + "2014" +
@@ -61,7 +62,7 @@ public class MediaFileOutputForecasterIntegrationTest {
                            File.separator + "2014-02-22 11.48.48.jpg";
     System.out.println(jpegDestionationPath);
     System.out.println(expectedValue);
-    assertThat(jpegDestionationPath, is(expectedValue));
+    assertThat(jpegDestionationPath.relativePath, is(expectedValue));
   }
 
   @Test
@@ -70,9 +71,10 @@ public class MediaFileOutputForecasterIntegrationTest {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
 
 
-    String jpegDestionationPath = mediaFileOutputForecaster.forecastOutputDestination(testInputFile,
-                                                                                      aJpegFile);
-    assertThat(jpegDestionationPath, is(File.separator + "noxon on raindeer - no date.jpg"));
+    RelativeMediaFolderOutput jpegDestionationPath;
+    jpegDestionationPath = mediaFileOutputForecaster.forecastOutputDestination(testInputFile,
+                                                                               aJpegFile);
+    assertThat(jpegDestionationPath.relativePath, is(File.separator + "noxon on raindeer - no date.jpg"));
   }
 
   @Test

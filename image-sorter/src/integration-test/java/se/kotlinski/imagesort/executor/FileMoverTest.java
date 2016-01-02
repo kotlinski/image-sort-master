@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
@@ -86,17 +87,17 @@ public class FileMoverTest {
     File instagramFile = mediaFileTestUtil.getInstagramFile();
 
 
-    String snapchatOutputDestination;
+    RelativeMediaFolderOutput snapchatOutputDestination;
     snapchatOutputDestination = mediaFileOutputForecaster.forecastOutputDestination(testInputFile,
                                                                                     snapchatFile);
-    String instagramOutputDestination;
+    RelativeMediaFolderOutput instagramOutputDestination;
     instagramOutputDestination = mediaFileOutputForecaster.forecastOutputDestination(testInputFile,
                                                                                      instagramFile);
 
     File instagramOuputFile = FileUtils.getFile(restorableTestMasterPath +
-                                                instagramOutputDestination);
+                                                instagramOutputDestination.relativePath);
     File snapchatOutputFile = FileUtils.getFile(restorableTestMasterPath +
-                                                snapchatOutputDestination);
+                                                snapchatOutputDestination.relativePath);
     FileUtils.copyFile(snapchatFile, instagramOuputFile);
     FileUtils.copyFile(instagramFile, snapchatOutputFile);
 
@@ -109,9 +110,9 @@ public class FileMoverTest {
     System.out.println(filesInFolder);
     for (File file : filesInFolder) {
       System.out.println(file);
-      String dateOutput = mediaFileOutputForecaster.forecastOutputDestination(
-          restorableTestMasterPath,
-          file);
+      RelativeMediaFolderOutput dateOutput;
+      dateOutput = mediaFileOutputForecaster.forecastOutputDestination(restorableTestMasterPath,
+                                                                       file);
       System.out.println(dateOutput);
     }
     //assertThat();

@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.resolver;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.main.ClientInterface;
 import se.kotlinski.imagesort.mapper.OutputMapper;
@@ -24,30 +25,28 @@ import static org.mockito.Mockito.mock;
 
 public class OutputConflictResolverTest {
 
-  Map<String, List<File>> mediaFileDestinations;
+  Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
   private OutputConflictResolver outputConflictResolver;
-  private OutputMapper outputMapper;
-  private MediaFileTestUtil mediaFileTestUtil;
-  private MediaFileOutputForecaster mediaFileOutputForecaster;
-  private MediaFileUtil mediaFileUtil;
   private ClientInterface clientInterface;
 
   @Before
   public void setUp() throws Exception {
     clientInterface = mock(ClientInterface.class);
 
-    mediaFileUtil = new MediaFileUtil();
+    MediaFileUtil mediaFileUtil1 = new MediaFileUtil();
     outputConflictResolver = new OutputConflictResolver(new MediaFileHashGenerator(),
-                                                        mediaFileUtil);
+                                                        mediaFileUtil1);
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
-    mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
+    MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer, fileDateInterpreter);
+    MediaFileOutputForecaster mediaFileOutputForecaster = new MediaFileOutputForecaster(
+        dateToFileRenamer,
+        fileDateInterpreter);
 
-    outputMapper = new OutputMapper(mediaFileOutputForecaster);
+    OutputMapper outputMapper = new OutputMapper(mediaFileOutputForecaster);
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
 
@@ -58,53 +57,80 @@ public class OutputConflictResolverTest {
 
   @Test
   public void testResolveOutputConflicts() throws Exception {
-    Map<List<File>, String> listStringMap;
+    Map<List<File>, RelativeMediaFolderOutput> listStringMap;
     listStringMap = outputConflictResolver.resolveOutputConflicts(clientInterface,
                                                                   mediaFileDestinations);
 
-    for (String s : listStringMap.values()) {
-      System.out.println(s);
+    for (RelativeMediaFolderOutput relativeMediaFolderOutput : listStringMap.values()) {
+      System.out.println(relativeMediaFolderOutput);
     }
-    Collection<String> outputPaths = listStringMap.values();
+    Collection<RelativeMediaFolderOutput> outputPaths = listStringMap.values();
     assertThat(listStringMap.size(), is(12));
     assertThat(outputPaths.size(), is(12));
 
-    assertThat(outputPaths.contains(File.separator + "2015" +
-                                    File.separator + "06" +
-                                    File.separator + "printscreens" +
-                                    File.separator + "2015-06-05 21.19.28.png"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2013" +
-                                    File.separator + "10" +
-                                    File.separator + "snapchat" +
-                                    File.separator + "2013-10-03 13.43.20.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2014" +
-                                    File.separator + "03" +
-                                    File.separator + "2014-03-02 01.09.34.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2014" +
-                                    File.separator + "02" +
-                                    File.separator + "2014-02-22 11.48.47_1.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2013" +
-                                    File.separator + "10" +
-                                    File.separator + "instagram" +
-                                    File.separator + "2013-10-26 20.20.46.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2007" +
-                                    File.separator + "06" +
-                                    File.separator + "2007-06-15 17.41.19.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2014" +
-                                    File.separator + "02" +
-                                    File.separator + "2014-02-22 11.48.48.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2014" +
-                                    File.separator + "nixon on raindeer - no date.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "noxon on raindeer - no date.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2014" +
-                                    File.separator + "03" +
-                                    File.separator + "2014-03-16 11.45.09.mp4"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2014" +
-                                    File.separator + "02" +
-                                    File.separator + "duplicate in subfolder" +
-                                    File.separator + "2014-02-22 11.48.48.jpg"), is(true));
-    assertThat(outputPaths.contains(File.separator + "2014" +
-                                    File.separator + "02" +
-                                    File.separator + "2014-02-22 11.48.47_2.jpg"), is(true));
+    RelativeMediaFolderOutput mediaFile = new RelativeMediaFolderOutput(File.separator +
+                                                                        "2015" +
+                                                                        File.separator +
+                                                                        "06" +
+                                                                        File.separator +
+                                                                        "printscreens" +
+                                                                        File.separator +
+                                                                        "2015-06-05 21.19.28.png");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2013" +
+                                              File.separator + "10" +
+                                              File.separator + "snapchat" +
+                                              File.separator + "2013-10-03 13.43.20.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2014" +
+                                              File.separator + "03" +
+                                              File.separator + "2014-03-02 01.09.34.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2014" +
+                                              File.separator + "02" +
+                                              File.separator + "2014-02-22 11.48.47_1.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2013" +
+                                              File.separator + "10" +
+                                              File.separator + "instagram" +
+                                              File.separator + "2013-10-26 20.20.46.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2007" +
+                                              File.separator + "06" +
+                                              File.separator + "2007-06-15 17.41.19.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2014" +
+                                              File.separator + "02" +
+                                              File.separator + "2014-02-22 11.48.48.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2014" +
+                                              File.separator + "nixon on raindeer - no date.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "noxon on raindeer - no date.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2014" +
+                                              File.separator + "03" +
+                                              File.separator + "2014-03-16 11.45.09.mp4");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2014" +
+                                              File.separator + "02" +
+                                              File.separator + "duplicate in subfolder" +
+                                              File.separator + "2014-02-22 11.48.48.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
+
+    mediaFile = new RelativeMediaFolderOutput(File.separator + "2014" +
+                                              File.separator + "02" +
+                                              File.separator + "2014-02-22 11.48.47_2.jpg");
+    assertThat(outputPaths.contains(mediaFile), is(true));
   }
 }

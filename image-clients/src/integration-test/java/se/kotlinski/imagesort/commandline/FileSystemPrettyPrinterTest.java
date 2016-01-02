@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.commandline;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.main.ClientInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.mapper.OutputMapper;
@@ -51,10 +52,10 @@ public class FileSystemPrettyPrinterTest {
 
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
-    Map<String, List<File>> mediaFileDestinations;
+    Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
     mediaFileDestinations = outputMapper.calculateOutputDestinations(testInputFile, mediaFiles);
 
-    for (Map.Entry<String, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
+    for (Map.Entry<RelativeMediaFolderOutput, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
       System.out.println(stringListEntry.getKey());
       System.out.println(stringListEntry.getValue());
       System.out.println("-");

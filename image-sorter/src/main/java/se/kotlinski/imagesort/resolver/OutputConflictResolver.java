@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.resolver;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.main.ClientInterface;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -23,12 +24,12 @@ public class OutputConflictResolver {
     this.mediaFileUtil = mediaFileUtil;
   }
 
-  public Map<List<File>, String> resolveOutputConflicts(final ClientInterface clientInterface,
-                                                        final Map<String, List<File>> mediaFileDestinations) {
-    Map<List<File>, String> filesToOutputDestination = new HashMap<>();
+  public Map<List<File>, RelativeMediaFolderOutput> resolveOutputConflicts(final ClientInterface clientInterface,
+                                                                           final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
+    Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination = new HashMap<>();
 
     int progress = 0;
-    for (String outputDirectory : mediaFileDestinations.keySet()) {
+    for (RelativeMediaFolderOutput outputDirectory : mediaFileDestinations.keySet()) {
       clientInterface.searchingForConflictsProgress(mediaFileDestinations.size(), ++progress);
 
       resolvConflictForMd5FileList(clientInterface,
@@ -42,9 +43,9 @@ public class OutputConflictResolver {
   }
 
   private void resolvConflictForMd5FileList(final ClientInterface clientInterface,
-                                            final Map<String, List<File>> mediaFileDestinations,
-                                            final Map<List<File>, String> filesToOutputDestination,
-                                            final String outputDirectory) {
+                                            final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations,
+                                            final Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination,
+                                            final RelativeMediaFolderOutput outputDirectory) {
     List<File> files = mediaFileDestinations.get(outputDirectory);
 
     Map<MediaFileDataHash, List<File>> md5Groups = new HashMap<>();
@@ -58,8 +59,8 @@ public class OutputConflictResolver {
   }
 
   private void renameOutputsWhenConflicts(final ClientInterface clientInterface,
-                                          final Map<List<File>, String> filesToOutputDestination,
-                                          final String outputDirectory,
+                                          final Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination,
+                                          final RelativeMediaFolderOutput outputDirectory,
                                           final List<File> files,
                                           final Map<MediaFileDataHash, List<File>> md5Groups) {
 
@@ -67,8 +68,8 @@ public class OutputConflictResolver {
       clientInterface.conflictFound(outputDirectory);
       int append = 1;
       for (List<File> fileList : md5Groups.values()) {
-        String outputWithAppendedValue = mediaFileUtil.appendToFileName(outputDirectory,
-                                                                        "_" + append);
+        RelativeMediaFolderOutput outputWithAppendedValue;
+        outputWithAppendedValue = mediaFileUtil.appendToFileName(outputDirectory, "_" + append);
         filesToOutputDestination.put(fileList, outputWithAppendedValue);
         append++;
       }
@@ -78,7 +79,8 @@ public class OutputConflictResolver {
     }
   }
 
-  private void groupFilesByMd5(final List<File> files, final Map<MediaFileDataHash, List<File>> md5Groups) {
+  private void groupFilesByMd5(final List<File> files,
+                               final Map<MediaFileDataHash, List<File>> md5Groups) {
     for (File file : files) {
       MediaFileDataHash hashDataValue = mediaFileHashGenerator.generateMediaFileDataHash(file);
       if (!md5Groups.containsKey(hashDataValue)) {

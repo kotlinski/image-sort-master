@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.forecaster;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.main.ClientInterface;
@@ -48,9 +49,9 @@ public class OutputMapperTest {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
-    Map<String, List<File>> stringListMap;
-    stringListMap = outputMapper.calculateOutputDestinations(testInputFile, mediaFiles);
-    assertThat(stringListMap.size(), is(11));
+    Map<RelativeMediaFolderOutput, List<File>> relativeOutputMap;
+    relativeOutputMap = outputMapper.calculateOutputDestinations(testInputFile, mediaFiles);
+    assertThat(relativeOutputMap.size(), is(11));
   }
 
 }

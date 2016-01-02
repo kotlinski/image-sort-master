@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.executor.FileMover;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
@@ -50,13 +51,13 @@ public class ImageSorter {
     printMediaFileStatsInFolder(clientInterface, mediaFiles);
 
     clientInterface.startCalculatingOutputDirectories();
-    Map<String, List<File>> mediaFileDestinations;
+    Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
     mediaFileDestinations = mediaOutputCalculator.calculateOutputDestinations(sortSettings.masterFolder,
                                                                               mediaFiles);
     clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
     clientInterface.startResolvingConflicts();
-    Map<List<File>, String> resolvedFilesToOutputMap;
+    Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap;
     resolvedFilesToOutputMap = outputConflictResolver.resolveOutputConflicts(clientInterface,
                                                                              mediaFileDestinations);
     clientInterface.successfulResolvedOutputConflicts(resolvedFilesToOutputMap);
