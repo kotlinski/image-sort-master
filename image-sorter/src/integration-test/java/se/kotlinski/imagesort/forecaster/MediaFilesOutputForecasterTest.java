@@ -2,9 +2,7 @@ package se.kotlinski.imagesort.forecaster;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.executor.ClientInterface;
-import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;

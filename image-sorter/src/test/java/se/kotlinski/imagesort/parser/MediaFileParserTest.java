@@ -5,14 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
-import javax.print.attribute.standard.Media;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,7 +33,7 @@ public class MediaFileParserTest {
   private MediaFileHashGenerator mediaFileHashGenerator;
   private FileDateInterpreter fileDateInterpreter;
   private DateToFileRenamer dateToFileRenamer;
-  private MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer;
+  private MediaFileDataMapper mediaFileDataMapper;
   private Map<MediaFileDataHash, List<File>> fileMap;
 
   @Before
@@ -52,7 +51,7 @@ public class MediaFileParserTest {
     dateToFileRenamer = spy(new DateToFileRenamer(calendar));
     mediaFileParser = new MediaFileParser(mediaFileUtil);
 
-    mediaFileHashDataMapTransformer = new MediaFileHashDataMapTransformer(mediaFileHashGenerator);
+    mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator);
   }
 
   @After
@@ -63,7 +62,7 @@ public class MediaFileParserTest {
   @Test
   public void testAddFileToEmptyMap() throws Exception {
     File imageFile = mediaFileTestUtil.getInstagramFile();
-    mediaFileHashDataMapTransformer.addMediaFileToMap(fileMap, imageFile);
+    mediaFileDataMapper.addMediaFileToMap(fileMap, imageFile);
     assertThat(fileMap.size(), is(1));
   }
 
@@ -72,8 +71,8 @@ public class MediaFileParserTest {
     File instagramFile = mediaFileTestUtil.getInstagramFile();
     File snapchatFile = mediaFileTestUtil.getSnapchatFile();
 
-    mediaFileHashDataMapTransformer.addMediaFileToMap(fileMap, instagramFile);
-    mediaFileHashDataMapTransformer.addMediaFileToMap(fileMap, snapchatFile);
+    mediaFileDataMapper.addMediaFileToMap(fileMap, instagramFile);
+    mediaFileDataMapper.addMediaFileToMap(fileMap, snapchatFile);
 
     MediaFileDataHash snapchatFileIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(snapchatFile);
     assertThat(fileMap.get(snapchatFileIdentifier).size(), is(1));
@@ -86,8 +85,8 @@ public class MediaFileParserTest {
   public void testAddTwoImageFilesToMap() throws Exception {
     File imageFile = mediaFileTestUtil.getInstagramFile();
 
-    mediaFileHashDataMapTransformer.addMediaFileToMap(fileMap, imageFile);
-    mediaFileHashDataMapTransformer.addMediaFileToMap(fileMap, imageFile);
+    mediaFileDataMapper.addMediaFileToMap(fileMap, imageFile);
+    mediaFileDataMapper.addMediaFileToMap(fileMap, imageFile);
 
     MediaFileDataHash imageDataIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(imageFile);
     assertThat(fileMap.get(imageDataIdentifier).size(), is(2));
@@ -97,8 +96,8 @@ public class MediaFileParserTest {
   public void testAddTwoVideoFilesToMap() throws Exception {
     File videoFile = mediaFileTestUtil.getMp4File();
 
-    mediaFileHashDataMapTransformer.addMediaFileToMap(fileMap, videoFile);
-    mediaFileHashDataMapTransformer.addMediaFileToMap(fileMap, videoFile);
+    mediaFileDataMapper.addMediaFileToMap(fileMap, videoFile);
+    mediaFileDataMapper.addMediaFileToMap(fileMap, videoFile);
 
     MediaFileDataHash videoDataIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(videoFile);
     assertThat(fileMap.get(videoDataIdentifier).size(), is(2));

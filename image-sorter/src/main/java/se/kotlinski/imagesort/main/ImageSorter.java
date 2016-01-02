@@ -11,9 +11,7 @@ import se.kotlinski.imagesort.executor.FileMover;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
-import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 
 import java.io.File;
 import java.util.List;
@@ -26,18 +24,19 @@ public class ImageSorter {
   private final MediaFileParser mediaFileParser;
   private final OutputConflictResolver outputConflictResolver;
   private final FileMover fileMover;
-  private final MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer;
+  private final MediaFileDataMapper mediaFileDataMapper;
   private final MediaFilesOutputForecaster mediaOutputCalculator;
 
   @Inject
   public ImageSorter(final ClientInterface clientInterface,
                      final MediaFileParser mediaFileParser,
-                     final MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer,
-                     final MediaFilesOutputForecaster mediaOutputCalculator, final OutputConflictResolver outputConflictResolver,
+                     final MediaFileDataMapper mediaFileDataMapper,
+                     final MediaFilesOutputForecaster mediaOutputCalculator,
+                     final OutputConflictResolver outputConflictResolver,
                      final FileMover fileMover) {
     this.clientInterface = clientInterface;
     this.mediaFileParser = mediaFileParser;
-    this.mediaFileHashDataMapTransformer = mediaFileHashDataMapTransformer;
+    this.mediaFileDataMapper = mediaFileDataMapper;
     this.mediaOutputCalculator = mediaOutputCalculator;
     this.outputConflictResolver = outputConflictResolver;
     this.fileMover = fileMover;
@@ -55,16 +54,20 @@ public class ImageSorter {
 
     clientInterface.startCalculatingOutputDirectories();
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = mediaOutputCalculator.calculateOutputDestinations(mediaFiles, masterFolderPath);
+    mediaFileDestinations = mediaOutputCalculator.calculateOutputDestinations(mediaFiles,
+                                                                              masterFolderPath);
     clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
     clientInterface.startResolvingConflicts();
     Map<List<File>, String> resolvedFilesToOutputMap;
-    resolvedFilesToOutputMap = outputConflictResolver.resolveOutputConflicts(clientInterface, mediaFileDestinations);
+    resolvedFilesToOutputMap = outputConflictResolver.resolveOutputConflicts(clientInterface,
+                                                                             mediaFileDestinations);
     clientInterface.successfulResolvedOutputConflicts(resolvedFilesToOutputMap);
 
     clientInterface.startMovingFiles();
-    fileMover.moveFilesToNewDestionation(clientInterface, resolvedFilesToOutputMap, masterFolderPath);
+    fileMover.moveFilesToNewDestionation(clientInterface,
+                                         resolvedFilesToOutputMap,
+                                         masterFolderPath);
 
     printMediaFileStatsInFolder(mediaFiles);
 
@@ -79,7 +82,7 @@ public class ImageSorter {
 
   private void printMediaFileStatsInFolder(final List<File> mediaFiles) {
     Map<MediaFileDataHash, List<File>> mediaFileHashDataListMap;
-    mediaFileHashDataListMap = mediaFileHashDataMapTransformer.transform(clientInterface, mediaFiles);
+    mediaFileHashDataListMap = mediaFileDataMapper.mapOnMediaFileData(clientInterface, mediaFiles);
     clientInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);
   }
 }

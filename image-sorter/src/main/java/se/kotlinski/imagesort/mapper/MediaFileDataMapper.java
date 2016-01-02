@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.transformer;
+package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
@@ -11,17 +11,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MediaFileHashDataMapTransformer {
+public class MediaFileDataMapper {
 
   private final MediaFileHashGenerator mediaFileHashGenerator;
 
   @Inject
-  public MediaFileHashDataMapTransformer(final MediaFileHashGenerator mediaFileHashGenerator) {
+  public MediaFileDataMapper(final MediaFileHashGenerator mediaFileHashGenerator) {
     this.mediaFileHashGenerator = mediaFileHashGenerator;
   }
 
-  public Map<MediaFileDataHash, List<File>> transform(ClientInterface clientInterface,
-                                                      List<File> files) {
+  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(ClientInterface clientInterface,
+                                                               List<File> files) {
 
     clientInterface.startGroupFilesByContent();
     Map<MediaFileDataHash, List<File>> fileMap = new HashMap<>();

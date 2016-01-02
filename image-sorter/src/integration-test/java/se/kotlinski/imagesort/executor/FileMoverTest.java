@@ -11,7 +11,7 @@ import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
-import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
@@ -58,8 +58,8 @@ public class FileMoverTest {
     OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MediaFileHashGenerator(),
                                                                                mediaFileUtil);
     fileMover = new FileMover(mediaFileUtil);
-    MediaFileHashDataMapTransformer mediaFileHashMapTransformer;
-    mediaFileHashMapTransformer = new MediaFileHashDataMapTransformer(new MediaFileHashGenerator());
+    MediaFileDataMapper mediaFileHashMapTransformer;
+    mediaFileHashMapTransformer = new MediaFileDataMapper(new MediaFileHashGenerator());
 
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
     mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, new FileDateInterpreter());

@@ -1,15 +1,12 @@
 package se.kotlinski.imagesort.utils;
 
 import org.apache.commons.io.FileUtils;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.parser.MediaFileParser;
-import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class MediaFileTestUtil {
   private final MediaFileUtil mediaFileUtils;

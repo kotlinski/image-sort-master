@@ -15,7 +15,7 @@ import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
-import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.utils.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
@@ -54,7 +54,7 @@ public class CommandLineInterfaceIntegrationTest {
     FileMover fileMover = new FileMover(mediaFileUtil);
     ClientInterface clientInterface = mock(ClientInterface.class);
 
-    MediaFileHashDataMapTransformer mediaFileHashMapTransformer = new MediaFileHashDataMapTransformer(MediaFileHashGenerator);
+    MediaFileDataMapper mediaFileHashMapTransformer = new MediaFileDataMapper(MediaFileHashGenerator);
     MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
     MediaFilesOutputForecaster mediaOutputCalculator = new MediaFilesOutputForecaster(mediaFileForecaster);
     ImageSorter imageSorter = new ImageSorter(clientInterface,

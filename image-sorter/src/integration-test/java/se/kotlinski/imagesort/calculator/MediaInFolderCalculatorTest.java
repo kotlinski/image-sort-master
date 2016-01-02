@@ -6,7 +6,7 @@ import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.parser.MediaFileParser;
-import se.kotlinski.imagesort.transformer.MediaFileHashDataMapTransformer;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -26,7 +26,7 @@ public class MediaInFolderCalculatorTest {
   private MediaFileHashGenerator mediaFileHashGenerator;
   private Map<MediaFileDataHash, List<File>> mediaFilesInFolder;
   private ClientInterface clientInterface;
-  private MediaFileHashDataMapTransformer mediaFileHashDataMapTransformer;
+  private MediaFileDataMapper mediaFileDataMapper;
 
   @Before
   public void setUp() throws Exception {
@@ -43,8 +43,8 @@ public class MediaInFolderCalculatorTest {
     MediaFileParser mediaFileParser = new MediaFileParser(mediaFileUtil);
     List<File> mediaFiles = mediaFileParser.getMediaFilesInFolder(clientInterface, masterFolder);
 
-    mediaFileHashDataMapTransformer = new MediaFileHashDataMapTransformer(mediaFileHashGenerator);
-    mediaFilesInFolder = mediaFileHashDataMapTransformer.transform(clientInterface, mediaFiles);
+    mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator);
+    mediaFilesInFolder = mediaFileDataMapper.mapOnMediaFileData(clientInterface, mediaFiles);
 
   }
 
