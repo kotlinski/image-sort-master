@@ -2,8 +2,8 @@ package se.kotlinski.imagesort.commandline;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.calculator.MediaInFolderCalculator;
-import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.executor.ClientInterface;
 
 import java.io.File;

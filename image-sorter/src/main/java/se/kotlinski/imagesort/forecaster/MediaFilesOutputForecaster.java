@@ -1,7 +1,6 @@
 package se.kotlinski.imagesort.forecaster;
 
 import com.google.inject.Inject;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
 
 import java.io.File;
 import java.util.ArrayList;

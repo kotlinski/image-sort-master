@@ -9,9 +9,9 @@ import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.executor.FileMover;
 import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.parser.MediaFileParser;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
-import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 
 import java.io.File;
 import java.util.List;
