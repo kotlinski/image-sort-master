@@ -1,8 +1,7 @@
 package se.kotlinski.imagesort.utils;
 
 import org.apache.commons.io.FileUtils;
-import se.kotlinski.imagesort.executor.ClientInterface;
-import se.kotlinski.imagesort.parser.MediaFileParser;
+import se.kotlinski.imagesort.main.ClientInterface;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +11,9 @@ public class MediaFileTestUtil {
   private final MediaFileUtil mediaFileUtils;
   private final String defaultTestFolderName = "inputImages";
   private final String restoreableTestFolderName = "restoreable_master_folder";
-  private MediaFileParser mediaFileParser;
 
   public MediaFileTestUtil(MediaFileUtil mediaFileUtils) {
     this.mediaFileUtils = mediaFileUtils;
-    mediaFileParser = new MediaFileParser(mediaFileUtils);
   }
 
   public File getTestInputFile() {
@@ -126,7 +123,7 @@ public class MediaFileTestUtil {
 
   public List<File> getMediaFiles(final ClientInterface clientInterface, final File testInputFile) {
 
-    return mediaFileParser.getMediaFilesInFolder(clientInterface, testInputFile);
+    return mediaFileUtils.getMediaFilesInFolder(clientInterface, testInputFile);
 
   }
 

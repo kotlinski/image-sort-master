@@ -2,11 +2,11 @@ package se.kotlinski.imagesort.commandline;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.executor.ClientInterface;
-import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
-import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
+import se.kotlinski.imagesort.mapper.OutputMapper;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -22,9 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class FileSystemPrettyPrinterTest {
 
   private FileSystemPrettyPrinter fileSystemPrettyPrinter;
-  private MediaFilesOutputForecaster mediaFilesOutputForecaster;
+  private OutputMapper outputMapper;
   private MediaFileTestUtil mediaFileTestUtil;
-  private MediaFileForecaster mediaFileForecaster;
   private ClientInterface clientInterface;
 
 
@@ -37,23 +36,23 @@ public class FileSystemPrettyPrinterTest {
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
+    MediaFileOutputForecaster mediaFileOutputForecaster;
+    mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
+                                                              fileDateInterpreter);
 
     clientInterface = new ImageSortProgressFeedback(fileSystemPrettyPrinter);
 
-    mediaFilesOutputForecaster = new MediaFilesOutputForecaster(mediaFileForecaster);
+    outputMapper = new OutputMapper(mediaFileOutputForecaster);
   }
 
   @Test
   public void testPrettyPrintFolderStructure() throws Exception {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
-    String testInputPath = mediaFileTestUtil.getTestInputPath();
 
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(mediaFiles,
-                                                                                   testInputPath);
+    mediaFileDestinations = outputMapper.calculateOutputDestinations(testInputFile, mediaFiles);
 
     for (Map.Entry<String, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
       System.out.println(stringListEntry.getKey());

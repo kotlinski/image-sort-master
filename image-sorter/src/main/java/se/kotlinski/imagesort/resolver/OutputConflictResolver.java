@@ -2,7 +2,7 @@ package se.kotlinski.imagesort.resolver;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
-import se.kotlinski.imagesort.executor.ClientInterface;
+import se.kotlinski.imagesort.main.ClientInterface;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 

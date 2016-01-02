@@ -6,9 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.parser.MediaFileParser;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -23,11 +22,7 @@ import static org.mockito.Mockito.spy;
 public class FileExecutorTest {
 
   private static final Logger LOGGER = LogManager.getLogger(FileExecutorTest.class);
-  private MediaFileParser mediaFileParser;
   private SortSettings sortSettings;
-  private MediaFileHashGenerator MediaFileHashGenerator;
-  private FileDateInterpreter fileDateInterpreter;
-  private DateToFileRenamer dateToFileRenamer;
   private MediaFileTestUtil mediaFileTestUtil;
 
 
@@ -40,10 +35,9 @@ public class FileExecutorTest {
     File file = new File(mediaFileTestUtil.getTestInputPath());
     sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     Calendar calendar = new GregorianCalendar();
-    MediaFileHashGenerator = spy(new MediaFileHashGenerator());
-    fileDateInterpreter = mock(FileDateInterpreter.class);
-    dateToFileRenamer = mock(DateToFileRenamer.class);
-    mediaFileParser = new MediaFileParser(mediaFileUtil);
+    se.kotlinski.imagesort.utils.MediaFileHashGenerator mediaFileHashGenerator = spy(new MediaFileHashGenerator());
+    FileDateInterpreter fileDateInterpreter = mock(FileDateInterpreter.class);
+    DateToFileRenamer dateToFileRenamer = mock(DateToFileRenamer.class);
 
   }
 

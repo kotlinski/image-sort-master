@@ -8,59 +8,53 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.commandline.argument.Transformer;
-import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.executor.FileMover;
-import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
-import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
+import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
-import se.kotlinski.imagesort.parser.MediaFileParser;
+import se.kotlinski.imagesort.mapper.OutputMapper;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.util.GregorianCalendar;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 public class CommandLineInterfaceIntegrationTest {
   private CommandLineInterface commandLineInterface;
-  private MediaFileUtil mediaFileUtil;
   private MediaFileTestUtil mediaFileTestUtil;
-  private Interpreter interpreter;
 
   @Before
   public void setUp() throws Exception {
-    mediaFileUtil = new MediaFileUtil();
+    MediaFileUtil mediaFileUtil = spy(new MediaFileUtil());
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
     MediaFileHashGenerator MediaFileHashGenerator = new MediaFileHashGenerator();
-
-    MediaFileParser mediaFileParser = spy(new MediaFileParser(mediaFileUtil));
 
     HelpFormatter formatter = new HelpFormatter();
     CommandLineParser parser = new GnuParser();
     MediaFileUtil fileUtil = new MediaFileUtil();
     Transformer transformer = new Transformer(formatter, parser, fileUtil);
-    interpreter = spy(new Interpreter(transformer));
+    Interpreter interpreter = spy(new Interpreter(transformer));
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
 
     OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MediaFileHashGenerator(),
                                                                                mediaFileUtil);
-    FileMover fileMover = new FileMover(mediaFileUtil);
-    ClientInterface clientInterface = mock(ClientInterface.class);
+    FileMover fileMover = new FileMover();
 
     MediaFileDataMapper mediaFileHashMapTransformer = new MediaFileDataMapper(MediaFileHashGenerator);
-    MediaFileForecaster mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
-    MediaFilesOutputForecaster mediaOutputCalculator = new MediaFilesOutputForecaster(mediaFileForecaster);
-    ImageSorter imageSorter = new ImageSorter(clientInterface,
-                                              mediaFileParser,
+    MediaFileOutputForecaster mediaFileOutputForecaster = new MediaFileOutputForecaster(
+        dateToFileRenamer,
+        fileDateInterpreter);
+    OutputMapper mediaOutputCalculator = new OutputMapper(mediaFileOutputForecaster);
+    ImageSorter imageSorter = new ImageSorter(mediaFileUtil,
                                               mediaFileHashMapTransformer,
-                                              mediaOutputCalculator, outputConflictResolver,
+                                              mediaOutputCalculator,
+                                              outputConflictResolver,
                                               fileMover);
 
     commandLineInterface = new CommandLineInterface(interpreter, imageSorter);

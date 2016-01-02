@@ -2,9 +2,10 @@ package se.kotlinski.imagesort.forecaster;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.executor.ClientInterface;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
+import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.mapper.OutputMapper;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -19,10 +20,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 
-public class MediaFilesOutputForecasterTest {
-  private MediaFilesOutputForecaster mediaFilesOutputForecaster;
+public class OutputMapperTest {
+  private OutputMapper outputMapper;
   private MediaFileTestUtil mediaFileTestUtil;
-  private MediaFileForecaster mediaFileForecaster;
   private ClientInterface clientInterface;
 
   @Before
@@ -35,21 +35,21 @@ public class MediaFilesOutputForecasterTest {
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
+    MediaFileOutputForecaster mediaFileOutputForecaster;
+    mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
+                                                              fileDateInterpreter);
 
-    mediaFilesOutputForecaster = new MediaFilesOutputForecaster(mediaFileForecaster);
+    outputMapper = new OutputMapper(mediaFileOutputForecaster);
   }
 
   @Test
   public void testCalculateOutputDestinations() throws Exception {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
-    String testInputPath = mediaFileTestUtil.getTestInputPath();
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
     Map<String, List<File>> stringListMap;
-    stringListMap = mediaFilesOutputForecaster.calculateOutputDestinations(mediaFiles,
-                                                                           testInputPath);
+    stringListMap = outputMapper.calculateOutputDestinations(testInputFile, mediaFiles);
     assertThat(stringListMap.size(), is(11));
   }
 

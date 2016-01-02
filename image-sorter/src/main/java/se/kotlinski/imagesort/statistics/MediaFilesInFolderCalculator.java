@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.calculator;
+package se.kotlinski.imagesort.statistics;
 
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class MediaInFolderCalculator {
+public class MediaFilesInFolderCalculator {
 
   public final MediaFileDataInFolder calculateMediaFileDataInFolder(final Map<MediaFileDataHash, List<File>> filesByMediaContent) {
     int numberOfFilesWithDuplicates = 0;
@@ -22,6 +22,8 @@ public class MediaInFolderCalculator {
       }
     }
 
-    return new MediaFileDataInFolder(numberOfUniqueFiles, numberOfFilesWithDuplicates, totalNumberOfFiles);
+    return new MediaFileDataInFolder(numberOfUniqueFiles,
+                                     numberOfFilesWithDuplicates,
+                                     totalNumberOfFiles);
   }
 }

@@ -6,12 +6,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.executor.ClientInterface;
 import se.kotlinski.imagesort.executor.FileMover;
-import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
-import se.kotlinski.imagesort.parser.MediaFileParser;
+import se.kotlinski.imagesort.mapper.OutputMapper;
 import se.kotlinski.imagesort.resolver.OutputConflictResolver;
+import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
 import java.util.List;
@@ -20,42 +19,40 @@ import java.util.Map;
 public class ImageSorter {
   private static final Logger LOGGER = LogManager.getLogger(ImageSorter.class);
 
-  private final ClientInterface clientInterface;
-  private final MediaFileParser mediaFileParser;
+  private final MediaFileUtil mediaFileUtil;
   private final OutputConflictResolver outputConflictResolver;
   private final FileMover fileMover;
   private final MediaFileDataMapper mediaFileDataMapper;
-  private final MediaFilesOutputForecaster mediaOutputCalculator;
+  private final OutputMapper mediaOutputCalculator;
 
   @Inject
-  public ImageSorter(final ClientInterface clientInterface,
-                     final MediaFileParser mediaFileParser,
+  public ImageSorter(final MediaFileUtil mediaFileUtil,
                      final MediaFileDataMapper mediaFileDataMapper,
-                     final MediaFilesOutputForecaster mediaOutputCalculator,
+                     final OutputMapper mediaOutputCalculator,
                      final OutputConflictResolver outputConflictResolver,
                      final FileMover fileMover) {
-    this.clientInterface = clientInterface;
-    this.mediaFileParser = mediaFileParser;
+    this.mediaFileUtil = mediaFileUtil;
     this.mediaFileDataMapper = mediaFileDataMapper;
     this.mediaOutputCalculator = mediaOutputCalculator;
     this.outputConflictResolver = outputConflictResolver;
     this.fileMover = fileMover;
   }
 
-  public void sortImages(SortSettings sortSettings) {
-    String masterFolderPath = sortSettings.masterFolder.getAbsolutePath();
+  public void sortImages(final ClientInterface clientInterface, SortSettings sortSettings) {
+    if (!isValidateSortSettings(sortSettings)) {
+      throw new IllegalArgumentException();
+    }
 
     clientInterface.initiateMediaFileParsingPhase();
+    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientInterface,
+                                                                sortSettings.masterFolder);
 
-    List<File> mediaFiles;
-    mediaFiles = mediaFileParser.getMediaFilesInFolder(clientInterface, sortSettings.masterFolder);
-
-    printMediaFileStatsInFolder(mediaFiles);
+    printMediaFileStatsInFolder(clientInterface, mediaFiles);
 
     clientInterface.startCalculatingOutputDirectories();
     Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = mediaOutputCalculator.calculateOutputDestinations(mediaFiles,
-                                                                              masterFolderPath);
+    mediaFileDestinations = mediaOutputCalculator.calculateOutputDestinations(sortSettings.masterFolder,
+                                                                              mediaFiles);
     clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
     clientInterface.startResolvingConflicts();
@@ -65,11 +62,11 @@ public class ImageSorter {
     clientInterface.successfulResolvedOutputConflicts(resolvedFilesToOutputMap);
 
     clientInterface.startMovingFiles();
-    fileMover.moveFilesToNewDestionation(clientInterface,
-                                         resolvedFilesToOutputMap,
-                                         masterFolderPath);
+    fileMover.moveFilesToNewDestination(clientInterface,
+                                        sortSettings.masterFolder,
+                                        resolvedFilesToOutputMap);
 
-    printMediaFileStatsInFolder(mediaFiles);
+    printMediaFileStatsInFolder(clientInterface, mediaFiles);
 
     // TODO: Clean up clientInterface.
     // TODO: Name after relative paths, alt store in files instead of strings. 
@@ -80,7 +77,12 @@ public class ImageSorter {
     // Print link to btc.
   }
 
-  private void printMediaFileStatsInFolder(final List<File> mediaFiles) {
+  private boolean isValidateSortSettings(final SortSettings sortSettings) {
+    return mediaFileUtil.isValidFolder(sortSettings.masterFolder);
+  }
+
+  private void printMediaFileStatsInFolder(final ClientInterface clientInterface,
+                                           final List<File> mediaFiles) {
     Map<MediaFileDataHash, List<File>> mediaFileHashDataListMap;
     mediaFileHashDataListMap = mediaFileDataMapper.mapOnMediaFileData(clientInterface, mediaFiles);
     clientInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);

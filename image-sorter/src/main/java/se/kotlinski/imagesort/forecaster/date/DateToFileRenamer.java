@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.utils;
+package se.kotlinski.imagesort.forecaster.date;
 
 import com.google.inject.Inject;
 

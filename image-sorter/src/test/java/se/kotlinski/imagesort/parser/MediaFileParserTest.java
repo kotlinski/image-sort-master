@@ -6,8 +6,8 @@ import org.junit.Test;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -25,14 +25,9 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.spy;
 
 public class MediaFileParserTest {
-  private MediaFileParser mediaFileParser;
   private MediaFileUtil mediaFileUtil;
   private MediaFileTestUtil mediaFileTestUtil;
-  private SortSettings sortSettings;
-  private Calendar calendar;
   private MediaFileHashGenerator mediaFileHashGenerator;
-  private FileDateInterpreter fileDateInterpreter;
-  private DateToFileRenamer dateToFileRenamer;
   private MediaFileDataMapper mediaFileDataMapper;
   private Map<MediaFileDataHash, List<File>> fileMap;
 
@@ -43,13 +38,9 @@ public class MediaFileParserTest {
     mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
-    sortSettings = new SortSettings();
+    SortSettings sortSettings = new SortSettings();
     sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
-    calendar = new GregorianCalendar();
     mediaFileHashGenerator = spy(new MediaFileHashGenerator());
-    fileDateInterpreter = spy(new FileDateInterpreter());
-    dateToFileRenamer = spy(new DateToFileRenamer(calendar));
-    mediaFileParser = new MediaFileParser(mediaFileUtil);
 
     mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator);
   }
@@ -111,20 +102,20 @@ public class MediaFileParserTest {
 
   @Test
   public void testRunIndexInvalidInput() throws Exception {
-    new MediaFileParser(mediaFileUtil);
+   // new MediaFileParser(mediaFileUtil);
 
     SortSettings sortSettings = new SortSettings();
-    new MediaFileParser(mediaFileUtil);
+   // new MediaFileParser(mediaFileUtil);
 
     sortSettings.masterFolder = new File("SomeInvalidFilePath");
-    ArrayList<File> inputFolders = new ArrayList<File>();
+    ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(sortSettings.masterFolder);
-    new MediaFileParser(mediaFileUtil);
+   // new MediaFileParser(mediaFileUtil);
 
     sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
-    inputFolders = new ArrayList<File>();
+    inputFolders = new ArrayList<>();
     inputFolders.add(sortSettings.masterFolder);
-    new MediaFileParser(mediaFileUtil);
+   // new MediaFileParser(mediaFileUtil);
   }
 
 

@@ -1,7 +1,7 @@
 package se.kotlinski.imagesort.mapper;
 
 import org.junit.Before;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.util.Calendar;

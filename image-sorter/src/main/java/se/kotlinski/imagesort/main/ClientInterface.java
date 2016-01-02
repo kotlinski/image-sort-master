@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.executor;
+package se.kotlinski.imagesort.main;
 
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 

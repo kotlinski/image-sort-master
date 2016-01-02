@@ -2,11 +2,11 @@ package se.kotlinski.imagesort.resolver;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.executor.ClientInterface;
-import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
-import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
+import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.mapper.OutputMapper;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -26,9 +26,9 @@ public class OutputConflictResolverTest {
 
   Map<String, List<File>> mediaFileDestinations;
   private OutputConflictResolver outputConflictResolver;
-  private MediaFilesOutputForecaster mediaFilesOutputForecaster;
+  private OutputMapper outputMapper;
   private MediaFileTestUtil mediaFileTestUtil;
-  private MediaFileForecaster mediaFileForecaster;
+  private MediaFileOutputForecaster mediaFileOutputForecaster;
   private MediaFileUtil mediaFileUtil;
   private ClientInterface clientInterface;
 
@@ -45,17 +45,15 @@ public class OutputConflictResolverTest {
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
+    mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer, fileDateInterpreter);
 
-    mediaFilesOutputForecaster = new MediaFilesOutputForecaster(mediaFileForecaster);
+    outputMapper = new OutputMapper(mediaFileOutputForecaster);
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
-    String testInputPath = mediaFileTestUtil.getTestInputPath();
 
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
-    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(mediaFiles,
-                                                                                   testInputPath);
+    mediaFileDestinations = outputMapper.calculateOutputDestinations(testInputFile, mediaFiles);
   }
 
   @Test

@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.utils;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 
 import java.io.File;
 import java.util.Calendar;

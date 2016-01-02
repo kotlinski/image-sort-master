@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import se.kotlinski.imagesort.commandline.ImageSortProgressFeedback;
-import se.kotlinski.imagesort.executor.ClientInterface;
+import se.kotlinski.imagesort.main.ClientInterface;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
