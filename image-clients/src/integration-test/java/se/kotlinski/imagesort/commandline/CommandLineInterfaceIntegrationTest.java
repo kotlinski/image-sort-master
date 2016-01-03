@@ -15,7 +15,10 @@ import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.mapper.OutputMapper;
-import se.kotlinski.imagesort.resolver.OutputConflictResolver;
+import se.kotlinski.imagesort.resolver.ConflictResolver;
+import se.kotlinski.imagesort.resolver.ExistingFilesResolver;
+import se.kotlinski.imagesort.resolver.FileSkipper;
+import se.kotlinski.imagesort.resolver.UniqueFileOutputResolver;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -32,7 +35,7 @@ public class CommandLineInterfaceIntegrationTest {
   public void setUp() throws Exception {
     MediaFileUtil mediaFileUtil = spy(new MediaFileUtil());
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
-    MediaFileHashGenerator MediaFileHashGenerator = new MediaFileHashGenerator();
+    MediaFileHashGenerator mediaFileHashGenerator = new MediaFileHashGenerator();
 
     HelpFormatter formatter = new HelpFormatter();
     CommandLineParser parser = new GnuParser();
@@ -42,19 +45,24 @@ public class CommandLineInterfaceIntegrationTest {
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
 
-    OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MediaFileHashGenerator(),
-                                                                               mediaFileUtil);
+    UniqueFileOutputResolver uniqueFileOutputResolver;
+    uniqueFileOutputResolver = new UniqueFileOutputResolver(mediaFileHashGenerator, mediaFileUtil);
+    FileSkipper fileSkipper = new FileSkipper();
+    ExistingFilesResolver existingFilesResolver = new ExistingFilesResolver(mediaFileUtil);
+    ConflictResolver conflictResolver = new ConflictResolver(uniqueFileOutputResolver,
+                                                             fileSkipper,
+                                                             existingFilesResolver);
     FileMover fileMover = new FileMover();
 
-    MediaFileDataMapper mediaFileHashMapTransformer = new MediaFileDataMapper(MediaFileHashGenerator);
-    MediaFileOutputForecaster mediaFileOutputForecaster = new MediaFileOutputForecaster(
-        dateToFileRenamer,
-        fileDateInterpreter);
+    MediaFileDataMapper mediaFileHashMapTransformer = new MediaFileDataMapper(mediaFileHashGenerator);
+    MediaFileOutputForecaster mediaFileOutputForecaster;
+    mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
+                                                              fileDateInterpreter);
     OutputMapper mediaOutputCalculator = new OutputMapper(mediaFileOutputForecaster);
     ImageSorter imageSorter = new ImageSorter(mediaFileUtil,
                                               mediaFileHashMapTransformer,
                                               mediaOutputCalculator,
-                                              outputConflictResolver,
+                                              conflictResolver,
                                               fileMover);
 
     commandLineInterface = new CommandLineInterface(interpreter, imageSorter);

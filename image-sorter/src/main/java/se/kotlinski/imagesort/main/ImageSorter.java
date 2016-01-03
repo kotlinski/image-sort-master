@@ -10,7 +10,7 @@ import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.executor.FileMover;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.mapper.OutputMapper;
-import se.kotlinski.imagesort.resolver.OutputConflictResolver;
+import se.kotlinski.imagesort.resolver.ConflictResolver;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.io.File;
@@ -21,7 +21,7 @@ public class ImageSorter {
   private static final Logger LOGGER = LogManager.getLogger(ImageSorter.class);
 
   private final MediaFileUtil mediaFileUtil;
-  private final OutputConflictResolver outputConflictResolver;
+  private final ConflictResolver conflictResolver;
   private final FileMover fileMover;
   private final MediaFileDataMapper mediaFileDataMapper;
   private final OutputMapper mediaOutputCalculator;
@@ -30,12 +30,12 @@ public class ImageSorter {
   public ImageSorter(final MediaFileUtil mediaFileUtil,
                      final MediaFileDataMapper mediaFileDataMapper,
                      final OutputMapper mediaOutputCalculator,
-                     final OutputConflictResolver outputConflictResolver,
+                     final ConflictResolver conflictResolver,
                      final FileMover fileMover) {
     this.mediaFileUtil = mediaFileUtil;
     this.mediaFileDataMapper = mediaFileDataMapper;
     this.mediaOutputCalculator = mediaOutputCalculator;
-    this.outputConflictResolver = outputConflictResolver;
+    this.conflictResolver = conflictResolver;
     this.fileMover = fileMover;
   }
 
@@ -58,19 +58,25 @@ public class ImageSorter {
 
     clientInterface.startResolvingConflicts();
     Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap;
-    resolvedFilesToOutputMap = outputConflictResolver.resolveOutputConflicts(clientInterface,
-                                                                             mediaFileDestinations);
+    resolvedFilesToOutputMap = conflictResolver.resolveOutputConflicts(clientInterface,
+                                                                       sortSettings.masterFolder,
+                                                                       mediaFileDestinations);
+
     clientInterface.successfulResolvedOutputConflicts(resolvedFilesToOutputMap);
 
-    clientInterface.startMovingFiles();
-    fileMover.moveFilesToNewDestination(clientInterface,
-                                        sortSettings.masterFolder,
-                                        resolvedFilesToOutputMap);
 
-    printMediaFileStatsInFolder(clientInterface, mediaFiles);
+    if (resolvedFilesToOutputMap.size() > 0) {
+
+      clientInterface.startMovingFiles();
+      fileMover.moveFilesToNewDestination(clientInterface,
+                                          sortSettings.masterFolder,
+                                          resolvedFilesToOutputMap);
+
+      printMediaFileStatsInFolder(clientInterface, mediaFiles);
+    }
 
     // TODO: Clean up clientInterface.
-    // TODO: Name after relative paths, alt store in files instead of strings. 
+    // TODO: Name after relative paths, alt store in files instead of strings.
 
 
     // Compare number of duplicates before and after....

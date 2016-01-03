@@ -18,17 +18,6 @@ public class FileMover {
                                         final File masterFolderFile,
                                         final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
 
-    skipFilesAlreadyNamedAsOutput(clientInterface, resolvedFilesToOutputMap, masterFolderFile);
-
-
-    //TODO: run recusivley, Move to Conflict resolver.
-    boolean foundConflicts = true;
-    while (foundConflicts) {
-      foundConflicts = resolveOutputConflictsWithOldFiles(masterFolderFile,
-                                                          resolvedFilesToOutputMap);
-    }
-
-    if (resolvedFilesToOutputMap.size() > 0) {
       clientInterface.prepareMovePhase();
 
       copyFilesToNewDestinations(masterFolderFile, resolvedFilesToOutputMap);
@@ -36,91 +25,8 @@ public class FileMover {
       cleanUpOldFiles(masterFolderFile, resolvedFilesToOutputMap);
 
       deleteEmptyDirectories(FileUtils.getFile(masterFolderFile));
-
-    }
   }
 
-  private boolean resolveOutputConflictsWithOldFiles(final File masterFolderFile,
-                                                     final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
-    return false;
-/*    boolean foundConflicts = false;
-    for (List<File> files : resolvedFilesToOutputMap.keySet()) {
-      for (File file : files) {
-        boolean conflictFound = checkIfFileConflictsWithOutputs(resolvedFilesToOutputMap,
-                                                                file,
-                                                                masterFolderPath);
-
-        if (conflictFound) {
-          foundConflicts = true;
-          String randomString = new BigInteger(130, new SecureRandom()).toString(32);
-          String newAbsolutePath = mediaFileUtil.appendToFileName(file.getAbsolutePath(),
-                                                                  randomString);
-          try {
-            FileUtils.moveFile(file, FileUtils.getFile(newAbsolutePath));
-          }
-          catch (IOException e) {
-            e.printStackTrace();
-          }
-          // file = FileUtils.getFile(newAbsolutePath);
-        }
-      }
-    }
-
-    return foundConflicts;*/
-  }
-
-  private boolean checkIfFileConflictsWithOutputs(final Map<List<File>, String> resolvedFilesToOutputMap,
-                                                  final File file,
-                                                  final String masterFolder) {
-
-    for (Map.Entry<List<File>, String> filesOutputEntry : resolvedFilesToOutputMap.entrySet()) {
-      if (checkIfFileIsInList(file, filesOutputEntry)) {
-        return false;
-      }
-      String absolutOutput = masterFolder + filesOutputEntry.getValue();
-      if (file.getAbsolutePath().equals(absolutOutput)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private boolean checkIfFileIsInList(final File file,
-                                      final Map.Entry<List<File>, String> filesOutputEntry) {
-    List<File> files = filesOutputEntry.getKey();
-    for (File fileInEntry : files) {
-      if (file.equals(fileInEntry)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-
-  private void skipFilesAlreadyNamedAsOutput(final ClientInterface clientInterface,
-                                             final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap,
-                                             final File masterFolderFile) {
-    int skippedFiles = 0;
-    int filesToMove = 0;
-    for (Map.Entry<List<File>, RelativeMediaFolderOutput> listStringEntry : resolvedFilesToOutputMap.entrySet()) {
-
-      List<File> fileList = listStringEntry.getKey();
-
-      for (Iterator<File> it = fileList.iterator(); it.hasNext(); ) {
-        File file = it.next();
-
-        String folderPath = masterFolderFile.getAbsolutePath() + listStringEntry.getValue();
-        if (file.getAbsolutePath().equals(folderPath)) {
-          skippedFiles++;
-          it.remove();
-        }
-        else {
-          filesToMove++;
-        }
-        clientInterface.skippingFilesToMove(skippedFiles, filesToMove);
-      }
-    }
-  }
 
   private void cleanUpOldFiles(final File masterFolderFile,
                                final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {

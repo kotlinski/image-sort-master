@@ -13,19 +13,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OutputConflictResolver {
+public class UniqueFileOutputResolver {
   private final MediaFileHashGenerator mediaFileHashGenerator;
   private final MediaFileUtil mediaFileUtil;
 
   @Inject
-  public OutputConflictResolver(final MediaFileHashGenerator mediaFileHashGenerator,
-                                final MediaFileUtil mediaFileUtil) {
+  public UniqueFileOutputResolver(final MediaFileHashGenerator mediaFileHashGenerator,
+                                  final MediaFileUtil mediaFileUtil) {
     this.mediaFileHashGenerator = mediaFileHashGenerator;
     this.mediaFileUtil = mediaFileUtil;
   }
 
-  public Map<List<File>, RelativeMediaFolderOutput> resolveOutputConflicts(final ClientInterface clientInterface,
-                                                                           final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
+
+  public Map<List<File>, RelativeMediaFolderOutput> resolve(final ClientInterface clientInterface,
+                                                            final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
+
     Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination = new HashMap<>();
 
     int progress = 0;
@@ -39,8 +41,8 @@ public class OutputConflictResolver {
     }
 
     return filesToOutputDestination;
-
   }
+
 
   private void resolvConflictForMd5FileList(final ClientInterface clientInterface,
                                             final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations,
@@ -68,8 +70,9 @@ public class OutputConflictResolver {
       clientInterface.conflictFound(outputDirectory);
       int append = 1;
       for (List<File> fileList : md5Groups.values()) {
-        RelativeMediaFolderOutput outputWithAppendedValue;
-        outputWithAppendedValue = mediaFileUtil.appendToFileName(outputDirectory, "_" + append);
+        String outputWithAppendedIdentifier = mediaFileUtil.appendToFileName(outputDirectory.relativePath, "_" + append);
+        RelativeMediaFolderOutput outputWithAppendedValue = new RelativeMediaFolderOutput(outputWithAppendedIdentifier);
+
         filesToOutputDestination.put(fileList, outputWithAppendedValue);
         append++;
       }

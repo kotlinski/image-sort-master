@@ -62,13 +62,12 @@ public class MediaFileUtil {
     return false;
   }
 
-  public RelativeMediaFolderOutput appendToFileName(final RelativeMediaFolderOutput outputDirectory, final String appendPart) {
+  public String appendToFileName(final String outputDirectoryString, final String appendPart) {
 
-    String outputDirectoryString = outputDirectory.relativePath;
     String outputPathWithoutExtension = outputDirectoryString.substring(0, outputDirectoryString.lastIndexOf('.'));
     String extension = outputDirectoryString.substring(outputDirectoryString.lastIndexOf('.'), outputDirectoryString.length());
 
-    return new RelativeMediaFolderOutput(outputPathWithoutExtension + appendPart + extension);
+    return outputPathWithoutExtension + appendPart + extension;
   }
 
 }

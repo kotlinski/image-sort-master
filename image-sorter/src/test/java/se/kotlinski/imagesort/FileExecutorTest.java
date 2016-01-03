@@ -35,7 +35,7 @@ public class FileExecutorTest {
     File file = new File(mediaFileTestUtil.getTestInputPath());
     sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     Calendar calendar = new GregorianCalendar();
-    se.kotlinski.imagesort.utils.MediaFileHashGenerator mediaFileHashGenerator = spy(new MediaFileHashGenerator());
+    MediaFileHashGenerator mediaFileHashGenerator = spy(new MediaFileHashGenerator());
     FileDateInterpreter fileDateInterpreter = mock(FileDateInterpreter.class);
     DateToFileRenamer dateToFileRenamer = mock(DateToFileRenamer.class);
 

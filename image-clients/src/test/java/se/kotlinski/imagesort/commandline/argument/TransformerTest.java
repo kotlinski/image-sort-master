@@ -21,12 +21,11 @@ public class TransformerTest {
 
   private Transformer transformer;
   private HelpFormatter formatter;
-  private MediaFileUtil mediaFileUtil;
   private CommandLineParser parser;
 
   @Before
   public void setUp() throws Exception {
-    mediaFileUtil = spy(new MediaFileUtil());
+    MediaFileUtil mediaFileUtil = spy(new MediaFileUtil());
     parser = mock(GnuParser.class);
     formatter = spy(new HelpFormatter());
     transformer = spy(new Transformer(formatter, parser, mediaFileUtil));

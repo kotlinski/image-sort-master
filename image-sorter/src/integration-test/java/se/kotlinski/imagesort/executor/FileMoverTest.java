@@ -13,7 +13,10 @@ import se.kotlinski.imagesort.main.ClientInterface;
 import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.mapper.OutputMapper;
-import se.kotlinski.imagesort.resolver.OutputConflictResolver;
+import se.kotlinski.imagesort.resolver.ConflictResolver;
+import se.kotlinski.imagesort.resolver.ExistingFilesResolver;
+import se.kotlinski.imagesort.resolver.FileSkipper;
+import se.kotlinski.imagesort.resolver.UniqueFileOutputResolver;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -49,11 +52,18 @@ public class FileMoverTest {
     // Copy all files from inputImages-folder to output-folder.
     // Do the move-operations on output-folder.
 
-    OutputConflictResolver outputConflictResolver = new OutputConflictResolver(new MediaFileHashGenerator(),
-                                                                               mediaFileUtil);
+    MediaFileHashGenerator mediaFileHashGenerator = new MediaFileHashGenerator();
+
+    UniqueFileOutputResolver uniqueFileOutputResolver;
+    uniqueFileOutputResolver = new UniqueFileOutputResolver(mediaFileHashGenerator, mediaFileUtil);
+    FileSkipper fileSkipper = new FileSkipper();
+    ExistingFilesResolver existingFilesResolver = new ExistingFilesResolver(mediaFileUtil);
+    ConflictResolver conflictResolver = new ConflictResolver(uniqueFileOutputResolver,
+                                                             fileSkipper,
+                                                             existingFilesResolver);
     fileMover = new FileMover();
     MediaFileDataMapper mediaFileHashMapTransformer;
-    mediaFileHashMapTransformer = new MediaFileDataMapper(new MediaFileHashGenerator());
+    mediaFileHashMapTransformer = new MediaFileDataMapper(mediaFileHashGenerator);
 
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
@@ -65,7 +75,7 @@ public class FileMoverTest {
     imageSorter = new ImageSorter(mediaFileUtil,
                                   mediaFileHashMapTransformer,
                                   mediaOutputCalculator,
-                                  outputConflictResolver,
+                                  conflictResolver,
                                   fileMover);
   }
 
