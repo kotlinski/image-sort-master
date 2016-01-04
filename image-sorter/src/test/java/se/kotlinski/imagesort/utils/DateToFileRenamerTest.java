@@ -21,7 +21,7 @@ public class DateToFileRenamerTest {
     Calendar calendar = new GregorianCalendar();
     dateToFileRenamer = new DateToFileRenamer(calendar);
   }
-  
+
   @Test
   public void testFormatPathDate() throws Exception {
     GregorianCalendar calendar = new GregorianCalendar();

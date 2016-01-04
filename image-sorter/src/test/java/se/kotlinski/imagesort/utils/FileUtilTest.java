@@ -32,10 +32,10 @@ public class FileUtilTest {
 
     mediaFileTestUtil = new MediaFileTestUtil(fileUtilMock);
 
-    Assert.assertEquals("system.path" +
-                        File.separator +
+    Assert.assertEquals(                                                                  "system.path"                                                     +
+                        File.separator                                                    +
                         "image-sorter" + File.separator + "src" + File.separator + "test" +
-                        File.separator + "resources" + File.separator + "inputImages",
+                        File.separator                                                    + "resources" + File.separator +                   "inputImages",
                         mediaFileTestUtil.getTestInputPath());
 
 
@@ -46,17 +46,17 @@ public class FileUtilTest {
     MediaFileUtil fileUtilMock = mock(MediaFileUtil.class);
 
     when(fileUtilMock.getSystemPath()).thenReturn("system.path" +
-                                                 File.separator +
-                                                 "image-clients" +
-                                                 File.separator);
+                                                  File.separator +
+                                                  "image-clients" +
+                                                  File.separator);
 
     mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
-    Assert.assertEquals("system.path" +
-                        File.separator +
+    Assert.assertEquals(                                                                  "system.path"                                                     +
+                        File.separator                                                    +
                         "image-sorter" + File.separator + "src" + File.separator + "test" +
-                        File.separator + "resources" + File.separator + "output",
+                        File.separator                                                    + "resources" +                                    File.separator                     + "output",
                         mediaFileTestUtil.getRestorableTestMasterPath());
   }
 }

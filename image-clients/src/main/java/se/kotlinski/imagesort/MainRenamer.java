@@ -10,24 +10,24 @@ import se.kotlinski.imagesort.module.ImageModule;
  */
 final class MainRenamer {
 
-	private MainRenamer() {
-	}
-
-	public static void main(String[] args) {
-    Injector injector = Guice.createInjector(new ImageModule());
-		for (String arg : args) {
-			System.out.println(arg);
-		}
-		runCLI(args, injector);
+  private MainRenamer() {
   }
 
-	private static void runCLI(final String[] args, final Injector injector) {
-		CommandLineInterface commandLineInterface = injector.getInstance(CommandLineInterface.class);
-		commandLineInterface.runCommandLine(args);
-	}
+  public static void main(String[] args) {
+    Injector injector = Guice.createInjector(new ImageModule());
+    for (String arg : args) {
+      System.out.println(arg);
+    }
+    runCLI(args, injector);
+  }
+
+  private static void runCLI(final String[] args, final Injector injector) {
+    CommandLineInterface commandLineInterface = injector.getInstance(CommandLineInterface.class);
+    commandLineInterface.runCommandLine(args);
+  }
 
 /*
-	if args.length == 0
+  if args.length == 0
 	private static void runGUI(final String[] args, final Injector injector) {
 		ApplicationController applicationController = injector.getInstance(ApplicationController.class);
 		applicationController.startApplication(args);

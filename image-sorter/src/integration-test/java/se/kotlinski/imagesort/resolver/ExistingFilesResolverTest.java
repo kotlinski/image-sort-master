@@ -6,12 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.executor.FileMover;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.main.ClientInterface;
-import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.mapper.MediaFileMapper;
 import se.kotlinski.imagesort.mapper.mappers.MediaFileToOutputMapper;
 import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
@@ -23,7 +21,6 @@ import java.io.File;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,13 +30,8 @@ public class ExistingFilesResolverTest {
 
   private MediaFileUtil mediaFileUtil;
   private MediaFileTestUtil mediaFileTestUtil;
-  private ImageSorter imageSorter;
-  private FileMover fileMover;
   private MediaFileOutputForecaster mediaFileOutputForecaster;
   private ClientInterface clientInterface;
-  private ExistingFilesResolver existingFilesResolver;
-  private ConflictResolver conflictResolver;
-  private MediaFileHashGenerator mediaFileHashGenerator;
 
   @Before
   public void setUp() throws Exception {
@@ -58,7 +50,6 @@ public class ExistingFilesResolverTest {
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
 
-    mediaFileHashGenerator = new MediaFileHashGenerator();
 
   }
 
@@ -125,9 +116,9 @@ public class ExistingFilesResolverTest {
 
 
     clientInterface.startResolvingConflicts();
-    conflictResolver = new ConflictResolver(mediaFileToOutputMapper,
-                                            new FileSkipper(),
-                                            new ExistingFilesResolver(mediaFileUtil));
+    ConflictResolver conflictResolver = new ConflictResolver(mediaFileToOutputMapper,
+                                                             new FileSkipper(),
+                                                             new ExistingFilesResolver(mediaFileUtil));
 
     conflictResolver.resolveOutputConflicts(clientInterface,
                                             restorableTestMasterFile,
@@ -141,15 +132,15 @@ public class ExistingFilesResolverTest {
       if (relativePath.equals(snapchatOutputDestination.relativePath)) {
         File file = key.get(0);
         MediaFileDataHash newFileHash = mediaFileHashGenerator.generateMediaFileDataHash(file);
-        MediaFileDataHash originalFileHash = mediaFileHashGenerator.generateMediaFileDataHash(
-            snapchatFile);
+        MediaFileDataHash originalFileHash;
+        originalFileHash = mediaFileHashGenerator.generateMediaFileDataHash(snapchatFile);
         assertThat(newFileHash, is(originalFileHash));
       }
       else if (relativePath.equals(instagramOutputDestination.relativePath)) {
         File file = key.get(0);
         MediaFileDataHash newFileHash = mediaFileHashGenerator.generateMediaFileDataHash(file);
-        MediaFileDataHash originalFileHash = mediaFileHashGenerator.generateMediaFileDataHash(
-            instagramFile);
+        MediaFileDataHash originalFileHash;
+        originalFileHash = mediaFileHashGenerator.generateMediaFileDataHash(instagramFile);
         assertThat(newFileHash, is(originalFileHash));
       }
       else {

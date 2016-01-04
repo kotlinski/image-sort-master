@@ -15,26 +15,26 @@ import static org.mockito.Mockito.spy;
 
 public class InterpreterIntegrationTest {
 
-	private Interpreter cmdInterpreter;
+  private Interpreter cmdInterpreter;
   private MediaFileUtil mediaFileUtil;
   private MediaFileTestUtil mediaFileTestUtil;
 
-	@Before
-	public void setUp() {
+  @Before
+  public void setUp() {
     mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
-		CommandLineParser parser = spy(new GnuParser());
-		HelpFormatter formatter = new HelpFormatter();
-		Transformer transformer = new Transformer(formatter, parser, mediaFileUtil);
+    CommandLineParser parser = spy(new GnuParser());
+    HelpFormatter formatter = new HelpFormatter();
+    Transformer transformer = new Transformer(formatter, parser, mediaFileUtil);
 
-		cmdInterpreter = new Interpreter(transformer);
-	}
+    cmdInterpreter = new Interpreter(transformer);
+  }
 
-	@Test
-	public void testTransformArgumentsSunchineScenario() throws Exception {
-		String testInputPath = mediaFileTestUtil.getTestInputPath();
-		String[] arguments = new String[]{"-s", testInputPath};
+  @Test
+  public void testTransformArgumentsSunchineScenario() throws Exception {
+    String testInputPath = mediaFileTestUtil.getTestInputPath();
+    String[] arguments = new String[]{"-s", testInputPath};
     SortSettings sortSettings = cmdInterpreter.transformArguments(arguments);
     assertThat(sortSettings.masterFolder.toString(), is(testInputPath));
   }

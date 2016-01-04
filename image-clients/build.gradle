@@ -14,14 +14,14 @@ findbugs {
 
 buildscript {
   repositories {
-    mavenCentral()
-    jcenter()
+	mavenCentral()
+	jcenter()
   }
 
   dependencies {
-    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
-    classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.0.2'
-    classpath 'ca.cutterslade.gradle:gradle-dependency-analyze:1.0.3'
+	classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
+	classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.0.2'
+	classpath 'ca.cutterslade.gradle:gradle-dependency-analyze:1.0.3'
   }
 }
 
@@ -36,15 +36,15 @@ jacoco {
 }
 jacocoTestReport {
   reports {
-    xml.enabled true
-    csv.enabled true
-    html.destination "${buildDir}/jacocoHtml"
+	xml.enabled true
+	csv.enabled true
+	html.destination "${buildDir}/jacocoHtml"
   }
 }
 
 jar {
   manifest {
-    attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
+	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
   }
   exclude('simplelogger.properties')
 }
@@ -73,8 +73,8 @@ tasks.withType(Test) {
 
 tasks.withType(FindBugs) {
   reports {
-    xml.enabled = false
-    html.enabled = true
+	xml.enabled = false
+	html.enabled = true
   }
 }
 

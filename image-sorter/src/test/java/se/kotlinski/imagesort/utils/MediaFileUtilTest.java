@@ -18,7 +18,7 @@ public class MediaFileUtilTest {
   @Test
   public void testRecursiveIterate() throws Exception {
     File folder = new File(mediaFileTestUtil.getTestInputPath());
-   // List<File> files = mediaFileTestUtil.readAllFilesInFolder(folder);
+    // List<File> files = mediaFileTestUtil.readAllFilesInFolder(folder);
 //    Assert.assertEquals("Image found in root folder", 12, files.size());
   }
 }

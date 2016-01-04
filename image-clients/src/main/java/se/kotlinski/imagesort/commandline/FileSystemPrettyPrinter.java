@@ -56,9 +56,11 @@ public class FileSystemPrettyPrinter {
     }
   }
 
-  private List<String> getFolders(final RelativeMediaFolderOutput filePath, final boolean detailedString) {
+  private List<String> getFolders(final RelativeMediaFolderOutput filePath,
+                                  final boolean detailedString) {
     String regexFileSeparator = File.separatorChar == '\\' ? "\\\\" : File.separator;
-    List<String> separated = new LinkedList<>(Arrays.asList(filePath.relativePath.split(regexFileSeparator)));
+    List<String> separated = new LinkedList<>(Arrays.asList(filePath.relativePath.split(
+        regexFileSeparator)));
     if (!detailedString) {
       separated.remove(separated.size() - 1);
     }

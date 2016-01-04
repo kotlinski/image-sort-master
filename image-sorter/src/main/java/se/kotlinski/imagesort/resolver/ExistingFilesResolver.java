@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.resolver;
 
+import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -8,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -18,6 +18,7 @@ public class ExistingFilesResolver {
 
   private final MediaFileUtil mediaFileUtil;
 
+  @Inject
   public ExistingFilesResolver(final MediaFileUtil mediaFileUtil) {
     this.mediaFileUtil = mediaFileUtil;
   }

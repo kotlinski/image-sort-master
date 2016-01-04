@@ -1,6 +1,5 @@
 package se.kotlinski.imagesort.utils;
 
-import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.main.ClientInterface;
 
 import java.io.File;
@@ -19,7 +18,8 @@ public class MediaFileUtil {
     return System.getProperty("user.dir") + File.separator;
   }
 
-  public List<File> getMediaFilesInFolder(final ClientInterface clientInterface, final File folder) {
+  public List<File> getMediaFilesInFolder(final ClientInterface clientInterface,
+                                          final File folder) {
     List<File> files = new ArrayList<>();
     if (folder == null || folder.listFiles() == null) {
       return files;
@@ -64,8 +64,11 @@ public class MediaFileUtil {
 
   public String appendToFileName(final String outputDirectoryString, final String appendPart) {
 
-    String outputPathWithoutExtension = outputDirectoryString.substring(0, outputDirectoryString.lastIndexOf('.'));
-    String extension = outputDirectoryString.substring(outputDirectoryString.lastIndexOf('.'), outputDirectoryString.length());
+    String outputPathWithoutExtension = outputDirectoryString.substring(0,
+                                                                        outputDirectoryString.lastIndexOf(
+                                                                            '.'));
+    String extension = outputDirectoryString.substring(outputDirectoryString.lastIndexOf('.'),
+                                                       outputDirectoryString.length());
 
     return outputPathWithoutExtension + appendPart + extension;
   }

@@ -3,11 +3,11 @@ package se.kotlinski.imagesort.commandline;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
-import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
+import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -53,7 +53,8 @@ public class FileSystemPrettyPrinterTest {
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
-    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile, mediaFiles);
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
+                                                                                mediaFiles);
 
     for (Map.Entry<RelativeMediaFolderOutput, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
       System.out.println(stringListEntry.getKey());

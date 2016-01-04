@@ -34,9 +34,9 @@ public class MediaFileMapper {
                                                                                 mediaFiles);
     clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
-    return mediaFileToOutputMapper.mapRelativeOutputsToFiles(clientInterface, mediaFileDestinations);
+    return mediaFileToOutputMapper.mapRelativeOutputsToFiles(clientInterface,
+                                                             mediaFileDestinations);
   }
-
 
 
 }

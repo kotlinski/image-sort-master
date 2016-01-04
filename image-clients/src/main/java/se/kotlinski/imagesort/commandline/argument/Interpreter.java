@@ -18,8 +18,7 @@ public class Interpreter {
     this.transformer = transformer;
   }
 
-  public final SortSettings transformArguments(final String[] arguments) throws
-      Exception {
+  public final SortSettings transformArguments(final String[] arguments) throws Exception {
     CommandLine commandLine = getCommandLine(arguments);
 
     return getSortSettings(commandLine);

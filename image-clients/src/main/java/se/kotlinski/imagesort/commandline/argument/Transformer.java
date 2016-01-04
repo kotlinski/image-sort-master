@@ -44,8 +44,7 @@ public class Transformer {
     return cmd;
   }
 
-  public SortSettings transformCommandLineArguments(final CommandLine commandLine) throws
-                                                                                         Exception {
+  public SortSettings transformCommandLineArguments(final CommandLine commandLine) throws Exception {
     SortSettings sortSettings = new SortSettings();
     if (commandLine == null || commandLine.hasOption("h") || !commandLine.hasOption('s')) {
       printHelp(getOptions());
@@ -63,7 +62,6 @@ public class Transformer {
     }
     throw new InvalidArgumentsException("Could not create sortSettings for attributes");
   }
-
 
 
   final Options getOptions() {

@@ -61,10 +61,12 @@ public class MediaFileParserTest {
     mediaFileDataMapper.addMediaFileToMap(fileMap, instagramFile);
     mediaFileDataMapper.addMediaFileToMap(fileMap, snapchatFile);
 
-    MediaFileDataHash snapchatFileIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(snapchatFile);
+    MediaFileDataHash snapchatFileIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
+        snapchatFile);
     assertThat(fileMap.get(snapchatFileIdentifier).size(), is(1));
 
-    MediaFileDataHash instagramFileIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(snapchatFile);
+    MediaFileDataHash instagramFileIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
+        snapchatFile);
     assertThat(fileMap.get(instagramFileIdentifier).size(), is(1));
   }
 
@@ -75,7 +77,8 @@ public class MediaFileParserTest {
     mediaFileDataMapper.addMediaFileToMap(fileMap, imageFile);
     mediaFileDataMapper.addMediaFileToMap(fileMap, imageFile);
 
-    MediaFileDataHash imageDataIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(imageFile);
+    MediaFileDataHash imageDataIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
+        imageFile);
     assertThat(fileMap.get(imageDataIdentifier).size(), is(2));
   }
 
@@ -86,7 +89,8 @@ public class MediaFileParserTest {
     mediaFileDataMapper.addMediaFileToMap(fileMap, videoFile);
     mediaFileDataMapper.addMediaFileToMap(fileMap, videoFile);
 
-    MediaFileDataHash videoDataIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(videoFile);
+    MediaFileDataHash videoDataIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
+        videoFile);
     assertThat(fileMap.get(videoDataIdentifier).size(), is(2));
   }
 
@@ -98,22 +102,21 @@ public class MediaFileParserTest {
 
   @Test
   public void testRunIndexInvalidInput() throws Exception {
-   // new MediaFileParser(mediaFileUtil);
+    // new MediaFileParser(mediaFileUtil);
 
     SortSettings sortSettings = new SortSettings();
-   // new MediaFileParser(mediaFileUtil);
+    // new MediaFileParser(mediaFileUtil);
 
     sortSettings.masterFolder = new File("SomeInvalidFilePath");
     ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(sortSettings.masterFolder);
-   // new MediaFileParser(mediaFileUtil);
+    // new MediaFileParser(mediaFileUtil);
 
     sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     inputFolders = new ArrayList<>();
     inputFolders.add(sortSettings.masterFolder);
-   // new MediaFileParser(mediaFileUtil);
+    // new MediaFileParser(mediaFileUtil);
   }
-
 
 
 }

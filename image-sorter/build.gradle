@@ -34,7 +34,7 @@ jacocoTestReport {
 }
 
 jar {
-  manifest{
+  manifest {
 	attributes provider: 'gradle', 'Main-Class': 'se.kotlinski.imagesort.MainRenamer'
   }
 }
@@ -71,8 +71,8 @@ tasks.withType(Test) {
 
 tasks.withType(FindBugs) {
   reports {
-    xml.enabled = false
-    html.enabled = true
+	xml.enabled = false
+	html.enabled = true
   }
 }
 

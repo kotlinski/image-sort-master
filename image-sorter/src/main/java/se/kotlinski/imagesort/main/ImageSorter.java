@@ -8,8 +8,8 @@ import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.executor.FileMover;
-import se.kotlinski.imagesort.mapper.mappers.MediaFileDataMapper;
 import se.kotlinski.imagesort.mapper.MediaFileMapper;
+import se.kotlinski.imagesort.mapper.mappers.MediaFileDataMapper;
 import se.kotlinski.imagesort.resolver.ConflictResolver;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 

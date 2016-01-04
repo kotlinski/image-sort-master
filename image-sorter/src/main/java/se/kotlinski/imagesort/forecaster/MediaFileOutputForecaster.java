@@ -21,7 +21,8 @@ public class MediaFileOutputForecaster {
     this.fileDateInterpreter = fileDateInterpreter;
   }
 
-  public RelativeMediaFolderOutput forecastOutputDestination(final File masterFolderFile, final File file) {
+  public RelativeMediaFolderOutput forecastOutputDestination(final File masterFolderFile,
+                                                             final File file) {
 
     String flavour = getFlavour(masterFolderFile, file);
 
@@ -29,7 +30,7 @@ public class MediaFileOutputForecaster {
     if (date != null) {
       String flavourDatePrefix = getFlavourDatePrefix(date);
       String reducedFlavour = reduceOldFlavourWithDateFlavour(flavour, flavourDatePrefix);
-      flavour = File.separator  + flavourDatePrefix + reducedFlavour;
+      flavour = File.separator + flavourDatePrefix + reducedFlavour;
     }
 
     String filename;

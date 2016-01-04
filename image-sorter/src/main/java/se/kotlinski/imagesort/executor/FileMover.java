@@ -7,7 +7,6 @@ import se.kotlinski.imagesort.main.ClientInterface;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,13 +17,13 @@ public class FileMover {
                                         final File masterFolderFile,
                                         final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
 
-      clientInterface.prepareMovePhase();
+    clientInterface.prepareMovePhase();
 
-      copyFilesToNewDestinations(masterFolderFile, resolvedFilesToOutputMap);
+    copyFilesToNewDestinations(masterFolderFile, resolvedFilesToOutputMap);
 
-      cleanUpOldFiles(masterFolderFile, resolvedFilesToOutputMap);
+    cleanUpOldFiles(masterFolderFile, resolvedFilesToOutputMap);
 
-      deleteEmptyDirectories(FileUtils.getFile(masterFolderFile));
+    deleteEmptyDirectories(FileUtils.getFile(masterFolderFile));
   }
 
 
