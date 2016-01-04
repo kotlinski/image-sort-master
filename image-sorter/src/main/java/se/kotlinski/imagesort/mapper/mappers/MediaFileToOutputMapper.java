@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.resolver;
+package se.kotlinski.imagesort.mapper.mappers;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
@@ -13,20 +13,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UniqueFileOutputResolver {
+public class MediaFileToOutputMapper {
   private final MediaFileHashGenerator mediaFileHashGenerator;
   private final MediaFileUtil mediaFileUtil;
 
   @Inject
-  public UniqueFileOutputResolver(final MediaFileHashGenerator mediaFileHashGenerator,
-                                  final MediaFileUtil mediaFileUtil) {
+  public MediaFileToOutputMapper(final MediaFileHashGenerator mediaFileHashGenerator,
+                                 final MediaFileUtil mediaFileUtil) {
     this.mediaFileHashGenerator = mediaFileHashGenerator;
     this.mediaFileUtil = mediaFileUtil;
   }
 
 
-  public Map<List<File>, RelativeMediaFolderOutput> resolve(final ClientInterface clientInterface,
-                                                            final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
+  public Map<List<File>, RelativeMediaFolderOutput> mapRelativeOutputsToFiles(final ClientInterface clientInterface,
+                                                                              final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
 
     Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination = new HashMap<>();
 
@@ -70,8 +70,10 @@ public class UniqueFileOutputResolver {
       clientInterface.conflictFound(outputDirectory);
       int append = 1;
       for (List<File> fileList : md5Groups.values()) {
-        String outputWithAppendedIdentifier = mediaFileUtil.appendToFileName(outputDirectory.relativePath, "_" + append);
-        RelativeMediaFolderOutput outputWithAppendedValue = new RelativeMediaFolderOutput(outputWithAppendedIdentifier);
+        String outputWithAppendedIdentifier = mediaFileUtil.appendToFileName(outputDirectory.relativePath,
+                                                                             "_" + append);
+        RelativeMediaFolderOutput outputWithAppendedValue = new RelativeMediaFolderOutput(
+            outputWithAppendedIdentifier);
 
         filesToOutputDestination.put(fileList, outputWithAppendedValue);
         append++;

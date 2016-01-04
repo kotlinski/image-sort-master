@@ -7,7 +7,9 @@ import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.main.ClientInterface;
-import se.kotlinski.imagesort.mapper.OutputMapper;
+import se.kotlinski.imagesort.mapper.MediaFileMapper;
+import se.kotlinski.imagesort.mapper.mappers.MediaFileToOutputMapper;
+import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -28,18 +30,20 @@ public class ConflictResolverTest {
   Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
   private ConflictResolver conflictResolver;
   private ClientInterface clientInterface;
+  private Map<List<File>, RelativeMediaFolderOutput> fileMapWithResolvedConflicts;
+  private MediaFileMapper mediaFileMapper;
 
   @Before
   public void setUp() throws Exception {
     clientInterface = mock(ClientInterface.class);
 
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
-    UniqueFileOutputResolver uniqueFileOutputResolver;
+    MediaFileToOutputMapper mediaFileToOutputMapper;
     MediaFileHashGenerator mediaFileDataHash = new MediaFileHashGenerator();
-    uniqueFileOutputResolver = new UniqueFileOutputResolver(mediaFileDataHash, mediaFileUtil);
+    mediaFileToOutputMapper = new MediaFileToOutputMapper(mediaFileDataHash, mediaFileUtil);
     FileSkipper fileSkipper = new FileSkipper();
     ExistingFilesResolver existingFilesResolver = new ExistingFilesResolver(mediaFileUtil);
-    conflictResolver = new ConflictResolver(uniqueFileOutputResolver,
+    conflictResolver = new ConflictResolver(mediaFileToOutputMapper,
                                             fileSkipper,
                                             existingFilesResolver);
     MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
@@ -47,32 +51,40 @@ public class ConflictResolverTest {
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    MediaFileOutputForecaster mediaFileOutputForecaster = new MediaFileOutputForecaster(
-        dateToFileRenamer,
-        fileDateInterpreter);
+    MediaFileOutputForecaster mediaFileOutputForecaster;
+    mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
+                                                              fileDateInterpreter);
 
-    OutputMapper outputMapper = new OutputMapper(mediaFileOutputForecaster);
+    OutputToMediaFileMapper outputToMediaFileMapper = new OutputToMediaFileMapper(
+        mediaFileOutputForecaster);
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
 
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
-    mediaFileDestinations = outputMapper.calculateOutputDestinations(testInputFile, mediaFiles);
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
+                                                                                mediaFiles);
+
+
+    mediaFileMapper = new MediaFileMapper(outputToMediaFileMapper, mediaFileToOutputMapper);
+    fileMapWithResolvedConflicts = mediaFileMapper.mapMediaFiles(clientInterface,
+                                                                 mediaFiles,
+                                                                 testInputFile);
   }
 
   @Test
   public void testResolveOutputConflicts() throws Exception {
     MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(new MediaFileUtil());
-    Map<List<File>, RelativeMediaFolderOutput> listStringMap;
-    listStringMap = conflictResolver.resolveOutputConflicts(clientInterface,
-                                                            mediaFileTestUtil.getTestInputFile(),
-                                                            mediaFileDestinations);
 
-    for (RelativeMediaFolderOutput relativeMediaFolderOutput : listStringMap.values()) {
+    conflictResolver.resolveOutputConflicts(clientInterface,
+                                            mediaFileTestUtil.getTestInputFile(),
+                                            fileMapWithResolvedConflicts);
+
+    for (RelativeMediaFolderOutput relativeMediaFolderOutput : fileMapWithResolvedConflicts.values()) {
       System.out.println(relativeMediaFolderOutput);
     }
-    Collection<RelativeMediaFolderOutput> outputPaths = listStringMap.values();
-    assertThat(listStringMap.size(), is(12));
+    Collection<RelativeMediaFolderOutput> outputPaths = fileMapWithResolvedConflicts.values();
+    assertThat(fileMapWithResolvedConflicts.size(), is(12));
     assertThat(outputPaths.size(), is(12));
 
     RelativeMediaFolderOutput mediaFile = new RelativeMediaFolderOutput(File.separator +

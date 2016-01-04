@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 public class ExistingFilesResolver {
@@ -22,9 +24,15 @@ public class ExistingFilesResolver {
 
   public boolean resolveOutputConflictsWithOldFiles(final File masterFolderFile,
                                                     final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
+
     boolean foundConflicts = false;
+
     for (List<File> files : resolvedFilesToOutputMap.keySet()) {
-      for (File file : files) {
+
+      ListIterator<File> fileIterator = files.listIterator();
+      while (fileIterator.hasNext()) {
+        File file = fileIterator.next();
+
         boolean conflictFound = checkIfFileConflictsWithOutputs(resolvedFilesToOutputMap,
                                                                 file,
                                                                 masterFolderFile);
@@ -40,7 +48,9 @@ public class ExistingFilesResolver {
           catch (IOException e) {
             e.printStackTrace();
           }
-          // file = FileUtils.getFile(newAbsolutePath);
+
+          fileIterator.remove();
+          fileIterator.add(FileUtils.getFile(newAbsolutePath));
         }
       }
     }
@@ -54,12 +64,11 @@ public class ExistingFilesResolver {
                                                   final File masterFolder) {
 
     for (Map.Entry<List<File>, RelativeMediaFolderOutput> filesOutputEntry : resolvedFilesToOutputMap.entrySet()) {
-      if (checkIfFileIsInList(file, filesOutputEntry)) {
-        return false;
-      }
-      String absolutOutput = masterFolder.getAbsolutePath() + filesOutputEntry.getValue();
-      if (file.getAbsolutePath().equals(absolutOutput)) {
-        return true;
+      if (!checkIfFileIsInList(file, filesOutputEntry)) {
+        String absoluteOutputPath = masterFolder.getAbsolutePath() + filesOutputEntry.getValue();
+        if (file.getAbsolutePath().equals(absoluteOutputPath)) {
+          return true;
+        }
       }
     }
     return false;

@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
+import se.kotlinski.imagesort.mapper.mappers.MediaFileDataMapper;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;

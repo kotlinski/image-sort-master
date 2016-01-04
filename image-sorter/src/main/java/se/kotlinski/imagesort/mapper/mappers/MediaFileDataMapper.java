@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.mapper;
+package se.kotlinski.imagesort.mapper.mappers;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;

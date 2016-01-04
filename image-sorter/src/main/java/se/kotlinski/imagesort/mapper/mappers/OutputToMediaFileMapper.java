@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.mapper;
+package se.kotlinski.imagesort.mapper.mappers;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OutputMapper {
+public class OutputToMediaFileMapper {
 
   private final MediaFileOutputForecaster mediaFileOutputForecaster;
 
   @Inject
-  public OutputMapper(final MediaFileOutputForecaster mediaFileOutputForecaster) {
+  public OutputToMediaFileMapper(final MediaFileOutputForecaster mediaFileOutputForecaster) {
     this.mediaFileOutputForecaster = mediaFileOutputForecaster;
   }
 

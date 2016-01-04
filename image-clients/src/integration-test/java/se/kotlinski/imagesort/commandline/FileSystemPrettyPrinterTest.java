@@ -5,7 +5,7 @@ import org.junit.Test;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.main.ClientInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
-import se.kotlinski.imagesort.mapper.OutputMapper;
+import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class FileSystemPrettyPrinterTest {
 
   private FileSystemPrettyPrinter fileSystemPrettyPrinter;
-  private OutputMapper outputMapper;
+  private OutputToMediaFileMapper outputToMediaFileMapper;
   private MediaFileTestUtil mediaFileTestUtil;
   private ClientInterface clientInterface;
 
@@ -43,7 +43,7 @@ public class FileSystemPrettyPrinterTest {
 
     clientInterface = new ImageSortProgressFeedback(fileSystemPrettyPrinter);
 
-    outputMapper = new OutputMapper(mediaFileOutputForecaster);
+    outputToMediaFileMapper = new OutputToMediaFileMapper(mediaFileOutputForecaster);
   }
 
   @Test
@@ -53,7 +53,7 @@ public class FileSystemPrettyPrinterTest {
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
-    mediaFileDestinations = outputMapper.calculateOutputDestinations(testInputFile, mediaFiles);
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile, mediaFiles);
 
     for (Map.Entry<RelativeMediaFolderOutput, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
       System.out.println(stringListEntry.getKey());
