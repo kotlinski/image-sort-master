@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.utils;
+package se.kotlinski.imagesort.forecaster.date;
 
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.MovieBox;

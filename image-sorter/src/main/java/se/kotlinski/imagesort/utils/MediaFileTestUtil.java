@@ -1,24 +1,19 @@
 package se.kotlinski.imagesort.utils;
 
 import org.apache.commons.io.FileUtils;
-import se.kotlinski.imagesort.executor.ClientInterface;
-import se.kotlinski.imagesort.parser.MediaFileParser;
+import se.kotlinski.imagesort.main.ClientInterface;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class MediaFileTestUtil {
   private final MediaFileUtil mediaFileUtils;
-  private MediaFileParser mediaFileParser;
-
   private final String defaultTestFolderName = "inputImages";
   private final String restoreableTestFolderName = "restoreable_master_folder";
 
   public MediaFileTestUtil(MediaFileUtil mediaFileUtils) {
     this.mediaFileUtils = mediaFileUtils;
-    mediaFileParser = new MediaFileParser(mediaFileUtils, new MD5Generator());
   }
 
   public File getTestInputFile() {
@@ -126,15 +121,10 @@ public class MediaFileTestUtil {
                     File.separator + "2013-10-26 20.20.46-kottbullar.jpg");
   }
 
-  public Map<String, List<File>> getParsedMediaFiles(final File testInputFile,
-                                                     final ClientInterface clientInterface) {
-    try {
-      return mediaFileParser.getMediaFilesInFolder(testInputFile, clientInterface);
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
+  public List<File> getMediaFiles(final ClientInterface clientInterface, final File testInputFile) {
+
+    return mediaFileUtils.getMediaFilesInFolder(clientInterface, testInputFile);
+
   }
 
   public void cleanRestoreableMasterFolder() {

@@ -1,32 +1,36 @@
 package se.kotlinski.imagesort.forecaster;
 
+import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 
 import java.io.File;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class MediaFileForecaster {
+public class MediaFileOutputForecaster {
   private final DateToFileRenamer dateToFileRenamer;
   private final FileDateInterpreter fileDateInterpreter;
 
-  public MediaFileForecaster(final DateToFileRenamer dateToFileRenamer,
-                             final FileDateInterpreter fileDateInterpreter) {
+  @Inject
+  public MediaFileOutputForecaster(final DateToFileRenamer dateToFileRenamer,
+                                   final FileDateInterpreter fileDateInterpreter) {
     this.dateToFileRenamer = dateToFileRenamer;
     this.fileDateInterpreter = fileDateInterpreter;
   }
 
-  public String forecastOutputDestination(final File file, final String masterFolderPath) {
+  public RelativeMediaFolderOutput forecastOutputDestination(final File masterFolderFile,
+                                                             final File file) {
 
-    String flavour = getFlavour(masterFolderPath, file);
+    String flavour = getFlavour(masterFolderFile, file);
 
     Date date = getMediaFileDate(file);
     if (date != null) {
       String flavourDatePrefix = getFlavourDatePrefix(date);
       String reducedFlavour = reduceOldFlavourWithDateFlavour(flavour, flavourDatePrefix);
-      flavour = File.separator  + flavourDatePrefix + reducedFlavour;
+      flavour = File.separator + flavourDatePrefix + reducedFlavour;
     }
 
     String filename;
@@ -37,11 +41,11 @@ public class MediaFileForecaster {
       filename = getDateFilename(date, file);
     }
 
-    return flavour + File.separator + filename;
+    return new RelativeMediaFolderOutput(flavour + File.separator + filename);
   }
 
-  String getFlavour(final String masterFolderPath, final File file) {
-    String flavourWithFileName = file.getPath().replace(masterFolderPath, "");
+  String getFlavour(final File masterFolderFile, final File file) {
+    String flavourWithFileName = file.getPath().replace(masterFolderFile.getAbsolutePath(), "");
 
     return flavourWithFileName.replace(File.separator + file.getName(), "");
   }

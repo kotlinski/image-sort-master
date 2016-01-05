@@ -1,6 +1,6 @@
 package se.kotlinski.imagesort.utils;
 
-import se.kotlinski.imagesort.executor.ClientInterface;
+import se.kotlinski.imagesort.main.ClientInterface;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,20 +18,25 @@ public class MediaFileUtil {
     return System.getProperty("user.dir") + File.separator;
   }
 
-  public List<File> getFilesInFolder(final File folder, final ClientInterface clientInterface) {
+  public List<File> getMediaFilesInFolder(final ClientInterface clientInterface,
+                                          final File folder) {
     List<File> files = new ArrayList<>();
     if (folder == null || folder.listFiles() == null) {
       return files;
     }
     for (File file : folder.listFiles()) {
       if (file.isDirectory()) {
-        files.addAll(getFilesInFolder(file, clientInterface));
-      }
-      else {
-        files.add(file);
+        files.addAll(getMediaFilesInFolder(clientInterface, file));
         clientInterface.parsedFilesInMasterFolderProgress(files.size());
       }
+      else {
+        if (isValidMediaFile(file)) {
+          files.add(file);
+          clientInterface.parsedFilesInMasterFolderProgress(files.size());
+        }
+      }
     }
+    clientInterface.parsedFilesInMasterFolderProgress(files.size());
     return files;
   }
 
@@ -57,9 +62,13 @@ public class MediaFileUtil {
     return false;
   }
 
-  public String appendToFileName(final String outputDirectory, final String appendPart) {
-    String outputPathWithoutExtension = outputDirectory.substring(0, outputDirectory.lastIndexOf('.'));
-    String extension = outputDirectory.substring(outputDirectory.lastIndexOf('.'), outputDirectory.length());
+  public String appendToFileName(final String outputDirectoryString, final String appendPart) {
+
+    String outputPathWithoutExtension = outputDirectoryString.substring(0,
+                                                                        outputDirectoryString.lastIndexOf(
+                                                                            '.'));
+    String extension = outputDirectoryString.substring(outputDirectoryString.lastIndexOf('.'),
+                                                       outputDirectoryString.length());
 
     return outputPathWithoutExtension + appendPart + extension;
   }

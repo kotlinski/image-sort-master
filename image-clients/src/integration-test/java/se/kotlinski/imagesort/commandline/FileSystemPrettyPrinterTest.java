@@ -2,11 +2,12 @@ package se.kotlinski.imagesort.commandline;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.executor.ClientInterface;
-import se.kotlinski.imagesort.forecaster.MediaFileForecaster;
-import se.kotlinski.imagesort.forecaster.MediaFilesOutputForecaster;
-import se.kotlinski.imagesort.utils.DateToFileRenamer;
-import se.kotlinski.imagesort.utils.FileDateInterpreter;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
+import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
+import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -22,10 +23,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class FileSystemPrettyPrinterTest {
 
   private FileSystemPrettyPrinter fileSystemPrettyPrinter;
-  private MediaFilesOutputForecaster mediaFilesOutputForecaster;
+  private OutputToMediaFileMapper outputToMediaFileMapper;
   private MediaFileTestUtil mediaFileTestUtil;
-  private MediaFileForecaster mediaFileForecaster;
   private ClientInterface clientInterface;
+
 
   @Before
   public void setUp() throws Exception {
@@ -36,30 +37,32 @@ public class FileSystemPrettyPrinterTest {
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
-    mediaFileForecaster = new MediaFileForecaster(dateToFileRenamer, fileDateInterpreter);
+    MediaFileOutputForecaster mediaFileOutputForecaster;
+    mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
+                                                              fileDateInterpreter);
 
     clientInterface = new ImageSortProgressFeedback(fileSystemPrettyPrinter);
 
-    mediaFilesOutputForecaster = new MediaFilesOutputForecaster(mediaFileForecaster);
+    outputToMediaFileMapper = new OutputToMediaFileMapper(mediaFileOutputForecaster);
   }
 
   @Test
   public void testPrettyPrintFolderStructure() throws Exception {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
-    String testInputPath = mediaFileTestUtil.getTestInputPath();
-    Map<String, List<File>> parsedMediaFiles = mediaFileTestUtil.getParsedMediaFiles(testInputFile,
-                                                                                     clientInterface);
 
-    Map<String, List<File>> mediaFileDestinations;
-    mediaFileDestinations = mediaFilesOutputForecaster.calculateOutputDestinations(parsedMediaFiles,
-                                                                                   testInputPath);
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
 
-    for (Map.Entry<String, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
+    Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
+                                                                                mediaFiles);
+
+    for (Map.Entry<RelativeMediaFolderOutput, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
       System.out.println(stringListEntry.getKey());
       System.out.println(stringListEntry.getValue());
       System.out.println("-");
     }
-    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations, true);
+    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations,
+                                                                               true);
 
 
     String expectedOutput = " |-noxon on raindeer - no date.jpg\n" +

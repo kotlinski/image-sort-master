@@ -1,125 +1,37 @@
 package se.kotlinski.imagesort.executor;
 
-import com.google.inject.Inject;
-import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
-import se.kotlinski.imagesort.utils.MediaFileUtil;
+import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+import se.kotlinski.imagesort.main.ClientInterface;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.math.BigInteger;
-import java.nio.file.Files;
-import java.security.SecureRandom;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class FileMover {
 
-  private final MediaFileUtil mediaFileUtil;
+  public void moveFilesToNewDestination(final ClientInterface clientInterface,
+                                        final File masterFolderFile,
+                                        final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
 
-  @Inject
-  public FileMover(final MediaFileUtil mediaFileUtil) {
-    this.mediaFileUtil = mediaFileUtil;
-  }
+    clientInterface.prepareMovePhase();
 
-  public void moveFilesToNewDestionation(final Map<List<File>, String> resolvedFilesToOutputMap,
-                                         final String masterFolderPath) {
+    copyFilesToNewDestinations(masterFolderFile, resolvedFilesToOutputMap);
 
-    skipFilesAlreadyNamedAsOutput(resolvedFilesToOutputMap, masterFolderPath);
+    cleanUpOldFiles(masterFolderFile, resolvedFilesToOutputMap);
 
-
-    //TODO: run recusivley, Move to Conflict resolver.
-    boolean noMoreConflicts = resolveOutputConflictsWithOldFiles(resolvedFilesToOutputMap,
-                                                                 masterFolderPath);
-
-    copyFilesToNewDestinations(resolvedFilesToOutputMap, masterFolderPath);
-
-    cleanUpOldFiles(resolvedFilesToOutputMap, masterFolderPath);
-
-    deleteEmptyDirectories(FileUtils.getFile(masterFolderPath));
-  }
-
-  private boolean resolveOutputConflictsWithOldFiles(final Map<List<File>, String> resolvedFilesToOutputMap,
-                                                     final String masterFolderPath) {
-
-    for (List<File> files : resolvedFilesToOutputMap.keySet()) {
-      for (File file : files) {
-        boolean conflictFound = checkIfFileConflictsWithOutputs(resolvedFilesToOutputMap,
-                                                                file,
-                                                                masterFolderPath);
-        if (conflictFound) {
-          String randomString = new BigInteger(130, new SecureRandom()).toString(32);
-          String newAbsolutePath = mediaFileUtil.appendToFileName(file.getAbsolutePath(),
-                                                                  randomString);
-          try {
-            FileUtils.moveFile(file, FileUtils.getFile(newAbsolutePath));
-          }
-          catch (IOException e) {
-            e.printStackTrace();
-          }
-          file = FileUtils.getFile(newAbsolutePath);
-        }
-      }
-    }
-
-
-    return false;
-  }
-
-  private boolean checkIfFileConflictsWithOutputs(final Map<List<File>, String> resolvedFilesToOutputMap,
-                                                  final File file,
-                                                  final String masterFolder) {
-
-    for (Map.Entry<List<File>, String> filesOutputEntry : resolvedFilesToOutputMap.entrySet()) {
-      if (checkIfFileIsInList(file, filesOutputEntry)) {
-        return false;
-      }
-      String absolutOutput = masterFolder + filesOutputEntry.getValue();
-      if (file.getAbsolutePath().equals(absolutOutput)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private boolean checkIfFileIsInList(final File file,
-                                      final Map.Entry<List<File>, String> filesOutputEntry) {
-    List<File> files = filesOutputEntry.getKey();
-    for (File fileInEntry : files) {
-      if (file.equals(fileInEntry)) {
-        return true;
-      }
-    }
-    return false;
+    deleteEmptyDirectories(FileUtils.getFile(masterFolderFile));
   }
 
 
-  private void skipFilesAlreadyNamedAsOutput(final Map<List<File>, String> resolvedFilesToOutputMap,
-                                             final String masterFolderPath) {
-    for (Map.Entry<List<File>, String> listStringEntry : resolvedFilesToOutputMap.entrySet()) {
-
-      List<File> fileList = listStringEntry.getKey();
-
-      for (Iterator<File> it = fileList.iterator(); it.hasNext(); ) {
-        File file = it.next();
-
-        String folderPath = masterFolderPath + listStringEntry.getValue();
-        if (file.getAbsolutePath().equals(folderPath)) {
-          it.remove();
-        }
-      }
-    }
-  }
-
-  private void cleanUpOldFiles(final Map<List<File>, String> resolvedFilesToOutputMap,
-                               final String masterFolderPath) {
+  private void cleanUpOldFiles(final File masterFolderFile,
+                               final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
     Set<File> filesToNotCleanUp = new HashSet<>();
-    for (String relativeOutputPath : resolvedFilesToOutputMap.values()) {
-      String newOutPutPath = masterFolderPath + relativeOutputPath;
+    for (RelativeMediaFolderOutput relativeOutputPath : resolvedFilesToOutputMap.values()) {
+      String newOutPutPath = masterFolderFile.getAbsolutePath() + relativeOutputPath;
       filesToNotCleanUp.add(FileUtils.getFile(newOutPutPath));
     }
 
@@ -132,12 +44,12 @@ public class FileMover {
     }
   }
 
-  private void copyFilesToNewDestinations(final Map<List<File>, String> resolvedFilesToOutputMap,
-                                          final String masterFolderPath) {
-    for (Map.Entry<List<File>, String> fileListToNewOutput : resolvedFilesToOutputMap.entrySet()) {
+  private void copyFilesToNewDestinations(final File masterFolderFile,
+                                          final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
+    for (Map.Entry<List<File>, RelativeMediaFolderOutput> fileListToNewOutput : resolvedFilesToOutputMap.entrySet()) {
       List<File> fileList = fileListToNewOutput.getKey();
 
-      String newOutputPath = masterFolderPath + fileListToNewOutput.getValue();
+      String newOutputPath = masterFolderFile.getAbsolutePath() + fileListToNewOutput.getValue();
       if (fileList.size() > 0) {
         File fileToCopy = fileList.get(0);
         copyFileToNewDestionation(fileToCopy, newOutputPath);
@@ -185,7 +97,8 @@ public class FileMover {
       System.gc();//Added this part
       try {
         Thread.sleep(1500);
-      } catch (InterruptedException e2) {
+      }
+      catch (InterruptedException e2) {
         e2.printStackTrace();
       }
     }

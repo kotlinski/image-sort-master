@@ -17,46 +17,50 @@ import javafx.stage.Stage;
  * @version $Revision: 1.1 $
  */
 public class FolderSelector {
-	public static final int INPUT_BUTTON_COLUMN_INDEX = 0;
-	public static final int INPUT_BUTTON_ROW_INDEX = 0;
-	public static final int OUTPUT_BUTTON_COLUMN_INDEX = 1;
-	public static final int OUTPUT_BUTTON_ROW_INDEX = 0;
-	public static final int INPUT_HORIZONTAL_GAP = 6;
-	public static final int INPUT_VERTICAL_GAP = 6;
+  public static final int INPUT_BUTTON_COLUMN_INDEX = 0;
+  public static final int INPUT_BUTTON_ROW_INDEX = 0;
+  public static final int OUTPUT_BUTTON_COLUMN_INDEX = 1;
+  public static final int OUTPUT_BUTTON_ROW_INDEX = 0;
+  public static final int INPUT_HORIZONTAL_GAP = 6;
+  public static final int INPUT_VERTICAL_GAP = 6;
   private static final int ROOT_GROUP_SPACING = 12;
   private final Stage primaryStage;
-	private Button inputButton;
-	private Button outputButton;
+  private Button inputButton;
+  private Button outputButton;
 
-	public FolderSelector(final Stage primaryStage) {
-		this.primaryStage = primaryStage;
-		primaryStage.setTitle("Set input/output folders");
-	}
+  public FolderSelector(final Stage primaryStage) {
+    this.primaryStage = primaryStage;
+    primaryStage.setTitle("Set input/output folders");
+  }
 
-	public final void setupInputButton(final EventHandler<ActionEvent> selectInputEvent){
-		inputButton = new Button("Select source folder");
-		inputButton.setOnAction(selectInputEvent);
-	}
-	public final void setupOutputButton(final EventHandler<ActionEvent> selectOutputEvent){
-		outputButton = new Button("Select Output Folder");
-		outputButton.setOnAction(selectOutputEvent);
-	}
+  public final void setupInputButton(final EventHandler<ActionEvent> selectInputEvent) {
+    inputButton = new Button("Select source folder");
+    inputButton.setOnAction(selectInputEvent);
+  }
 
-	public final void setupGridLayout(){
+  public final void setupOutputButton(final EventHandler<ActionEvent> selectOutputEvent) {
+    outputButton = new Button("Select Output Folder");
+    outputButton.setOnAction(selectOutputEvent);
+  }
 
-		final GridPane inputGridPane = new GridPane();
+  public final void setupGridLayout() {
 
-		GridPane.setConstraints(inputButton, INPUT_BUTTON_COLUMN_INDEX, INPUT_BUTTON_ROW_INDEX);
-		GridPane.setConstraints(outputButton, OUTPUT_BUTTON_COLUMN_INDEX, OUTPUT_BUTTON_ROW_INDEX);
-		inputGridPane.setHgap(INPUT_HORIZONTAL_GAP);
-		inputGridPane.setVgap(INPUT_VERTICAL_GAP);
-		inputGridPane.getChildren().addAll(inputButton, outputButton);
+    final GridPane inputGridPane = new GridPane();
+
+    GridPane.setConstraints(inputButton, INPUT_BUTTON_COLUMN_INDEX, INPUT_BUTTON_ROW_INDEX);
+    GridPane.setConstraints(outputButton, OUTPUT_BUTTON_COLUMN_INDEX, OUTPUT_BUTTON_ROW_INDEX);
+    inputGridPane.setHgap(INPUT_HORIZONTAL_GAP);
+    inputGridPane.setVgap(INPUT_VERTICAL_GAP);
+    inputGridPane.getChildren().addAll(inputButton, outputButton);
 
     final Pane rootGroup = new VBox(ROOT_GROUP_SPACING);
-		rootGroup.getChildren().addAll(inputGridPane);
-		rootGroup.setPadding(new Insets(ROOT_GROUP_SPACING, ROOT_GROUP_SPACING, ROOT_GROUP_SPACING, ROOT_GROUP_SPACING));
+    rootGroup.getChildren().addAll(inputGridPane);
+    rootGroup.setPadding(new Insets(ROOT_GROUP_SPACING,
+                                    ROOT_GROUP_SPACING,
+                                    ROOT_GROUP_SPACING,
+                                    ROOT_GROUP_SPACING));
 
-		primaryStage.setScene(new Scene(rootGroup));
-		primaryStage.show();
-	}
+    primaryStage.setScene(new Scene(rootGroup));
+    primaryStage.show();
+  }
 }

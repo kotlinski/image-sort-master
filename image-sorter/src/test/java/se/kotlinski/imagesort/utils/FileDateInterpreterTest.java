@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
+import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 
 import java.io.File;
 import java.text.DateFormat;
