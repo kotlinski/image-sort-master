@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class ImageSortProgressFeedback extends ClientInterface {
+public class ImageSortProgressFeedback implements ClientInterface {
   private final FileSystemPrettyPrinter fileSystemPrettyPrinter;
 
   @Inject

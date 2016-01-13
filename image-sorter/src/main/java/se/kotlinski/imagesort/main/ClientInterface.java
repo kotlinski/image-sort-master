@@ -7,39 +7,39 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ClientInterface {
-  public abstract void initiateMediaFileParsingPhase();
+public interface ClientInterface {
+  void initiateMediaFileParsingPhase();
 
-  public abstract void masterFolderFailedParsed();
+  void masterFolderFailedParsed();
 
-  public abstract void parsedFilesInMasterFolderProgress(final int size);
+  void parsedFilesInMasterFolderProgress(final int size);
 
-  public abstract boolean masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder);
-
-
-  public abstract void startCalculatingOutputDirectories();
-
-  public abstract void successfulCalculatedOutputDestinations(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations);
+  boolean masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder);
 
 
-  public abstract void startResolvingConflicts();
+  void startCalculatingOutputDirectories();
 
-  public abstract void startGroupFilesByContent();
-
-  public abstract void groupFilesByContentProgress(final int total, final int progress);
-
-  public abstract void successfulResolvedOutputConflicts(final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap);
+  void successfulCalculatedOutputDestinations(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations);
 
 
-  public abstract void startMovingFiles();
+  void startResolvingConflicts();
 
-  public abstract void searchingForConflictsProgress(final int total, final int progress);
+  void startGroupFilesByContent();
 
-  public abstract void conflictFound(final RelativeMediaFolderOutput outputDirectory);
+  void groupFilesByContentProgress(final int total, final int progress);
 
-  public abstract void skippingFilesToMove(final int skippedFiles, final int filesToMove);
+  void successfulResolvedOutputConflicts(final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap);
 
-  public abstract void prepareMovePhase();
+
+  void startMovingFiles();
+
+  void searchingForConflictsProgress(final int total, final int progress);
+
+  void conflictFound(final RelativeMediaFolderOutput outputDirectory);
+
+  void skippingFilesToMove(final int skippedFiles, final int filesToMove);
+
+  void prepareMovePhase();
 
 
 }
