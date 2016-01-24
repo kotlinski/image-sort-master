@@ -32,38 +32,8 @@ public class CommandLineInterface {
     }
 
     ClientInterface clientInterface = new ImageSortProgressFeedback(new FileSystemPrettyPrinter());
-    imageSorter.sortImages(clientInterface, sortSettings);
+    imageSorter.analyzeImages(clientInterface, sortSettings);
 
-
-    //TODO: Make a conflict handler.
-    // When several files have the same destination, some salutary checks have to be made.
-    // * what if the are different images, etc.
-    //
-    // Calculate a new "Map-tree" Based on exports.
-    //    Each key is : "2014<fileseparator>05<fileseparator>filename followed by a file-list
-
-    // Run Move/delete for each export with tracking on each operation.
-
-
-    // ReRun groupFilesByMediaContent and Print size of FilesByMediaContent after running move/delete.
-    // + Duplicates for each file.
-
-
-/////////////////////
-
-
-    //Print all images and videos read from inputFolders + master folder
-    //filePrinter.printTotalNumberOfFiles(deprecatedExportFileDataMap.totalNumberOfFiles());
-
-    //Some files may be the same, but with different flavours
-    // deprecatedExportCollector.tagUniqueFilesWithSameName(deprecatedExportFileDataMap);
-
-//    printExportFolders(deprecatedExportFileDataMap);
-
-   /* filePrinter.printTotalNumberOfDuplicates(deprecatedExportFileDataMap.totalNumberOfFiles(),
-                                             deprecatedExportFileDataMap.getNumberOfUniqueImages(),
-                                             deprecatedExportFileDataMap.getNumberOfRemovableFiles());
-*/
   }
 }
 
