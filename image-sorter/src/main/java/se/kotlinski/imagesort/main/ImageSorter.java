@@ -39,7 +39,8 @@ public class ImageSorter {
     this.mediaFileMapper = mediaFileMapper;
   }
 
-  public void sortImages(final ClientInterface clientInterface, SortSettings sortSettings) {
+  public Map<List<File>, RelativeMediaFolderOutput> analyzeImages(final ClientInterface clientInterface,
+                                                                  SortSettings sortSettings) {
     if (!isValidateSortSettings(sortSettings)) {
       throw new IllegalArgumentException();
     }
@@ -48,29 +49,36 @@ public class ImageSorter {
     List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientInterface,
                                                                 sortSettings.masterFolder);
 
+    long l = System.currentTimeMillis();
     printMediaFileStatsInFolder(clientInterface, mediaFiles);
+    System.out.println("printMediaFileStatsInFolder " + (System.currentTimeMillis() - l) + " ms");
 
+    Map<List<File>, RelativeMediaFolderOutput> mappedMediaFiles;
+    mappedMediaFiles = mediaFileMapper.mapMediaFiles(clientInterface,
+                                                     mediaFiles,
+                                                     sortSettings.masterFolder);
+    return mappedMediaFiles;
+  }
 
-    Map<List<File>, RelativeMediaFolderOutput> fileMapWithResolvedConflicts;
-    fileMapWithResolvedConflicts = mediaFileMapper.mapMediaFiles(clientInterface,
-                                                                 mediaFiles,
-                                                                 sortSettings.masterFolder);
+  public void moveImages(final ClientInterface clientInterface,
+                         SortSettings sortSettings,
+                         Map<List<File>, RelativeMediaFolderOutput> mappedMediaFiles) {
 
 
     clientInterface.startResolvingConflicts();
     conflictResolver.resolveOutputConflicts(clientInterface,
                                             sortSettings.masterFolder,
-                                            fileMapWithResolvedConflicts);
+                                            mappedMediaFiles);
 
-    clientInterface.successfulResolvedOutputConflicts(fileMapWithResolvedConflicts);
+    clientInterface.successfulResolvedOutputConflicts(mappedMediaFiles);
 
 
-    if (fileMapWithResolvedConflicts.size() > 0) {
+    if (mappedMediaFiles.size() > 0) {
 
       clientInterface.startMovingFiles();
       fileMover.moveFilesToNewDestination(clientInterface,
                                           sortSettings.masterFolder,
-                                          fileMapWithResolvedConflicts);
+                                          mappedMediaFiles);
 
     }
 

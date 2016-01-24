@@ -3,7 +3,7 @@ package se.kotlinski.imagesort;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import se.kotlinski.imagesort.commandline.CommandLineInterface;
-import se.kotlinski.imagesort.javafx.controllers.GuiClient;
+import se.kotlinski.imagesort.javafx.GuiClient;
 import se.kotlinski.imagesort.module.ImageModule;
 
 /**

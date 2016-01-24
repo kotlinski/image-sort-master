@@ -14,19 +14,18 @@ public interface ClientInterface {
 
   void parsedFilesInMasterFolderProgress(final int size);
 
-  boolean masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder);
-
+  void startGroupFilesByContent();
+  void groupFilesByContentProgress(final int total, final int progress);
 
   void startCalculatingOutputDirectories();
-
   void successfulCalculatedOutputDestinations(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations);
+
+  void masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder);
+
 
 
   void startResolvingConflicts();
 
-  void startGroupFilesByContent();
-
-  void groupFilesByContentProgress(final int total, final int progress);
 
   void successfulResolvedOutputConflicts(final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap);
 

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -9,22 +15,23 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
-<TabPane maxHeight="-Infinity" maxWidth="700.0" minHeight="-Infinity" minWidth="500.0" prefHeight="390.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se.kotlinski.imagesort.javafx.controllers.TabGroupController" fx:id="tabGroup">
+
+<TabPane fx:id="tabGroup" maxHeight="-Infinity" maxWidth="700.0" minHeight="-Infinity" minWidth="500.0" prefHeight="390.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se.kotlinski.imagesort.javafx.controllers.TabGroupController">
 	<tabs>
 		<Tab fx:id="selectFolderTab" text="Select folder">
 			<content>
 				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
 					<children>
-						<Button layoutX="22.0" layoutY="36.0" mnemonicParsing="false" text="Select Folder" fx:id="selectFolderButton" />
-						<Button fx:id="selectFolderContinueButton" layoutX="442.0" layoutY="298.0" mnemonicParsing="false" text="Analyze folder" />
-						<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="436.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true">
+						<Button fx:id="selectFolderButton" layoutX="22.0" layoutY="36.0" maxWidth="120.0" mnemonicParsing="false" prefWidth="120.0" text="Select Folder" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0" />
+						<Button fx:id="selectFolderContinueButton" disable="true" layoutX="442.0" layoutY="298.0" mnemonicParsing="false" text="Analyze folder" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+						<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="436.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="75.0">
 							<image>
 								<Image url="@../images/chart.png" />
 							</image>
 						</ImageView>
-						<Text layoutX="436.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" />
-						<Text layoutX="22.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Image Master. &#10;&#10;This application will help you rename your media files and put them in folders based on the date they were taken. &#10;&#10;Please select a folder above to " wrappingWidth="355.21875" />
-						<TextField editable="false" layoutX="151.0" layoutY="36.0" prefHeight="27.0" prefWidth="285.0" />
+						<Text layoutX="420.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="240.0" />
+						<Text layoutX="22.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Image Master. &#10;&#10;This application will help you rename your media files and put them in folders based on the date they were taken. &#10;&#10;Please select a folder above to " wrappingWidth="355.21875" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="75.0" />
+                  <Text fx:id="selectedFolderPathText" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" translateX="15.0" wrappingWidth="418.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="37.0" />
 					</children>
 				</AnchorPane>
 			</content>
@@ -33,23 +40,23 @@
 			<content>
 				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
 					<children>
-						<AnchorPane layoutX="14.0" layoutY="12.431640625" visible="false" fx:id="analyzeResultScene">
+						<AnchorPane fx:id="analyzeResultScene" layoutX="14.0" layoutY="12.431640625" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 							<children>
-								<Text layoutX="422.0" layoutY="241.568359375" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" />
-								<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="422.0" layoutY="91.568359375" pickOnBounds="true" preserveRatio="true">
+								<Text layoutX="423.0" layoutY="253.568359375" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="240.0" />
+								<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="420.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="75.0">
 									<image>
 										<Image url="@../images/chart.png" />
 									</image>
 								</ImageView>
-								<Button layoutX="457.0" layoutY="286.568359375" mnemonicParsing="false" text="Move files" />
-								<Button layoutX="20.0" layoutY="286.568359375" mnemonicParsing="false" text="Back" />
-								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Analyze done&#10;&#10;The files in your selected folder will be placed in following subfolders:&#10;" wrappingWidth="253.21875" />
-								<TextArea layoutY="76.568359375" prefHeight="195.0" prefWidth="406.0" />
+								<Button layoutX="457.0" layoutY="286.568359375" mnemonicParsing="false" text="Move files" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+								<Text layoutX="20.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The files in your selected folder will be placed in following subfolders:&#10;" wrappingWidth="253.21875" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0" />
+								<TextArea fx:id="analyzeFolderTextArea" layoutY="76.568359375" prefHeight="195.0" prefWidth="406.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="75.0" />
 							</children>
 						</AnchorPane>
-						<AnchorPane layoutX="270.0" layoutY="184.0" fx:id="analyzeLoadingScene">
+						<AnchorPane fx:id="analyzeLoadingScene" layoutX="120.0" layoutY="184.0" prefHeight="133.0" prefWidth="271.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 							<children>
-								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Loading..." />
+								<Text fx:id="analyzeTabLoadingText" layoutX="30.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loading..." wrappingWidth="540.505859375" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+                        <ProgressBar fx:id="analyzeTabProgressBar" layoutX="30.0" layoutY="159.0" prefHeight="20.0" prefWidth="567.0" progress="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
 							</children>
 						</AnchorPane>
 					</children>

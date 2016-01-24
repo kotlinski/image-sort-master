@@ -30,8 +30,11 @@ public class MediaFileMapper {
 
     clientInterface.startCalculatingOutputDirectories();
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
+    long l1 = System.currentTimeMillis();
+
     mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(masterFolder,
                                                                                 mediaFiles);
+    System.out.println(System.currentTimeMillis() - l1 + " ms");
     clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
     return mediaFileToOutputMapper.mapRelativeOutputsToFiles(clientInterface,

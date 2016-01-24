@@ -36,8 +36,8 @@ public class MediaFileDataMapper {
 
   public void addMediaFileToMap(final Map<MediaFileDataHash, List<File>> fileMap, final File file) {
     try {
-      MediaFileDataHash fileContentIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
-          file);
+      MediaFileDataHash fileContentIdentifier;
+      fileContentIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(file);
       if (!fileMap.containsKey(fileContentIdentifier)) {
         fileMap.put(fileContentIdentifier, new ArrayList<>());
       }
