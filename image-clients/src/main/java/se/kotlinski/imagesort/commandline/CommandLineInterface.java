@@ -5,7 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
+import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
+import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
 import se.kotlinski.imagesort.main.ImageSorter;
 
 public class CommandLineInterface {
@@ -31,8 +33,9 @@ public class CommandLineInterface {
       return;
     }
 
-    ClientInterface clientInterface = new ImageSortProgressFeedback(new FileSystemPrettyPrinter());
-    imageSorter.analyzeImages(clientInterface, sortSettings);
+    ClientPreMovePhaseInterface clientPreMovePhaseFeedback = new ImageSortPreMoveProgressFeedback(new FileSystemPrettyPrinter());
+    ClientReadFilesInFolderInterface imageSortReadFilesInFolderFeedback = new ImageSortReadFilesInFolderFeedback();
+    imageSorter.analyzeImages(imageSortReadFilesInFolderFeedback, clientPreMovePhaseFeedback, sortSettings);
 
   }
 }

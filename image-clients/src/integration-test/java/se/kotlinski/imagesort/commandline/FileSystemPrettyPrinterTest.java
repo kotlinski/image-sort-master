@@ -6,7 +6,7 @@ import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
 import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -25,7 +25,7 @@ public class FileSystemPrettyPrinterTest {
   private FileSystemPrettyPrinter fileSystemPrettyPrinter;
   private OutputToMediaFileMapper outputToMediaFileMapper;
   private MediaFileTestUtil mediaFileTestUtil;
-  private ClientInterface clientInterface;
+  private ClientReadFilesInFolderInterface clientReadFilesInFolderInterface;
 
 
   @Before
@@ -41,7 +41,7 @@ public class FileSystemPrettyPrinterTest {
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
 
-    clientInterface = new ImageSortProgressFeedback(fileSystemPrettyPrinter);
+    clientReadFilesInFolderInterface = new ImageSortReadFilesInFolderFeedback();
 
     outputToMediaFileMapper = new OutputToMediaFileMapper(mediaFileOutputForecaster);
   }
@@ -50,7 +50,7 @@ public class FileSystemPrettyPrinterTest {
   public void testPrettyPrintFolderStructure() throws Exception {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
 
-    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientReadFilesInFolderInterface, testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
     mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,

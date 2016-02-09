@@ -9,7 +9,9 @@ import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
+import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
+import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
 import se.kotlinski.imagesort.mapper.MediaFileMapper;
 import se.kotlinski.imagesort.mapper.mappers.MediaFileToOutputMapper;
 import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
@@ -31,11 +33,15 @@ public class ExistingFilesResolverTest {
   private MediaFileUtil mediaFileUtil;
   private MediaFileTestUtil mediaFileTestUtil;
   private MediaFileOutputForecaster mediaFileOutputForecaster;
-  private ClientInterface clientInterface;
+  private ClientPreMovePhaseInterface clientPreMovePhaseInterface;
+  private ClientMovePhaseInterface clientMovePhaseInterface;
+  private ClientReadFilesInFolderInterface clientReadFilesInFolderInterface;
 
   @Before
   public void setUp() throws Exception {
-    clientInterface = mock(ClientInterface.class);
+    clientPreMovePhaseInterface = mock(ClientPreMovePhaseInterface.class);
+    clientReadFilesInFolderInterface = mock(ClientReadFilesInFolderInterface.class);
+    clientMovePhaseInterface = mock(ClientMovePhaseInterface.class);
 
     mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
@@ -98,7 +104,7 @@ public class ExistingFilesResolverTest {
     MediaFileHashGenerator mediaFileHashGenerator = new MediaFileHashGenerator();
 
 
-    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientInterface,
+    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientReadFilesInFolderInterface,
                                                                 restorableTestMasterFile);
 
     OutputToMediaFileMapper mediaOutputMapper;
@@ -110,17 +116,17 @@ public class ExistingFilesResolverTest {
 
 
     Map<List<File>, RelativeMediaFolderOutput> fileMapWithResolvedConflicts;
-    fileMapWithResolvedConflicts = mediaFileMapper.mapMediaFiles(clientInterface,
+    fileMapWithResolvedConflicts = mediaFileMapper.mapMediaFiles(clientPreMovePhaseInterface,
                                                                  mediaFiles,
                                                                  restorableTestMasterFile);
 
 
-    clientInterface.startResolvingConflicts();
+    clientMovePhaseInterface.startResolvingConflicts();
     ConflictResolver conflictResolver = new ConflictResolver(mediaFileToOutputMapper,
                                                              new FileSkipper(),
                                                              new ExistingFilesResolver(mediaFileUtil));
 
-    conflictResolver.resolveOutputConflicts(clientInterface,
+    conflictResolver.resolveOutputConflicts(clientMovePhaseInterface,
                                             restorableTestMasterFile,
                                             fileMapWithResolvedConflicts);
 

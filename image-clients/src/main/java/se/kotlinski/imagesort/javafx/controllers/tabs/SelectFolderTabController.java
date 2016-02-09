@@ -11,7 +11,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.javafx.controllers.TabSwitcher;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
+import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
 import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.module.ImageModule;
 
@@ -21,18 +22,21 @@ public class SelectFolderTabController {
 
   public final Button selectFolderButton;
   public final Button continueButton;
-  private final ClientInterface clientInterface;
+  private final ClientPreMovePhaseInterface clientPreMovePhaseInterface;
+  private final ClientReadFilesInFolderInterface clientReadFilesInFolderInterface;
   private final TabSwitcher tabSwitcher;
   private final Text selectedFolderPathText;
   private final ImageSorter imageSorter;
   private File selectedFolder;
 
-  public SelectFolderTabController(final ClientInterface clientInterface,
+  public SelectFolderTabController(final ClientPreMovePhaseInterface clientPreMovePhaseInterface,
+                                   final ClientReadFilesInFolderInterface clientReadFilesInFolderInterface,
                                    final TabSwitcher tabSwitcher,
                                    final Button selectFolderButton,
                                    final Button continueButton,
                                    final Text selectedFolderPathText) {
-    this.clientInterface = clientInterface;
+    this.clientPreMovePhaseInterface = clientPreMovePhaseInterface;
+    this.clientReadFilesInFolderInterface = clientReadFilesInFolderInterface;
     this.tabSwitcher = tabSwitcher;
     this.selectFolderButton = selectFolderButton;
     this.continueButton = continueButton;
@@ -47,7 +51,7 @@ public class SelectFolderTabController {
   private void setUpListeners() {
     continueButton.setOnAction((event) -> {
       if (selectedFolder != null) {
-        tabSwitcher.switchToAnalyzeTab();
+        tabSwitcher.setTabsInAnalyzeMode();
         imageSortFolder(selectedFolder);
       }
     });
@@ -83,10 +87,11 @@ public class SelectFolderTabController {
     Task<Integer> task = new Task<Integer>() {
       @Override
       protected Integer call() throws Exception {
-        imageSorter.analyzeImages(clientInterface, sortSettings);
+        imageSorter.analyzeImages(clientReadFilesInFolderInterface, clientPreMovePhaseInterface, sortSettings);
         return 0;
       }
     };
+
     new Thread(task).start();
 
   }

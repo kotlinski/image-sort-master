@@ -10,17 +10,16 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.javafx.controllers.tabs.AnalyzeTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.SelectFolderTabController;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class TabGroupController implements ClientInterface, TabSwitcher {
+public class TabGroupController implements TabSwitcher {
 
   //TABS
   @FXML
@@ -60,16 +59,23 @@ public class TabGroupController implements ClientInterface, TabSwitcher {
 
   @FXML
   private void initialize() {
+    ClientPreMovePhaseImplementation clientMoveAnalyzePhaseImplementation;
+    clientMoveAnalyzePhaseImplementation = new ClientPreMovePhaseImplementation(this,
+                                                                                analyzeTabController);
+    ClientMovePhaseImplementation clientMovePhaseImplementation = new ClientMovePhaseImplementation();
     selectionModel = tabGroup.getSelectionModel();
 
+    ClientReadFilesInFolderInterface clientReadFilesInFolderInterface = new ClientReadFilesInFolderImplementation(analyzeTabController);
 
-    selectFolderTabController = new SelectFolderTabController(this,
+    selectFolderTabController = new SelectFolderTabController(clientMoveAnalyzePhaseImplementation,
+                                                              clientReadFilesInFolderInterface,
                                                               this,
                                                               selectFolderButton,
                                                               selectFolderContinueButton,
                                                               selectedFolderPathText);
 
-    analyzeTabController = new AnalyzeTabController(this,
+    analyzeTabController = new AnalyzeTabController(clientMoveAnalyzePhaseImplementation,
+                                                    clientMovePhaseImplementation,
                                                     this,
                                                     analyzeTab,
                                                     analyzeLoadingScene,
@@ -80,95 +86,40 @@ public class TabGroupController implements ClientInterface, TabSwitcher {
     analyzeTabController.resetTab();
   }
 
-
   public void setStageAndSetupListeners(final Stage primaryStage) {
     selectFolderTabController.setStageAndSetupListeners(primaryStage);
   }
 
-  @Override
-  public void switchToAnalyzeTab() {
-    analyzeTab.setDisable(false);
-    selectionModel.select(analyzeTab);
-  }
 
   @Override
   public void resetTabs() {
     analyzeTabController.resetTab();
+
+    selectionModel.select(selectFolderTab);
+
+    selectFolderTab.setDisable(false);
+    analyzeTab.setDisable(true);
   }
 
   @Override
-  public void initiateMediaFileParsingPhase() {
-    analyzeTabController.initiateMediaFileParsingPhase();
+  public void setTabsInAnalyzeMode() {
+    analyzeTabController.resetTab();
+
+    selectionModel.select(analyzeTab);
+
+    analyzeTab.setDisable(true);
+    selectFolderTab.setDisable(true);
   }
 
   @Override
-  public void masterFolderFailedParsed() {
-    analyzeTabController.masterFolderFailedParsed();
-  }
-
-  @Override
-  public void parsedFilesInMasterFolderProgress(final int size) {
-    analyzeTabController.parsedFilesInMasterFolderProgress(size);
-  }
-
-  @Override
-  public void startGroupFilesByContent() {
-
-  }
-
-  @Override
-  public void groupFilesByContentProgress(final int total, final int progress) {
-    analyzeTabController.groupFilesByContentProgress(total, progress);
-  }
-
-  @Override
-  public void masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
-    analyzeTabController.masterFolderSuccessfulParsed(mediaFilesInFolder);
-  }
-
-  @Override
-  public void startCalculatingOutputDirectories() {
-    analyzeTabController.startCalculatingOutputDirectories();
-  }
-
-  @Override
-  public void successfulCalculatedOutputDestinations(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
+  public void setTabsInAnalyzeModeDone(Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
     analyzeTabController.successfulCalculatedOutputDestinations(mediaFileDestinations);
-  }
 
-  @Override
-  public void startResolvingConflicts() {
-  }
+    analyzeLoadingScene.setVisible(false);
+    analyzeResultScene.setVisible(true);
 
-
-  @Override
-  public void successfulResolvedOutputConflicts(final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
-
-  }
-
-  @Override
-  public void startMovingFiles() {
-
-  }
-
-  @Override
-  public void searchingForConflictsProgress(final int total, final int progress) {
-
-  }
-
-  @Override
-  public void conflictFound(final RelativeMediaFolderOutput outputDirectory) {
-
-  }
-
-  @Override
-  public void skippingFilesToMove(final int skippedFiles, final int filesToMove) {
-
-  }
-
-  @Override
-  public void prepareMovePhase() {
-
+    analyzeTab.setDisable(false);
+    selectFolderTab.setDisable(false);
   }
 
 }

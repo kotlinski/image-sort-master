@@ -2,7 +2,7 @@ package se.kotlinski.imagesort.resolver;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
 import se.kotlinski.imagesort.mapper.mappers.MediaFileToOutputMapper;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class ConflictResolver {
     this.existingFilesResolver = existingFilesResolver;
   }
 
-  public void resolveOutputConflicts(final ClientInterface clientInterface,
+  public void resolveOutputConflicts(final ClientMovePhaseInterface clientMovePhaseInterface,
                                      final File masterFolderFile,
                                      final Map<List<File>, RelativeMediaFolderOutput> mediaFileDestinations) {
 
@@ -37,7 +37,7 @@ public class ConflictResolver {
     }
 
 
-    fileSkipper.skipFilesAlreadyNamedAsOutput(clientInterface,
+    fileSkipper.skipFilesAlreadyNamedAsOutput(clientMovePhaseInterface,
                                               mediaFileDestinations,
                                               masterFolderFile);
 

@@ -39,58 +39,51 @@ public class ImageSorter {
     this.mediaFileMapper = mediaFileMapper;
   }
 
-  public Map<List<File>, RelativeMediaFolderOutput> analyzeImages(final ClientInterface clientInterface,
+
+  // TODO: Make 3 types of client callbacks,
+  /*
+   * one for analyze phase
+   * one for move phase
+   * one for count unique images in folder (Maybe do this in the move - phase instead)
+   */
+
+  public Map<List<File>, RelativeMediaFolderOutput> analyzeImages(final ClientReadFilesInFolderInterface clientReadFilesInFolderInterface,
+                                                                  final ClientPreMovePhaseInterface clientPreMovePhaseInterface,
                                                                   SortSettings sortSettings) {
     if (!isValidateSortSettings(sortSettings)) {
       throw new IllegalArgumentException();
     }
 
-    clientInterface.initiateMediaFileParsingPhase();
-    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientInterface,
+    clientPreMovePhaseInterface.initiateMediaFileParsingPhase();
+    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientReadFilesInFolderInterface,
                                                                 sortSettings.masterFolder);
 
-    long l = System.currentTimeMillis();
-    printMediaFileStatsInFolder(clientInterface, mediaFiles);
-    System.out.println("printMediaFileStatsInFolder " + (System.currentTimeMillis() - l) + " ms");
-
     Map<List<File>, RelativeMediaFolderOutput> mappedMediaFiles;
-    mappedMediaFiles = mediaFileMapper.mapMediaFiles(clientInterface,
+    mappedMediaFiles = mediaFileMapper.mapMediaFiles(clientPreMovePhaseInterface,
                                                      mediaFiles,
                                                      sortSettings.masterFolder);
     return mappedMediaFiles;
   }
 
-  public void moveImages(final ClientInterface clientInterface,
+  public void moveImages(final ClientMovePhaseInterface clientMovePhaseInterface,
                          SortSettings sortSettings,
                          Map<List<File>, RelativeMediaFolderOutput> mappedMediaFiles) {
 
 
-    clientInterface.startResolvingConflicts();
-    conflictResolver.resolveOutputConflicts(clientInterface,
+    clientMovePhaseInterface.startResolvingConflicts();
+    conflictResolver.resolveOutputConflicts(clientMovePhaseInterface,
                                             sortSettings.masterFolder,
                                             mappedMediaFiles);
 
-    clientInterface.successfulResolvedOutputConflicts(mappedMediaFiles);
+    clientMovePhaseInterface.successfulResolvedOutputConflicts(mappedMediaFiles);
 
 
     if (mappedMediaFiles.size() > 0) {
-
-      clientInterface.startMovingFiles();
-      fileMover.moveFilesToNewDestination(clientInterface,
+      clientMovePhaseInterface.startMovingFiles();
+      fileMover.moveFilesToNewDestination(clientMovePhaseInterface,
                                           sortSettings.masterFolder,
                                           mappedMediaFiles);
-
     }
-
-
-    List<File> mediaFilesListAfterMovePhase = mediaFileUtil.getMediaFilesInFolder(clientInterface,
-                                                                                  sortSettings.masterFolder);
-    printMediaFileStatsInFolder(clientInterface, mediaFilesListAfterMovePhase);
-
-
-    // TODO: Clean up clientInterface.
-    // TODO: Name after relative paths, alt store in files instead of strings.
-
 
     // Compare number of duplicates before and after....
 
@@ -102,12 +95,24 @@ public class ImageSorter {
   }
 
 
-  private void printMediaFileStatsInFolder(final ClientInterface clientInterface,
-                                           final List<File> mediaFiles) {
+  public void printMediaFileStatsInFolder(final SortSettings sortSettings,
+                                          final ClientReadFilesInFolderInterface clientReadFilesInFolderInterface,
+                                          final ClientAnalyzeFilesInFolderInterface clientAnalyzeFilesInFolderInterface) {
+
+    ///
+    List<File> mediaFilesListAfterMovePhase;
+    mediaFilesListAfterMovePhase = mediaFileUtil.getMediaFilesInFolder(
+        clientReadFilesInFolderInterface,
+        sortSettings.masterFolder);
+
+    ///
 
     Map<MediaFileDataHash, List<File>> mediaFileHashDataListMap;
-    mediaFileHashDataListMap = mediaFileDataMapper.mapOnMediaFileData(clientInterface, mediaFiles);
-    clientInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);
+    mediaFileHashDataListMap = mediaFileDataMapper.mapOnMediaFileData(
+        clientAnalyzeFilesInFolderInterface,
+        mediaFilesListAfterMovePhase);
+
+    clientAnalyzeFilesInFolderInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);
   }
 
 }

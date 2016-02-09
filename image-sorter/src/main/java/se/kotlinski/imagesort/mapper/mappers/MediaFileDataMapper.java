@@ -2,7 +2,7 @@ package se.kotlinski.imagesort.mapper.mappers;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientAnalyzeFilesInFolderInterface;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 
 import java.io.File;
@@ -20,15 +20,15 @@ public class MediaFileDataMapper {
     this.mediaFileHashGenerator = mediaFileHashGenerator;
   }
 
-  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(ClientInterface clientInterface,
+  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(ClientAnalyzeFilesInFolderInterface clientAnalyzeFilesInFolderInterface,
                                                                List<File> files) {
 
-    clientInterface.startGroupFilesByContent();
+    clientAnalyzeFilesInFolderInterface.startGroupFilesByContent();
     Map<MediaFileDataHash, List<File>> fileMap = new HashMap<>();
     int progress = 0;
     for (File file : files) {
       progress++;
-      clientInterface.groupFilesByContentProgress(files.size(), progress);
+      clientAnalyzeFilesInFolderInterface.groupFilesByContentProgress(files.size(), progress);
       addMediaFileToMap(fileMap, file);
     }
     return fileMap;

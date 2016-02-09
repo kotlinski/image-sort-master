@@ -2,7 +2,7 @@ package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
 import se.kotlinski.imagesort.mapper.mappers.MediaFileToOutputMapper;
 import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
 
@@ -24,20 +24,20 @@ public class MediaFileMapper {
     this.mediaFileToOutputMapper = mediaFileToOutputMapper;
   }
 
-  public Map<List<File>, RelativeMediaFolderOutput> mapMediaFiles(final ClientInterface clientInterface,
+  public Map<List<File>, RelativeMediaFolderOutput> mapMediaFiles(final ClientPreMovePhaseInterface clientPreMovePhaseInterface,
                                                                   final List<File> mediaFiles,
                                                                   final File masterFolder) {
 
-    clientInterface.startCalculatingOutputDirectories();
+    clientPreMovePhaseInterface.startCalculatingOutputDirectories();
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
     long l1 = System.currentTimeMillis();
 
     mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(masterFolder,
                                                                                 mediaFiles);
     System.out.println(System.currentTimeMillis() - l1 + " ms");
-    clientInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
+    clientPreMovePhaseInterface.successfulCalculatedOutputDestinations(mediaFileDestinations);
 
-    return mediaFileToOutputMapper.mapRelativeOutputsToFiles(clientInterface,
+    return mediaFileToOutputMapper.mapRelativeOutputsToFiles(clientPreMovePhaseInterface,
                                                              mediaFileDestinations);
   }
 

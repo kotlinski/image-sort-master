@@ -13,7 +13,8 @@ import se.kotlinski.imagesort.commandline.FileSystemPrettyPrinter;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.javafx.controllers.TabSwitcher;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
+import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
 import se.kotlinski.imagesort.main.ImageSorter;
 import se.kotlinski.imagesort.module.ImageModule;
 
@@ -23,7 +24,7 @@ import java.util.Map;
 
 public class AnalyzeTabController {
 
-  private final ClientInterface clientInterface;
+  private final ClientMovePhaseInterface clientMovePhaseInterface;
   private final TabSwitcher tabSwitcher;
   private final Tab analyzeTab;
   private final AnchorPane analyzeLoadingScene;
@@ -34,7 +35,8 @@ public class AnalyzeTabController {
   private final ImageSorter imageSorter;
   private final FileSystemPrettyPrinter fileSystemPrettyPrinter;
 
-  public AnalyzeTabController(final ClientInterface clientInterface,
+  public AnalyzeTabController(final ClientPreMovePhaseInterface clientAnalyzePhaseImplementation,
+                              final ClientMovePhaseInterface clientMovePhaseInterface,
                               final TabSwitcher tabSwitcher,
                               final Tab analyzeTab,
                               final AnchorPane analyzeLoadingScene,
@@ -42,7 +44,7 @@ public class AnalyzeTabController {
                               final Text analyzeTabLoadingText,
                               final ProgressBar analyzeTabProgressBar,
                               final TextArea analyzeFolderTextArea) {
-    this.clientInterface = clientInterface;
+    this.clientMovePhaseInterface = clientMovePhaseInterface;
     this.tabSwitcher = tabSwitcher;
     this.analyzeTab = analyzeTab;
     this.analyzeLoadingScene = analyzeLoadingScene;
@@ -111,13 +113,12 @@ public class AnalyzeTabController {
         mediaFileDestinations,
         false);
     analyzeFolderTextArea.setText(folderStructureString);
-    analyzeLoadingScene.setVisible(false);
-    analyzeResultScene.setVisible(true);
   }
 
   private void updateLoadingFromSeparateThread(String value) {
     Platform.runLater(new Runnable() {
-      @Override public void run() {
+      @Override
+      public void run() {
         analyzeTabLoadingText.setText(value);
       }
     });

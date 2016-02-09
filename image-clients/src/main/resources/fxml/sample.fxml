@@ -22,33 +22,37 @@
 			<content>
 				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
 					<children>
-						<Button fx:id="selectFolderButton" layoutX="22.0" layoutY="36.0" maxWidth="120.0" mnemonicParsing="false" prefWidth="120.0" text="Select Folder" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0" />
-						<Button fx:id="selectFolderContinueButton" disable="true" layoutX="442.0" layoutY="298.0" mnemonicParsing="false" text="Analyze folder" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
-						<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="436.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="75.0">
+						<Button fx:id="selectFolderButton" layoutX="22.0" layoutY="36.0" maxHeight="-Infinity" maxWidth="120.0" minWidth="150.0" mnemonicParsing="false" prefWidth="150.0" text="Select Folder" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0" />
+						<Button fx:id="selectFolderContinueButton" disable="true" layoutX="442.0" layoutY="298.0" maxWidth="150.0" minWidth="150.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="150.0" text="Prepare Move" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="260.0" />
+						<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="420.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="50.0">
 							<image>
 								<Image url="@../images/chart.png" />
 							</image>
 						</ImageView>
-						<Text layoutX="420.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="240.0" />
+						<Text layoutX="420.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="210.0" />
 						<Text layoutX="22.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Image Master. &#10;&#10;This application will help you rename your media files and put them in folders based on the date they were taken. &#10;&#10;Please select a folder above to " wrappingWidth="355.21875" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="75.0" />
-                  <Text fx:id="selectedFolderPathText" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" translateX="15.0" wrappingWidth="418.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="37.0" />
+                  <Text fx:id="selectedFolderPathText" boundsType="LOGICAL_VERTICAL_CENTER" layoutX="173.0" strokeType="OUTSIDE" strokeWidth="0.0" translateX="15.0" wrappingWidth="395.0" AnchorPane.leftAnchor="173.0" AnchorPane.topAnchor="36.0">
+                     <font>
+                        <Font size="12.0" />
+                     </font></Text>
+                  <Button disable="true" layoutX="439.0" layoutY="300.0" maxWidth="150.0" minWidth="150.0" mnemonicParsing="false" prefWidth="150.0" text="Find Duplicates" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0" />
 					</children>
 				</AnchorPane>
 			</content>
 		</Tab>
-		<Tab fx:id="analyzeTab" disable="true" text="Analyze">
+		<Tab fx:id="analyzeTab" disable="true" text="Move Analyze">
 			<content>
 				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
 					<children>
 						<AnchorPane fx:id="analyzeResultScene" layoutX="14.0" layoutY="12.431640625" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 							<children>
-								<Text layoutX="423.0" layoutY="253.568359375" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="240.0" />
-								<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="420.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="75.0">
+								<Text layoutX="423.0" layoutY="253.568359375" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="210.0" />
+								<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="420.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="50.0">
 									<image>
 										<Image url="@../images/chart.png" />
 									</image>
 								</ImageView>
-								<Button layoutX="457.0" layoutY="286.568359375" mnemonicParsing="false" text="Move files" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+								<Button layoutX="457.0" layoutY="286.568359375" maxWidth="150.0" minWidth="150.0" mnemonicParsing="false" prefWidth="150.0" text="Move files" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
 								<Text layoutX="20.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The files in your selected folder will be placed in following subfolders:&#10;" wrappingWidth="253.21875" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0" />
 								<TextArea fx:id="analyzeFolderTextArea" layoutY="76.568359375" prefHeight="195.0" prefWidth="406.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="75.0" />
 							</children>
@@ -63,21 +67,26 @@
 				</AnchorPane>
 			</content>
 		</Tab>
-		<Tab fx:id="moveTab" disable="true" text="Result">
+		<Tab fx:id="moveTab" disable="true" text="Move Result">
 			<content>
 				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
 					<children>
-						<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="436.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true">
+						<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="420.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
 							<image>
 								<Image url="@../images/chart.png" />
 							</image>
 						</ImageView>
-						<Text layoutX="436.0" layoutY="267.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins for next beer" wrappingWidth="150.21875" />
+						<Text layoutX="436.0" layoutY="267.0" lineSpacing="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins for next beer" wrappingWidth="150.21875" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="210.0" />
 						<Text layoutX="26.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Done moving files&#10;&#10;Successfully moved and renamed files.&#10;&#10;&#10;Move statistics: " />
 						<TextArea layoutX="26.0" layoutY="131.0" prefHeight="195.0" prefWidth="346.0" />
 					</children>
 				</AnchorPane>
 			</content>
 		</Tab>
+      <Tab disable="true" text="Duplicate Files">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
+      </Tab>
 	</tabs>
 </TabPane>

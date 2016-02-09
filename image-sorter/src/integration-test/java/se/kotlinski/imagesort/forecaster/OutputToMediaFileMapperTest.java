@@ -5,7 +5,8 @@ import org.junit.Test;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
+import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
 import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -24,11 +25,11 @@ import static org.mockito.Mockito.mock;
 public class OutputToMediaFileMapperTest {
   private OutputToMediaFileMapper outputToMediaFileMapper;
   private MediaFileTestUtil mediaFileTestUtil;
-  private ClientInterface clientInterface;
+  private ClientReadFilesInFolderInterface clientReadFilesInFolderInterface;
 
   @Before
   public void setUp() throws Exception {
-    clientInterface = mock(ClientInterface.class);
+    clientReadFilesInFolderInterface = mock(ClientReadFilesInFolderInterface.class);
 
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
@@ -47,7 +48,7 @@ public class OutputToMediaFileMapperTest {
   public void testCalculateOutputDestinations() throws Exception {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
-    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientReadFilesInFolderInterface, testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> relativeOutputMap;
     relativeOutputMap = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,

@@ -4,7 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.main.ClientAnalyzeFilesInFolderInterface;
+import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
+import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
 import se.kotlinski.imagesort.mapper.mappers.MediaFileDataMapper;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
@@ -21,24 +23,28 @@ import static org.mockito.Mockito.mock;
 public class MediaFilesInFolderCalculatorTest {
 
   private MediaFilesInFolderCalculator mediaFilesInFolderCalculator;
+  private ClientReadFilesInFolderInterface clientReadFilesInFolderInterface;
+  private ClientAnalyzeFilesInFolderInterface clientAnalyzeFilesInFolderInterface;
   private Map<MediaFileDataHash, List<File>> mediaFilesInFolder;
 
   @Before
   public void setUp() throws Exception {
-    ClientInterface clientInterface = mock(ClientInterface.class);
+    ClientMovePhaseInterface clientMovePhaseInterface = mock(ClientMovePhaseInterface.class);
 
     mediaFilesInFolderCalculator = new MediaFilesInFolderCalculator();
 
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
     MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
     MediaFileHashGenerator mediaFileHashGenerator = new MediaFileHashGenerator();
+    clientReadFilesInFolderInterface = mock(ClientReadFilesInFolderInterface.class);
+    clientAnalyzeFilesInFolderInterface = mock(ClientAnalyzeFilesInFolderInterface.class);
 
     File masterFolder = mediaFileTestUtil.getTestInputFile();
 
-    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientInterface, masterFolder);
+    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientReadFilesInFolderInterface, masterFolder);
 
     MediaFileDataMapper mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator);
-    mediaFilesInFolder = mediaFileDataMapper.mapOnMediaFileData(clientInterface, mediaFiles);
+    mediaFilesInFolder = mediaFileDataMapper.mapOnMediaFileData(clientAnalyzeFilesInFolderInterface, mediaFiles);
 
   }
 

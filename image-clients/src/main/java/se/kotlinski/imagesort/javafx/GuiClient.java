@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 import se.kotlinski.imagesort.javafx.controllers.TabGroupController;
 
 
@@ -25,7 +26,9 @@ public class GuiClient extends Application {
     primaryStage.setTitle("Image Sorter");
     primaryStage.setScene(new Scene(root));
     primaryStage.setResizable(false);
+    primaryStage.getIcons().add(new Image("/images/icon_64x64.png"));
     primaryStage.show();
+
   }
 
 }
