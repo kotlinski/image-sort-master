@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.javafx.controllers;
+package se.kotlinski.imagesort.javafx.controllers.listeners;
 
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.main.ClientMovePhaseInterface;

@@ -1,6 +1,7 @@
-package se.kotlinski.imagesort.javafx.controllers;
+package se.kotlinski.imagesort.javafx.controllers.listeners;
 
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+import se.kotlinski.imagesort.javafx.controllers.TabGroupController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.AnalyzeTabController;
 import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
 
