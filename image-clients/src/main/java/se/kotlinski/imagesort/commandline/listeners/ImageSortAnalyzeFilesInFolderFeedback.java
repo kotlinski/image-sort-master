@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.commandline;
+package se.kotlinski.imagesort.commandline.listeners;
 
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;

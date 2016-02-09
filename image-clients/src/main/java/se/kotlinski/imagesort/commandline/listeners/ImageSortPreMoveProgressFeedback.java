@@ -1,6 +1,7 @@
-package se.kotlinski.imagesort.commandline;
+package se.kotlinski.imagesort.commandline.listeners;
 
 import com.google.inject.Inject;
+import se.kotlinski.imagesort.commandline.FileSystemPrettyPrinter;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
 

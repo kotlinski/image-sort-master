@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.commandline;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.commandline.listeners.ImageSortReadFilesInFolderFeedback;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;

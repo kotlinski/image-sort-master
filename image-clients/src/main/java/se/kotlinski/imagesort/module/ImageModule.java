@@ -3,7 +3,7 @@ package se.kotlinski.imagesort.module;
 import com.google.inject.AbstractModule;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
-import se.kotlinski.imagesort.commandline.ImageSortMovePhaseProgressFeedback;
+import se.kotlinski.imagesort.commandline.listeners.ImageSortMovePhaseProgressFeedback;
 import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
 
 import java.util.Calendar;
