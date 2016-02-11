@@ -1,9 +1,9 @@
-package se.kotlinski.imagesort.mapper.mappers;
+package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
+import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -25,16 +25,16 @@ public class MediaFileToOutputMapper {
   }
 
 
-  public Map<List<File>, RelativeMediaFolderOutput> mapRelativeOutputsToFiles(final ClientPreMovePhaseInterface clientPreMovePhaseInterface,
+  public Map<List<File>, RelativeMediaFolderOutput> mapRelativeOutputsToFiles(final PreMoveFeedbackInterface preMoveFeedback,
                                                                               final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
 
     Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination = new HashMap<>();
 
     int progress = 0;
     for (RelativeMediaFolderOutput outputDirectory : mediaFileDestinations.keySet()) {
-      clientPreMovePhaseInterface.searchingForConflictsProgress(mediaFileDestinations.size(), ++progress);
+      preMoveFeedback.groupingFilesByContentProgress(mediaFileDestinations.size(), ++progress);
 
-      resolvConflictForMd5FileList(clientPreMovePhaseInterface,
+      resolvConflictForMd5FileList(preMoveFeedback,
                                    mediaFileDestinations,
                                    filesToOutputDestination,
                                    outputDirectory);
@@ -44,7 +44,7 @@ public class MediaFileToOutputMapper {
   }
 
 
-  private void resolvConflictForMd5FileList(final ClientPreMovePhaseInterface clientPreMovePhaseInterface,
+  private void resolvConflictForMd5FileList(final PreMoveFeedbackInterface preMoveFeedback,
                                             final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations,
                                             final Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination,
                                             final RelativeMediaFolderOutput outputDirectory) {
@@ -53,21 +53,21 @@ public class MediaFileToOutputMapper {
     Map<MediaFileDataHash, List<File>> md5Groups = new HashMap<>();
     groupFilesByMd5(files, md5Groups);
 
-    renameOutputsWhenConflicts(clientPreMovePhaseInterface,
+    renameOutputsWhenConflicts(preMoveFeedback,
                                filesToOutputDestination,
                                outputDirectory,
                                files,
                                md5Groups);
   }
 
-  private void renameOutputsWhenConflicts(final ClientPreMovePhaseInterface clientPreMovePhaseInterface,
+  private void renameOutputsWhenConflicts(final PreMoveFeedbackInterface preMoveFeedback,
                                           final Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination,
                                           final RelativeMediaFolderOutput outputDirectory,
                                           final List<File> files,
                                           final Map<MediaFileDataHash, List<File>> md5Groups) {
 
     if (severalGroupsWithSameOutput(md5Groups)) {
-      clientPreMovePhaseInterface.conflictFound(outputDirectory);
+      preMoveFeedback.conflictFound(outputDirectory);
       int append = 1;
       for (List<File> fileList : md5Groups.values()) {
         String outputWithAppendedIdentifier = mediaFileUtil.appendToFileName(outputDirectory.relativePath,

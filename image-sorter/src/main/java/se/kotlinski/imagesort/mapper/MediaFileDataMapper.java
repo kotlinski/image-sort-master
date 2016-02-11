@@ -1,8 +1,8 @@
-package se.kotlinski.imagesort.mapper.mappers;
+package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
-import se.kotlinski.imagesort.main.ClientAnalyzeFilesInFolderInterface;
+import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 
 import java.io.File;
@@ -20,15 +20,15 @@ public class MediaFileDataMapper {
     this.mediaFileHashGenerator = mediaFileHashGenerator;
   }
 
-  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(ClientAnalyzeFilesInFolderInterface clientAnalyzeFilesInFolderInterface,
+  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(FindDuplicatesFeedbackInterface findDuplicatesFeedbackInterface,
                                                                List<File> files) {
 
-    clientAnalyzeFilesInFolderInterface.startGroupFilesByContent();
+    findDuplicatesFeedbackInterface.startGroupFilesByContent();
     Map<MediaFileDataHash, List<File>> fileMap = new HashMap<>();
     int progress = 0;
     for (File file : files) {
       progress++;
-      clientAnalyzeFilesInFolderInterface.groupFilesByContentProgress(files.size(), progress);
+      findDuplicatesFeedbackInterface.groupFilesByContentProgress(files.size(), progress);
       addMediaFileToMap(fileMap, file);
     }
     return fileMap;

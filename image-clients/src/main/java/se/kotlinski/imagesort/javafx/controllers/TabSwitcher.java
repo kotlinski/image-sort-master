@@ -12,5 +12,5 @@ public interface TabSwitcher {
 
   void setTabsInAnalyzeMode();
   
-  void setTabsInAnalyzeModeDone(Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations);
+  void setTabsInAnalyzeModeDone(Map<List<File>, RelativeMediaFolderOutput> mediaFileDestinations);
 }

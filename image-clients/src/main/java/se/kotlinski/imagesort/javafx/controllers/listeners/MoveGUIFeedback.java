@@ -1,13 +1,13 @@
 package se.kotlinski.imagesort.javafx.controllers.listeners;
 
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
+import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class ClientMovePhaseImplementation implements ClientMovePhaseInterface {
+public class MoveGUIFeedback implements MoveFeedbackInterface {
 
 
   @Override

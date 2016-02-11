@@ -3,13 +3,13 @@ package se.kotlinski.imagesort.commandline.listeners;
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.commandline.FileSystemPrettyPrinter;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
+import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class ImageSortPreMoveProgressFeedback implements ClientPreMovePhaseInterface {
+public class ImageSortPreMoveProgressFeedback implements PreMoveFeedbackInterface {
 
 
   private final FileSystemPrettyPrinter fileSystemPrettyPrinter;
@@ -20,32 +20,24 @@ public class ImageSortPreMoveProgressFeedback implements ClientPreMovePhaseInter
   }
 
   @Override
-  public void initiateMediaFileParsingPhase() {
+  public void initiatePreMovePhase() {
+    System.out.println("");
     System.out.println("Parsing input folder for videos and images...");
-  }
-
-  @Override
-  public void startCalculatingOutputDirectories() {
     System.out.println("");
     System.out.println("Start calculating new output directories.");
     System.out.println("");
   }
 
   @Override
-  public void successfulCalculatedOutputDestinations(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
+  public void calculatedDestinationForEachFile(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
     System.out.println("");
     System.out.println("Total number of output destinations: " + mediaFileDestinations.size());
-    System.out.println("The new output tree: ");
-    String outputTree;
-    outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations,
-                                                                        false);
-    System.out.println();
-    System.out.println(outputTree);
+
   }
 
 
   @Override
-  public void searchingForConflictsProgress(final int total, final int progress) {
+  public void groupingFilesByContentProgress(final int total, final int progress) {
     float percentageProgress = progress * 1f / total * 1f;
 
     System.out.print("Current progress: " +
@@ -62,6 +54,16 @@ public class ImageSortPreMoveProgressFeedback implements ClientPreMovePhaseInter
     System.out.println("Multiple files want this output: " +
                        outputDirectory.relativePath +
                        ",\n ...conflict resolved.");
+  }
+
+  @Override
+  public void fileGroupedByContent(final Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent) {
+    System.out.println("Files grouped by content...\n");
+    System.out.println("The new output tree: ");
+    String outputTree;
+    outputTree = fileSystemPrettyPrinter.convertFolderStructureToString(filesGroupedByContent, false);
+    System.out.println();
+    System.out.println(outputTree);
   }
 
 }

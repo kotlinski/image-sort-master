@@ -1,4 +1,4 @@
-package se.kotlinski.imagesort.main;
+package se.kotlinski.imagesort.feedback;
 
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 
@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public interface ClientMovePhaseInterface {
+public interface MoveFeedbackInterface {
 
   void startResolvingConflicts();
 

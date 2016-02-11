@@ -2,14 +2,14 @@ package se.kotlinski.imagesort.commandline.listeners;
 
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
-import se.kotlinski.imagesort.main.ClientAnalyzeFilesInFolderInterface;
+import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
 import se.kotlinski.imagesort.statistics.MediaFilesInFolderCalculator;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class ImageSortAnalyzeFilesInFolderFeedback implements ClientAnalyzeFilesInFolderInterface {
+public class ImageSortFindDuplicatesFeedbackFeedback implements FindDuplicatesFeedbackInterface {
 
   @Override
   public void startGroupFilesByContent() {

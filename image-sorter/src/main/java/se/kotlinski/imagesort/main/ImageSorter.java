@@ -8,8 +8,13 @@ import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.executor.FileMover;
-import se.kotlinski.imagesort.mapper.MediaFileMapper;
-import se.kotlinski.imagesort.mapper.mappers.MediaFileDataMapper;
+import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
+import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
+import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
+import se.kotlinski.imagesort.mapper.MediaFileToOutputMapper;
+import se.kotlinski.imagesort.mapper.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.resolver.ConflictResolver;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -21,22 +26,25 @@ public class ImageSorter {
   private static final Logger LOGGER = LogManager.getLogger(ImageSorter.class);
 
   private final MediaFileUtil mediaFileUtil;
+  private final OutputToMediaFileMapper outputToMediaFileMapper;
+  private final MediaFileToOutputMapper mediaFileToOutputMapper;
   private final ConflictResolver conflictResolver;
   private final FileMover fileMover;
-  private final MediaFileMapper mediaFileMapper;
   private final MediaFileDataMapper mediaFileDataMapper;
 
   @Inject
   public ImageSorter(final MediaFileUtil mediaFileUtil,
+                     final OutputToMediaFileMapper outputToMediaFileMapper,
+                     final MediaFileToOutputMapper mediaFileToOutputMapper,
                      final MediaFileDataMapper mediaFileDataMapper,
-                     final MediaFileMapper mediaFileMapper,
                      final ConflictResolver conflictResolver,
                      final FileMover fileMover) {
     this.mediaFileUtil = mediaFileUtil;
+    this.outputToMediaFileMapper = outputToMediaFileMapper;
+    this.mediaFileToOutputMapper = mediaFileToOutputMapper;
     this.mediaFileDataMapper = mediaFileDataMapper;
     this.conflictResolver = conflictResolver;
     this.fileMover = fileMover;
-    this.mediaFileMapper = mediaFileMapper;
   }
 
 
@@ -47,40 +55,52 @@ public class ImageSorter {
    * one for count unique images in folder (Maybe do this in the move - phase instead)
    */
 
-  public Map<List<File>, RelativeMediaFolderOutput> analyzeImages(final ClientReadFilesInFolderInterface clientReadFilesInFolderInterface,
-                                                                  final ClientPreMovePhaseInterface clientPreMovePhaseInterface,
+  public Map<List<File>, RelativeMediaFolderOutput> analyzeImages(final ReadFilesFeedbackInterface readFilesFeedback,
+                                                                  final PreMoveFeedbackInterface preMoveFeedback,
                                                                   SortSettings sortSettings) {
     if (!isValidateSortSettings(sortSettings)) {
       throw new IllegalArgumentException();
     }
+    preMoveFeedback.initiatePreMovePhase();
 
-    clientPreMovePhaseInterface.initiateMediaFileParsingPhase();
-    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientReadFilesInFolderInterface,
+
+    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(readFilesFeedback,
                                                                 sortSettings.masterFolder);
 
-    Map<List<File>, RelativeMediaFolderOutput> mappedMediaFiles;
-    mappedMediaFiles = mediaFileMapper.mapMediaFiles(clientPreMovePhaseInterface,
-                                                     mediaFiles,
-                                                     sortSettings.masterFolder);
-    return mappedMediaFiles;
+    Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,
+                                                                                sortSettings.masterFolder,
+                                                                                mediaFiles);
+    preMoveFeedback.calculatedDestinationForEachFile(mediaFileDestinations);
+
+
+
+    Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent;
+    filesGroupedByContent = mediaFileToOutputMapper.mapRelativeOutputsToFiles(preMoveFeedback,
+                                                                              mediaFileDestinations);
+
+
+    preMoveFeedback.fileGroupedByContent(filesGroupedByContent);
+
+    return filesGroupedByContent;
   }
 
-  public void moveImages(final ClientMovePhaseInterface clientMovePhaseInterface,
+  public void moveImages(final MoveFeedbackInterface moveFeedbackInterface,
                          SortSettings sortSettings,
                          Map<List<File>, RelativeMediaFolderOutput> mappedMediaFiles) {
 
 
-    clientMovePhaseInterface.startResolvingConflicts();
-    conflictResolver.resolveOutputConflicts(clientMovePhaseInterface,
+    moveFeedbackInterface.startResolvingConflicts();
+    conflictResolver.resolveOutputConflicts(moveFeedbackInterface,
                                             sortSettings.masterFolder,
                                             mappedMediaFiles);
 
-    clientMovePhaseInterface.successfulResolvedOutputConflicts(mappedMediaFiles);
+    moveFeedbackInterface.successfulResolvedOutputConflicts(mappedMediaFiles);
 
 
     if (mappedMediaFiles.size() > 0) {
-      clientMovePhaseInterface.startMovingFiles();
-      fileMover.moveFilesToNewDestination(clientMovePhaseInterface,
+      moveFeedbackInterface.startMovingFiles();
+      fileMover.moveFilesToNewDestination(moveFeedbackInterface,
                                           sortSettings.masterFolder,
                                           mappedMediaFiles);
     }
@@ -96,23 +116,22 @@ public class ImageSorter {
 
 
   public void printMediaFileStatsInFolder(final SortSettings sortSettings,
-                                          final ClientReadFilesInFolderInterface clientReadFilesInFolderInterface,
-                                          final ClientAnalyzeFilesInFolderInterface clientAnalyzeFilesInFolderInterface) {
+                                          final ReadFilesFeedbackInterface readFilesFeedbackInterface,
+                                          final FindDuplicatesFeedbackInterface findDuplicatesFeedbackInterface) {
 
     ///
     List<File> mediaFilesListAfterMovePhase;
-    mediaFilesListAfterMovePhase = mediaFileUtil.getMediaFilesInFolder(
-        clientReadFilesInFolderInterface,
-        sortSettings.masterFolder);
+    mediaFilesListAfterMovePhase = mediaFileUtil.getMediaFilesInFolder(readFilesFeedbackInterface,
+                                                                       sortSettings.masterFolder);
 
     ///
 
     Map<MediaFileDataHash, List<File>> mediaFileHashDataListMap;
     mediaFileHashDataListMap = mediaFileDataMapper.mapOnMediaFileData(
-        clientAnalyzeFilesInFolderInterface,
+        findDuplicatesFeedbackInterface,
         mediaFilesListAfterMovePhase);
 
-    clientAnalyzeFilesInFolderInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);
+    findDuplicatesFeedbackInterface.masterFolderSuccessfulParsed(mediaFileHashDataListMap);
   }
 
 }

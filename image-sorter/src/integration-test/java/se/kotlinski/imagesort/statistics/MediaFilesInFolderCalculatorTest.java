@@ -4,10 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
-import se.kotlinski.imagesort.main.ClientAnalyzeFilesInFolderInterface;
-import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
-import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
-import se.kotlinski.imagesort.mapper.mappers.MediaFileDataMapper;
+import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
+import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -23,28 +23,28 @@ import static org.mockito.Mockito.mock;
 public class MediaFilesInFolderCalculatorTest {
 
   private MediaFilesInFolderCalculator mediaFilesInFolderCalculator;
-  private ClientReadFilesInFolderInterface clientReadFilesInFolderInterface;
-  private ClientAnalyzeFilesInFolderInterface clientAnalyzeFilesInFolderInterface;
+  private ReadFilesFeedbackInterface readFilesFeedbackInterface;
+  private FindDuplicatesFeedbackInterface findDuplicatesFeedbackInterface;
   private Map<MediaFileDataHash, List<File>> mediaFilesInFolder;
 
   @Before
   public void setUp() throws Exception {
-    ClientMovePhaseInterface clientMovePhaseInterface = mock(ClientMovePhaseInterface.class);
+    MoveFeedbackInterface moveFeedbackInterface = mock(MoveFeedbackInterface.class);
 
     mediaFilesInFolderCalculator = new MediaFilesInFolderCalculator();
 
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
     MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
     MediaFileHashGenerator mediaFileHashGenerator = new MediaFileHashGenerator();
-    clientReadFilesInFolderInterface = mock(ClientReadFilesInFolderInterface.class);
-    clientAnalyzeFilesInFolderInterface = mock(ClientAnalyzeFilesInFolderInterface.class);
+    readFilesFeedbackInterface = mock(ReadFilesFeedbackInterface.class);
+    findDuplicatesFeedbackInterface = mock(FindDuplicatesFeedbackInterface.class);
 
     File masterFolder = mediaFileTestUtil.getTestInputFile();
 
-    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(clientReadFilesInFolderInterface, masterFolder);
+    List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(readFilesFeedbackInterface, masterFolder);
 
     MediaFileDataMapper mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator);
-    mediaFilesInFolder = mediaFileDataMapper.mapOnMediaFileData(clientAnalyzeFilesInFolderInterface, mediaFiles);
+    mediaFilesInFolder = mediaFileDataMapper.mapOnMediaFileData(findDuplicatesFeedbackInterface, mediaFiles);
 
   }
 

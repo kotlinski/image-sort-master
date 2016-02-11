@@ -6,12 +6,11 @@ import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
-import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
-import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
-import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
-import se.kotlinski.imagesort.mapper.MediaFileMapper;
-import se.kotlinski.imagesort.mapper.mappers.MediaFileToOutputMapper;
-import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
+import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
+import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
+import se.kotlinski.imagesort.mapper.MediaFileToOutputMapper;
+import se.kotlinski.imagesort.mapper.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
@@ -31,17 +30,17 @@ public class ConflictResolverTest {
 
   Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
   private ConflictResolver conflictResolver;
-  private ClientReadFilesInFolderInterface clientReadFilesInFolderInterface;
-  private ClientPreMovePhaseInterface clientPreMovePhaseInterface;
-  private ClientMovePhaseInterface clientMovePhaseInterface;
+  private ReadFilesFeedbackInterface readFilesFeedbackInterface;
+  private PreMoveFeedbackInterface preMoveFeedbackInterface;
+  private MoveFeedbackInterface moveFeedbackInterface;
   private Map<List<File>, RelativeMediaFolderOutput> fileMapWithResolvedConflicts;
   private MediaFileMapper mediaFileMapper;
 
   @Before
   public void setUp() throws Exception {
-    clientReadFilesInFolderInterface = mock(ClientReadFilesInFolderInterface.class);
-    clientPreMovePhaseInterface = mock(ClientPreMovePhaseInterface.class);
-    clientMovePhaseInterface = mock(ClientMovePhaseInterface.class);
+    readFilesFeedbackInterface = mock(ReadFilesFeedbackInterface.class);
+    preMoveFeedbackInterface = mock(PreMoveFeedbackInterface.class);
+    moveFeedbackInterface = mock(MoveFeedbackInterface.class);
 
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
     MediaFileToOutputMapper mediaFileToOutputMapper;
@@ -66,23 +65,24 @@ public class ConflictResolverTest {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
 
-    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientReadFilesInFolderInterface, testInputFile);
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(readFilesFeedbackInterface, testInputFile);
 
-    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,
+                                                                                testInputFile,
                                                                                 mediaFiles);
 
 
     mediaFileMapper = new MediaFileMapper(outputToMediaFileMapper, mediaFileToOutputMapper);
-    fileMapWithResolvedConflicts = mediaFileMapper.mapMediaFiles(clientPreMovePhaseInterface,
-                                                                 mediaFiles,
-                                                                 testInputFile);
+    fileMapWithResolvedConflicts = mediaFileMapper.groupFilesByContent(preMoveFeedbackInterface,
+                                                                       mediaFiles,
+                                                                       testInputFile);
   }
 
   @Test
   public void testResolveOutputConflicts() throws Exception {
     MediaFileTestUtil mediaFileTestUtil = new MediaFileTestUtil(new MediaFileUtil());
 
-    conflictResolver.resolveOutputConflicts(clientMovePhaseInterface,
+    conflictResolver.resolveOutputConflicts(moveFeedbackInterface,
                                             mediaFileTestUtil.getTestInputFile(),
                                             fileMapWithResolvedConflicts);
 

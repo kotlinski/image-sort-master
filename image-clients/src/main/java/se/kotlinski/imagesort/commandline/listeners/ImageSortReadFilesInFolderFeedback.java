@@ -1,8 +1,8 @@
 package se.kotlinski.imagesort.commandline.listeners;
 
-import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 
-public class ImageSortReadFilesInFolderFeedback implements ClientReadFilesInFolderInterface {
+public class ImageSortReadFilesInFolderFeedback implements ReadFilesFeedbackInterface {
 
   @Override
   public void parsedFilesInMasterFolderProgress(final int size) {

@@ -1,17 +1,17 @@
 package se.kotlinski.imagesort.javafx.controllers.listeners;
 
 import se.kotlinski.imagesort.data.MediaFileDataHash;
-import se.kotlinski.imagesort.main.ClientAnalyzeFilesInFolderInterface;
+import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class AnalyzeFilesInFolderImplementation implements ClientAnalyzeFilesInFolderInterface {
+public class FindDuplicatesGUIFeedback implements FindDuplicatesFeedbackInterface {
 
-  private final AnalyzeFilesInFolderImplementation analyzeTabController;
+  private final FindDuplicatesGUIFeedback analyzeTabController;
 
-  public AnalyzeFilesInFolderImplementation(final AnalyzeFilesInFolderImplementation analyzeTabController) {
+  public FindDuplicatesGUIFeedback(final FindDuplicatesGUIFeedback analyzeTabController) {
     this.analyzeTabController = analyzeTabController;
   }
 
@@ -22,12 +22,13 @@ public class AnalyzeFilesInFolderImplementation implements ClientAnalyzeFilesInF
 
   @Override
   public void groupFilesByContentProgress(final int total, final int progress) {
-    analyzeTabController.groupFilesByContentProgress(total, progress);
+
   }
 
   @Override
   public void masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
     analyzeTabController.masterFolderSuccessfulParsed(mediaFilesInFolder);
+
   }
 
 }

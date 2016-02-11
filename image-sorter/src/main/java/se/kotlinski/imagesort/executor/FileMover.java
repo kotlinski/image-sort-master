@@ -2,7 +2,7 @@ package se.kotlinski.imagesort.executor;
 
 import org.apache.commons.io.FileUtils;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
+import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,11 +13,11 @@ import java.util.Set;
 
 public class FileMover {
 
-  public void moveFilesToNewDestination(final ClientMovePhaseInterface clientMovePhaseInterface,
+  public void moveFilesToNewDestination(final MoveFeedbackInterface moveFeedbackInterface,
                                         final File masterFolderFile,
                                         final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
 
-    clientMovePhaseInterface.prepareMovePhase();
+    moveFeedbackInterface.prepareMovePhase();
 
     copyFilesToNewDestinations(masterFolderFile, resolvedFilesToOutputMap);
 

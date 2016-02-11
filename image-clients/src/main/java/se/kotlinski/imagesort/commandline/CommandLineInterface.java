@@ -7,8 +7,8 @@ import se.kotlinski.imagesort.commandline.argument.Interpreter;
 import se.kotlinski.imagesort.commandline.listeners.ImageSortPreMoveProgressFeedback;
 import se.kotlinski.imagesort.commandline.listeners.ImageSortReadFilesInFolderFeedback;
 import se.kotlinski.imagesort.data.SortSettings;
-import se.kotlinski.imagesort.main.ClientPreMovePhaseInterface;
-import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
+import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 import se.kotlinski.imagesort.main.ImageSorter;
 
 public class CommandLineInterface {
@@ -34,8 +34,8 @@ public class CommandLineInterface {
       return;
     }
 
-    ClientPreMovePhaseInterface clientPreMovePhaseFeedback = new ImageSortPreMoveProgressFeedback(new FileSystemPrettyPrinter());
-    ClientReadFilesInFolderInterface imageSortReadFilesInFolderFeedback = new ImageSortReadFilesInFolderFeedback();
+    PreMoveFeedbackInterface clientPreMovePhaseFeedback = new ImageSortPreMoveProgressFeedback(new FileSystemPrettyPrinter());
+    ReadFilesFeedbackInterface imageSortReadFilesInFolderFeedback = new ImageSortReadFilesInFolderFeedback();
     imageSorter.analyzeImages(imageSortReadFilesInFolderFeedback, clientPreMovePhaseFeedback, sortSettings);
 
   }

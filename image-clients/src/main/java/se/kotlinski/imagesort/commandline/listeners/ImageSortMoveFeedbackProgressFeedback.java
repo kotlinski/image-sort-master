@@ -3,14 +3,14 @@ package se.kotlinski.imagesort.commandline.listeners;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
+import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
 import se.kotlinski.imagesort.statistics.MediaFilesInFolderCalculator;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class ImageSortMovePhaseProgressFeedback implements ClientMovePhaseInterface {
+public class ImageSortMoveFeedbackProgressFeedback implements MoveFeedbackInterface {
 
 
   @Override

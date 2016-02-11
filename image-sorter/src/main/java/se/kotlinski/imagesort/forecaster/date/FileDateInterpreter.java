@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -50,26 +51,33 @@ public class FileDateInterpreter {
 
   @SuppressWarnings ("PMD.EmptyCatchBlock")
   public Date getDate(final File file) throws Exception {
+    Calendar calendar = Calendar.getInstance();
+    calendar.clear();
+    calendar.set(Calendar.YEAR, 2000);
+    Date threshold_for_valid_dates = calendar.getTime();
     try {
-      return getImageDate(file);
-    }
-    catch (CouldNotParseDateException e) {
-      //LOGGER.error("File is not an image with meta data, " + file);
+      Date imageDate = getImageDate(file);
+      if (imageDate.after(threshold_for_valid_dates)) {
+        return imageDate;
+      }
     }
     catch (Exception e) {
       // This is expected
     }
     try {
-      return getVideoDate(file);
-    }
-    catch (CouldNotParseDateException e) {
-      //LOGGER.error("File is not an video with meta data, " + file);
+      Date videoDate = getVideoDate(file);
+      if (videoDate.after(threshold_for_valid_dates)) {
+        return videoDate;
+      }
     }
     catch (Exception e) {
       // This is expected
     }
     try {
-      return getDateOutOfFileName(file);
+      Date dateOutOfFileName = getDateOutOfFileName(file);
+      if (dateOutOfFileName.after(threshold_for_valid_dates)) {
+        return dateOutOfFileName;
+      }
     }
     catch (Exception e) {
       // This is expected

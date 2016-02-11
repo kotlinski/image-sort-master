@@ -13,10 +13,9 @@ import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
 import se.kotlinski.imagesort.main.ImageSorter;
-import se.kotlinski.imagesort.mapper.MediaFileMapper;
-import se.kotlinski.imagesort.mapper.mappers.MediaFileDataMapper;
-import se.kotlinski.imagesort.mapper.mappers.MediaFileToOutputMapper;
-import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
+import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
+import se.kotlinski.imagesort.mapper.MediaFileToOutputMapper;
+import se.kotlinski.imagesort.mapper.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.resolver.ConflictResolver;
 import se.kotlinski.imagesort.resolver.ExistingFilesResolver;
 import se.kotlinski.imagesort.resolver.FileSkipper;
@@ -64,9 +63,9 @@ public class CommandLineInterfaceIntegrationTest {
     MediaFileMapper mediaFileMapper = new MediaFileMapper(outputToMediaFileMapper,
                                                           mediaFileToOutputMapper);
     ImageSorter imageSorter = new ImageSorter(mediaFileUtil,
-                                              mediaFileDataMapper,
-                                              mediaFileMapper,
-                                              conflictResolver,
+                                              outputToMediaFileMapper,
+                                              mediaFileToOutputMapper,
+                                              mediaFileDataMapper, conflictResolver,
                                               fileMover);
 
     commandLineInterface = new CommandLineInterface(interpreter, imageSorter);

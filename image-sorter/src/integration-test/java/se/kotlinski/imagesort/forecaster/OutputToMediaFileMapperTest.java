@@ -5,9 +5,8 @@ import org.junit.Test;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
-import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
-import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
-import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
+import se.kotlinski.imagesort.mapper.OutputToMediaFileMapper;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -25,11 +24,11 @@ import static org.mockito.Mockito.mock;
 public class OutputToMediaFileMapperTest {
   private OutputToMediaFileMapper outputToMediaFileMapper;
   private MediaFileTestUtil mediaFileTestUtil;
-  private ClientReadFilesInFolderInterface clientReadFilesInFolderInterface;
+  private ReadFilesFeedbackInterface readFilesFeedbackInterface;
 
   @Before
   public void setUp() throws Exception {
-    clientReadFilesInFolderInterface = mock(ClientReadFilesInFolderInterface.class);
+    readFilesFeedbackInterface = mock(ReadFilesFeedbackInterface.class);
 
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
@@ -48,10 +47,11 @@ public class OutputToMediaFileMapperTest {
   public void testCalculateOutputDestinations() throws Exception {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
-    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientReadFilesInFolderInterface, testInputFile);
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(readFilesFeedbackInterface, testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> relativeOutputMap;
-    relativeOutputMap = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
+    relativeOutputMap = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,
+                                                                            testInputFile,
                                                                             mediaFiles);
     assertThat(relativeOutputMap.size(), is(11));
   }

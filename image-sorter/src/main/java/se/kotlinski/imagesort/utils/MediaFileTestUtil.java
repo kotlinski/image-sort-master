@@ -1,8 +1,7 @@
 package se.kotlinski.imagesort.utils;
 
 import org.apache.commons.io.FileUtils;
-import se.kotlinski.imagesort.main.ClientMovePhaseInterface;
-import se.kotlinski.imagesort.main.ClientReadFilesInFolderInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,9 +121,9 @@ public class MediaFileTestUtil {
                     File.separator + "2013-10-26 20.20.46-kottbullar.jpg");
   }
 
-  public List<File> getMediaFiles(final ClientReadFilesInFolderInterface clientReadFilesInFolderInterface, final File testInputFile) {
+  public List<File> getMediaFiles(final ReadFilesFeedbackInterface readFilesFeedbackInterface, final File testInputFile) {
 
-    return mediaFileUtils.getMediaFilesInFolder(clientReadFilesInFolderInterface, testInputFile);
+    return mediaFileUtils.getMediaFilesInFolder(readFilesFeedbackInterface, testInputFile);
 
   }
 
