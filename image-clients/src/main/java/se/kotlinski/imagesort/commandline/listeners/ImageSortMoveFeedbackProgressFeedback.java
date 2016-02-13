@@ -1,5 +1,4 @@
 package se.kotlinski.imagesort.commandline.listeners;
-
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
@@ -48,6 +47,11 @@ public class ImageSortMoveFeedbackProgressFeedback implements MoveFeedbackInterf
   public void prepareMovePhase() {
     System.out.println("");
     System.out.println("Moving files...");
+  }
+
+  @Override
+  public void movePhaseComplete() {
+    System.out.println("Done.");
   }
 
 

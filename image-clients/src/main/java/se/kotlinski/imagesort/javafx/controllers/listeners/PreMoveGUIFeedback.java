@@ -1,8 +1,8 @@
 package se.kotlinski.imagesort.javafx.controllers.listeners;
 
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
-import se.kotlinski.imagesort.javafx.controllers.TabGroupController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.PreMoveTabController;
 
 import java.io.File;
@@ -11,25 +11,17 @@ import java.util.Map;
 
 public class PreMoveGUIFeedback implements PreMoveFeedbackInterface {
 
-  private final TabGroupController tabSwitcher;
   private final PreMoveTabController preMoveTabController;
 
-  public PreMoveGUIFeedback(final TabGroupController tabSwitcher,
-                            final PreMoveTabController preMoveTabController) {
-    this.tabSwitcher = tabSwitcher;
+  public PreMoveGUIFeedback(final PreMoveTabController preMoveTabController) {
     this.preMoveTabController = preMoveTabController;
   }
 
 
   @Override
-  public void initiatePreMovePhase() {
-    preMoveTabController.initiatingPreMoveFeedback();
+  public void preMovePhaseInitiated() {
+    preMoveTabController.preMoveFeedbackInitiated();
     preMoveTabController.startCalculatingOutputDirectories();
-  }
-
-  @Override
-  public void calculatedDestinationForEachFile(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
-    preMoveTabController.doneCalculatingDestionationEveryFile(mediaFileDestinations);
   }
 
   @Override
@@ -43,7 +35,16 @@ public class PreMoveGUIFeedback implements PreMoveFeedbackInterface {
   }
 
   @Override
-  public void fileGroupedByContent(final Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent) {
-    preMoveTabController.doneWithMovePhase(filesGroupedByContent);
+  public void calculatedDestinationForEachFile(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations) {
+    preMoveTabController.doneCalculatingDestinationEveryFile(mediaFileDestinations);
   }
+
+  @Override
+  public void preMovePhaseComplete(final Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent,
+                                   final SortSettings sortSettings) {
+    preMoveTabController.preMovePhaseCompleted(filesGroupedByContent, sortSettings);
+
+  }
+
+
 }

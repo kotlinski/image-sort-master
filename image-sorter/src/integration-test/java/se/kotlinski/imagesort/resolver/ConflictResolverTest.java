@@ -31,15 +31,14 @@ public class ConflictResolverTest {
   Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
   private ConflictResolver conflictResolver;
   private ReadFilesFeedbackInterface readFilesFeedbackInterface;
-  private PreMoveFeedbackInterface preMoveFeedbackInterface;
+  private PreMoveFeedbackInterface preMoveFeedback;
   private MoveFeedbackInterface moveFeedbackInterface;
   private Map<List<File>, RelativeMediaFolderOutput> fileMapWithResolvedConflicts;
-  private MediaFileMapper mediaFileMapper;
 
   @Before
   public void setUp() throws Exception {
     readFilesFeedbackInterface = mock(ReadFilesFeedbackInterface.class);
-    preMoveFeedbackInterface = mock(PreMoveFeedbackInterface.class);
+    preMoveFeedback = mock(PreMoveFeedbackInterface.class);
     moveFeedbackInterface = mock(MoveFeedbackInterface.class);
 
     MediaFileUtil mediaFileUtil = new MediaFileUtil();
@@ -72,10 +71,6 @@ public class ConflictResolverTest {
                                                                                 mediaFiles);
 
 
-    mediaFileMapper = new MediaFileMapper(outputToMediaFileMapper, mediaFileToOutputMapper);
-    fileMapWithResolvedConflicts = mediaFileMapper.groupFilesByContent(preMoveFeedbackInterface,
-                                                                       mediaFiles,
-                                                                       testInputFile);
   }
 
   @Test

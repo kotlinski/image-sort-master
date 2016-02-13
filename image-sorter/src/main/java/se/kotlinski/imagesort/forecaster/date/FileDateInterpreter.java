@@ -14,6 +14,8 @@ import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,12 +36,13 @@ public class FileDateInterpreter {
       ExifIFD0Directory exifIFD0Directory;
       exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
       int tagDatetime = ExifIFD0Directory.TAG_DATETIME;
-      if (exifSubIFDDirectory != null &&
-          exifSubIFDDirectory.getDate(tagDatetimeOriginal, TimeZone.getDefault()) != null) {
+      if (exifSubIFDDirectory != null && exifSubIFDDirectory.getDate(tagDatetimeOriginal,
+                                                                     TimeZone.getDefault()) !=
+                                         null) {
         return exifSubIFDDirectory.getDate(tagDatetimeOriginal, TimeZone.getDefault());
       }
-      if (exifIFD0Directory != null &&
-          exifIFD0Directory.getDate(tagDatetime, TimeZone.getDefault()) != null) {
+      if (exifIFD0Directory != null && exifIFD0Directory.getDate(tagDatetime,
+                                                                 TimeZone.getDefault()) != null) {
         return exifIFD0Directory.getDate(tagDatetime, TimeZone.getDefault());
       }
       throw new CouldNotParseDateException();
@@ -61,6 +64,7 @@ public class FileDateInterpreter {
         return imageDate;
       }
     }
+
     catch (Exception e) {
       // This is expected
     }
@@ -73,6 +77,7 @@ public class FileDateInterpreter {
     catch (Exception e) {
       // This is expected
     }
+
     try {
       Date dateOutOfFileName = getDateOutOfFileName(file);
       if (dateOutOfFileName.after(threshold_for_valid_dates)) {
@@ -82,6 +87,18 @@ public class FileDateInterpreter {
     catch (Exception e) {
       // This is expected
     }
+
+    try {
+      BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+      Date dateFromFileAttributes = new Date(attr.creationTime().toMillis());
+      if (dateFromFileAttributes.after(threshold_for_valid_dates)) {
+        return dateFromFileAttributes;
+      }
+    }
+    catch (Exception err) {
+      // This is expected
+    }
+
     throw new CouldNotParseDateException("Could not Parse: " + file);
   }
 

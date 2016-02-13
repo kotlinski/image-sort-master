@@ -58,14 +58,14 @@ public class CommandLineInterfaceIntegrationTest {
     MediaFileOutputForecaster mediaFileOutputForecaster;
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
-    OutputToMediaFileMapper outputToMediaFileMapper = new OutputToMediaFileMapper(
-        mediaFileOutputForecaster);
-    MediaFileMapper mediaFileMapper = new MediaFileMapper(outputToMediaFileMapper,
-                                                          mediaFileToOutputMapper);
+    OutputToMediaFileMapper outputToMediaFileMapper;
+    outputToMediaFileMapper = new OutputToMediaFileMapper(mediaFileOutputForecaster);
+
     ImageSorter imageSorter = new ImageSorter(mediaFileUtil,
                                               outputToMediaFileMapper,
                                               mediaFileToOutputMapper,
-                                              mediaFileDataMapper, conflictResolver,
+                                              mediaFileDataMapper,
+                                              conflictResolver,
                                               fileMover);
 
     commandLineInterface = new CommandLineInterface(interpreter, imageSorter);

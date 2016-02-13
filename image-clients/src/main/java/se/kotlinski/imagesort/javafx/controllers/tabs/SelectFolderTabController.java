@@ -25,20 +25,20 @@ public class SelectFolderTabController {
 
   public final Button selectFolderButton;
   public final Button continueButton;
-  private final PreMoveFeedbackInterface preMoveFeedbackInterface;
+  private final PreMoveFeedbackInterface preMoveFeedback;
   private final ReadFilesFeedbackInterface readFilesFeedbackInterface;
   private final TabSwitcher tabSwitcher;
   private final Text selectedFolderPathText;
   private final ImageSorter imageSorter;
   private File selectedFolder;
 
-  public SelectFolderTabController(final PreMoveFeedbackInterface preMoveFeedbackInterface,
+  public SelectFolderTabController(final PreMoveFeedbackInterface preMoveFeedback,
                                    final ReadFilesFeedbackInterface readFilesFeedbackInterface,
                                    final TabSwitcher tabSwitcher,
                                    final Button selectFolderButton,
                                    final Button continueButton,
                                    final Text selectedFolderPathText) {
-    this.preMoveFeedbackInterface = preMoveFeedbackInterface;
+    this.preMoveFeedback = preMoveFeedback;
     this.readFilesFeedbackInterface = readFilesFeedbackInterface;
     this.tabSwitcher = tabSwitcher;
     this.selectFolderButton = selectFolderButton;
@@ -54,8 +54,8 @@ public class SelectFolderTabController {
   private void setUpListeners() {
     continueButton.setOnAction((event) -> {
       if (selectedFolder != null) {
-        tabSwitcher.setTabsInAnalyzeMode();
-        imageSortFolder(selectedFolder);
+        tabSwitcher.setTabsInPreMoveMode();
+        runPreMovePhase(selectedFolder);
       }
     });
   }
@@ -83,21 +83,26 @@ public class SelectFolderTabController {
     selectFolderButton.setOnAction(selectInputEvent);
   }
 
-  private void imageSortFolder(final File folder) {
+  private void runPreMovePhase(final File folder) {
     SortSettings sortSettings = new SortSettings();
     sortSettings.masterFolder = folder;
 
     Task<Integer> task = new Task<Integer>() {
       @Override
       protected Integer call() throws Exception {
+        preMoveFeedback.preMovePhaseInitiated();
+
         Map<List<File>, RelativeMediaFolderOutput> listRelativeMediaFolderOutputMap;
-        listRelativeMediaFolderOutputMap = imageSorter.analyzeImages(readFilesFeedbackInterface, preMoveFeedbackInterface, sortSettings);
-        System.out.println(listRelativeMediaFolderOutputMap);
+        listRelativeMediaFolderOutputMap = imageSorter.analyzeImages(readFilesFeedbackInterface,
+                                                                     preMoveFeedback,
+                                                                     sortSettings);
+
+        preMoveFeedback.preMovePhaseComplete(listRelativeMediaFolderOutputMap, sortSettings);
+
         return 0;
       }
     };
 
-    System.out.println("Start image thread");
     new Thread(task).start();
 
   }

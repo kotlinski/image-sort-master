@@ -61,7 +61,6 @@ public class ImageSorter {
     if (!isValidateSortSettings(sortSettings)) {
       throw new IllegalArgumentException();
     }
-    preMoveFeedback.initiatePreMovePhase();
 
 
     List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(readFilesFeedback,
@@ -74,13 +73,9 @@ public class ImageSorter {
     preMoveFeedback.calculatedDestinationForEachFile(mediaFileDestinations);
 
 
-
     Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent;
     filesGroupedByContent = mediaFileToOutputMapper.mapRelativeOutputsToFiles(preMoveFeedback,
                                                                               mediaFileDestinations);
-
-
-    preMoveFeedback.fileGroupedByContent(filesGroupedByContent);
 
     return filesGroupedByContent;
   }

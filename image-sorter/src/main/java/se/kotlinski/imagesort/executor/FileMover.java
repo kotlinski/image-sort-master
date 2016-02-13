@@ -52,7 +52,7 @@ public class FileMover {
       String newOutputPath = masterFolderFile.getAbsolutePath() + fileListToNewOutput.getValue();
       if (fileList.size() > 0) {
         File fileToCopy = fileList.get(0);
-        copyFileToNewDestionation(fileToCopy, newOutputPath);
+        copyFileToNewDestination(fileToCopy, newOutputPath);
       }
     }
   }
@@ -104,7 +104,7 @@ public class FileMover {
     }
   }
 
-  private void copyFileToNewDestionation(final File fileToCopy, final String newOutput) {
+  private void copyFileToNewDestination(final File fileToCopy, final String newOutput) {
     try {
       File toFile = FileUtils.getFile(newOutput);
       FileUtils.copyFile(fileToCopy, toFile, true);

@@ -3,6 +3,7 @@ package se.kotlinski.imagesort.commandline.listeners;
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.commandline.FileSystemPrettyPrinter;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class ImageSortPreMoveProgressFeedback implements PreMoveFeedbackInterfac
   }
 
   @Override
-  public void initiatePreMovePhase() {
+  public void preMovePhaseInitiated() {
     System.out.println("");
     System.out.println("Parsing input folder for videos and images...");
     System.out.println("");
@@ -57,7 +58,8 @@ public class ImageSortPreMoveProgressFeedback implements PreMoveFeedbackInterfac
   }
 
   @Override
-  public void fileGroupedByContent(final Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent) {
+  public void preMovePhaseComplete(final Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent,
+                                   final SortSettings sortSettings) {
     System.out.println("Files grouped by content...\n");
     System.out.println("The new output tree: ");
     String outputTree;

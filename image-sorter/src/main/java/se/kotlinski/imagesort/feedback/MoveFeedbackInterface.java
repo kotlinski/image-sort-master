@@ -18,4 +18,5 @@ public interface MoveFeedbackInterface {
 
   void prepareMovePhase();
 
+  void movePhaseComplete();
 }

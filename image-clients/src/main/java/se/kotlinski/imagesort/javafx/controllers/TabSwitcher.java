@@ -10,7 +10,11 @@ public interface TabSwitcher {
 
   void resetTabs();
 
-  void setTabsInAnalyzeMode();
+  void setTabsInPreMoveMode();
   
-  void setTabsInAnalyzeModeDone(Map<List<File>, RelativeMediaFolderOutput> mediaFileDestinations);
+  void setTabsInPreMoveModeDone(Map<List<File>, RelativeMediaFolderOutput> mediaFileDestinations);
+
+  void setTabsInMoveMode();
+
+  void setTabsInMoveModeDone();
 }

@@ -74,8 +74,10 @@ public class MediaFileOutputForecasterIntegrationTest {
     RelativeMediaFolderOutput jpegDestionationPath;
     jpegDestionationPath = mediaFileOutputForecaster.forecastOutputDestination(testInputFile,
                                                                                aJpegFile);
-    assertThat(jpegDestionationPath.relativePath,
-               is(File.separator + "noxon on raindeer - no date.jpg"));
+    String expectedValue = File.separator + "2015" +
+                           File.separator + "12" +
+                           File.separator + "2015-12-23 18.50.0.jpg";
+    assertThat(jpegDestionationPath.relativePath, is(expectedValue));
   }
 
   @Test
