@@ -18,5 +18,10 @@ public interface MoveFeedbackInterface {
 
   void prepareMovePhase();
 
+  void copyingFile(int numberOfCopiedFiles, int size);
+
+  void deletingFile(int filesDeleted, int size);
+
   void movePhaseComplete();
+
 }

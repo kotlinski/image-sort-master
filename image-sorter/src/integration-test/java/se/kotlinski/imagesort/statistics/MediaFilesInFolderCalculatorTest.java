@@ -54,8 +54,8 @@ public class MediaFilesInFolderCalculatorTest {
     mediaFileDataInFolder = mediaFilesInFolderCalculator.calculateMediaFileDataInFolder(
         mediaFilesInFolder);
 
-    assertThat(mediaFileDataInFolder.numberOfUniqueFiles, is(10));
+    assertThat(mediaFileDataInFolder.numberOfUniqueFiles, is(11));
     assertThat(mediaFileDataInFolder.numberOfMediaFilesWithDuplicates, is(2));
-    assertThat(mediaFileDataInFolder.totalNumberOfFiles, is(13));
+    assertThat(mediaFileDataInFolder.totalNumberOfFiles, is(14));
   }
 }

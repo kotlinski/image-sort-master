@@ -49,17 +49,27 @@ public class MoveTabController {
 
   public void successfulResolvedOutputConflicts(final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
     moveTabLoadingText.setText("Resolving conflicts...");
-    moveTabProgressBar.setProgress(0.2);
+    moveTabProgressBar.setProgress(0.0);
   }
 
   public void startMovingFiles() {
     moveTabLoadingText.setText("Moving files");
-    moveTabProgressBar.setProgress(0.4);
+    moveTabProgressBar.setProgress(0.0);
+  }
+
+  public void copyingFile(final int numberOfCopiedFiles, final int size) {
+    moveTabLoadingText.setText("Moving files");
+    moveTabProgressBar.setProgress((numberOfCopiedFiles * 1.0 / size * 1.0));
   }
 
   public void movePhaseComplete() {
     moveLoadingScene.setVisible(false);
     moveResultScene.setVisible(true);
     tabSwitcher.setTabsInMoveModeDone();
+  }
+
+  public void deletingFile(final int filesDeleted, final int size) {
+    moveTabLoadingText.setText("Removing duplicates...");
+    moveTabProgressBar.setProgress((filesDeleted * 1.0 / size * 1.0));
   }
 }

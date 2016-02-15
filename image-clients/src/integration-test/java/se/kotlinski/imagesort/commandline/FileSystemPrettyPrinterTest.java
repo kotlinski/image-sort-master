@@ -5,6 +5,7 @@ import org.junit.Test;
 import se.kotlinski.imagesort.commandline.listeners.ImageSortPreMoveProgressFeedback;
 import se.kotlinski.imagesort.commandline.listeners.ImageSortReadFilesInFolderFeedback;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
 import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
@@ -30,7 +31,7 @@ public class FileSystemPrettyPrinterTest {
   private OutputToMediaFileMapper outputToMediaFileMapper;
   private MediaFileTestUtil mediaFileTestUtil;
   private ReadFilesFeedbackInterface readFilesFeedbackInterface;
-  private ImageSortPreMoveProgressFeedback preMoveFeedback;
+  private PreMoveFeedbackInterface preMoveFeedback;
   private MediaFileToOutputMapper mediaFileToOutputMapper;
 
 
@@ -48,7 +49,7 @@ public class FileSystemPrettyPrinterTest {
                                                               fileDateInterpreter);
 
     readFilesFeedbackInterface = new ImageSortReadFilesInFolderFeedback();
-    preMoveFeedback = new ImageSortPreMoveProgressFeedback(fileSystemPrettyPrinter);
+    preMoveFeedback = new ImageSortPreMoveProgressFeedback(new FileSystemPrettyPrinter());
 
     outputToMediaFileMapper = new OutputToMediaFileMapper(mediaFileOutputForecaster);
     mediaFileToOutputMapper = new MediaFileToOutputMapper(new MediaFileHashGenerator(),
@@ -67,31 +68,29 @@ public class FileSystemPrettyPrinterTest {
                                                                                 testInputFile,
                                                                                 mediaFiles);
 
-
-    Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent;
-    filesGroupedByContent = mediaFileToOutputMapper.mapRelativeOutputsToFiles(preMoveFeedback,
-                                                                              mediaFileDestinations);
-
     for (Map.Entry<RelativeMediaFolderOutput, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
       System.out.println(stringListEntry.getKey());
       System.out.println(stringListEntry.getValue());
       System.out.println("-");
     }
+
+    Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent;
+    filesGroupedByContent = mediaFileToOutputMapper.mapRelativeOutputsToFiles(preMoveFeedback,
+                                                                              mediaFileDestinations);
+
+
     String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(filesGroupedByContent,
                                                                                true);
 
 
-    String expectedOutput = " |-2015\n" +
-                            " | |-12\n" +
-                            " | | |-2015-12-23 18.50.00.jpg\n" +
-                            " | | |-2014\n" +
-                            " | | | |-2015-12-23 18.50.00.jpg\n" +
+    String expectedOutput = " |-tricky-snapchat-image.jpg\n" +
+                            " |-noxon on raindeer - no date.jpg\n" +
+                            " |-2015\n" +
                             " | |-06\n" +
                             " | | |-printscreens\n" +
                             " | | | |-2015-06-05 21.19.28.png\n" +
-                            " | |-01\n" +
-                            " | | |-2015-01-01 01.00.19.jpg\n" +
                             " |-2014\n" +
+                            " | |-nixon on raindeer - no date.jpg\n" +
                             " | |-03\n" +
                             " | | |-2014-03-16 11.45.09.mp4\n" +
                             " | | |-2014-03-02 01.09.34.jpg\n" +

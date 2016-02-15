@@ -1,4 +1,5 @@
 package se.kotlinski.imagesort.commandline.listeners;
+
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
@@ -47,6 +48,33 @@ public class ImageSortMoveFeedbackProgressFeedback implements MoveFeedbackInterf
   public void prepareMovePhase() {
     System.out.println("");
     System.out.println("Moving files...");
+  }
+
+  @Override
+  public void copyingFile(final int numberOfCopiedFiles, final int size) {
+    float percentageProgress = numberOfCopiedFiles * 1f / size * 1f;
+
+    System.out.print("Current progress: " +
+                     (int) (percentageProgress * 100f) +
+                     "%, " +
+                     numberOfCopiedFiles +
+                     " of " +
+                     size +
+                     "\r");
+
+  }
+
+  @Override
+  public void deletingFile(final int filesDeleted, final int size) {
+    float percentageProgress = filesDeleted * 1f / size * 1f;
+
+    System.out.print("Current progress: " +
+                     (int) (percentageProgress * 100f) +
+                     "%, " +
+                     filesDeleted +
+                     " of " +
+                     size +
+                     "\r");
   }
 
   @Override

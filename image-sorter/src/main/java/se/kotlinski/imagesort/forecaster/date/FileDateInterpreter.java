@@ -14,8 +14,6 @@ import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -88,7 +86,8 @@ public class FileDateInterpreter {
       // This is expected
     }
 
-    try {
+/*
+   try {
       BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
       Date dateFromFileAttributes = new Date(attr.creationTime().toMillis());
       if (dateFromFileAttributes.after(threshold_for_valid_dates)) {
@@ -98,6 +97,7 @@ public class FileDateInterpreter {
     catch (Exception err) {
       // This is expected
     }
+    */
 
     throw new CouldNotParseDateException("Could not Parse: " + file);
   }

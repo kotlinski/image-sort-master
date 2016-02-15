@@ -13,21 +13,22 @@ import java.util.Set;
 
 public class FileMover {
 
-  public void moveFilesToNewDestination(final MoveFeedbackInterface moveFeedbackInterface,
+  public void moveFilesToNewDestination(final MoveFeedbackInterface moveFeedback,
                                         final File masterFolderFile,
                                         final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
 
-    moveFeedbackInterface.prepareMovePhase();
+    moveFeedback.prepareMovePhase();
 
-    copyFilesToNewDestinations(masterFolderFile, resolvedFilesToOutputMap);
+    copyFilesToNewDestinations(moveFeedback, masterFolderFile, resolvedFilesToOutputMap);
 
-    cleanUpOldFiles(masterFolderFile, resolvedFilesToOutputMap);
+    cleanUpOldFiles(moveFeedback, masterFolderFile, resolvedFilesToOutputMap);
 
     deleteEmptyDirectories(FileUtils.getFile(masterFolderFile));
   }
 
 
-  private void cleanUpOldFiles(final File masterFolderFile,
+  private void cleanUpOldFiles(final MoveFeedbackInterface moveFeedback,
+                               final File masterFolderFile,
                                final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
     Set<File> filesToNotCleanUp = new HashSet<>();
     for (RelativeMediaFolderOutput relativeOutputPath : resolvedFilesToOutputMap.values()) {
@@ -35,7 +36,9 @@ public class FileMover {
       filesToNotCleanUp.add(FileUtils.getFile(newOutPutPath));
     }
 
+    int deletedFiles = 0;
     for (List<File> files : resolvedFilesToOutputMap.keySet()) {
+      moveFeedback.deletingFile(deletedFiles++, resolvedFilesToOutputMap.size());
       for (File file : files) {
         if (!filesToNotCleanUp.contains(file)) {
           deleteFile(file);
@@ -44,11 +47,14 @@ public class FileMover {
     }
   }
 
-  private void copyFilesToNewDestinations(final File masterFolderFile,
+  private void copyFilesToNewDestinations(final MoveFeedbackInterface moveFeedback,
+                                          final File masterFolderFile,
                                           final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap) {
+    int numberOfCopiedFiles = 0;
     for (Map.Entry<List<File>, RelativeMediaFolderOutput> fileListToNewOutput : resolvedFilesToOutputMap.entrySet()) {
-      List<File> fileList = fileListToNewOutput.getKey();
+      moveFeedback.copyingFile(numberOfCopiedFiles++, resolvedFilesToOutputMap.size());
 
+      List<File> fileList = fileListToNewOutput.getKey();
       String newOutputPath = masterFolderFile.getAbsolutePath() + fileListToNewOutput.getValue();
       if (fileList.size() > 0) {
         File fileToCopy = fileList.get(0);

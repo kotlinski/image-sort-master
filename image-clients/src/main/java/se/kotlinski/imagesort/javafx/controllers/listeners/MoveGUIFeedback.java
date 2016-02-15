@@ -45,6 +45,16 @@ public class MoveGUIFeedback implements MoveFeedbackInterface {
 
 
   @Override
+  public void copyingFile(final int numberOfCopiedFiles, final int size) {
+    moveTabController.copyingFile(numberOfCopiedFiles, size);
+  }
+
+  @Override
+  public void deletingFile(final int filesDeleted, final int size) {
+    moveTabController.deletingFile(filesDeleted, size);
+  }
+
+  @Override
   public void movePhaseComplete() {
     moveTabController.movePhaseComplete();
   }
