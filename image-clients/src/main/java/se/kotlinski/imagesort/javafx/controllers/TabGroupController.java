@@ -13,9 +13,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
+import se.kotlinski.imagesort.javafx.controllers.listeners.FindDuplicatesGUIFeedback;
 import se.kotlinski.imagesort.javafx.controllers.listeners.MoveGUIFeedback;
 import se.kotlinski.imagesort.javafx.controllers.listeners.PreMoveGUIFeedback;
-import se.kotlinski.imagesort.javafx.controllers.listeners.ReadFilesGUIFeedback;
+import se.kotlinski.imagesort.javafx.controllers.tabs.FindDuplicatesTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.MoveTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.PreMoveTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.SelectFolderTabController;
@@ -36,13 +37,21 @@ public class TabGroupController implements TabSwitcher {
   @FXML
   public Tab moveTab;
   @FXML
+  public Tab findDuplicatesTab;
+  @FXML
   public Button selectFolderButton;
   @FXML
   public Button selectFolderContinueButton;
   @FXML
+  public Button findDuplicatesContinueButton;
+  @FXML
+  public AnchorPane findDuplicatesLoadingScene;
+  @FXML
   public AnchorPane preMoveLoadingScene;
   @FXML
   public AnchorPane moveLoadingScene;
+  @FXML
+  public AnchorPane findDuplicatesResultScene;
   @FXML
   public AnchorPane preMoveResultScene;
   @FXML
@@ -50,13 +59,19 @@ public class TabGroupController implements TabSwitcher {
   @FXML
   public Text selectedFolderPathText;
   @FXML
+  public Text findDuplicatesTabLoadingText;
+  @FXML
   public Text preMoveTabLoadingText;
   @FXML
   public Text moveTabLoadingText;
   @FXML
+  public ProgressBar findDuplicatesTabProgressBar;
+  @FXML
   public ProgressBar moveTabProgressBar;
   @FXML
   public ProgressBar preMoveTabProgressBar;
+  @FXML
+  public TextArea findDuplicatesFolderTextArea;
   @FXML
   public TextArea preMoveFolderTextArea;
   @FXML
@@ -68,6 +83,7 @@ public class TabGroupController implements TabSwitcher {
   private SingleSelectionModel<Tab> tabSelector;
   private PreMoveTabController preMoveTabController;
   private MoveTabController moveTabController;
+  private FindDuplicatesTabController findDuplicatesTabController;
 
   public TabGroupController() {
   }
@@ -75,6 +91,17 @@ public class TabGroupController implements TabSwitcher {
 
   @FXML
   private void initialize() {
+
+    findDuplicatesTabController = new FindDuplicatesTabController(this,
+                                                                  findDuplicatesTab,
+                                                                  findDuplicatesLoadingScene,
+                                                                  findDuplicatesResultScene,
+                                                                  findDuplicatesTabLoadingText,
+                                                                  findDuplicatesTabProgressBar,
+                                                                  findDuplicatesFolderTextArea);
+
+    FindDuplicatesGUIFeedback findDuplicatesFeedbackInterface;
+    findDuplicatesFeedbackInterface = new FindDuplicatesGUIFeedback(findDuplicatesTabController);
 
 
     moveTabController = new MoveTabController(moveTab,
@@ -101,15 +128,14 @@ public class TabGroupController implements TabSwitcher {
     PreMoveGUIFeedback preMoveGUIFeedback;
     preMoveGUIFeedback = new PreMoveGUIFeedback(preMoveTabController);
 
-    ReadFilesFeedbackInterface readFilesFeedbackInterface;
-    readFilesFeedbackInterface = new ReadFilesGUIFeedback(preMoveTabController);
-
     selectFolderTabController = new SelectFolderTabController(preMoveGUIFeedback,
-                                                              readFilesFeedbackInterface,
+                                                              preMoveGUIFeedback,
+                                                              findDuplicatesFeedbackInterface,
                                                               this,
                                                               selectFolderButton,
                                                               selectFolderContinueButton,
-                                                              selectedFolderPathText);
+                                                              selectedFolderPathText,
+                                                              findDuplicatesContinueButton);
 
   }
 
@@ -127,6 +153,8 @@ public class TabGroupController implements TabSwitcher {
 
     selectFolderTab.setDisable(false);
     preMoveTab.setDisable(true);
+    moveTab.setDisable(true);
+    findDuplicatesTab.setDisable(true);
   }
 
   @Override
@@ -138,6 +166,7 @@ public class TabGroupController implements TabSwitcher {
     preMoveTab.setDisable(false);
     selectFolderTab.setDisable(true);
     moveTab.setDisable(true);
+    findDuplicatesTab.setDisable(true);
   }
 
   @Override
@@ -147,6 +176,7 @@ public class TabGroupController implements TabSwitcher {
     selectFolderTab.setDisable(false);
     preMoveTab.setDisable(false);
     moveTab.setDisable(true);
+    findDuplicatesTab.setDisable(false);
   }
 
   @Override
@@ -157,12 +187,35 @@ public class TabGroupController implements TabSwitcher {
     moveTab.setDisable(false);
     preMoveTab.setDisable(true);
     selectFolderTab.setDisable(true);
+    findDuplicatesTab.setDisable(true);
   }
 
   @Override
   public void setTabsInMoveModeDone() {
     preMoveTab.setDisable(false);
     selectFolderTab.setDisable(false);
+    findDuplicatesTab.setDisable(false);
+  }
+
+  @Override
+  public void setTabsInFindDuplicatesMode() {
+    findDuplicatesTabController.resetTab();
+
+    tabSelector.select(findDuplicatesTab);
+    findDuplicatesTab.setDisable(false);
+
+    selectFolderTab.setDisable(true);
+    moveTab.setDisable(true);
+    preMoveTab.setDisable(true);
+  }
+
+  @Override
+  public void setTabsInFindDuplicatesModeDone() {
+    findDuplicatesTab.setDisable(false);
+    selectFolderTab.setDisable(false);
+    moveTab.setDisable(true);
+    preMoveTab.setDisable(true);
+
   }
 
 }

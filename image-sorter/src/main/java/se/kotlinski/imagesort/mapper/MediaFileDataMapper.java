@@ -20,15 +20,15 @@ public class MediaFileDataMapper {
     this.mediaFileHashGenerator = mediaFileHashGenerator;
   }
 
-  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(FindDuplicatesFeedbackInterface findDuplicatesFeedbackInterface,
+  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(FindDuplicatesFeedbackInterface findDuplicatesFeedback,
                                                                List<File> files) {
 
-    findDuplicatesFeedbackInterface.startGroupFilesByContent();
+    findDuplicatesFeedback.startGroupFilesByContent();
     Map<MediaFileDataHash, List<File>> fileMap = new HashMap<>();
     int progress = 0;
     for (File file : files) {
       progress++;
-      findDuplicatesFeedbackInterface.groupFilesByContentProgress(files.size(), progress);
+      findDuplicatesFeedback.groupFilesByContentProgress(files.size(), progress);
       addMediaFileToMap(fileMap, file);
     }
     return fileMap;

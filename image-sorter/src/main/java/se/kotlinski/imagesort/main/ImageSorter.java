@@ -110,9 +110,9 @@ public class ImageSorter {
   }
 
 
-  public void printMediaFileStatsInFolder(final SortSettings sortSettings,
-                                          final ReadFilesFeedbackInterface readFilesFeedbackInterface,
-                                          final FindDuplicatesFeedbackInterface findDuplicatesFeedbackInterface) {
+  public void findDuplicatedFileStatsInFolder(final SortSettings sortSettings,
+                                              final ReadFilesFeedbackInterface readFilesFeedbackInterface,
+                                              final FindDuplicatesFeedbackInterface findDuplicatesFeedbackInterface) {
 
     ///
     List<File> mediaFilesListAfterMovePhase;

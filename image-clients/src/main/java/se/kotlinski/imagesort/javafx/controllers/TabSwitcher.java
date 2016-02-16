@@ -17,4 +17,8 @@ public interface TabSwitcher {
   void setTabsInMoveMode();
 
   void setTabsInMoveModeDone();
+
+  void setTabsInFindDuplicatesMode();
+
+  void setTabsInFindDuplicatesModeDone();
 }

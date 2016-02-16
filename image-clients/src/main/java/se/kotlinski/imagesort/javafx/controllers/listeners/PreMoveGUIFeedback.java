@@ -3,13 +3,14 @@ package se.kotlinski.imagesort.javafx.controllers.listeners;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 import se.kotlinski.imagesort.javafx.controllers.tabs.PreMoveTabController;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class PreMoveGUIFeedback implements PreMoveFeedbackInterface {
+public class PreMoveGUIFeedback implements PreMoveFeedbackInterface, ReadFilesFeedbackInterface {
 
   private final PreMoveTabController preMoveTabController;
 
@@ -47,4 +48,8 @@ public class PreMoveGUIFeedback implements PreMoveFeedbackInterface {
   }
 
 
+  @Override
+  public void parsedFilesInMasterFolderProgress(final int size) {
+    preMoveTabController.readFilesProgressFeedback(size);
+  }
 }
