@@ -1,7 +1,7 @@
 package se.kotlinski.imagesort.utils;
 
 import org.apache.commons.io.FileUtils;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.List;
 public class MediaFileTestUtil {
   private final MediaFileUtil mediaFileUtils;
   private final String defaultTestFolderName = "inputImages";
-  private final String restoreableTestFolderName = "restoreable_master_folder";
+  private final String restorableTestFolderName = "restoreable_master_folder";
 
   public MediaFileTestUtil(MediaFileUtil mediaFileUtils) {
     this.mediaFileUtils = mediaFileUtils;
@@ -28,12 +28,12 @@ public class MediaFileTestUtil {
   }
 
   public File getRestorableTestMasterFile() {
-    String path = modifyPath(mediaFileUtils.getSystemPath(), restoreableTestFolderName);
+    String path = modifyPath(mediaFileUtils.getSystemPath(), restorableTestFolderName);
     return new File(path);
   }
 
   public String getRestorableTestMasterPath() {
-    String modifyPath = modifyPath(mediaFileUtils.getSystemPath(), restoreableTestFolderName);
+    String modifyPath = modifyPath(mediaFileUtils.getSystemPath(), restorableTestFolderName);
     createDir(modifyPath);
     return modifyPath;
   }
@@ -121,9 +121,9 @@ public class MediaFileTestUtil {
                     File.separator + "2013-10-26 20.20.46-kottbullar.jpg");
   }
 
-  public List<File> getMediaFiles(final ClientInterface clientInterface, final File testInputFile) {
+  public List<File> getMediaFiles(final ReadFilesFeedbackInterface readFilesFeedbackInterface, final File testInputFile) {
 
-    return mediaFileUtils.getMediaFilesInFolder(clientInterface, testInputFile);
+    return mediaFileUtils.getMediaFilesInFolder(readFilesFeedbackInterface, testInputFile);
 
   }
 

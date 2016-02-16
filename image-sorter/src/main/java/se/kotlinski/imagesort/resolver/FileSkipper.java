@@ -1,7 +1,7 @@
 package se.kotlinski.imagesort.resolver;
 
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
 
 import java.io.File;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import java.util.Map;
 public class FileSkipper {
 
 
-  public void skipFilesAlreadyNamedAsOutput(final ClientInterface clientInterface,
+  public void skipFilesAlreadyNamedAsOutput(final MoveFeedbackInterface moveFeedbackInterface,
                                             final Map<List<File>, RelativeMediaFolderOutput> resolvedFilesToOutputMap,
                                             final File masterFolderFile) {
     int skippedFiles = 0;
@@ -31,7 +31,7 @@ public class FileSkipper {
         else {
           filesToMove++;
         }
-        clientInterface.skippingFilesToMove(skippedFiles, filesToMove);
+        moveFeedbackInterface.skippingFilesToMove(skippedFiles, filesToMove);
       }
     }
   }

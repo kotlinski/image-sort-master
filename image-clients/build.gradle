@@ -4,13 +4,13 @@ apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'org.unbroken-dome.test-sets'
+apply from: 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin'
 
 mainClassName = "se.kotlinski.imagesort.MainRenamer"
 
 findbugs {
   toolVersion = "3.0.1"
 }
-
 
 buildscript {
   repositories {
@@ -29,6 +29,42 @@ apply plugin: 'ca.cutterslade.analyze'
 
 analyzeClassesDependencies {
   justWarn = true
+}
+
+javafx {
+
+  appName = 'Image Sorter'
+  mainClass = 'se.kotlinski.imagesort.MainRenamer'
+  version = '4.0.0'
+  licenseType = 'Apache License Version 2.0'
+  vendor = 'Simon Kotlinski'
+
+  jvmArgs = []
+
+  profiles {
+/*	windows {
+	  appID = 'b533f663-1efd-489f-b910-4c7ec20c7fd0'
+	}*/
+
+/*	macosx {
+	  category = 'public.app-category.developer-tools'
+	  id = 'com.shemnon.java.javafx.ensemble8'
+	}*/
+  }
+
+  icons {
+	shortcut = [
+			'icon_16x16.png', 'icon_16x16@2x.png',
+			'icon_32x32.png', 'icon_32x32@2x.png',
+			'icon_128x128.png', 'icon_128x128@2x.png',
+			'icon_256x256.png', 'icon_256x256@2x.png',
+			'icon_512x512.png', 'icon_512x512@2x.png'
+	]
+	volume = shortcut
+	setup = shortcut
+  }
+
+  verbose = true
 }
 
 jacoco {

@@ -12,10 +12,10 @@ import java.util.TreeSet;
 
 public class FileSystemPrettyPrinter {
 
-  public String convertFolderStructureToString(final Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations,
+  public String convertFolderStructureToString(final Map<List<File>, RelativeMediaFolderOutput> mediaFileDestinations,
                                                final boolean detailedString) {
     StringTree stringTree = new StringTree(File.separator);
-    for (RelativeMediaFolderOutput filePath : mediaFileDestinations.keySet()) {
+    for (RelativeMediaFolderOutput filePath : mediaFileDestinations.values()) {
       List<String> subFolders = getFolders(filePath, detailedString);
       addChild(stringTree.root, subFolders, 1);
     }

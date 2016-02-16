@@ -19,6 +19,7 @@ public class FileDateInterpreterTest {
   private File imageWithDate;
   private File videoWithDate;
   private File imageWithoutDate;
+  private File trickySnapchatImage;
 
   @Before
   public void setUp() throws Exception {
@@ -36,11 +37,15 @@ public class FileDateInterpreterTest {
                              File.separator +
                              "2014-03-16 10.45.09.mp4");
 
+    trickySnapchatImage = new File(mediaFileTestUtil.getTestInputPath() +
+                                   File.separator +
+                                   "tricky-snapchat-image.jpg");
+
     fileDateInterpreter = new FileDateInterpreter();
   }
 
   @Test
-  public void testGetFileDate() {
+  public void testGetFileDate_ImageWithDate() {
     try {
       Date date = fileDateInterpreter.getDate(imageWithDate);
       Date expectedDate = getExpectedDate("2013-10-03 13.43.20", null);
@@ -52,7 +57,10 @@ public class FileDateInterpreterTest {
     catch (Exception e) {
       e.printStackTrace();
     }
+  }
 
+  @Test
+  public void testGetFileDate_VideoWithDate() {
     try {
       Date date = fileDateInterpreter.getDate(videoWithDate);
       Date expectedDate = getExpectedDate("2014-03-16 11.45.09", null);
@@ -64,7 +72,24 @@ public class FileDateInterpreterTest {
     catch (Exception e) {
       e.printStackTrace();
     }
+  }
 
+  @Test
+  public void testGetFileDate_TrickySnapchatImage() {
+    try {
+      fileDateInterpreter.getDate(trickySnapchatImage);
+    }
+    catch (CouldNotParseDateException e) {
+      assert true;
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+
+  @Test
+  public void testGetFileDate_VideoWithoutDate() {
     try {
       fileDateInterpreter.getDate(imageWithoutDate);
       assert false;

@@ -4,13 +4,15 @@ import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MediaFilesInFolderCalculator {
 
   public final MediaFileDataInFolder calculateMediaFileDataInFolder(final Map<MediaFileDataHash, List<File>> filesByMediaContent) {
-    int numberOfFilesWithDuplicates = 0;
+    final Map<MediaFileDataHash, List<File>> filesWithDuplicates = new HashMap<>();
     int totalNumberOfFiles = 0;
     int numberOfUniqueFiles = filesByMediaContent.size();
 
@@ -18,12 +20,11 @@ public class MediaFilesInFolderCalculator {
       List<File> files = filesByMediaContent.get(mediaFileDataHash);
       totalNumberOfFiles += files.size();
       if (files.size() > 1) {
-        numberOfFilesWithDuplicates++;
+        filesWithDuplicates.put(mediaFileDataHash, files);
       }
     }
 
-    return new MediaFileDataInFolder(numberOfUniqueFiles,
-                                     numberOfFilesWithDuplicates,
-                                     totalNumberOfFiles);
+    return new MediaFileDataInFolder(numberOfUniqueFiles, filesWithDuplicates, totalNumberOfFiles);
   }
+
 }

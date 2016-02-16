@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -33,12 +34,13 @@ public class FileDateInterpreter {
       ExifIFD0Directory exifIFD0Directory;
       exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
       int tagDatetime = ExifIFD0Directory.TAG_DATETIME;
-      if (exifSubIFDDirectory != null &&
-          exifSubIFDDirectory.getDate(tagDatetimeOriginal, TimeZone.getDefault()) != null) {
+      if (exifSubIFDDirectory != null && exifSubIFDDirectory.getDate(tagDatetimeOriginal,
+                                                                     TimeZone.getDefault()) !=
+                                         null) {
         return exifSubIFDDirectory.getDate(tagDatetimeOriginal, TimeZone.getDefault());
       }
-      if (exifIFD0Directory != null &&
-          exifIFD0Directory.getDate(tagDatetime, TimeZone.getDefault()) != null) {
+      if (exifIFD0Directory != null && exifIFD0Directory.getDate(tagDatetime,
+                                                                 TimeZone.getDefault()) != null) {
         return exifIFD0Directory.getDate(tagDatetime, TimeZone.getDefault());
       }
       throw new CouldNotParseDateException();
@@ -50,30 +52,53 @@ public class FileDateInterpreter {
 
   @SuppressWarnings ("PMD.EmptyCatchBlock")
   public Date getDate(final File file) throws Exception {
+    Calendar calendar = Calendar.getInstance();
+    calendar.clear();
+    calendar.set(Calendar.YEAR, 2000);
+    Date threshold_for_valid_dates = calendar.getTime();
     try {
-      return getImageDate(file);
+      Date imageDate = getImageDate(file);
+      if (imageDate.after(threshold_for_valid_dates)) {
+        return imageDate;
+      }
     }
-    catch (CouldNotParseDateException e) {
-      //LOGGER.error("File is not an image with meta data, " + file);
-    }
+
     catch (Exception e) {
       // This is expected
     }
     try {
-      return getVideoDate(file);
-    }
-    catch (CouldNotParseDateException e) {
-      //LOGGER.error("File is not an video with meta data, " + file);
+      Date videoDate = getVideoDate(file);
+      if (videoDate.after(threshold_for_valid_dates)) {
+        return videoDate;
+      }
     }
     catch (Exception e) {
       // This is expected
     }
+
     try {
-      return getDateOutOfFileName(file);
+      Date dateOutOfFileName = getDateOutOfFileName(file);
+      if (dateOutOfFileName.after(threshold_for_valid_dates)) {
+        return dateOutOfFileName;
+      }
     }
     catch (Exception e) {
       // This is expected
     }
+
+/*
+   try {
+      BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+      Date dateFromFileAttributes = new Date(attr.creationTime().toMillis());
+      if (dateFromFileAttributes.after(threshold_for_valid_dates)) {
+        return dateFromFileAttributes;
+      }
+    }
+    catch (Exception err) {
+      // This is expected
+    }
+    */
+
     throw new CouldNotParseDateException("Could not Parse: " + file);
   }
 

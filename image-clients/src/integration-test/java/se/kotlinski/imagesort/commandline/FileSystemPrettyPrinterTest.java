@@ -2,12 +2,17 @@ package se.kotlinski.imagesort.commandline;
 
 import org.junit.Before;
 import org.junit.Test;
+import se.kotlinski.imagesort.commandline.listeners.ImageSortPreMoveProgressFeedback;
+import se.kotlinski.imagesort.commandline.listeners.ImageSortReadFilesInFolderFeedback;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
+import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
+import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 import se.kotlinski.imagesort.forecaster.date.DateToFileRenamer;
 import se.kotlinski.imagesort.forecaster.date.FileDateInterpreter;
-import se.kotlinski.imagesort.main.ClientInterface;
-import se.kotlinski.imagesort.mapper.mappers.OutputToMediaFileMapper;
+import se.kotlinski.imagesort.mapper.MediaFileToOutputMapper;
+import se.kotlinski.imagesort.mapper.OutputToMediaFileMapper;
+import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 import se.kotlinski.imagesort.utils.MediaFileTestUtil;
 import se.kotlinski.imagesort.utils.MediaFileUtil;
 
@@ -25,7 +30,9 @@ public class FileSystemPrettyPrinterTest {
   private FileSystemPrettyPrinter fileSystemPrettyPrinter;
   private OutputToMediaFileMapper outputToMediaFileMapper;
   private MediaFileTestUtil mediaFileTestUtil;
-  private ClientInterface clientInterface;
+  private ReadFilesFeedbackInterface readFilesFeedbackInterface;
+  private PreMoveFeedbackInterface preMoveFeedback;
+  private MediaFileToOutputMapper mediaFileToOutputMapper;
 
 
   @Before
@@ -41,19 +48,24 @@ public class FileSystemPrettyPrinterTest {
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
 
-    clientInterface = new ImageSortProgressFeedback(fileSystemPrettyPrinter);
+    readFilesFeedbackInterface = new ImageSortReadFilesInFolderFeedback();
+    preMoveFeedback = new ImageSortPreMoveProgressFeedback(new FileSystemPrettyPrinter());
 
     outputToMediaFileMapper = new OutputToMediaFileMapper(mediaFileOutputForecaster);
+    mediaFileToOutputMapper = new MediaFileToOutputMapper(new MediaFileHashGenerator(),
+                                                          mediaFileUtil);
   }
 
   @Test
   public void testPrettyPrintFolderStructure() throws Exception {
     File testInputFile = mediaFileTestUtil.getTestInputFile();
 
-    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(clientInterface, testInputFile);
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(readFilesFeedbackInterface,
+                                                            testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
-    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,
+                                                                                testInputFile,
                                                                                 mediaFiles);
 
     for (Map.Entry<RelativeMediaFolderOutput, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {
@@ -61,11 +73,18 @@ public class FileSystemPrettyPrinterTest {
       System.out.println(stringListEntry.getValue());
       System.out.println("-");
     }
-    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(mediaFileDestinations,
+
+    Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent;
+    filesGroupedByContent = mediaFileToOutputMapper.mapRelativeOutputsToFiles(preMoveFeedback,
+                                                                              mediaFileDestinations);
+
+
+    String fileSystem = fileSystemPrettyPrinter.convertFolderStructureToString(filesGroupedByContent,
                                                                                true);
 
 
-    String expectedOutput = " |-noxon on raindeer - no date.jpg\n" +
+    String expectedOutput = " |-tricky-snapchat-image.jpg\n" +
+                            " |-noxon on raindeer - no date.jpg\n" +
                             " |-2015\n" +
                             " | |-06\n" +
                             " | | |-printscreens\n" +
@@ -79,7 +98,8 @@ public class FileSystemPrettyPrinterTest {
                             " | | |-duplicate in subfolder\n" +
                             " | | | |-2014-02-22 11.48.48.jpg\n" +
                             " | | |-2014-02-22 11.48.48.jpg\n" +
-                            " | | |-2014-02-22 11.48.47.jpg\n" +
+                            " | | |-2014-02-22 11.48.47_2.jpg\n" +
+                            " | | |-2014-02-22 11.48.47_1.jpg\n" +
                             " |-2013\n" +
                             " | |-10\n" +
                             " | | |-snapchat\n" +

@@ -1,8 +1,8 @@
-package se.kotlinski.imagesort.mapper.mappers;
+package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
-import se.kotlinski.imagesort.main.ClientInterface;
+import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
 
 import java.io.File;
@@ -20,15 +20,15 @@ public class MediaFileDataMapper {
     this.mediaFileHashGenerator = mediaFileHashGenerator;
   }
 
-  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(ClientInterface clientInterface,
+  public Map<MediaFileDataHash, List<File>> mapOnMediaFileData(FindDuplicatesFeedbackInterface findDuplicatesFeedback,
                                                                List<File> files) {
 
-    clientInterface.startGroupFilesByContent();
+    findDuplicatesFeedback.startGroupFilesByContent();
     Map<MediaFileDataHash, List<File>> fileMap = new HashMap<>();
     int progress = 0;
     for (File file : files) {
       progress++;
-      clientInterface.groupFilesByContentProgress(files.size(), progress);
+      findDuplicatesFeedback.groupFilesByContentProgress(files.size(), progress);
       addMediaFileToMap(fileMap, file);
     }
     return fileMap;
@@ -36,8 +36,8 @@ public class MediaFileDataMapper {
 
   public void addMediaFileToMap(final Map<MediaFileDataHash, List<File>> fileMap, final File file) {
     try {
-      MediaFileDataHash fileContentIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
-          file);
+      MediaFileDataHash fileContentIdentifier;
+      fileContentIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(file);
       if (!fileMap.containsKey(fileContentIdentifier)) {
         fileMap.put(fileContentIdentifier, new ArrayList<>());
       }
