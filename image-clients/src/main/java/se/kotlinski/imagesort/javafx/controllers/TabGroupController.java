@@ -20,6 +20,7 @@ import se.kotlinski.imagesort.javafx.controllers.tabs.FindDuplicatesTabControlle
 import se.kotlinski.imagesort.javafx.controllers.tabs.MoveTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.PreMoveTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.SelectFolderTabController;
+import se.kotlinski.imagesort.secrets.Passwords;
 
 import java.io.File;
 import java.util.List;
@@ -136,6 +137,9 @@ public class TabGroupController implements TabSwitcher {
                                                               selectFolderContinueButton,
                                                               selectedFolderPathText,
                                                               findDuplicatesContinueButton);
+
+    Passwords passwords = new Passwords();
+    System.out.println("Pass: " + passwords.getPassword());
 
   }
 

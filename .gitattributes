@@ -1,1 +1,2 @@
 # Encrypt the passwords-file.
+analytics filter=git-crypt diff=git-crypt
