@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.javafx.controllers.tabs;
 
+import com.brsanthu.googleanalytics.PageViewHit;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import javafx.concurrent.Task;
@@ -34,6 +35,7 @@ public class SelectFolderTabController {
   private final Button findDuplicatesContinueButton;
   private final ImageSorter imageSorter;
   private File selectedFolder;
+
 
   public SelectFolderTabController(final PreMoveFeedbackInterface preMoveFeedback,
                                    final ReadFilesFeedbackInterface readFilesFeedbackInterface,

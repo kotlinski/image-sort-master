@@ -64,6 +64,8 @@ public class PreMoveTabController {
     fileSystemPrettyPrinter = injector.getInstance(FileSystemPrettyPrinter.class);
 
     setUpListeners();
+
+
   }
 
   public void resetTab() {
@@ -150,7 +152,8 @@ public class PreMoveTabController {
     preMoveFolderTextArea.setText(folderStructureString);
   }
 
-  public void preMovePhaseCompleted(final Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent, final SortSettings sortSettings) {
+  public void preMovePhaseCompleted(final Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent,
+                                    final SortSettings sortSettings) {
     this.sortSettings = sortSettings;
     this.filesGroupedByContent = filesGroupedByContent;
     tabSwitcher.setTabsInPreMoveModeDone(filesGroupedByContent);

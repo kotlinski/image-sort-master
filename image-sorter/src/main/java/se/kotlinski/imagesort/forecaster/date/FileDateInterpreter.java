@@ -21,8 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class FileDateInterpreter {
 
+public class FileDateInterpreter {
   private static final Logger LOGGER = LogManager.getLogger(FileDateInterpreter.class);
 
   Date getImageDate(File file) throws Exception {

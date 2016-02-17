@@ -62,7 +62,6 @@ public class ImageSorter {
       throw new IllegalArgumentException();
     }
 
-
     List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(readFilesFeedback,
                                                                 sortSettings.masterFolder);
 

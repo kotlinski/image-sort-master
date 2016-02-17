@@ -83,6 +83,9 @@ dependencies {
   compile 'com.google.inject:guice:4.0'
   compile 'org.apache.tika:tika-core:1.11'
 
+  compile 'com.brsanthu:google-analytics-java:1.1.2'
+  compile 'com.mixpanel:mixpanel-java:1.4.3'
+
   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.5'
   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.5'
 

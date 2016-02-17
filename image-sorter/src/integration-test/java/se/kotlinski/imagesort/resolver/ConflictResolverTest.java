@@ -54,6 +54,7 @@ public class ConflictResolverTest {
 
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
+
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
     MediaFileOutputForecaster mediaFileOutputForecaster;
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,

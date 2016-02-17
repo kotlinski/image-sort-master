@@ -1,5 +1,9 @@
 package se.kotlinski.imagesort.javafx.controllers;
 
+import com.brsanthu.googleanalytics.GoogleAnalytics;
+import com.brsanthu.googleanalytics.PageViewHit;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
@@ -19,7 +23,7 @@ import se.kotlinski.imagesort.javafx.controllers.tabs.FindDuplicatesTabControlle
 import se.kotlinski.imagesort.javafx.controllers.tabs.MoveTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.PreMoveTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.SelectFolderTabController;
-import se.kotlinski.imagesort.secrets.Passwords;
+import se.kotlinski.imagesort.module.ImageModule;
 
 import java.io.File;
 import java.util.List;
@@ -27,6 +31,7 @@ import java.util.Map;
 
 public class TabGroupController implements TabSwitcher {
 
+  private final GoogleAnalytics googleAnalytics;
   //TABS
   @FXML
   public TabPane tabGroup;
@@ -86,6 +91,9 @@ public class TabGroupController implements TabSwitcher {
   private FindDuplicatesTabController findDuplicatesTabController;
 
   public TabGroupController() {
+
+    Injector injector = Guice.createInjector(new ImageModule());
+    googleAnalytics = injector.getInstance(GoogleAnalytics.class);
   }
 
 
@@ -136,10 +144,6 @@ public class TabGroupController implements TabSwitcher {
                                                               selectFolderContinueButton,
                                                               selectedFolderPathText,
                                                               findDuplicatesContinueButton);
-
-    Passwords passwords = new Passwords();
-    System.out.println("Pass: " + passwords.getAnalytics());
-
   }
 
   public void setStageAndSetupListeners(final Stage primaryStage) {
@@ -170,6 +174,8 @@ public class TabGroupController implements TabSwitcher {
     selectFolderTab.setDisable(true);
     moveTab.setDisable(true);
     findDuplicatesTab.setDisable(true);
+
+    googleAnalytics.postAsync(new PageViewHit("preMoveTabController", "preMove"));
   }
 
   @Override
@@ -179,7 +185,8 @@ public class TabGroupController implements TabSwitcher {
     selectFolderTab.setDisable(false);
     preMoveTab.setDisable(false);
     moveTab.setDisable(true);
-    findDuplicatesTab.setDisable(false);
+    findDuplicatesTab.setDisable(true);
+    googleAnalytics.postAsync(new PageViewHit("preMoveTabController", "preMoveDone"));
   }
 
   @Override
@@ -191,13 +198,17 @@ public class TabGroupController implements TabSwitcher {
     preMoveTab.setDisable(true);
     selectFolderTab.setDisable(true);
     findDuplicatesTab.setDisable(true);
+
+    googleAnalytics.postAsync(new PageViewHit("moveTabController", "move"));
   }
 
   @Override
   public void setTabsInMoveModeDone() {
     preMoveTab.setDisable(false);
     selectFolderTab.setDisable(false);
-    findDuplicatesTab.setDisable(false);
+    findDuplicatesTab.setDisable(true);
+
+    googleAnalytics.postAsync(new PageViewHit("moveTabController", "moveDone"));
   }
 
   @Override
@@ -210,6 +221,8 @@ public class TabGroupController implements TabSwitcher {
     selectFolderTab.setDisable(true);
     moveTab.setDisable(true);
     preMoveTab.setDisable(true);
+
+    googleAnalytics.postAsync(new PageViewHit("findDuplicatesTabController", "findDuplicates"));
   }
 
   @Override
@@ -218,7 +231,7 @@ public class TabGroupController implements TabSwitcher {
     selectFolderTab.setDisable(false);
     moveTab.setDisable(true);
     preMoveTab.setDisable(true);
-
+    googleAnalytics.postAsync(new PageViewHit("findDuplicatesTabController", "findDuplicatesDone"));
   }
 
 }
