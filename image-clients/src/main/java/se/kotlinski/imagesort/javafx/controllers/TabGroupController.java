@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 import se.kotlinski.imagesort.javafx.controllers.listeners.FindDuplicatesGUIFeedback;
 import se.kotlinski.imagesort.javafx.controllers.listeners.MoveGUIFeedback;
 import se.kotlinski.imagesort.javafx.controllers.listeners.PreMoveGUIFeedback;
@@ -139,7 +138,7 @@ public class TabGroupController implements TabSwitcher {
                                                               findDuplicatesContinueButton);
 
     Passwords passwords = new Passwords();
-    System.out.println("Pass: " + passwords.getPassword());
+    System.out.println("Pass: " + passwords.getAnalytics());
 
   }
 

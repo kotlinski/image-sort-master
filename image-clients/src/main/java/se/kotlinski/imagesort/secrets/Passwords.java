@@ -10,9 +10,8 @@ import java.util.List;
 
 public class Passwords {
 
-  public static final String ANALYTICS_ID = "";
 
-  public String getPassword() {
+  public String getAnalytics() {
     String password = "";
     try {
       Path usrDir = Paths.get(System.getProperty("user.dir"));
