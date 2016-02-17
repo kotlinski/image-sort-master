@@ -15,9 +15,14 @@ public class Passwords {
     String password = "";
     try {
       Path usrDir = Paths.get(System.getProperty("user.dir"));
+      if (usrDir == null) {
+        return "";
+      }
       Path analyticsDir = usrDir.getParent();
+      if (analyticsDir == null) {
+        return "";
+      }
       Path analytics = Paths.get(analyticsDir.toString() + File.separator + "analytics");
-      System.out.println("path: " + analytics);
       List<String> lines = Files.readAllLines(analytics, Charset.defaultCharset());
       password = lines.get(0);
     }

@@ -51,6 +51,7 @@ public class ExistingFilesResolverTest {
 
 
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
+
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
@@ -118,8 +119,9 @@ public class ExistingFilesResolverTest {
                                                                           mediaFiles);
 
     Map<List<File>, RelativeMediaFolderOutput> fileMapWithResolvedConflicts;
-    fileMapWithResolvedConflicts = mediaFileToOutputMapper.mapRelativeOutputsToFiles(preMoveFeedbackInterface,
-                                                                              mediaFileDestinations);
+    fileMapWithResolvedConflicts = mediaFileToOutputMapper.mapRelativeOutputsToFiles(
+        preMoveFeedbackInterface,
+        mediaFileDestinations);
 
     moveFeedbackInterface.startResolvingConflicts();
     ConflictResolver conflictResolver = new ConflictResolver(mediaFileToOutputMapper,

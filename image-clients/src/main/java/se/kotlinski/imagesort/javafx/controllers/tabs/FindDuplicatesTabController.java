@@ -8,8 +8,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
-import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.javafx.controllers.TabSwitcher;
 import se.kotlinski.imagesort.statistics.MediaFilesInFolderCalculator;
 
@@ -41,6 +39,7 @@ public class FindDuplicatesTabController {
     this.tabLoadingText = tabLoadingText;
     this.tabProgressBar = tabProgressBar;
     this.folderTextArea = folderTextArea;
+
   }
 
   public void resetTab() {
@@ -91,8 +90,8 @@ public class FindDuplicatesTabController {
         mediaFilesInFolder);
 
 
-    folderTextArea.setText(mediaDataBeforeExecution.toString() + "\n\n" +
-                           mediaDataBeforeExecution.printAllDuplicatedFiles());
-
+    String output = mediaDataBeforeExecution.toString() + "\n\n" +
+                    mediaDataBeforeExecution.printAllDuplicatedFiles();
+    folderTextArea.setText(output);
   }
 }

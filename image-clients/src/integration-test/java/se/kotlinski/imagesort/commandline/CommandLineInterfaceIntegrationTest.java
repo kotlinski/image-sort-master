@@ -43,6 +43,7 @@ public class CommandLineInterfaceIntegrationTest {
     Transformer transformer = new Transformer(formatter, parser, fileUtil);
     Interpreter interpreter = spy(new Interpreter(transformer));
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
+
     FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
 
     MediaFileToOutputMapper mediaFileToOutputMapper;
