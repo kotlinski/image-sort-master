@@ -1,0 +1,2 @@
+# Encrypt the passwords-file.
+image-clients/src/main/java/se/kotlinski/imagesort/secrets/Passwords.java filter=git-crypt diff=git-crypt
