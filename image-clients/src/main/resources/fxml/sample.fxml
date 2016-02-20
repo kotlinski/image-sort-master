@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
@@ -10,6 +15,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 <TabPane fx:id="tabGroup" maxHeight="-Infinity" maxWidth="700.0" minHeight="-Infinity" minWidth="500.0" prefHeight="390.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se.kotlinski.imagesort.javafx.controllers.TabGroupController">
 	<tabs>
 		<Tab fx:id="selectFolderTab" text="Select folder">
@@ -24,7 +30,7 @@
 							</image>
 						</ImageView>
 						<Text layoutX="420.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please donate me some bitcoins." wrappingWidth="150.21875" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="210.0" />
-						<Text layoutX="22.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Image Master. &#10;&#10;This application will help you rename your media files and put them in folders based on the date they were taken. &#10;&#10;Please select a folder above to " wrappingWidth="355.21875" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="75.0" />
+						<Text layoutX="22.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Image Sort Master. &#10;&#10;This application will help you rename your media files and put them in folders based on the date they were taken. &#10;&#10;Please select a folder above to that you want to date-sort. &#10;&#10;The program will put your images in folder based on the date taken. &#10;It will rename files and put the files in a year and month-folder. &#10;Instagram/img_abs.jpg&#10;will end up as: &#10;2015/02/Instagram/2015-02-25 14.02.28.jpg&#10;&#10;/Simon Kotlinski" wrappingWidth="355.21875" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="75.0" />
                   <Text fx:id="selectedFolderPathText" boundsType="LOGICAL_VERTICAL_CENTER" layoutX="173.0" strokeType="OUTSIDE" strokeWidth="0.0" translateX="15.0" wrappingWidth="395.0" AnchorPane.leftAnchor="173.0" AnchorPane.topAnchor="36.0">
                      <font>
                         <Font size="12.0" />

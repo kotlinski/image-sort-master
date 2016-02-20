@@ -1,4 +1,4 @@
 # Encrypt the passwords-file.
-analytics filter=git-crypt diff=git-crypt
-mixpanel filter=git-crypt diff=git-crypt
+image-clients\src\main\resources\secrets\analytics filter=git-crypt diff=git-crypt
+image-clients\src\main\resources\secrets\mixpanel filter=git-crypt diff=git-crypt
 
