@@ -2,6 +2,7 @@ package se.kotlinski.imagesort.module;
 
 import com.brsanthu.googleanalytics.GoogleAnalytics;
 import com.google.inject.AbstractModule;
+import com.mixpanel.mixpanelapi.MessageBuilder;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import se.kotlinski.imagesort.commandline.listeners.ImageSortMoveFeedbackProgressFeedback;
@@ -19,5 +20,6 @@ public class ImageModule extends AbstractModule {
     bind(CommandLineParser.class).to(GnuParser.class);
     bind(Calendar.class).to(GregorianCalendar.class);
     bind(GoogleAnalytics.class).toInstance(new GoogleAnalytics(new Passwords().getAnalytics()));
+    bind(MessageBuilder.class).toInstance(new MessageBuilder(new Passwords().getMixpanelToken()));
   }
 }

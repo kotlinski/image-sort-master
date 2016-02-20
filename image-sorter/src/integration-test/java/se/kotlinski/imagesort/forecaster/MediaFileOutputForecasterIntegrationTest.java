@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.forecaster;
 
+import com.mixpanel.mixpanelapi.MessageBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
@@ -14,6 +15,7 @@ import java.util.GregorianCalendar;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 
 public class MediaFileOutputForecasterIntegrationTest {
@@ -28,7 +30,11 @@ public class MediaFileOutputForecasterIntegrationTest {
 
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
-    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+
+    MessageBuilder messageBuilder = mock(MessageBuilder.class);
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter(mixpanel,
+                                                                      sessionUniqueID,
+                                                                      messageBuilder);
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
   }

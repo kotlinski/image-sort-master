@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.commandline;
 
+import com.mixpanel.mixpanelapi.MessageBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.commandline.listeners.ImageSortPreMoveProgressFeedback;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class FileSystemPrettyPrinterTest {
 
@@ -44,7 +46,10 @@ public class FileSystemPrettyPrinterTest {
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
 
-    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+    MessageBuilder messageBuilder = mock(MessageBuilder.class);
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter(mixpanel,
+                                                                      sessionUniqueID,
+                                                                      messageBuilder);
     MediaFileOutputForecaster mediaFileOutputForecaster;
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);

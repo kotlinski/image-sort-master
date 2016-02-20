@@ -1,8 +1,9 @@
 package se.kotlinski.imagesort.javafx.controllers.tabs;
 
-import com.brsanthu.googleanalytics.PageViewHit;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
@@ -34,10 +36,16 @@ public class SelectFolderTabController {
   private final Text selectedFolderPathText;
   private final Button findDuplicatesContinueButton;
   private final ImageSorter imageSorter;
+  private final MessageBuilder messageBuilder;
+  private final MixpanelAPI mixpanel;
+  private final String sessionUniqueID;
   private File selectedFolder;
 
 
-  public SelectFolderTabController(final PreMoveFeedbackInterface preMoveFeedback,
+  public SelectFolderTabController(final MixpanelAPI mixpanel,
+                                   final String sessionUniqueID,
+                                   final MessageBuilder messageBuilder,
+                                   final PreMoveFeedbackInterface preMoveFeedback,
                                    final ReadFilesFeedbackInterface readFilesFeedbackInterface,
                                    final FindDuplicatesFeedbackInterface findDuplicatesFeedbackInterface,
                                    final TabSwitcher tabSwitcher,
@@ -45,6 +53,9 @@ public class SelectFolderTabController {
                                    final Button continueButton,
                                    final Text selectedFolderPathText,
                                    final Button findDuplicatesContinueButton) {
+    this.mixpanel = mixpanel;
+    this.sessionUniqueID = sessionUniqueID;
+    this.messageBuilder = messageBuilder;
     this.preMoveFeedback = preMoveFeedback;
     this.readFilesFeedbackInterface = readFilesFeedbackInterface;
     this.findDuplicatesFeedbackInterface = findDuplicatesFeedbackInterface;
@@ -103,6 +114,16 @@ public class SelectFolderTabController {
   private void runPreMovePhase(final File folder) {
     SortSettings sortSettings = new SortSettings();
     sortSettings.masterFolder = folder;
+    try {
+      JSONObject props = new JSONObject();
+      props.put("Folder", folder);
+      JSONObject sentEvent = messageBuilder.event(sessionUniqueID, "select_folder", props);
+      mixpanel.sendMessage(sentEvent);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+
 
     Task<Integer> task = new Task<Integer>() {
       @Override
@@ -110,11 +131,28 @@ public class SelectFolderTabController {
         preMoveFeedback.preMovePhaseInitiated();
 
         Map<List<File>, RelativeMediaFolderOutput> listRelativeMediaFolderOutputMap;
-        listRelativeMediaFolderOutputMap = imageSorter.analyzeImages(readFilesFeedbackInterface,
-                                                                     preMoveFeedback,
-                                                                     sortSettings);
 
-        preMoveFeedback.preMovePhaseComplete(listRelativeMediaFolderOutputMap, sortSettings);
+        try {
+          listRelativeMediaFolderOutputMap = imageSorter.analyzeImages(readFilesFeedbackInterface,
+                                                                       preMoveFeedback,
+                                                                       sortSettings);
+          preMoveFeedback.preMovePhaseComplete(listRelativeMediaFolderOutputMap, sortSettings);
+
+        }
+        catch (Exception e) {
+          try {
+            JSONObject props = new JSONObject();
+
+            props.put("phase", "analyze_images");
+            props.put("stacktrace", e.toString());
+            JSONObject sentEvent = messageBuilder.event(sessionUniqueID, "error", props);
+            mixpanel.sendMessage(sentEvent);
+          }
+          catch (Exception error) {
+            error.printStackTrace();
+          }
+          e.printStackTrace();
+        }
 
         return 0;
       }
@@ -127,12 +165,40 @@ public class SelectFolderTabController {
     SortSettings sortSettings = new SortSettings();
     sortSettings.masterFolder = folder;
 
+    try {
+      JSONObject props = new JSONObject();
+      props.put("Folder", folder);
+      JSONObject sentEvent = messageBuilder.event(sessionUniqueID, "find_duplicates", props);
+      mixpanel.sendMessage(sentEvent);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+
     Task<Integer> task = new Task<Integer>() {
       @Override
       protected Integer call() throws Exception {
-        imageSorter.findDuplicatedFileStatsInFolder(sortSettings,
-                                                    readFilesFeedbackInterface,
-                                                    findDuplicatesFeedbackInterface);
+        try {
+          imageSorter.findDuplicatedFileStatsInFolder(sortSettings,
+                                                      readFilesFeedbackInterface,
+                                                      findDuplicatesFeedbackInterface);
+        }
+        catch (Exception e) {
+          try {
+            JSONObject props = new JSONObject();
+
+            props.put("phase", "find_duplicates");
+            props.put("stacktrace", e.toString());
+            JSONObject sentEvent = messageBuilder.event(sessionUniqueID,
+                                                        "error",
+                                                        props);
+            mixpanel.sendMessage(sentEvent);
+          }
+          catch (Exception error) {
+            error.printStackTrace();
+          }
+          e.printStackTrace();
+        }
 
         return 0;
       }

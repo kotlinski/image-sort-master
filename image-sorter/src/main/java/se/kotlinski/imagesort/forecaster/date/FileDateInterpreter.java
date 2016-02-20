@@ -8,8 +8,12 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
+import com.google.inject.Inject;
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 import se.kotlinski.imagesort.exception.CouldNotParseDateException;
 
 import java.io.File;
@@ -24,6 +28,16 @@ import java.util.TimeZone;
 
 public class FileDateInterpreter {
   private static final Logger LOGGER = LogManager.getLogger(FileDateInterpreter.class);
+  private final MessageBuilder messageBuilder;
+  private final MixpanelAPI mixpanel;
+  private final String sessionUniqueID;
+
+  @Inject
+  public FileDateInterpreter(final MixpanelAPI mixpanel, final String sessionUniqueID, final MessageBuilder messageBuilder) {
+    this.mixpanel = mixpanel;
+    this.sessionUniqueID = sessionUniqueID;
+    this.messageBuilder = messageBuilder;
+  }
 
   Date getImageDate(File file) throws Exception {
     try {
@@ -62,10 +76,10 @@ public class FileDateInterpreter {
         return imageDate;
       }
     }
-
     catch (Exception e) {
       // This is expected
     }
+
     try {
       Date videoDate = getVideoDate(file);
       if (videoDate.after(threshold_for_valid_dates)) {
@@ -98,6 +112,19 @@ public class FileDateInterpreter {
       // This is expected
     }
     */
+
+    try {
+      JSONObject props = new JSONObject();
+      props.put("File", file.toString());
+      JSONObject sentEvent = messageBuilder.event(sessionUniqueID,
+                                                  "could_not_parse_date",
+                                                  props);
+      mixpanel.sendMessage(sentEvent);
+
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
 
     throw new CouldNotParseDateException("Could not Parse: " + file);
   }

@@ -1,5 +1,6 @@
 package se.kotlinski.imagesort.utils;
 
+import com.mixpanel.mixpanelapi.MessageBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +13,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+import static org.mockito.Mockito.mock;
 
 public class FileDateInterpreterTest {
 
@@ -41,7 +44,9 @@ public class FileDateInterpreterTest {
                                    File.separator +
                                    "tricky-snapchat-image.jpg");
 
-    fileDateInterpreter = new FileDateInterpreter();
+
+    MessageBuilder messageBuilder = mock(MessageBuilder.class);
+    fileDateInterpreter = new FileDateInterpreter(mixpanel, sessionUniqueID, messageBuilder);
   }
 
   @Test
