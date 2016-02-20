@@ -1,4 +1,4 @@
-Image Sort Master
+![Image sort master](image-clients/src/deploy/package/icon_64x64.png)Image Sort Master
 ============
 
 [![Build Status](https://travis-ci.org/kotlinski/image-sort-master.svg?branch=feature%2Ftravis)](https://travis-ci.org/kotlinski/image-sort-master) [![Coverage Status](https://img.shields.io/coveralls/kotlinski/image-sort-master.svg)](https://coveralls.io/r/kotlinski/image-sort-master)
@@ -42,6 +42,7 @@ Downloads
 
 Mac:  https://www.dropbox.com/s/qs220167u1yki41/Image%20Sorter-5.0.0.pkg?dl=1
 
+Windows: https://www.dropbox.com/s/9hp8zgkgl9qkwsc/Image%20Sorter-5.0.0.msi?dl=1
 
 
 Donate
