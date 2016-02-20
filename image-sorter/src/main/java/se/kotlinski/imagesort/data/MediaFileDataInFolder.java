@@ -35,6 +35,8 @@ public class MediaFileDataInFolder {
       }
       returnString += "  },\n";
     }
+    returnString += "]\n";
+
 
     return returnString;
   }
