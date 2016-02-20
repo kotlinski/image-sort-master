@@ -40,7 +40,7 @@ Tutorial
 Downloads
 --------
 
-Mac:  https://www.dropbox.com/s/qs220167u1yki41/Image%20Sorter-5.0.0.pkg?dl=1
+Mac:  https://www.dropbox.com/s/xgxv27w6b903858/Image%20Sorter-5.0.0.dmg?dl=1
 
 Windows: https://www.dropbox.com/s/9hp8zgkgl9qkwsc/Image%20Sorter-5.0.0.msi?dl=1
 
