@@ -1,7 +1,8 @@
 package se.kotlinski.imagesort.secrets;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,21 +16,18 @@ public class Passwords {
   public String getAnalytics() {
     String password = "";
     try {
-      Path usrDir = Paths.get(System.getProperty("user.dir"));
-      if (usrDir == null) {
-        return "";
-      }
-      Path analyticsDir = usrDir.getParent();
-      if (analyticsDir == null) {
-        return "";
-      }
-      Path analytics = Paths.get(analyticsDir.toString() + File.separator + "analytics");
+      URL resource = getClass().getResource("/secrets/analytics");
+      Path analytics = Paths.get(resource.toURI());
       List<String> lines = Files.readAllLines(analytics, Charset.defaultCharset());
       password = lines.get(0);
     }
     catch (IOException e) {
       e.printStackTrace();
     }
+    catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
+
 
     return password;
   }
@@ -61,20 +59,14 @@ public class Passwords {
 
   public List<String> getMixpanelStringArray() {
     try {
-      Path usrDir = Paths.get(System.getProperty("user.dir"));
-
-
-      if (usrDir != null && usrDir.getParent() != null) {
-        Path parent = usrDir.getParent();
-        if (parent != null) {
-          String path = parent.toString();
-          Path analytics = Paths.get(path + File.separator + "mixpanel");
-          return Files.readAllLines(analytics, Charset.defaultCharset());
-        }
-
-      }
+      URL resource = getClass().getResource("/secrets/mixpanel");
+      Path analytics = Paths.get(resource.toURI());
+      return Files.readAllLines(analytics, Charset.defaultCharset());
     }
     catch (IOException e) {
+      e.printStackTrace();
+    }
+    catch (URISyntaxException e) {
       e.printStackTrace();
     }
 
