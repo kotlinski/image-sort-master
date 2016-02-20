@@ -60,9 +60,7 @@ public class ConflictResolverTest {
 
     MessageBuilder messageBuilder = mock(MessageBuilder.class);
     MixpanelAPI mixpanel = mock(MixpanelAPI.class);
-    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter(mixpanel,
-                                                                      "",
-                                                                      messageBuilder);
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter(mixpanel, "", messageBuilder);
     MediaFileOutputForecaster mediaFileOutputForecaster;
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);

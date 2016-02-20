@@ -8,8 +8,8 @@ Purpose
 
 How and when do you sort and back up your images from your camera-devices? 
 
-I have my images stored on a few hard drive backups, dropbox and various devices;
-My dropbox, my nexus 5 and my old Samsung galaxy device. The problem is that 
+I have my images stored on a few hard drive backups, Dropbox and various devices;
+My Dropbox, my Nexus 6p and my old devices(Nexus 5 and Samsung Galaxy). The problem is that
 Dropbox, Nexus 5 and Samsung all have their own way of naming the images and their 
 storage's always get full at different points of time. Dropbox gets full once in a year,
 my phone every two or three months, or sometimes, devices get wasted. 
@@ -30,29 +30,25 @@ A flavor is all sub folders from the root folder, except year/month.
  <br>will be sorted as:<br> 
 `root-folder/2013/04/Wedding/TheKiss/2013-04-22 13.17.00.png`
 <br>
-The application will detect all duplicate files and merge them into one when possible. 
+The application will detect all duplicate files and merge them into one when possible.
+
+Tutorial
+--------
+[![ScreenShot](readme-images/youtube.png)](https://www.youtube.com/watch?v=L2TtF-VDhnk)
+
+
+Downloads
+--------
+
+Mac:  https://www.dropbox.com/s/qs220167u1yki41/Image%20Sorter-5.0.0.pkg?dl=1
+
 
 
 Donate
 --------
 Bitcoin address `36h3FR2xqVZg14TASLMPvDfETBDziUb1oo`
 
-![Bitcoin address](chart.png)
-
-
-Pseudo code
---------
- - Select folder where your images are
- - Parse all images and videos from selected folder.
-     - Detect flavors 
-     - Read the image/video meta-data 
-     - Calculate an unique id(MD5) of each image.
-     - Make a set of MD5.
- - Execute, export to master folder
- - Create report of duplicates and put it in output root folder
-     - May contain a list of duplicate images.
-     - Lists of renamed files etc. 
- 
+![Bitcoin address](readme-images/chart.png)
 
 A real life situation
 --------
@@ -136,7 +132,22 @@ Intellij in _Analyze > Show coverage data..._
 
 
 ### GUI 
-Not in MVP 1
+
+The gui in version 5.
+
+Select folder
+![Bitcoin address](readme-images/select folder.png)
+
+Detect duplicates
+![Bitcoin address](readme-images/duplicates.png)
+
+Move files (Preview)
+![Bitcoin address](readme-images/premove.png)
+
+![Bitcoin address](readme-images/done.png)
+
+
+
 
 Road map
 --------
@@ -146,9 +157,9 @@ Road map
 - [x] take an input folder and generate new folders from meta data
 - [x] use dependency injection, (Guice etc)
 - [x] add automatic builds
-- [ ] create a simple gui selecting two folders(input/output)
-- [ ] present the results of duplicates etc.
+- [x] create a simple gui selecting two folders(input/output)
+- [x] present the results of duplicates etc.
 - [x] take care of output folder on update
-- [ ] print out new file structure as default, add parameter to execute
+- [x] print out new file structure as default, add parameter to execute
 - [ ] add parameter list of flavours not should be accepted. 
 
