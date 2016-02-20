@@ -35,7 +35,7 @@ javafx {
 
   appName = 'Image Sorter'
   mainClass = 'se.kotlinski.imagesort.MainRenamer'
-  version = '4.0.0'
+  version = '4.1.0'
   licenseType = 'Apache License Version 2.0'
   vendor = 'Simon Kotlinski'
 
@@ -122,6 +122,7 @@ dependencies {
   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.5'
 
   compile 'com.mixpanel:mixpanel-java:1.4.3'
+  compile 'com.brsanthu:google-analytics-java:1.1.2'
 
   testCompile 'org.hamcrest:hamcrest-core:1.3'
   integrationTestCompile 'org.hamcrest:hamcrest-core:1.3'

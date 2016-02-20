@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.resolver;
 
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
@@ -55,7 +57,12 @@ public class ConflictResolverTest {
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
 
-    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+
+    MessageBuilder messageBuilder = mock(MessageBuilder.class);
+    MixpanelAPI mixpanel = mock(MixpanelAPI.class);
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter(mixpanel,
+                                                                      "",
+                                                                      messageBuilder);
     MediaFileOutputForecaster mediaFileOutputForecaster;
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);

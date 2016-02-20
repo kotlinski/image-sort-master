@@ -2,6 +2,8 @@ package se.kotlinski.imagesort.javafx.controllers.tabs;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.ButtonBase;
@@ -10,7 +12,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import org.json.JSONObject;
 import se.kotlinski.imagesort.commandline.FileSystemPrettyPrinter;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.data.SortSettings;
@@ -36,11 +38,16 @@ public class PreMoveTabController {
   private final ImageSorter imageSorter;
   private final FileSystemPrettyPrinter fileSystemPrettyPrinter;
   private final ButtonBase moveImagesButton;
-
+  private final MessageBuilder messageBuilder;
+  private final MixpanelAPI mixpanel;
+  private final String sessionUniqueID;
   private Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent;
   private SortSettings sortSettings;
 
-  public PreMoveTabController(final MoveFeedbackInterface moveFeedback,
+  public PreMoveTabController(final MixpanelAPI mixpanel,
+                              final String sessionUniqueID,
+                              final MessageBuilder messageBuilder,
+                              final MoveFeedbackInterface moveFeedback,
                               final TabSwitcher tabSwitcher,
                               final Tab preMoveTab,
                               final AnchorPane preMoveLoadingScene,
@@ -49,6 +56,9 @@ public class PreMoveTabController {
                               final ProgressBar preMoveTabProgressBar,
                               final TextArea preMoveFolderTextArea,
                               final ButtonBase moveImagesButton) {
+    this.mixpanel = mixpanel;
+    this.sessionUniqueID = sessionUniqueID;
+    this.messageBuilder = messageBuilder;
     this.moveFeedback = moveFeedback;
     this.tabSwitcher = tabSwitcher;
     this.preMoveTab = preMoveTab;
@@ -90,15 +100,34 @@ public class PreMoveTabController {
   private void runMovePhase(final Map<List<File>, RelativeMediaFolderOutput> filesGroupedByContent) {
 
     Task<Integer> task = new Task<Integer>() {
+
       @Override
       protected Integer call() throws Exception {
-        imageSorter.moveImages(moveFeedback, sortSettings, filesGroupedByContent);
+        try {
+          imageSorter.moveImages(moveFeedback, sortSettings, filesGroupedByContent);
+        }
+        catch (Exception e) {
+          try {
+            JSONObject props = new JSONObject();
+            props.put("phase", "move_images");
+            props.put("stacktrace", e.toString());
+            JSONObject sentEvent = messageBuilder.event(sessionUniqueID,
+                                                        "error",
+                                                        props);
+            mixpanel.sendMessage(sentEvent);
+          }
+          catch (Exception error) {
+            error.printStackTrace();
+          }
+          e.printStackTrace();
+        }
+
+
         moveFeedback.movePhaseComplete();
         return 0;
       }
     };
 
-    System.out.println("Start image thread");
     new Thread(task).start();
 
   }
@@ -112,11 +141,6 @@ public class PreMoveTabController {
       }
     });
   }
-
-
-  public void setStageAndSetupListeners(final Stage primaryStage) {
-  }
-
 
   public void startCalculatingOutputDirectories() {
     updateLoadingFromSeparateThread("Calculating output directories...");

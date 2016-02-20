@@ -4,6 +4,8 @@ import com.brsanthu.googleanalytics.GoogleAnalytics;
 import com.brsanthu.googleanalytics.PageViewHit;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
@@ -15,6 +17,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.javafx.controllers.listeners.FindDuplicatesGUIFeedback;
 import se.kotlinski.imagesort.javafx.controllers.listeners.MoveGUIFeedback;
@@ -28,10 +31,14 @@ import se.kotlinski.imagesort.module.ImageModule;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class TabGroupController implements TabSwitcher {
 
   private final GoogleAnalytics googleAnalytics;
+  private final MessageBuilder messageBuilder;
+  private final String sessionUniqueID;
+  private final MixpanelAPI mixpanel;
   //TABS
   @FXML
   public TabPane tabGroup;
@@ -81,7 +88,6 @@ public class TabGroupController implements TabSwitcher {
   public TextArea preMoveFolderTextArea;
   @FXML
   public ButtonBase moveImagesButton;
-
   //Select folder tab
   private SelectFolderTabController selectFolderTabController;
   //Result tab
@@ -91,16 +97,20 @@ public class TabGroupController implements TabSwitcher {
   private FindDuplicatesTabController findDuplicatesTabController;
 
   public TabGroupController() {
-
     Injector injector = Guice.createInjector(new ImageModule());
     googleAnalytics = injector.getInstance(GoogleAnalytics.class);
+    messageBuilder = injector.getInstance(MessageBuilder.class);
+    mixpanel = new MixpanelAPI();
+    sessionUniqueID = UUID.randomUUID().toString();
   }
-
 
   @FXML
   private void initialize() {
 
-    findDuplicatesTabController = new FindDuplicatesTabController(this,
+    findDuplicatesTabController = new FindDuplicatesTabController(mixpanel,
+                                                                  sessionUniqueID,
+                                                                  messageBuilder,
+                                                                  this,
                                                                   findDuplicatesTab,
                                                                   findDuplicatesLoadingScene,
                                                                   findDuplicatesResultScene,
@@ -122,7 +132,8 @@ public class TabGroupController implements TabSwitcher {
     MoveGUIFeedback moveGUIFeedback = new MoveGUIFeedback(moveTabController);
     tabSelector = tabGroup.getSelectionModel();
 
-    preMoveTabController = new PreMoveTabController(moveGUIFeedback,
+    preMoveTabController = new PreMoveTabController(mixpanel, sessionUniqueID, messageBuilder,
+                                                    moveGUIFeedback,
                                                     this,
                                                     preMoveTab,
                                                     preMoveLoadingScene,
@@ -136,7 +147,10 @@ public class TabGroupController implements TabSwitcher {
     PreMoveGUIFeedback preMoveGUIFeedback;
     preMoveGUIFeedback = new PreMoveGUIFeedback(preMoveTabController);
 
-    selectFolderTabController = new SelectFolderTabController(preMoveGUIFeedback,
+    selectFolderTabController = new SelectFolderTabController(mixpanel,
+                                                              sessionUniqueID,
+                                                              messageBuilder,
+                                                              preMoveGUIFeedback,
                                                               preMoveGUIFeedback,
                                                               findDuplicatesFeedbackInterface,
                                                               this,
@@ -162,6 +176,16 @@ public class TabGroupController implements TabSwitcher {
     preMoveTab.setDisable(true);
     moveTab.setDisable(true);
     findDuplicatesTab.setDisable(true);
+
+    try {
+      JSONObject props = new JSONObject();
+      String resetTabs = "resetTabs";
+      props.put("tab", resetTabs);
+      trackProgress(resetTabs, props);
+    }
+    catch (Exception error) {
+      error.printStackTrace();
+    }
   }
 
   @Override
@@ -175,7 +199,18 @@ public class TabGroupController implements TabSwitcher {
     moveTab.setDisable(true);
     findDuplicatesTab.setDisable(true);
 
-    googleAnalytics.postAsync(new PageViewHit("preMoveTabController", "preMove"));
+    String preMove = "preMove";
+    googleAnalytics.postAsync(new PageViewHit("preMoveTabController", preMove));
+
+    try {
+      JSONObject props = new JSONObject();
+
+      props.put("tab", preMove);
+      trackProgress(preMove, props);
+    }
+    catch (Exception error) {
+      error.printStackTrace();
+    }
   }
 
   @Override
@@ -186,7 +221,18 @@ public class TabGroupController implements TabSwitcher {
     preMoveTab.setDisable(false);
     moveTab.setDisable(true);
     findDuplicatesTab.setDisable(true);
-    googleAnalytics.postAsync(new PageViewHit("preMoveTabController", "preMoveDone"));
+    String preMoveDone = "preMoveDone";
+    googleAnalytics.postAsync(new PageViewHit("preMoveTabController", preMoveDone));
+
+    try {
+      JSONObject props = new JSONObject();
+
+      props.put("tab", preMoveDone);
+      trackProgress(preMoveDone, props);
+    }
+    catch (Exception error) {
+      error.printStackTrace();
+    }
   }
 
   @Override
@@ -199,7 +245,18 @@ public class TabGroupController implements TabSwitcher {
     selectFolderTab.setDisable(true);
     findDuplicatesTab.setDisable(true);
 
-    googleAnalytics.postAsync(new PageViewHit("moveTabController", "move"));
+    String move = "move";
+    googleAnalytics.postAsync(new PageViewHit("moveTabController", move));
+
+    try {
+      JSONObject props = new JSONObject();
+
+      props.put("tab", move);
+      trackProgress(move, props);
+    }
+    catch (Exception error) {
+      error.printStackTrace();
+    }
   }
 
   @Override
@@ -208,7 +265,18 @@ public class TabGroupController implements TabSwitcher {
     selectFolderTab.setDisable(false);
     findDuplicatesTab.setDisable(true);
 
-    googleAnalytics.postAsync(new PageViewHit("moveTabController", "moveDone"));
+    String moveDone = "moveDone";
+    googleAnalytics.postAsync(new PageViewHit("moveTabController", moveDone));
+
+    try {
+      JSONObject props = new JSONObject();
+
+      props.put("tab", moveDone);
+      trackProgress(moveDone, props);
+    }
+    catch (Exception error) {
+      error.printStackTrace();
+    }
   }
 
   @Override
@@ -222,7 +290,18 @@ public class TabGroupController implements TabSwitcher {
     moveTab.setDisable(true);
     preMoveTab.setDisable(true);
 
-    googleAnalytics.postAsync(new PageViewHit("findDuplicatesTabController", "findDuplicates"));
+    String findDuplicates = "findDuplicates";
+    googleAnalytics.postAsync(new PageViewHit("findDuplicatesTabController", findDuplicates));
+
+    try {
+      JSONObject props = new JSONObject();
+
+      props.put("tab", findDuplicates);
+      trackProgress(findDuplicates, props);
+    }
+    catch (Exception error) {
+      error.printStackTrace();
+    }
   }
 
   @Override
@@ -231,7 +310,28 @@ public class TabGroupController implements TabSwitcher {
     selectFolderTab.setDisable(false);
     moveTab.setDisable(true);
     preMoveTab.setDisable(true);
-    googleAnalytics.postAsync(new PageViewHit("findDuplicatesTabController", "findDuplicatesDone"));
+    String findDuplicatesDone = "findDuplicatesDone";
+    googleAnalytics.postAsync(new PageViewHit("findDuplicatesTabController", findDuplicatesDone));
+
+    try {
+      JSONObject props = new JSONObject();
+      props.put("tab", findDuplicatesDone);
+      trackProgress(findDuplicatesDone, props);
+    }
+    catch (Exception error) {
+      error.printStackTrace();
+    }
+  }
+
+
+  private void trackProgress(String tab, final JSONObject props) {
+    try {
+      JSONObject sentEvent = messageBuilder.event(sessionUniqueID, "progress_" + tab, props);
+      mixpanel.sendMessage(sentEvent);
+    }
+    catch (Exception error) {
+      error.printStackTrace();
+    }
   }
 
 }

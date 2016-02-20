@@ -1,11 +1,14 @@
 package se.kotlinski.imagesort.javafx.controllers.tabs;
 
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import org.json.JSONObject;
 import se.kotlinski.imagesort.data.MediaFileDataHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.javafx.controllers.TabSwitcher;
@@ -24,14 +27,23 @@ public class FindDuplicatesTabController {
   private final Text tabLoadingText;
   private final ProgressBar tabProgressBar;
   private final TextArea folderTextArea;
+  private final MessageBuilder messageBuilder;
+  private final MixpanelAPI mixpanel;
+  private final String sessionUniqueID;
 
-  public FindDuplicatesTabController(final TabSwitcher tabSwitcher,
+  public FindDuplicatesTabController(final MixpanelAPI mixpanel,
+                                     final String sessionUniqueID,
+                                     final MessageBuilder messageBuilder,
+                                     final TabSwitcher tabSwitcher,
                                      final Tab tab,
                                      final AnchorPane loadingScene,
                                      final AnchorPane resultScene,
                                      final Text tabLoadingText,
                                      final ProgressBar tabProgressBar,
                                      final TextArea folderTextArea) {
+    this.mixpanel = mixpanel;
+    this.sessionUniqueID = sessionUniqueID;
+    this.messageBuilder = messageBuilder;
     this.tabSwitcher = tabSwitcher;
     this.tab = tab;
     this.loadingScene = loadingScene;
@@ -93,5 +105,18 @@ public class FindDuplicatesTabController {
     String output = mediaDataBeforeExecution.toString() + "\n\n" +
                     mediaDataBeforeExecution.printAllDuplicatedFiles();
     folderTextArea.setText(output);
+
+
+    try {
+      JSONObject props = new JSONObject();
+      props.put("summary", mediaDataBeforeExecution.toString());
+      props.put("duplicates", mediaDataBeforeExecution.printAllDuplicatedFiles());
+      JSONObject sentEvent = messageBuilder.event(sessionUniqueID, "duplicates_result", props);
+      mixpanel.sendMessage(sentEvent);
+
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

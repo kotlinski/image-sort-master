@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.resolver;
 
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -52,7 +54,12 @@ public class ExistingFilesResolverTest {
 
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
 
-    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+
+    MessageBuilder messageBuilder = mock(MessageBuilder.class);
+    MixpanelAPI mixpanel = mock(MixpanelAPI.class);
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter(mixpanel,
+                                                                      "",
+                                                                      messageBuilder);
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
 

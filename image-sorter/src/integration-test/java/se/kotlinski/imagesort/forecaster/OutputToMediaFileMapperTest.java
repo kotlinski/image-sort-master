@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.forecaster;
 
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import org.junit.Before;
 import org.junit.Test;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
@@ -39,7 +41,11 @@ public class OutputToMediaFileMapperTest {
     Calendar calendar = new GregorianCalendar();
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(calendar);
 
-    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+    MessageBuilder messageBuilder = mock(MessageBuilder.class);
+    MixpanelAPI mixpanel = mock(MixpanelAPI.class);
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter(mixpanel,
+                                                                      "",
+                                                                      messageBuilder);
     MediaFileOutputForecaster mediaFileOutputForecaster;
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
@@ -51,7 +57,8 @@ public class OutputToMediaFileMapperTest {
   public void testCalculateOutputDestinations() throws Exception {
 
     File testInputFile = mediaFileTestUtil.getTestInputFile();
-    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(readFilesFeedbackInterface, testInputFile);
+    List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(readFilesFeedbackInterface,
+                                                            testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> relativeOutputMap;
     relativeOutputMap = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,

@@ -1,5 +1,7 @@
 package se.kotlinski.imagesort.commandline;
 
+import com.mixpanel.mixpanelapi.MessageBuilder;
+import com.mixpanel.mixpanelapi.MixpanelAPI;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -25,6 +27,7 @@ import se.kotlinski.imagesort.utils.MediaFileUtil;
 
 import java.util.GregorianCalendar;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 public class CommandLineInterfaceIntegrationTest {
@@ -43,8 +46,10 @@ public class CommandLineInterfaceIntegrationTest {
     Transformer transformer = new Transformer(formatter, parser, fileUtil);
     Interpreter interpreter = spy(new Interpreter(transformer));
     DateToFileRenamer dateToFileRenamer = new DateToFileRenamer(new GregorianCalendar());
+    MixpanelAPI mixpanel = mock(MixpanelAPI.class);
 
-    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter();
+    MessageBuilder messageBuilder = mock(MessageBuilder.class);
+    FileDateInterpreter fileDateInterpreter = new FileDateInterpreter(mixpanel, "", messageBuilder);
 
     MediaFileToOutputMapper mediaFileToOutputMapper;
     mediaFileToOutputMapper = new MediaFileToOutputMapper(mediaFileHashGenerator, mediaFileUtil);
