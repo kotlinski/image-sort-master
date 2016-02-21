@@ -19,7 +19,7 @@ public class ImageModule extends AbstractModule {
     bind(MoveFeedbackInterface.class).to(ImageSortMoveFeedbackProgressFeedback.class);
     bind(CommandLineParser.class).to(GnuParser.class);
     bind(Calendar.class).to(GregorianCalendar.class);
-    bind(GoogleAnalytics.class).toInstance(new GoogleAnalytics(new Passwords().getAnalytics()));
+    bind(GoogleAnalytics.class).toInstance(new GoogleAnalytics(new Passwords().getAnalyticsToken()));
     bind(MessageBuilder.class).toInstance(new MessageBuilder(new Passwords().getMixpanelToken()));
   }
 }

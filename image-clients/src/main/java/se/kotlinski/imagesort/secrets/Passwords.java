@@ -1,9 +1,14 @@
 package se.kotlinski.imagesort.secrets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,65 +18,37 @@ import java.util.List;
 public class Passwords {
 
 
-  public String getAnalytics() {
-    String password = "";
+  public String getAnalyticsToken() {
+    InputStream inputStream = Passwords.class.getResourceAsStream("analytics");
+    Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+    BufferedReader br = new BufferedReader(reader);
+    String analyticsKey;
     try {
-      URL resource = getClass().getResource("/secrets/analytics");
-      Path analytics = Paths.get(resource.toURI());
-      List<String> lines = Files.readAllLines(analytics, Charset.defaultCharset());
-      password = lines.get(0);
+      analyticsKey = br.readLine();
+      br.close();
+      return analyticsKey;
     }
     catch (IOException e) {
       e.printStackTrace();
     }
-    catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
-
-
-    return password;
+    return "";
   }
 
 
   public String getMixpanelToken() {
-    List<String> mixpanelStringArray = getMixpanelStringArray();
-    if (mixpanelStringArray.size() > 0) {
-      return mixpanelStringArray.get(0);
-    }
-    return "";
-  }
-
-  public String getMixpanelApiKey() {
-    List<String> mixpanelStringArray = getMixpanelStringArray();
-    if (mixpanelStringArray.size() > 1) {
-      return mixpanelStringArray.get(1);
-    }
-    return "";
-  }
-
-  public String getMixpanelApiSecret() {
-    List<String> mixpanelStringArray = getMixpanelStringArray();
-    if (mixpanelStringArray.size() > 2) {
-      return mixpanelStringArray.get(2);
-    }
-    return "";
-  }
-
-  public List<String> getMixpanelStringArray() {
+    InputStream inputStream = Passwords.class.getResourceAsStream("mixpanel");
+    Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+    BufferedReader br = new BufferedReader(reader);
+    String mixpanelKey;
     try {
-      URL resource = getClass().getResource("/secrets/mixpanel");
-      Path analytics = Paths.get(resource.toURI());
-      return Files.readAllLines(analytics, Charset.defaultCharset());
+      mixpanelKey = br.readLine();
+      br.close();
+      return mixpanelKey;
     }
     catch (IOException e) {
       e.printStackTrace();
     }
-    catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
-
-    return new ArrayList<>();
+    return "";
   }
-
 
 }
