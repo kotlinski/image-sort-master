@@ -27,6 +27,7 @@ import se.kotlinski.imagesort.javafx.controllers.tabs.MoveTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.PreMoveTabController;
 import se.kotlinski.imagesort.javafx.controllers.tabs.SelectFolderTabController;
 import se.kotlinski.imagesort.module.ImageModule;
+import se.kotlinski.imagesort.secrets.Passwords;
 
 import java.io.File;
 import java.util.List;
