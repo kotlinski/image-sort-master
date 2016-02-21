@@ -1,4 +1,3 @@
 # Encrypt the passwords-file.
-image-clients\src\main\resources\se\kotlinski\imagesort\secrets\analytics filter=git-crypt diff=git-crypt
-image-clients\src\main\resources\se\kotlinski\imagesort\secrets\mixpanel filter=git-crypt diff=git-crypt
-
+image-clients/src/main/resources/se/kotlinski/imagesort/secrets/analytics filter=git-crypt diff=git-crypt
+image-clients/src/main/resources/se/kotlinski/imagesort/secrets/mixpanel filter=git-crypt diff=git-crypt
