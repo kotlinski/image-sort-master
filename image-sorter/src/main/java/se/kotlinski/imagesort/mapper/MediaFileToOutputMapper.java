@@ -1,7 +1,7 @@
 package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
@@ -50,7 +50,7 @@ public class MediaFileToOutputMapper {
                                             final RelativeMediaFolderOutput outputDirectory) {
     List<File> files = mediaFileDestinations.get(outputDirectory);
 
-    Map<MediaFileDataHash, List<File>> md5Groups = new HashMap<>();
+    Map<PixelHash, List<File>> md5Groups = new HashMap<>();
     groupFilesByMd5(files, md5Groups);
 
     renameOutputsWhenConflicts(preMoveFeedback,
@@ -64,7 +64,7 @@ public class MediaFileToOutputMapper {
                                           final Map<List<File>, RelativeMediaFolderOutput> filesToOutputDestination,
                                           final RelativeMediaFolderOutput outputDirectory,
                                           final List<File> files,
-                                          final Map<MediaFileDataHash, List<File>> md5Groups) {
+                                          final Map<PixelHash, List<File>> md5Groups) {
 
     if (severalGroupsWithSameOutput(md5Groups)) {
       preMoveFeedback.conflictFound(outputDirectory);
@@ -85,17 +85,17 @@ public class MediaFileToOutputMapper {
   }
 
   private void groupFilesByMd5(final List<File> files,
-                               final Map<MediaFileDataHash, List<File>> md5Groups) {
+                               final Map<PixelHash, List<File>> md5Groups) {
     for (File file : files) {
-      MediaFileDataHash hashDataValue = mediaFileHashGenerator.generateMediaFileDataHash(file);
-      if (!md5Groups.containsKey(hashDataValue)) {
-        md5Groups.put(hashDataValue, new ArrayList<>());
+      PixelHash pixelHash = mediaFileHashGenerator.generatePixelDataHash(file);
+      if (!md5Groups.containsKey(pixelHash)) {
+        md5Groups.put(pixelHash, new ArrayList<>());
       }
-      md5Groups.get(hashDataValue).add(file);
+      md5Groups.get(pixelHash).add(file);
     }
   }
 
-  private boolean severalGroupsWithSameOutput(final Map<MediaFileDataHash, List<File>> md5Groups) {
+  private boolean severalGroupsWithSameOutput(final Map<PixelHash, List<File>> md5Groups) {
     return md5Groups.size() > 1;
   }
 

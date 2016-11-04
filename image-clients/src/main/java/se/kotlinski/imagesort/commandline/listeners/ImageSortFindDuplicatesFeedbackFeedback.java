@@ -1,6 +1,6 @@
 package se.kotlinski.imagesort.commandline.listeners;
 
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
 import se.kotlinski.imagesort.statistics.MediaFilesInFolderCalculator;
@@ -31,14 +31,14 @@ public class ImageSortFindDuplicatesFeedbackFeedback implements FindDuplicatesFe
   }
 
   @Override
-  public void masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
+  public void masterFolderSuccessfulParsed(final Map<PixelHash, List<File>> mediaFilesInFolder) {
     System.out.println();
     System.out.println("Folder data stats: ");
     printMediaFilesInFolderData(mediaFilesInFolder);
     System.out.println();
   }
 
-  private void printMediaFilesInFolderData(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
+  private void printMediaFilesInFolderData(final Map<PixelHash, List<File>> mediaFilesInFolder) {
     MediaFilesInFolderCalculator mediaFilesInFolderCalculator = new MediaFilesInFolderCalculator(); // TODO: inject
     MediaFileDataInFolder mediaDataBeforeExecution;
     mediaDataBeforeExecution = mediaFilesInFolderCalculator.calculateMediaFileDataInFolder(

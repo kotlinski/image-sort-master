@@ -1,6 +1,6 @@
 package se.kotlinski.imagesort.commandline.listeners;
 
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
@@ -83,7 +83,7 @@ public class ImageSortMoveFeedbackProgressFeedback implements MoveFeedbackInterf
   }
 
 
-  private void printMediaFilesInFolderData(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
+  private void printMediaFilesInFolderData(final Map<PixelHash, List<File>> mediaFilesInFolder) {
     MediaFilesInFolderCalculator mediaFilesInFolderCalculator = new MediaFilesInFolderCalculator(); // TODO: inject
     MediaFileDataInFolder mediaDataBeforeExecution;
     mediaDataBeforeExecution = mediaFilesInFolderCalculator.calculateMediaFileDataInFolder(

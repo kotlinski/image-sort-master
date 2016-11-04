@@ -2,7 +2,7 @@ package se.kotlinski.imagesort.statistics;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
 import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
@@ -25,7 +25,7 @@ public class MediaFilesInFolderCalculatorTest {
   private MediaFilesInFolderCalculator mediaFilesInFolderCalculator;
   private ReadFilesFeedbackInterface readFilesFeedbackInterface;
   private FindDuplicatesFeedbackInterface findDuplicatesFeedbackInterface;
-  private Map<MediaFileDataHash, List<File>> mediaFilesInFolder;
+  private Map<PixelHash, List<File>> mediaFilesInFolder;
 
   @Before
   public void setUp() throws Exception {

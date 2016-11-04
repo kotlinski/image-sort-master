@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.feedback.MoveFeedbackInterface;
 import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
@@ -146,17 +146,17 @@ public class ExistingFilesResolverTest {
 
       if (relativePath.equals(snapchatOutputDestination.relativePath)) {
         File file = key.get(0);
-        MediaFileDataHash newFileHash = mediaFileHashGenerator.generateMediaFileDataHash(file);
-        MediaFileDataHash originalFileHash;
-        originalFileHash = mediaFileHashGenerator.generateMediaFileDataHash(snapchatFile);
-        assertThat(newFileHash, is(originalFileHash));
+        PixelHash pixelHash = mediaFileHashGenerator.generatePixelDataHash(file);
+        PixelHash originalPixelHash;
+        originalPixelHash = mediaFileHashGenerator.generatePixelDataHash(snapchatFile);
+        assertThat(pixelHash, is(originalPixelHash));
       }
       else if (relativePath.equals(instagramOutputDestination.relativePath)) {
         File file = key.get(0);
-        MediaFileDataHash newFileHash = mediaFileHashGenerator.generateMediaFileDataHash(file);
-        MediaFileDataHash originalFileHash;
-        originalFileHash = mediaFileHashGenerator.generateMediaFileDataHash(instagramFile);
-        assertThat(newFileHash, is(originalFileHash));
+        PixelHash newPixelHash = mediaFileHashGenerator.generatePixelDataHash(file);
+        PixelHash originalPixelHash;
+        originalPixelHash = mediaFileHashGenerator.generatePixelDataHash(instagramFile);
+        assertThat(newPixelHash, is(originalPixelHash));
       }
       else {
         assert false;

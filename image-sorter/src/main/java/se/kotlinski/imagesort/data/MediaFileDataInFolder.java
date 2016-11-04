@@ -6,11 +6,11 @@ import java.util.Map;
 
 public class MediaFileDataInFolder {
   public final int numberOfUniqueFiles;
-  public final Map<MediaFileDataHash, List<File>> filesWithDuplicates;
+  public final Map<PixelHash, List<File>> filesWithDuplicates;
   public final int totalNumberOfFiles;
 
   public MediaFileDataInFolder(final int numberOfUniqueFiles,
-                               final Map<MediaFileDataHash, List<File>> filesWithDuplicates,
+                               final Map<PixelHash, List<File>> filesWithDuplicates,
                                final int totalNumberOfFiles) {
     this.numberOfUniqueFiles = numberOfUniqueFiles;
     this.filesWithDuplicates = filesWithDuplicates;
@@ -27,8 +27,8 @@ public class MediaFileDataInFolder {
 
   public String printAllDuplicatedFiles() {
     String returnString = "[\n";
-    for (MediaFileDataHash mediaFileDataHash : filesWithDuplicates.keySet()) {
-      List<File> files = filesWithDuplicates.get(mediaFileDataHash);
+    for (PixelHash pixelHash : filesWithDuplicates.keySet()) {
+      List<File> files = filesWithDuplicates.get(pixelHash);
       returnString += "  {\n";
       for (File file : files) {
         returnString += "    " + file.toString() + ",\n";

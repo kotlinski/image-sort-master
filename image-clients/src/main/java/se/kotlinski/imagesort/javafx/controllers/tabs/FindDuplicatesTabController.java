@@ -9,7 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.json.JSONObject;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.MediaFileDataInFolder;
 import se.kotlinski.imagesort.javafx.controllers.TabSwitcher;
 import se.kotlinski.imagesort.statistics.MediaFilesInFolderCalculator;
@@ -89,7 +89,7 @@ public class FindDuplicatesTabController {
     updateLoadingFromSeparateThread("Parsed " + size + " files in folder.");
   }
 
-  public void masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
+  public void masterFolderSuccessfulParsed(final Map<PixelHash, List<File>> mediaFilesInFolder) {
     tabProgressBar.setProgress(1.0);
 
     tabSwitcher.setTabsInFindDuplicatesModeDone();

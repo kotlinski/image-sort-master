@@ -1,9 +1,9 @@
 package se.kotlinski.imagesort.data;
 
-public class MediaFileDataHash {
+public class PixelHash {
   public final String hash;
 
-  public MediaFileDataHash(final String hash) {
+  public PixelHash(final String hash) {
     this.hash = hash;
   }
 
@@ -17,7 +17,7 @@ public class MediaFileDataHash {
       return false;
     }
 
-    MediaFileDataHash that = (MediaFileDataHash) o;
+    PixelHash that = (PixelHash) o;
 
     return hash != null ? hash.equals(that.hash) : that.hash == null;
 

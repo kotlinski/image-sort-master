@@ -2,7 +2,7 @@ package se.kotlinski.imagesort.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.exception.CouldNotGenerateIDException;
 
 import java.io.BufferedInputStream;
@@ -17,7 +17,7 @@ import java.util.Formatter;
 public class MediaFileHashGenerator {
   private static final Logger LOGGER = LogManager.getLogger(MediaFileHashGenerator.class);
 
-  public MediaFileDataHash generateMediaFileDataHash(final File file) {
+  public PixelHash generatePixelDataHash(final File file) {
     try {
       return generateImageMD5(file);
     }
@@ -27,10 +27,10 @@ public class MediaFileHashGenerator {
     }
 
     // Other files (Video)
-    return new MediaFileDataHash(file.getAbsolutePath());
+    return new PixelHash(file.getAbsolutePath());
   }
 
-  private MediaFileDataHash generateImageMD5(final File file) throws Exception {
+  private PixelHash generateImageMD5(final File file) throws Exception {
     try {
       MessageDigest messageDigest = MessageDigest.getInstance("Md5");
       FileInputStream fis = new FileInputStream(file);
@@ -47,7 +47,7 @@ public class MediaFileHashGenerator {
 
       // get the hash value as byte array
       byte[] hash = messageDigest.digest();
-      return new MediaFileDataHash(byteArray2Hex(hash));
+      return new PixelHash(byteArray2Hex(hash));
     }
     catch (NoSuchAlgorithmException | IOException e) {
       LOGGER.error("Could not generate image unique id", e);

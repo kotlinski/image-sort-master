@@ -4,7 +4,7 @@ package se.kotlinski.imagesort.main;
 import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.executor.FileMover;
@@ -120,7 +120,7 @@ public class ImageSorter {
 
     ///
 
-    Map<MediaFileDataHash, List<File>> mediaFileHashDataListMap;
+    Map<PixelHash, List<File>> mediaFileHashDataListMap;
     mediaFileHashDataListMap = mediaFileDataMapper.mapOnMediaFileData(
         findDuplicatesFeedbackInterface,
         mediaFilesListAfterMovePhase);

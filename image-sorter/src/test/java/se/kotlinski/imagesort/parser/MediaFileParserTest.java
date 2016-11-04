@@ -3,7 +3,7 @@ package se.kotlinski.imagesort.parser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
 import se.kotlinski.imagesort.utils.MediaFileHashGenerator;
@@ -25,7 +25,7 @@ public class MediaFileParserTest {
   private MediaFileTestUtil mediaFileTestUtil;
   private MediaFileHashGenerator mediaFileHashGenerator;
   private MediaFileDataMapper mediaFileDataMapper;
-  private Map<MediaFileDataHash, List<File>> fileMap;
+  private Map<PixelHash, List<File>> fileMap;
 
   @Before
   public void setUp() {
@@ -61,12 +61,10 @@ public class MediaFileParserTest {
     mediaFileDataMapper.addMediaFileToMap(fileMap, instagramFile);
     mediaFileDataMapper.addMediaFileToMap(fileMap, snapchatFile);
 
-    MediaFileDataHash snapchatFileIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
-        snapchatFile);
-    assertThat(fileMap.get(snapchatFileIdentifier).size(), is(1));
+    PixelHash snapchatPixelHash = mediaFileHashGenerator.generatePixelDataHash(snapchatFile);
+    assertThat(fileMap.get(snapchatPixelHash).size(), is(1));
 
-    MediaFileDataHash instagramFileIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
-        snapchatFile);
+    PixelHash instagramFileIdentifier = mediaFileHashGenerator.generatePixelDataHash(snapchatFile);
     assertThat(fileMap.get(instagramFileIdentifier).size(), is(1));
   }
 
@@ -77,9 +75,8 @@ public class MediaFileParserTest {
     mediaFileDataMapper.addMediaFileToMap(fileMap, imageFile);
     mediaFileDataMapper.addMediaFileToMap(fileMap, imageFile);
 
-    MediaFileDataHash imageDataIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
-        imageFile);
-    assertThat(fileMap.get(imageDataIdentifier).size(), is(2));
+    PixelHash pixelHash = mediaFileHashGenerator.generatePixelDataHash(imageFile);
+    assertThat(fileMap.get(pixelHash).size(), is(2));
   }
 
   @Test
@@ -89,15 +86,16 @@ public class MediaFileParserTest {
     mediaFileDataMapper.addMediaFileToMap(fileMap, videoFile);
     mediaFileDataMapper.addMediaFileToMap(fileMap, videoFile);
 
-    MediaFileDataHash videoDataIdentifier = mediaFileHashGenerator.generateMediaFileDataHash(
-        videoFile);
-    assertThat(fileMap.get(videoDataIdentifier).size(), is(2));
+    PixelHash pixelHash = mediaFileHashGenerator.generatePixelDataHash(videoFile);
+    assertThat(fileMap.get(pixelHash).size(), is(2));
   }
 
   @Test
   public void testRunIndex() throws Exception {/*
-    DeprecatedExportFileDataMap exportFileDataMap = getMediaFileParser().transformFilesToMediaFiles(sortSettings);
-    Assert.assertEquals("Number of Unique images", 8, exportFileDataMap.getNumberOfUniqueImages());*/
+    DeprecatedExportFileDataMap exportFileDataMap = getMediaFileParser()
+    .transformFilesToMediaFiles(sortSettings);
+    Assert.assertEquals("Number of Unique images", 8, exportFileDataMap.getNumberOfUniqueImages()
+    );*/
   }
 
   @Test

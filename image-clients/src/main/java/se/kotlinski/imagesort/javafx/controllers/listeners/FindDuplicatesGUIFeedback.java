@@ -1,6 +1,6 @@
 package se.kotlinski.imagesort.javafx.controllers.listeners;
 
-import se.kotlinski.imagesort.data.MediaFileDataHash;
+import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.feedback.FindDuplicatesFeedbackInterface;
 import se.kotlinski.imagesort.feedback.ReadFilesFeedbackInterface;
 import se.kotlinski.imagesort.javafx.controllers.tabs.FindDuplicatesTabController;
@@ -37,7 +37,7 @@ public class FindDuplicatesGUIFeedback
 
 
   @Override
-  public void masterFolderSuccessfulParsed(final Map<MediaFileDataHash, List<File>> mediaFilesInFolder) {
+  public void masterFolderSuccessfulParsed(final Map<PixelHash, List<File>> mediaFilesInFolder) {
     tabController.masterFolderSuccessfulParsed(mediaFilesInFolder);
   }
 }
