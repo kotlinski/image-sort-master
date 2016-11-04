@@ -22,12 +22,29 @@ public class MediaFileHashGenerator {
       return generateImageMD5(file);
     }
     catch (Exception e) {
-      LOGGER.error("Could not generate id for file: " + file, e);
+      LOGGER.error("Could not generate pixel hash: " + file, e);
       e.printStackTrace();
     }
 
     // Other files (Video)
     return new PixelHash(file.getAbsolutePath());
+  }
+
+  public String generateFileInfoHash(final File file) {
+    try {
+      return generateHashBasedOnFileInfo(file);
+    }
+    catch (Exception e) {
+      LOGGER.error("Could not generate id for file: " + file, e);
+      e.printStackTrace();
+      throw e;
+    }
+  }
+
+  private String generateHashBasedOnFileInfo(final File file) {
+    String name = file.getAbsolutePath();
+    String size = String.valueOf(file.length());
+    return name + ":" + size;
   }
 
   private PixelHash generateImageMD5(final File file) throws Exception {

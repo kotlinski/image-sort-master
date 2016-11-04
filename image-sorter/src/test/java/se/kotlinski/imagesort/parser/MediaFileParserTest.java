@@ -1,8 +1,10 @@
 package se.kotlinski.imagesort.parser;
 
+import org.hamcrest.core.StringContains;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import se.kotlinski.imagesort.data.PixelHash;
 import se.kotlinski.imagesort.data.SortSettings;
 import se.kotlinski.imagesort.mapper.MediaFileDataMapper;
@@ -16,8 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.spy;
 
 public class MediaFileParserTest {
@@ -51,6 +55,18 @@ public class MediaFileParserTest {
     File imageFile = mediaFileTestUtil.getInstagramFile();
     mediaFileDataMapper.addMediaFileToMap(fileMap, imageFile);
     assertThat(fileMap.size(), is(1));
+  }
+
+  @Test
+  public void testGettingFileInfoHash() throws Exception {
+    File instagramFile = mediaFileTestUtil.getInstagramFile();
+    File snapchatFile = mediaFileTestUtil.getSnapchatFile();
+
+    String snapchatFileInfoHash = mediaFileHashGenerator.generateFileInfoHash(snapchatFile);
+    assertThat(snapchatFileInfoHash, containsString("/image-sort-master/image-sorter/src/test/resources/inputImages/2013/snapchat/2013-10-03 13.43.20-kaffe.jpg:1774007"));
+
+    String instagramFileInfoHash = mediaFileHashGenerator.generateFileInfoHash(instagramFile);
+    assertThat(instagramFileInfoHash, containsString("/image-sorter/src/test/resources/inputImages/2013/instagram/2013-10-26 20.20.46-kottbullar.jpg:1855859"));
   }
 
   @Test
