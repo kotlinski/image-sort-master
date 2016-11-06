@@ -16,14 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
 import static org.mockito.Mockito.spy;
 
 public class MediaFileParserTest {
-  private MediaFileUtil mediaFileUtil;
   private MediaFileTestUtil mediaFileTestUtil;
   private MediaFileHashGenerator mediaFileHashGenerator;
   private MediaFileDataMapper mediaFileDataMapper;
@@ -33,7 +30,7 @@ public class MediaFileParserTest {
   public void setUp() {
     fileMap = new HashMap<>();
 
-    mediaFileUtil = new MediaFileUtil();
+    MediaFileUtil mediaFileUtil = new MediaFileUtil();
     mediaFileTestUtil = new MediaFileTestUtil(mediaFileUtil);
 
     SortSettings sortSettings = new SortSettings();
@@ -55,48 +52,6 @@ public class MediaFileParserTest {
     assertThat(fileMap.size(), is(1));
   }
 
-  @Test
-  public void testGettingFileInfoHashForTwoImages() throws Exception {
-    File instagramFile = mediaFileTestUtil.getInstagramFile();
-    File snapchatFile = mediaFileTestUtil.getSnapchatFile();
-
-    String snapchatFileInfoHash = mediaFileHashGenerator.generateFileInfoHash(snapchatFile);
-    assertThat(snapchatFileInfoHash,
-               containsString("/2013/snapchat/2013-10-03 13.43.20-kaffe.jpg:1774007"));
-
-    String instagramFileInfoHash = mediaFileHashGenerator.generateFileInfoHash(instagramFile);
-    assertThat(instagramFileInfoHash,
-               containsString("2013/instagram/2013-10-26 20.20.46-kottbullar.jpg:1855859"));
-
-    assertThat(snapchatFileInfoHash, not(instagramFileInfoHash));
-  }
-
-  @Test
-  public void testGettingFileInfoHashForOneImages() throws Exception {
-    File instagramFile = mediaFileTestUtil.getInstagramFile();
-    File snapchatFile = mediaFileTestUtil.getSnapchatFile();
-
-    String snapchatFileInfoHash = mediaFileHashGenerator.generateFileInfoHash(snapchatFile);
-    assertThat(snapchatFileInfoHash,
-               containsString("/2013/snapchat/2013-10-03 13.43.20-kaffe.jpg:1774007"));
-
-    String instagramFileInfoHash2 = mediaFileHashGenerator.generateFileInfoHash(instagramFile);
-    assertThat(instagramFileInfoHash2,
-               containsString("2013/instagram/2013-10-26 20.20.46-kottbullar.jpg:1855859"));
-
-    assertThat(snapchatFileInfoHash, not(instagramFileInfoHash2));
-  }
-
-  @Test
-  public void testGettingFileInfoHashForOneVideo() throws Exception {
-    File mp4File = mediaFileTestUtil.getMp4File();
-
-    String mp4FileInfoHash = mediaFileHashGenerator.generateFileInfoHash(mp4File);
-    assertThat(mp4FileInfoHash,
-               containsString(
-                   "/Users/simon/dev/github/image-sort-master/image-sorter/src/test/resources" +
-                   "/inputImages/2014-03-16 10.45.09.mp4:9203152"));
-  }
 
   @Test
   public void testAddTwoDifferentFiles() throws Exception {
@@ -136,29 +91,16 @@ public class MediaFileParserTest {
   }
 
   @Test
-  public void testRunIndex() throws Exception {/*
-    DeprecatedExportFileDataMap exportFileDataMap = getMediaFileParser()
-    .transformFilesToMediaFiles(sortSettings);
-    Assert.assertEquals("Number of Unique images", 8, exportFileDataMap.getNumberOfUniqueImages()
-    );*/
-  }
-
-  @Test
   public void testRunIndexInvalidInput() throws Exception {
-    // new MediaFileParser(mediaFileUtil);
-
     SortSettings sortSettings = new SortSettings();
-    // new MediaFileParser(mediaFileUtil);
 
     sortSettings.masterFolder = new File("SomeInvalidFilePath");
     ArrayList<File> inputFolders = new ArrayList<>();
     inputFolders.add(sortSettings.masterFolder);
-    // new MediaFileParser(mediaFileUtil);
 
     sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     inputFolders = new ArrayList<>();
     inputFolders.add(sortSettings.masterFolder);
-    // new MediaFileParser(mediaFileUtil);
   }
 
 
