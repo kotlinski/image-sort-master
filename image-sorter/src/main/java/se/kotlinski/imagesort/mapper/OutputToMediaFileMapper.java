@@ -2,7 +2,6 @@ package se.kotlinski.imagesort.mapper;
 
 import com.google.inject.Inject;
 import se.kotlinski.imagesort.data.RelativeMediaFolderOutput;
-import se.kotlinski.imagesort.feedback.PreMoveFeedbackInterface;
 import se.kotlinski.imagesort.forecaster.MediaFileOutputForecaster;
 
 import java.io.File;
@@ -20,9 +19,10 @@ public class OutputToMediaFileMapper {
     this.mediaFileOutputForecaster = mediaFileOutputForecaster;
   }
 
-  public Map<RelativeMediaFolderOutput, List<File>> calculateOutputDestinations(final PreMoveFeedbackInterface preMoveFeedback,
-                                                                                final File masterFolderFile,
-                                                                                final List<File> mediaFiles) {
+  public Map<RelativeMediaFolderOutput, List<File>> calculateOutputDestinations(final File
+                                                                                    masterFolderFile,
+                                                                                final List<File>
+                                                                                    mediaFiles) {
 
     Map<RelativeMediaFolderOutput, List<File>> exportFiles = new HashMap<>();
 

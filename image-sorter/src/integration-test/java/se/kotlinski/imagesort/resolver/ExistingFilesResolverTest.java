@@ -62,8 +62,6 @@ public class ExistingFilesResolverTest {
                                                                       messageBuilder);
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);
-
-
   }
 
   @After
@@ -72,7 +70,7 @@ public class ExistingFilesResolverTest {
   }
 
   @Test
-  public void testMoveFilesToNewDestionationWhenHavingConflictingNames() throws Exception {
+  public void testMoveFilesToNewDestinationWhenHavingConflictingNames() throws Exception {
     //TODO the test defined below
 
     mediaFileTestUtil.cleanRestoreableMasterFolder();
@@ -121,8 +119,7 @@ public class ExistingFilesResolverTest {
 
 
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
-    mediaFileDestinations = mediaOutputMapper.calculateOutputDestinations(preMoveFeedbackInterface,
-                                                                          restorableTestMasterFile,
+    mediaFileDestinations = mediaOutputMapper.calculateOutputDestinations(restorableTestMasterFile,
                                                                           mediaFiles);
 
     Map<List<File>, RelativeMediaFolderOutput> fileMapWithResolvedConflicts;

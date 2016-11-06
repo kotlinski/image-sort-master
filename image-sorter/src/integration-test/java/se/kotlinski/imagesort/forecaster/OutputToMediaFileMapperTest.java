@@ -61,8 +61,7 @@ public class OutputToMediaFileMapperTest {
                                                             testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> relativeOutputMap;
-    relativeOutputMap = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,
-                                                                            testInputFile,
+    relativeOutputMap = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
                                                                             mediaFiles);
     assertThat(relativeOutputMap.size(), is(12));
   }

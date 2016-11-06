@@ -65,9 +65,13 @@ public class ImageSorter {
     List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(readFilesFeedback,
                                                                 sortSettings.masterFolder);
 
+    /**
+     * Analyze images and use cache
+     */
+
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
-    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,
-                                                                                sortSettings.masterFolder,
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(sortSettings
+                                                                                    .masterFolder,
                                                                                 mediaFiles);
     preMoveFeedback.calculatedDestinationForEachFile(mediaFileDestinations);
 

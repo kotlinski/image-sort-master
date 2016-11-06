@@ -72,8 +72,7 @@ public class FileSystemPrettyPrinterTest {
                                                             testInputFile);
 
     Map<RelativeMediaFolderOutput, List<File>> mediaFileDestinations;
-    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,
-                                                                                testInputFile,
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
                                                                                 mediaFiles);
 
     for (Map.Entry<RelativeMediaFolderOutput, List<File>> stringListEntry : mediaFileDestinations.entrySet()) {

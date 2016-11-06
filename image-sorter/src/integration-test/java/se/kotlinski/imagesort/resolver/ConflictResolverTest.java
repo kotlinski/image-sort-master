@@ -73,8 +73,7 @@ public class ConflictResolverTest {
     List<File> mediaFiles = mediaFileTestUtil.getMediaFiles(readFilesFeedbackInterface,
                                                             testInputFile);
 
-    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(preMoveFeedback,
-                                                                                testInputFile,
+    mediaFileDestinations = outputToMediaFileMapper.calculateOutputDestinations(testInputFile,
                                                                                 mediaFiles);
 
     fileMapWithResolvedConflicts = mediaFileToOutputMapper.mapRelativeOutputsToFiles(preMoveFeedback,
