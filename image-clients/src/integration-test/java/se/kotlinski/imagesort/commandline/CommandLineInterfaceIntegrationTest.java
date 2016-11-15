@@ -60,7 +60,8 @@ public class CommandLineInterfaceIntegrationTest {
                                                              existingFilesResolver);
     FileMover fileMover = new FileMover();
 
-    MediaFileDataMapper mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator);
+    MediaFileDataMapper mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator,
+                                                                      mediaFileCacher);
     MediaFileOutputForecaster mediaFileOutputForecaster;
     mediaFileOutputForecaster = new MediaFileOutputForecaster(dateToFileRenamer,
                                                               fileDateInterpreter);

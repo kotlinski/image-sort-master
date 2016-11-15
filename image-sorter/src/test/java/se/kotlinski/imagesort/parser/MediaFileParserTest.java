@@ -37,7 +37,7 @@ public class MediaFileParserTest {
     sortSettings.masterFolder = new File(mediaFileTestUtil.getRestorableTestMasterPath());
     mediaFileHashGenerator = spy(new MediaFileHashGenerator());
 
-    mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator);
+    mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator, mediaFileCacher);
   }
 
   @After
@@ -102,6 +102,5 @@ public class MediaFileParserTest {
     inputFolders = new ArrayList<>();
     inputFolders.add(sortSettings.masterFolder);
   }
-
 
 }

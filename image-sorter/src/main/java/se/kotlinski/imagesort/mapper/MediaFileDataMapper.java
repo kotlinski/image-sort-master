@@ -14,13 +14,17 @@ import java.util.Map;
 public class MediaFileDataMapper {
 
   private final MediaFileHashGenerator mediaFileHashGenerator;
+  private final MediaFileCacher mediaFileCacher;
 
   @Inject
-  public MediaFileDataMapper(final MediaFileHashGenerator mediaFileHashGenerator) {
+  public MediaFileDataMapper(final MediaFileHashGenerator mediaFileHashGenerator,
+                             final MediaFileCacher mediaFileCacher) {
     this.mediaFileHashGenerator = mediaFileHashGenerator;
+    this.mediaFileCacher = mediaFileCacher;
   }
 
-  public Map<PixelHash, List<File>> mapOnMediaFileData(FindDuplicatesFeedbackInterface findDuplicatesFeedback,
+  public Map<PixelHash, List<File>> mapOnMediaFileData(FindDuplicatesFeedbackInterface
+                                                           findDuplicatesFeedback,
                                                        List<File> files) {
 
     findDuplicatesFeedback.startGroupFilesByContent();
@@ -37,7 +41,14 @@ public class MediaFileDataMapper {
   public void addMediaFileToMap(final Map<PixelHash, List<File>> fileMap, final File file) {
     try {
       PixelHash pixelHash;
-      pixelHash = mediaFileHashGenerator.generatePixelDataHash(file);
+      if (mediaFileCacher.isFileCached(file)) {
+        pixelHash = mediaFileCacher.getMediaFilePixelHash(file);
+      }
+      else {
+        pixelHash = mediaFileHashGenerator.generatePixelDataHash(file);
+        mediaFileCacher.setMediaFileCache(file, pixelHash);
+      }
+
       if (!fileMap.containsKey(pixelHash)) {
         fileMap.put(pixelHash, new ArrayList<>());
       }

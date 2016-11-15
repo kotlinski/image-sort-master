@@ -43,7 +43,8 @@ public class MediaFilesInFolderCalculatorTest {
 
     List<File> mediaFiles = mediaFileUtil.getMediaFilesInFolder(readFilesFeedbackInterface, masterFolder);
 
-    MediaFileDataMapper mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator);
+    MediaFileDataMapper mediaFileDataMapper = new MediaFileDataMapper(mediaFileHashGenerator,
+                                                                      mediaFileCacher);
     mediaFilesInFolder = mediaFileDataMapper.mapOnMediaFileData(findDuplicatesFeedbackInterface, mediaFiles);
 
   }
